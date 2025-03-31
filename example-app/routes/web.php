@@ -15,12 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('welcome');
+});
 
 // returns the home page with all posts
-Route::get('/', PostController::class .'@index')->name('posts.index');
+Route::get('/crud', PostController::class .'@index')->name('posts.index');
 // returns the form for adding a post
 Route::get('/posts/create', PostController::class . '@create')->name('posts.create');
 // adds a post to the database
