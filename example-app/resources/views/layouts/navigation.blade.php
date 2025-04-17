@@ -23,9 +23,9 @@
                 </div>
                 @auth
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('maintainers')" :active="request()->routeIs('dashboard')">
-                            {{ __('Control de Mantenedores') }}
-                        </x-nav-link>
+                    <x-nav-link :href="route('maintainers.index')" :active="request()->routeIs('maintainers.index')">
+                        {{ __('Control de Mantenedores') }}
+                    </x-nav-link>
                     </div>
                 @endauth
             </div>
