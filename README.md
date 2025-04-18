@@ -30,3 +30,14 @@ Se debe montar la concección a travez de:
 
     1. npm install
     2. npm run dev
+
+
+# Creacion de tablas en laravel 10.x
+
+    1. php artisan make:migration create_[nombre_tabla]
+
+            $table->integer(''); //Se define la variable
+            $table->primary(''); //Se le añade como clave primaria
+
+            $table->string('');
+            $table->foreign('')->references('')->on('');
