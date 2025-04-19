@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NoticiaController;
-
+use App\Http\Controllers\WelcomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,9 +15,12 @@ use App\Http\Controllers\NoticiaController;
 */
 
 
-Route::get('/', [NoticiaController::class, 'index']);
+Route::get('/', [WelcomeController::class, 'index']);
 Route::resource('noticias', NoticiaController::class);
 Route::get('/noticias/{noticia}', [NoticiaController::class, 'show'])->name('noticias.show');
+
+
+
 
 
 
