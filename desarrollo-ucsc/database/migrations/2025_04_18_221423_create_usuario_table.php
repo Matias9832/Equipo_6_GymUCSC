@@ -12,19 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('usuario', function (Blueprint $table) {
-            $table->integer('id_usuario');
-            $table->primary('id_usuario');
-
+            $table->id('id_usuario'); // Esto crea un campo AUTO_INCREMENT y PRIMARY KEY
             $table->string('rut_alumno');
-            $table->foreign('rut_alumno')->references('rut_alumno')->on('alumno'); //clave foranea
-
-            $table->boolean('bloqueado_usuario');
-            $table->boolean('activado_usuario');
-            
+            $table->boolean('bloqueado_usuario')->default(0);
+            $table->boolean('activado_usuario')->default(1);
             $table->string('correo_usuario');
             $table->string('contrasenia_usuario');
             $table->string('tipo_usuario');
-            
             $table->timestamps();
         });
     }
