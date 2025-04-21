@@ -3,16 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\MaintainerController;
 /*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
+Todavía tengo que administrar los cargos de admin
 */
 
 Route::get('/', function () {
@@ -22,6 +16,20 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+
+
+    // Ruta para la tabla de usuarios
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+});
+
+//Rutas para los mantenedores
+Route::middleware('auth')->group(function () {
+    Route::get('/maintainers', [MaintainerController::class, 'index'])->name('maintainers.index');
+    Route::get('/maintainers/users', [MaintainerController::class, 'users'])->name('maintainers.users');
+});
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('usuario', function (Blueprint $table) {
-            $table->id('id_usuario'); // Auto-incremental
-            $table->string('correo_usuario')->unique();
-            $table->string('contrasenia_usuario');
-            $table->string('rut_alumno')->unique();
+            $table->id('id_usuario'); // Esto crea un campo AUTO_INCREMENT y PRIMARY KEY
+            $table->string('rut_alumno');
             $table->boolean('bloqueado_usuario')->default(0);
             $table->boolean('activado_usuario')->default(1);
+            $table->string('correo_usuario');
+            $table->string('contrasenia_usuario');
             $table->string('tipo_usuario');
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('usuario');
     }
 };

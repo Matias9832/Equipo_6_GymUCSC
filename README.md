@@ -30,3 +30,25 @@ Se debe montar la concección a travez de:
 
     1. npm install
     2. npm run dev
+
+
+# Creacion de tablas en laravel 10.x
+
+## php artisan make:migration create_[nombre_tabla]
+
+    $table->integer(''); //Se define la variable
+    $table->primary(''); //Se le añade como clave primaria
+
+    $table->string('');
+    $table->foreign('')->references('')->on('');
+
+
+## php artisan make:seeder AlumnoSeeder
+Crear un seeder, ayuda a cargar datos de manera automatica, para ejecutar un sedder se debe:
+
+
+Para ejecutar todos los sedders:
+> php artisan db:seed 
+
+Para ejecutar un sedder en especifico:
+> php artisan db:seed --class=AlumnoSeeder
