@@ -1,18 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Noticia;
-use Illuminate\Http\Request;
 
-class NoticiaController extends Controller
+use Illuminate\Http\Request;
+use App\Models\Noticias;
+
+class NoticiasController extends Controller
 {
     public function index()
     {
-        $noticias = Noticia::latest()->paginate(3); ; 
+        $noticias = Noticias::latest()->paginate(3); ; 
         return view('welcome', compact('noticias'));
     }
     
-    public function show(Noticia $noticia)
+    public function show(Noticias $noticia)
     {
         return view('noticias.show', compact('noticia'));
     }
@@ -29,7 +30,7 @@ class NoticiaController extends Controller
             'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $noticia = new Noticia();
+        $noticia = new Noticias();
         $noticia->titulo = $request->titulo;
         $noticia->contenido = $request->contenido;
 
@@ -47,12 +48,12 @@ class NoticiaController extends Controller
     }
 
 
-    public function edit(Noticia $noticia)
+    public function edit(Noticias $noticia)
     {
         return view('noticias.edit', compact('noticia'));
     }
 
-    public function update(Request $request, Noticia $noticia)
+    public function update(Request $request, Noticias $noticia)
     {
         $request->validate([
             'titulo' => 'required',
@@ -82,7 +83,7 @@ class NoticiaController extends Controller
     }
     
 
-    public function destroy(Noticia $noticia)
+    public function destroy(Noticias $noticia)
     {
         $noticia->delete();
 

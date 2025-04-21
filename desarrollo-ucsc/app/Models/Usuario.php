@@ -34,4 +34,10 @@ class Usuario extends Authenticatable
     {
         return $this->contrasenia_usuario;
     }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->tipo_usuario === 'admin'; // o el valor que uses para admins
+    }
+
 }
