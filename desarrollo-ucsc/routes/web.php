@@ -3,22 +3,31 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\NewsController;
+use Illuminate\Support\Facades\Auth;
 
-// Página de bienvenida
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+// Página principal: Mostrar noticias públicas
+Route::get('/', [NewsController::class, 'index'])->name('home');
 
 // Rutas de autenticación
-Route::get('/login', [LoginController::class, 'create'])->name('login'); // Ruta para mostrar el formulario de inicio de sesión
-Route::post('/login', [LoginController::class, 'authenticate']); // Ruta para procesar el inicio de sesión
+Route::get('/login', [LoginController::class, 'create'])->name('login'); // Formulario de inicio de sesión
+Route::post('/login', [LoginController::class, 'authenticate']);        // Procesa el inicio de sesión
 
-Route::get('/register', [RegisterController::class, 'create'])->name('register'); // Ruta para mostrar el formulario de registro
-Route::post('/register', [RegisterController::class, 'store']); // Ruta para procesar el registro
+Route::get('/register', [RegisterController::class, 'create'])->name('register'); // Formulario de registro
+Route::post('/register', [RegisterController::class, 'store']);                  // Procesa el registro
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout'); // Ruta para cerrar sesión
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout'); // Cerrar sesión
 
-// Página de bienvenida después de iniciar sesión
+// Página de bienvenida (redirige a noticias)
 Route::get('/bienvenido', function () {
-    return view('bienvenido');
+    return redirect()->route('home');
 })->name('bienvenido');
+
+// Noticias públicas
+Route::get('/noticias', [NewsController::class, 'index'])->name('home');
+Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('home');
+
+// CRUD para administradores
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::resource('news', NewsController::class)->except(['index', 'show']);
+});

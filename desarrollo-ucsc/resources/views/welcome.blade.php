@@ -1,39 +1,47 @@
-<!-- filepath: c:\xampp\htdocs\Equipo_6_GymUCSC\desarrollo-ucsc\resources\views\welcome.blade.php -->
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-    <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="text-center">
-            <!-- Logo -->
-            <img src="{{ asset('images/logo_ucsc.png') }}" alt="Logo UCSC" style="width: 150px;">
-            <h1 class="mt-4 text-danger">Bienvenido a la Aplicación</h1>
+@extends('layouts.app')
 
-            @if (Route::has('login'))
-                <div class="mt-4">
-                    @auth
-                        <p class="mb-4">Ya has iniciado sesión como <strong>{{ Auth::user()->correo_usuario }}</strong></p>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="btn btn-danger">Cerrar sesión</button>
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-danger me-2">Iniciar sesión</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-outline-danger">Registrarse</a>
-                        @endif
-                    @endauth
+@section('title', 'Noticias')
+
+@section('content')
+<div class="row">
+    <div class="col-lg-8">
+        <h4 class="mb-4">Noticias</h4>
+
+        @if($news->isEmpty())
+            <div class="card shadow-sm text-center p-5">
+                <div class="card-body">
+                    <i class="bi bi-info-circle display-4 text-secondary mb-3"></i>
+                    <h5 class="card-title">No hay noticias disponibles</h5>
+                    <p class="card-text text-muted">Vuelve pronto. Aquí aparecerán las últimas novedades del gimnasio.</p>
                 </div>
-            @endif
-        </div>
+            </div>
+        @else
+            @foreach($news as $item)
+            <div class="card mb-4 shadow-sm">
+                <div class="row g-0">
+                    <div class="col-md-5">
+                        @if($item->image)
+                        <img src="{{ asset('storage/' . $item->image) }}" class="img-fluid object-fit-cover rounded-start h-100" alt="{{ $item->title }}">
+                        @endif
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <p class="text-muted mb-1">
+                                <small>
+                                    <i class="bi bi-calendar3"></i> {{ \Carbon\Carbon::parse($item->published_at)->format('d M Y') }} |
+                                    <i class="bi bi-tag"></i> {{ $item->category }} |
+                                    <i class="bi bi-person"></i> {{ $item->author }}
+                                </small>
+                            </p>
+                            <h5 class="card-title">{{ $item->title }}</h5>
+                            <p class="card-text">{{ Str::limit($item->content, 100) }}</p>
+                            <a href="#" class="text-primary">Read more →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        @endif
     </div>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</div>
+@endsection
