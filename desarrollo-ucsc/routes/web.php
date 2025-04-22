@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\NewsController;
-use Illuminate\Support\Facades\Auth;
+use App\Models\News;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', [NewsController::class, 'index'])->name('home');
@@ -23,6 +23,12 @@ Route::get('/bienvenido', function () {
     return redirect()->route('home');
 })->name('bienvenido');
 
+// Ruta para la página de bienvenida (welcome.blade.php)
+Route::get('/welcome', function () {
+    $news = News::all(); // Obtén todas las noticias desde la base de datos
+    return view('welcome', compact('news')); // Pasa la variable $news a la vista
+})->name('welcome');
+
 // Noticias públicas
 Route::get('/noticias', [NewsController::class, 'index'])->name('home');
 Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('home');
@@ -31,3 +37,7 @@ Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('home');
 Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::resource('news', NewsController::class)->except(['index', 'show']);
 });
+//esto debemos unirlo con lo de arriba y editarlo para que solo entren administradores
+Route::get('/admin', function () {
+    return view('admin.index');
+})->name('admin.index');
