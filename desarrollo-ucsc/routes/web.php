@@ -5,9 +5,17 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\NewsController;
 use App\Models\News;
+use App\Http\Controllers\AlumnoController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', [NewsController::class, 'index'])->name('home');
+
+// Grupo de rutas para mantenedores
+// Rutas para el CRUD de alumnos (sin autenticación ni permisos de administrador, esto debe ser modificado)
+Route::prefix('admin')->group(function () {
+    Route::resource('alumnos', AlumnoController::class);
+});
+
 
 // Rutas de autenticación
 Route::get('/login', [LoginController::class, 'create'])->name('login'); // Formulario de inicio de sesión

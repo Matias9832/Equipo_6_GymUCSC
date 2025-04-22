@@ -10,10 +10,16 @@
             </a>
         </li>
         <li class="nav-item mb-2">
+            <a href="{{ route('alumnos.index') }}" class="nav-link text-dark">
+                <i class="bi bi-people me-2"></i> Alumnos
+            </a>
+        </li>
+        <li class="nav-item mb-2">
             <a href="#" class="nav-link text-dark">
                 <i class="bi bi-gear me-2"></i> Configuración
             </a>
         </li>
+        
         <!-- Agrega más enlaces aquí -->
     </ul>
 </div>
