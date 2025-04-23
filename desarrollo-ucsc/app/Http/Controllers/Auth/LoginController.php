@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Usuario;
 use App\Models\News;
 
 class LoginController extends Controller
@@ -24,21 +26,35 @@ class LoginController extends Controller
     {
         // Validar los datos del formulario
         $credentials = $request->validate([
-            'correo_usuario' => 'required|email',
+            'rut_alumno' => 'required',
             'password' => 'required',
+        ], [
+            'rut_alumno.required' => 'El campo RUT es obligatorio.',
+            'password.required' => 'El campo contraseña es obligatorio.',
         ]);
 
-        // Intentar autenticar al usuario
-        if (Auth::attempt(['correo_usuario' => $credentials['correo_usuario'], 'password' => $credentials['password']])) {
-            $request->session()->regenerate();
-            $news = News::all(); // Obtener todas las noticias para mostrarlas en la vista de inicio
-            return view('welcome', compact('news')); // Redirigir al usuario autenticado
+        // Verificar si el RUT existe en la base de datos
+        $usuario = Usuario::where('rut_alumno', $credentials['rut_alumno'])->first();
+        if (!$usuario) {
+            return back()->withErrors([
+                'rut_alumno' => 'El RUT ingresado no está asociado a ningún usuario registrado.',
+            ]);
         }
 
-        // Si la autenticación falla
-        return back()->withErrors([
-            'correo_usuario' => 'Las credenciales no coinciden con nuestros registros.',
-        ]);
+        // Verificar si la contraseña es correcta
+        if (!Hash::check($credentials['password'], $usuario->contrasenia_usuario)) {
+            return back()->withErrors([
+                'password' => 'La contraseña ingresada no corresponde al RUT ingresado.',
+            ]);
+        }
+
+        // Autenticar al usuario
+        Auth::login($usuario);
+        $request->session()->regenerate();
+
+        // Redirigir al usuario autenticado (sin modificar la redirección existente)
+        $news = News::all(); // Obtener todas las noticias para mostrarlas en la vista de inicio
+        return view('welcome', compact('news')); // Redirigir al usuario autenticado
     }
 
     /**

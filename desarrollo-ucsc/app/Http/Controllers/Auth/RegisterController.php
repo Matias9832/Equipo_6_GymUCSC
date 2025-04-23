@@ -26,9 +26,35 @@ class RegisterController extends Controller
     {
         // Validar los datos del formulario
         $request->validate([
-            'correo' => 'required|email|unique:usuario,correo_usuario',
+            'correo' => [
+                'required',
+                'email',
+                'unique:usuario,correo_usuario',
+                function ($attribute, $value, $fail) {
+                    if (\DB::table('usuario')->where('correo_usuario', $value)->exists()) {
+                        $fail('El correo ingresado ya está registrado.');
+                    }
+                },
+            ],
             'contraseña' => 'required|confirmed|min:6',
-            'rut' => 'required|unique:usuario,rut_alumno',
+            'rut' => [
+                'required',
+                'unique:usuario,rut_alumno',
+                function ($attribute, $value, $fail) {
+                    if (!\DB::table('alumno')->where('rut_alumno', $value)->exists()) {
+                        $fail('El RUT ingresado no está registrado en la tabla de alumnos.');
+                    }
+                },
+            ],
+        ], [
+            'correo.required' => 'El campo correo es obligatorio.',
+            'correo.email' => 'El correo debe tener un formato válido.',
+            'correo.unique' => 'El correo ingresado ya está registrado.',
+            'contraseña.required' => 'El campo contraseña es obligatorio.',
+            'contraseña.confirmed' => 'Las contraseñas no coinciden.',
+            'contraseña.min' => 'La contraseña debe tener al menos 6 caracteres.',
+            'rut.required' => 'El campo RUT es obligatorio.',
+            'rut.unique' => 'El RUT ingresado ya está registrado en la tabla de usuarios.',
         ]);
 
         try {
@@ -45,8 +71,8 @@ class RegisterController extends Controller
             // Iniciar sesión automáticamente
             Auth::login($usuario);
 
-            // Redirigir al usuario a la página de bienvenida con un mensaje de éxito
-            return redirect()->route('welcome')->with('success', 'Usuario registrado e iniciado sesión correctamente.');
+            // Redirigir al usuario con un mensaje de éxito
+            return redirect()->route('register')->with('success', 'El usuario fue registrado exitosamente.');
         } catch (\Exception $e) {
             // Registrar el error en los logs para depuración
             Log::error('Error al registrar usuario: ' . $e->getMessage());
