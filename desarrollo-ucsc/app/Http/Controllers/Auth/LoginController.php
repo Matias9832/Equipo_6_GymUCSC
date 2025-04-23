@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\News;
 
 class LoginController extends Controller
 {
@@ -30,7 +31,8 @@ class LoginController extends Controller
         // Intentar autenticar al usuario
         if (Auth::attempt(['correo_usuario' => $credentials['correo_usuario'], 'password' => $credentials['password']])) {
             $request->session()->regenerate();
-            return redirect()->route('welcome'); // Redirigir al usuario autenticado
+            $news = News::all(); // Obtener todas las noticias para mostrarlas en la vista de inicio
+            return view('welcome', compact('news')); // Redirigir al usuario autenticado
         }
 
         // Si la autenticación falla
@@ -47,7 +49,7 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
-        return redirect()->route('welcome')->with('success', 'Sesión cerrada correctamente.');
+        $news = News::all(); 
+        return view('welcome', compact('news'))->with('success', 'Sesión cerrada correctamente.');
     }
 }
