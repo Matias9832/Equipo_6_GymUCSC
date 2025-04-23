@@ -16,9 +16,10 @@ return new class extends Migration
             $table->primary('id_ingreso');
             
             $table->integer('id_sala');
-            $table->integer('id_usuario');
+            $table->unsignedBigInteger('id_usuario'); // Cambiado a 'unsignedBigInteger'
+
             $table->foreign('id_sala')->references('id_sala')->on('sala');
-            $table->foreign('id_usuario')->references('id_usuario')->on('usuario');
+            $table->foreign('id_usuario')->references('id_usuario')->on('usuario'); 
 
             $table->date('fecha_ingreso');
             $table->time('hora_ingreso');
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sala_usuario');
+        Schema::dropIfExists('ingreso');
     }
 };
