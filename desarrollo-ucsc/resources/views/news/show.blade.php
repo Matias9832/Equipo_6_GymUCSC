@@ -14,6 +14,6 @@
         </div>
         
 
-        <a href="{{ route('noticias.index') }}" class="btn btn-secondary mt-4">← Volver</a>
+        <a href="{{ route('news.index') }}" class="btn btn-secondary mt-4">← Volver</a>
     </div>
 @endsection

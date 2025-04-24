@@ -5,39 +5,59 @@ namespace App\Http\Controllers;
 use App\Models\News;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('auth'); // Asegura login
+        $this->middleware('admin'); // Solo admins (crea middleware si no existe)
+    }
+
     public function index()
     {
         $news = News::latest()->paginate(5);
        
-        return view('welcome', compact('news'));
+        return view('news.index', compact('news'));
     }
 
     public function create()
     {
         return view('news.create');
     }
+    
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg|max:2048'
-        ]);
+{
+    $request->validate([
+        'titulo' => 'required',
+        'contenido' => 'required',
+        'category' => 'required',
+        'author' => 'required',
+        'published_at' => 'required|date',
+        'imagen' => 'nullable|image',
+    ]);
 
-        $data = $request->all();
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('news_images', 'public');
+    // Guardar la imagen si está presente
+    $nombreImagen = null;
+        if ($request->hasFile('imagen')) {
+            $nombreImagen = time().'.'.$request->imagen->extension();
+            $request->imagen->storeAs('public', $nombreImagen);
         }
 
-        News::create($data);
+        News::create([
+            'titulo' => $request->titulo,
+            'contenido' => $request->contenido,
+            'category' => $request->category,
+            'author' => $request->author,
+            'published_at' => $request->published_at,
+            'imagen' => $nombreImagen,
+        ]);
 
-        return redirect()->route('news.index')->with('success', 'Noticia creada con éxito.');
-    }
+    return redirect()->route('news.index')->with('success', 'Noticia creada con éxito.');
+}
 
     public function show(News $news)
     {
@@ -52,24 +72,33 @@ class NewsController extends Controller
     public function update(Request $request, News $news)
     {
         $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg|max:2048'
+            'titulo' => 'required',
+            'contenido' => 'required',
+            'category' => 'required',
+            'author' => 'required',
+            'published_at' => 'required|date',
+            'imagen' => 'nullable|image',
         ]);
 
-        $data = $request->all();
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('news_images', 'public');
+        if ($request->hasFile('imagen')) {
+            if ($news->imagen) {
+                Storage::delete('public/' . $news->imagen);
+            }
+            $nombreImagen = time().'.'.$request->imagen->extension();
+            $request->imagen->storeAs('public', $nombreImagen);
+            $news->imagen = $nombreImagen;
         }
 
-        $news->update($data);
+        $news->update($request->except('imagen'));
 
         return redirect()->route('news.index')->with('success', 'Noticia actualizada.');
     }
 
     public function destroy(News $news)
     {
+        if ($news->imagen) {
+            Storage::delete('public/' . $news->imagen);
+        }
         $news->delete();
         return redirect()->route('news.index')->with('success', 'Noticia eliminada.');
     }
