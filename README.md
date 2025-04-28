@@ -2,7 +2,7 @@
 Repositorio Git para plataforma Web UCSC
  
 ## Iniciar proyecto laravel
-    1.Habilitar extension=zip en php.ino
+    1.Habilitar extension=zip y gd en php.ino
     2.composer create-project "laravel/laravel:^10.0" desarrollo-ucsc
     3.cd desarrollo-ucsc
 
