@@ -13,5 +13,7 @@ class News extends Model
         'titulo', 'contenido', 'imagen', 'category', 'author', 'published_at'
     ];
   
-    protected $dates = ['published_at'];
+    protected $casts = [
+        'published_at' => 'datetime',
+    ];
 }

@@ -1,19 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container mt-5">
-        <h1>{{ $noticia->titulo }}</h1>
-        <p class="text-muted">{{ $noticia->created_at->format('d M Y') }}</p>
-        <hr>
-        @if ($noticia->imagen)
-            <img src="{{ asset($noticia->imagen) }}" alt="Imagen de la noticia" class="img-fluid">
-        @endif
-        <br>
-        <div>
-            {!! nl2br(e($noticia->contenido)) !!}
-        </div>
-        
+    <div class="container">
+        <h1>{{ $news->titulo }}</h1>
 
-        <a href="{{ route('news.index') }}" class="btn btn-secondary mt-4">← Volver</a>
+        @if ($news->imagen)
+            <img src="{{ asset('storage/' . $news->imagen) }}" alt="Imagen de la noticia" class="img-fluid mb-3">
+        @endif
+
+        <p><strong>Categoría:</strong> {{ $news->category }}</p>
+        <p><strong>Autor:</strong> {{ $news->author }}</p>
+        <p><strong>Publicado el:</strong> {{ $news->published_at->format('d m Y') }}
+            <strong>Por:</strong> {{ $news->author }}</p>
+        </p>
+
+        <div class="mt-4">
+            {!! nl2br(e($news->contenido)) !!}
+        </div>
+
+        <a href="{{ url('/') }}" class="btn btn-primary mt-4">Volver al inicio</a>
     </div>
 @endsection

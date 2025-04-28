@@ -23,17 +23,18 @@ Route::get('/bienvenido', function () {
     return redirect()->route('home');
 })->name('bienvenido');
 
-// Noticias públicas
-Route::get('/news', [NewsController::class, 'index'])->name('home');
-Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('home');
+// Mostrar una noticia pública (detalle de noticia)
+Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
 
-// CRUD para administradores
+// CRUD para administradores (solo para logueados y admin)
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('news', NewsController::class)->except(['index', 'show']);
 });
 
+// CRUD para usuarios logueados (permitir ver detalles)
 Route::middleware(['auth'])->group(function () {
     Route::get('/news/create', [NewsController::class, 'create'])->name('news.create')->middleware('admin');
     Route::get('/news/{id}/edit', [NewsController::class, 'edit'])->name('news.edit')->middleware('admin');
     Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('news.destroy')->middleware('admin');
 });
+

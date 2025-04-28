@@ -6,19 +6,22 @@ use App\Models\News;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Alumno;
 
 class NewsController extends Controller
 {
     
     public function __construct()
     {
-        $this->middleware('auth'); // Asegura login
-        $this->middleware('admin'); // Solo admins (crea middleware si no existe)
+        
+        $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('admin')->except(['index', 'show']);
     }
+
 
     public function index()
     {
-        $news = News::latest()->paginate(5);
+        $news = News::latest()->paginate(3);
        
         return view('news.index', compact('news'));
     }
@@ -35,64 +38,79 @@ class NewsController extends Controller
         'titulo' => 'required',
         'contenido' => 'required',
         'category' => 'required',
-        'author' => 'required',
-        'published_at' => 'required|date',
         'imagen' => 'nullable|image',
     ]);
 
     // Guardar la imagen si está presente
     $nombreImagen = null;
-        if ($request->hasFile('imagen')) {
-            $nombreImagen = time().'.'.$request->imagen->extension();
-            $request->imagen->storeAs('public', $nombreImagen);
-        }
+    if ($request->hasFile('imagen')) {
+        $nombreImagen = time().'.'.$request->imagen->extension();
+        $request->imagen->storeAs('public', $nombreImagen);
+    }
 
-        News::create([
-            'titulo' => $request->titulo,
-            'contenido' => $request->contenido,
-            'category' => $request->category,
-            'author' => $request->author,
-            'published_at' => $request->published_at,
-            'imagen' => $nombreImagen,
-        ]);
+    $rutUsuario = auth()->user()->rut_alumno;
+    $alumno= Alumno::where('rut_alumno', $rutUsuario)->first();
 
-    return redirect()->route('news.index')->with('success', 'Noticia creada con éxito.');
+    News::create([
+        'titulo' => $request->titulo,
+        'contenido' => $request->contenido,
+        'category' => $request->category,
+        'author' => $alumno->nombre_alumno,
+        'published_at' => now(),
+        'imagen' => $nombreImagen,
+    ]);
+
+    return redirect('/')->with('success', 'Noticia creada con éxito.');
 }
 
-    public function show(News $news)
-    {
-        return view('news.show', compact('news'));
-    }
+public function show($id)
+{
+    $news = News::findOrFail($id);
+    return view('news.show', compact('news'));
+}
 
-    public function edit(News $news)
-    {
-        return view('news.edit', compact('news'));
-    }
+public function edit($id)
+{
+    $news = News::findOrFail($id);
+    return view('news.edit', compact('news'));
+}
 
-    public function update(Request $request, News $news)
-    {
-        $request->validate([
-            'titulo' => 'required',
-            'contenido' => 'required',
-            'category' => 'required',
-            'author' => 'required',
-            'published_at' => 'required|date',
-            'imagen' => 'nullable|image',
-        ]);
+public function update(Request $request, $id)
+{
+    $news = News::findOrFail($id);
 
-        if ($request->hasFile('imagen')) {
-            if ($news->imagen) {
-                Storage::delete('public/' . $news->imagen);
-            }
-            $nombreImagen = time().'.'.$request->imagen->extension();
-            $request->imagen->storeAs('public', $nombreImagen);
-            $news->imagen = $nombreImagen;
+    // Validación de campos
+    $request->validate([
+        'titulo' => 'required',
+        'contenido' => 'required',
+        'category' => 'required',
+        'imagen' => 'nullable|image',  // Imagen opcional
+    ]);
+
+    // Si se ha subido una nueva imagen, reemplazar la anterior
+    if ($request->hasFile('imagen')) {
+        // Eliminar la imagen antigua si existe
+        if ($news->imagen) {
+            Storage::delete('public/' . $news->imagen);
         }
-
-        $news->update($request->except('imagen'));
-
-        return redirect()->route('news.index')->with('success', 'Noticia actualizada.');
+        // Guardar la nueva imagen
+        $nombreImagen = time() . '.' . $request->imagen->extension();
+        $request->imagen->storeAs('public', $nombreImagen);
+        $news->imagen = $nombreImagen;
     }
+
+    // Actualizar los demás campos
+    $news->titulo = $request->titulo;
+    $news->contenido = $request->contenido;
+    $news->category = $request->category;
+    
+
+    // Guardar la noticia actualizada
+    $news->save();
+
+    // Redirigir con mensaje de éxito
+    return redirect('/')->with('update', 'Noticia actualizada.');
+}
 
     public function destroy(News $news)
     {
@@ -100,7 +118,7 @@ class NewsController extends Controller
             Storage::delete('public/' . $news->imagen);
         }
         $news->delete();
-        return redirect()->route('news.index')->with('success', 'Noticia eliminada.');
+        return redirect('/')->with('delete', 'Noticia eliminada.');
     }
 }
 
