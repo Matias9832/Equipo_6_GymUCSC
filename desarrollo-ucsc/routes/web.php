@@ -14,6 +14,9 @@ Route::get('/', [NewsController::class, 'index'])->name('home');
 // Rutas para el CRUD de alumnos (sin autenticación ni permisos de administrador, esto debe ser modificado)
 Route::prefix('admin')->group(function () {
     Route::resource('alumnos', AlumnoController::class);
+    
+    // Ruta para importar el archivo Excel
+    Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
 });
 
 

@@ -11,7 +11,10 @@ Repositorio Git para plataforma Web UCSC
     6.php artisan serve
 
 > Si el paso anterior no funciona se debe Verificar que en la carpeta .env existe e instalar composer en la carpeta desarrollo-ucsc
-     
+
+### Dependencias adicionales:
+    composer require maatwebsite/excel
+
 
 ## Para el manejo de la base de datos:
     1. php artisan migrate :    Migra la base de datos

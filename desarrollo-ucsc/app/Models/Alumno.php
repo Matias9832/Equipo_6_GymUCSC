@@ -21,5 +21,15 @@ class Alumno extends Model
     protected $keyType = 'string';
 
     // Permitir asignación masiva para estas columnas
-    protected $fillable = ['rut_alumno', 'nombre_alumno', 'carrera', 'estado_alumno'];
+    protected $fillable = [
+        'rut_alumno',
+        'apellido_paterno',
+        'apellido_materno',
+        'nombre_alumno',
+        'carrera',
+        'estado_alumno'
+    ];
+    
+    protected $dates = ['created_at', 'updated_at'];
+
 }
