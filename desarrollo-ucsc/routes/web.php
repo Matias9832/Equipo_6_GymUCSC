@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\NewsController;
 use App\Models\News;
 use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\EspacioController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', [NewsController::class, 'index'])->name('home');
@@ -13,7 +14,9 @@ Route::get('/', [NewsController::class, 'index'])->name('home');
 // Grupo de rutas para mantenedores
 // Rutas para el CRUD de alumnos (sin autenticación ni permisos de administrador, esto debe ser modificado)
 Route::prefix('admin')->group(function () {
+    
     Route::resource('alumnos', AlumnoController::class);
+    Route::resource('espacios', EspacioController::class);
     
     // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
@@ -42,7 +45,7 @@ Route::get('/welcome', function () {
 
 // Noticias públicas
 Route::get('/noticias', [NewsController::class, 'index'])->name('home');
-Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('home');
+Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
 
 // CRUD para administradores (solo para logueados y admin)
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -60,3 +63,5 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/admin', function () {
     return view('admin.index');
 })->name('admin.index');
+
+

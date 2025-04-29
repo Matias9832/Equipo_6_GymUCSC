@@ -15,6 +15,11 @@
             </a>
         </li>
         <li class="nav-item mb-2">
+            <a href="{{ route('espacios.index') }}" class="nav-link text-dark">
+                <i class="bi bi-people me-2"></i> Espacios
+            </a>
+        </li>
+        <li class="nav-item mb-2">
             <a href="#" class="nav-link text-dark">
                 <i class="bi bi-gear me-2"></i> Configuración
             </a>
