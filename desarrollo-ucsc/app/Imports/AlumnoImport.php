@@ -2,26 +2,36 @@
 
 namespace App\Imports;
 
-use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Concerns\ToCollection;
-use Illuminate\Support\Collection;
+use App\Models\Alumno;
+use Maatwebsite\Excel\Row;
+use Maatwebsite\Excel\Concerns\OnEachRow;
+use Maatwebsite\Excel\Concerns\WithHeadingRow; //Salta la primera fila que considera los encabezados
 
-class AlumnoImport implements ToCollection
+class AlumnoImport implements OnEachRow, WithHeadingRow
 {
-    public function collection(Collection $rows)
+    public function onRow(Row $row)
     {
-        // Saltar la primera fila (encabezados del Excel)
-        $rows->skip(1)->each(function ($row) {
-            DB::table('alumno')->insert([
-                'rut_alumno' => $row[0],
-                'apellido_paterno' => $row[1],
-                'apellido_materno' => $row[2],
-                'nombre_alumno' => $row[3],
-                'carrera' => $row[4],
-                'estado_alumno' => $row[5],
-                'created_at' => now(),
-                'updated_at' => now(),
+        $data = $row->toArray();
+
+        $alumno = Alumno::find($data['rut_alumno']);
+
+        if ($alumno) {
+            $alumno->update([
+                'apellido_paterno' => $data['apellido_paterno'],
+                'apellido_materno' => $data['apellido_materno'],
+                'nombre_alumno' => $data['nombre_alumno'],
+                'carrera' => $data['carrera'],
+                'estado_alumno' => $data['estado_alumno'],
             ]);
-        });
+        } else {
+            Alumno::create([
+                'rut_alumno'      => $data['rut_alumno'],
+                'apellido_paterno' => $data['apellido_paterno'],
+                'apellido_materno' => $data['apellido_materno'],
+                'nombre_alumno'   => $data['nombre_alumno'],
+                'carrera'         => $data['carrera'],
+                'estado_alumno'   => $data['estado_alumno'],
+            ]);
+        }
     }
 }
