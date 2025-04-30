@@ -14,6 +14,12 @@
                 <i class="bi bi-people me-2"></i> Alumnos
             </a>
         </li>
+        <!-- Configuraciones para editar página web -->
+        <li class="nav-item mb-2">
+            <a href="#" class="nav-link text-dark">
+                <i class="bi bi-gear me-2"></i> Configuración
+            </a>
+        </li>
         <!-- Menú desplegable: Mantenedores Geográficos -->
         <li class="nav-item mb-2">
             <a class="nav-link text-dark d-flex align-items-center" data-bs-toggle="collapse" href="#mantenedoresGeograficos" role="button" aria-expanded="false" aria-controls="mantenedoresGeograficos">
@@ -40,11 +46,7 @@
                 </ul>
             </div>
         </li>
-        <li class="nav-item mb-2">
-            <a href="#" class="nav-link text-dark">
-                <i class="bi bi-gear me-2"></i> Configuración
-            </a>
-        </li>
+        
     </ul>
 </div>
 @endsection

@@ -7,6 +7,7 @@ use App\Http\Controllers\NewsController;
 use App\Models\News;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\PaisController;
+use App\Http\Controllers\RegionController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', [NewsController::class, 'index'])->name('home');

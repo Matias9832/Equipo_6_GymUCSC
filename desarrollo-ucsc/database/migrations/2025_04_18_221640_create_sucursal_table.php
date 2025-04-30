@@ -15,7 +15,7 @@ return new class extends Migration
             $table->integer('id_suc');
             $table->primary('id_suc');
 
-            $table->integer('id_ciudad');
+            $table->unsignedBigInteger('id_ciudad');
             $table->foreign('id_ciudad')->references('id_ciudad')->on('ciudad');
             $table->integer('id_marca');
             $table->foreign('id_marca')->references('id_marca')->on('marca');
