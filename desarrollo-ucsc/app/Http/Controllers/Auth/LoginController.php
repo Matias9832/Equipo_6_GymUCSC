@@ -14,6 +14,8 @@ class LoginController extends Controller
     /**
      * Muestra el formulario de inicio de sesión.
      */
+    protected $redirectTo = '/';
+
     public function create()
     {
         return view('auth.login'); // Asegúrate de tener esta vista en resources/views/auth/login.blade.php
@@ -41,6 +43,11 @@ class LoginController extends Controller
             ]);
         }
 
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended($this->redirectTo);
+        }
+        
         // Verificar si la contraseña es correcta
         if (!Hash::check($credentials['password'], $usuario->contrasenia_usuario)) {
             return back()->withErrors([
@@ -66,6 +73,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         $news = News::all(); 
-        return view('welcome', compact('news'))->with('success', 'Sesión cerrada correctamente.');
+        return redirect('/')->with('success', 'Sesión cerrada correctamente.');
     }
 }

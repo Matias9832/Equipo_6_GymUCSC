@@ -6,10 +6,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\NewsController;
 use App\Models\News;
 use App\Http\Controllers\AlumnoController;
-use App\Http\Controllers\PaisController;
-use App\Http\Controllers\RegionController;
-use App\Http\Controllers\CiudadController;
-
+use App\Http\Controllers\EspacioController;
+use App\Http\Controllers\TipoEspacioController;
+use App\Http\Controllers\TipoSancionController;
 use App\Http\Controllers\MaquinaController;
 
 // Página principal: Mostrar noticias públicas
@@ -17,8 +16,13 @@ Route::get('/', [NewsController::class, 'index'])->name('home');
 
 // Grupo de rutas para mantenedores
 Route::prefix('admin')->group(function () {
-    // Rutas para el CRUD de alumnos
+    
     Route::resource('alumnos', AlumnoController::class);
+    Route::resource('espacios', EspacioController::class);
+    Route::resource('tipos_espacio', TipoEspacioController::class)->parameters(['tipos_espacio' => 'tipoEspacio']);
+    Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
+    
+    // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
 
     // Rutas para el CRUD de máquinas
@@ -47,21 +51,22 @@ Route::get('/welcome', function () {
 
 // Noticias públicas
 Route::get('/noticias', [NewsController::class, 'index'])->name('home');
-Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('home');
+Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
 
-// CRUD para administradores
-Route::middleware(['auth', 'is_admin'])->group(function () {
+// CRUD para administradores (solo para logueados y admin)
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('news', NewsController::class)->except(['index', 'show']);
 });
 
-// Página principal del panel de administración
+// CRUD para usuarios logueados (permitir ver detalles)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/news/create', [NewsController::class, 'create'])->name('news.create')->middleware('admin');
+    Route::get('/news/{id}/edit', [NewsController::class, 'edit'])->name('news.edit')->middleware('admin');
+    Route::delete('/news/{id}', [NewsController::class, 'destroy'])->name('news.destroy')->middleware('admin');
+});
+
+//esto debemos unirlo con lo de arriba y editarlo para que solo entren administradores
 Route::get('/admin', function () {
     return view('admin.index');
 })->name('admin.index');
 
-// Rutas para el CRUD de ciudades, países y regiones (solo para administradores)
-Route::prefix('admin')->group(function () {
-    Route::resource('ciudades', CiudadController::class);
-    Route::resource('paises', PaisController::class);
-    Route::resource('regiones', RegionController::class);
-});
