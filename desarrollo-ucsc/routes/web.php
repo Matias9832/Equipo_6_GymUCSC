@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\NewsController;
 use App\Models\News;
 use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\PaisController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', [NewsController::class, 'index'])->name('home');
@@ -52,3 +53,10 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 Route::get('/admin', function () {
     return view('admin.index');
 })->name('admin.index');
+
+// Rutas para el CRUD de ciudades, países y regiones (solo para administradores)
+Route::prefix('admin')->group(function () {
+    Route::resource('ciudades', CiudadController::class);
+    Route::resource('paises', PaisController::class);
+    Route::resource('regiones', RegionController::class);
+});

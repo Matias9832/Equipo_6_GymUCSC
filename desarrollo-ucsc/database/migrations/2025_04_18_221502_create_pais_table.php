@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pais', function (Blueprint $table) {
-            $table->integer('id_pais');
-            $table->primary('id_pais');
+            $table->id('id_pais');
 
             $table->string('nombre_pais');
             $table->string('bandera_pais');
+            $table->timestamps();
         });
     }
 

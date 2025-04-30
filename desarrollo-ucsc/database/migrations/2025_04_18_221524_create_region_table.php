@@ -15,7 +15,7 @@ return new class extends Migration
             $table->integer('id_region');
             $table->primary('id_region');
             
-            $table->integer('id_pais');
+            $table->unsignedBigInteger('id_pais');
             $table->foreign('id_pais')->references('id_pais')->on('pais');
             
             $table->string('nombre_region');
