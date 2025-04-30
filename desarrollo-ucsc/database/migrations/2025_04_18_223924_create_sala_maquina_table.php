@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sala_maquina', function (Blueprint $table) {
-            $table->integer('id_sala');
-            $table->integer('id_maq');
-            $table->primary(['id_sala', 'id_maq']);
+        if (!Schema::hasTable('sala_maquina')) {
+            Schema::create('sala_maquina', function (Blueprint $table) {
+                $table->integer('id_sala');
+                $table->integer('id_maq');
+                $table->primary(['id_sala', 'id_maq']);
 
-            $table->foreign('id_sala')->references('id_sala')->on('sala');
-            $table->foreign('id_maq')->references('id_maq')->on('maquina');
+                $table->foreign('id_sala')->references('id_sala')->on('sala');
+                $table->foreign('id_maq')->references('id_maq')->on('maquina');
 
-            $table->integer('cantidad_maq');
-        });
+                $table->integer('cantidad_maq');
+            });
+        }
     }
 
     /**
