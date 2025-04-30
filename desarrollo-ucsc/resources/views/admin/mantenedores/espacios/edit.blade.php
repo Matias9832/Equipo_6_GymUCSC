@@ -11,7 +11,7 @@
         @method('PUT')
         <div class="mb-3">
             <label for="nombre_espacio" class="form-label">Nombre</label>
-            <input type="text" name="nombre_espacio" id="nombre_espacio" class="form-control" value="{{ $espacio->nombre }}" required>
+            <input type="text" name="nombre_espacio" id="nombre_espacio" class="form-control" value="{{ $espacio->nombre_espacio }}" required>
         </div>
         <div class="mb-3">
             <label for="tipo_espacio" class="form-label">Tipo de espacio</label>
@@ -20,7 +20,7 @@
     
         <div class="mb-3">
             <label for="id_suc" class="form-label">Sucursal</label>
-            <input type="text" name="id_suc" id="id_suc" class="form-control" value="{{ $espacio->sucursal }}" required>
+            <input type="text" name="id_suc" id="id_suc" class="form-control" value="{{ $espacio->id_suc }}" required>
         </div>
 
         <button type="submit" class="btn btn-success">Guardar Cambios</button>

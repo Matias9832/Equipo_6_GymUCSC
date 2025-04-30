@@ -20,6 +20,10 @@ class Espacio extends Model
         'id_suc',
     ];
 
+    public function tipo()
+    {
+        return $this->belongsTo(TipoEspacio::class, 'tipo_espacio');
+    }
     /*public function sucursal()
     {
         return $this->belongsTo(Sucursal::class);

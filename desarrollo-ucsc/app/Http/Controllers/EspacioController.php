@@ -9,20 +9,21 @@ class EspacioController extends Controller
 {
     public function index()
     {
-        $espacios = Espacio::all();
+        $espacios = Espacio::with(['tipo'])->get();
         return view('admin.mantenedores.espacios.index', compact('espacios'));
     }
 
     public function create()
     {
-        return view('admin.mantenedores.espacios.create');
+        $tipos = \App\Models\TipoEspacio::all();
+        return view('admin.mantenedores.espacios.create', compact('tipos'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'nombre_espacio' => 'required|string|max:255',
-            'tipo_espacio' => 'required',
+            'tipo_espacio' => 'required|integer|exists:tipos_espacio,id',
             'id_suc' => 'required|integer',
         ]);
 
@@ -37,7 +38,7 @@ class EspacioController extends Controller
         return view('admin.mantenedores.espacios.edit', compact('espacio'));
     }
 
-    public function update(Request $request, $espacio)
+    public function update(Request $request, Espacio $espacio)
     {
         
 
@@ -52,9 +53,8 @@ class EspacioController extends Controller
         return redirect()->route('espacios.index')->with('success', 'Espacio actualizado correctamente.');
     }
 
-    public function destroy( $espacio)
+    public function destroy( Espacio $espacio)
     {
-        $espacio = Espacio::findOrFail($espacio);
         $espacio->delete();
 
         return redirect()->route('espacios.index')->with('success', 'Espacio eliminado correctamente.');

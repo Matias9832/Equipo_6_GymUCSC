@@ -13,7 +13,7 @@ class TipoEspacioController extends Controller
     public function index()
     {
         $tipos = TipoEspacio::all();
-        return view('tipos_espacio.index', compact('tipos'));
+        return view('admin.mantenedores.tipos_espacio.index', compact('tipos'));
     }
 
     /**
@@ -21,7 +21,7 @@ class TipoEspacioController extends Controller
      */
     public function create()
     {
-        return view('tipos_espacio.create');
+        return view('admin.mantenedores.tipos_espacio.create');
     }
 
     /**
@@ -43,7 +43,7 @@ class TipoEspacioController extends Controller
      */
     public function edit(TipoEspacio $tipoEspacio)
     {
-        return view('tipos_espacio.edit', ['tipo' => $tipoEspacio]);
+        return view('admin.mantenedores.tipos_espacio.edit', ['tipo' => $tipoEspacio]);
     }
 
     /**
@@ -52,10 +52,10 @@ class TipoEspacioController extends Controller
     public function update(Request $request, TipoEspacio $tipoEspacio)
     {
         $request->validate([
-            'nombre' => 'required|string|max:255',
+            'nombre_tipo' => 'required|string|max:255',
         ]);
 
-        $tipoEspacio->update($request->only('nombre_espacio'));
+        $tipoEspacio->update($request->only('nombre_tipo'));
 
         return redirect()->route('tipos_espacio.index')->with('success', 'Tipo de espacio actualizado correctamente.');
     }

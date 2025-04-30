@@ -1,12 +1,12 @@
 <!-- RECORDAR QUE PARA HACER UN UPDATE SE DEBE IMPORTAR UN EXCEL CON LAS TABLAS ORDENADAS CORRECTAMENTE -->
 @extends('layouts.admin')
 
-@section('title', 'Editar Espacio')
+@section('title', 'Editar Tipos de Espacio')
 
 @section('content')
     <h1 class="h3">Editar Espacio</h1>
         
-    <form action="{{ route('tipos_espacio.update', $tipo->id) }}" method="POST">
+    <form action="{{ route('tipos_espacio.update', $tipo) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="mb-3">

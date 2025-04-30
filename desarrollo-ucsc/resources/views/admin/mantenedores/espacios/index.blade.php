@@ -26,9 +26,9 @@
         <tbody>
             @forelse ($espacios as $espacio)
                 <tr>
-                    <td>{{ $espacio->id }}</td>
+                    <td>{{ $espacio->id_espacio }}</td>
                     <td>{{ $espacio->nombre_espacio }}</td>
-                    <td>{{ ucfirst($espacio->tipo_espacio) }}</td>
+                    <td>{{ ucfirst($espacio->tipo->nombre_tipo) }}</td>
                     <td>{{ $espacio->id_suc}}</td>
                     <td>
                         <a href="{{ route('espacios.edit', $espacio) }}" class="btn btn-sm btn-warning">Editar</a>

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('id_suc')->references('id_suc')->on('sucursal');
             
             $table->string('nombre_espacio');
-            $table->string('tipo_espacio');
+            $table->string('tipo_espacio')->constrained('tipos_espacio');
         });
     }
 

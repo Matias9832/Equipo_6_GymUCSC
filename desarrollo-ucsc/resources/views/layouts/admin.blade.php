@@ -20,6 +20,16 @@
             </a>
         </li>
         <li class="nav-item mb-2">
+            <a href="{{ route('tipos_espacio.index') }}" class="nav-link text-dark">
+                <i class="bi bi-rocket-takeoff"></i> Tipos de Espacios
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a href="{{ route('tipos_sancion.index') }}" class="nav-link text-dark">
+                <i class="bi bi-hourglass-split"></i> Tipos de Sanción
+            </a>
+        </li>
+        <li class="nav-item mb-2">
             <a href="#" class="nav-link text-dark">
                 <i class="bi bi-gear me-2"></i> Configuración
             </a>

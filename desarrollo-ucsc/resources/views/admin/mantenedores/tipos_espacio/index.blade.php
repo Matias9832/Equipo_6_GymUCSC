@@ -22,12 +22,12 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($tipo as $tipos)
+            @forelse ($tipos as $tipos)
                 <tr>
                     <td>{{ $tipos->id }}</td>
-                    <td>{{ $tipos->nombre}}</td>
+                    <td>{{ $tipos->nombre_tipo}}</td>
                     <td>
-                        <a href="{{ route('espacio.edit', $tipos-> id) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="{{ route('tipos_espacio.edit', $tipos-> id) }}" class="btn btn-sm btn-warning">Editar</a>
 
                         <form action="{{ route('tipos_espacio.destroy', $tipos-> id) }}" method="POST" style="display:inline-block;">
                             @csrf
@@ -38,7 +38,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5">No hay tipod de espacios disponibles.</td>
+                    <td colspan="5">No hay Tipos de espacios disponibles.</td>
                 </tr>
             @endforelse
         </tbody>

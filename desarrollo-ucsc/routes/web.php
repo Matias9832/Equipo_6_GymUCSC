@@ -8,6 +8,7 @@ use App\Models\News;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\EspacioController;
 use App\Http\Controllers\TipoEspacioController;
+use App\Http\Controllers\TipoSancionController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', [NewsController::class, 'index'])->name('home');
@@ -18,8 +19,8 @@ Route::prefix('admin')->group(function () {
     
     Route::resource('alumnos', AlumnoController::class);
     Route::resource('espacios', EspacioController::class);
-    Route::resource('tipos_espacio', TipoEspacioController::class);
-
+    Route::resource('tipos_espacio', TipoEspacioController::class)->parameters(['tipos_espacio' => 'tipoEspacio']);
+    Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
     
     // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
