@@ -12,11 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('maquina', function (Blueprint $table) {
-            $table->integer('id_maq');
-            $table->primary('id_maq');
-            
-            $table->string('nombre_maq');
-            $table->boolean('estado_maq');
+            $table->id('id_maq'); // Define 'id_maq' como clave primaria autoincremental
+            $table->string('nombre_maq'); // Nombre de la máquina
+            $table->boolean('estado_maq'); // Estado de la máquina (activo/inactivo)
+            $table->timestamps(); // Columnas created_at y updated_at
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('maquina');
+        Schema::dropIfExists('maquina'); // Elimina la tabla si existe
     }
 };
