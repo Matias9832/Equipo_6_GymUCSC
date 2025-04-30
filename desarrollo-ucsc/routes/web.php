@@ -10,19 +10,20 @@ use App\Http\Controllers\PaisController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\CiudadController;
 
+use App\Http\Controllers\MaquinaController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', [NewsController::class, 'index'])->name('home');
 
 // Grupo de rutas para mantenedores
-// Rutas para el CRUD de alumnos (sin autenticación ni permisos de administrador, esto debe ser modificado)
 Route::prefix('admin')->group(function () {
+    // Rutas para el CRUD de alumnos
     Route::resource('alumnos', AlumnoController::class);
-    
-    // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
-});
 
+    // Rutas para el CRUD de máquinas
+    Route::resource('maquinas', MaquinaController::class);
+});
 
 // Rutas de autenticación
 Route::get('/login', [LoginController::class, 'create'])->name('login'); // Formulario de inicio de sesión
@@ -52,7 +53,8 @@ Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('home');
 Route::middleware(['auth', 'is_admin'])->group(function () {
     Route::resource('news', NewsController::class)->except(['index', 'show']);
 });
-//esto debemos unirlo con lo de arriba y editarlo para que solo entren administradores
+
+// Página principal del panel de administración
 Route::get('/admin', function () {
     return view('admin.index');
 })->name('admin.index');

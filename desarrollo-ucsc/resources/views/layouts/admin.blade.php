@@ -16,6 +16,12 @@
         </li>
         <!-- Configuraciones para editar página web -->
         <li class="nav-item mb-2">
+            <a href="{{ route('maquinas.index') }}" class="nav-link text-dark">
+                <i class="bi bi-gear me-2"></i> Maquinas
+            </a>
+        </li>
+        
+        <li class="nav-item mb-2">
             <a href="#" class="nav-link text-dark">
                 <i class="bi bi-gear me-2"></i> Configuración
             </a>
