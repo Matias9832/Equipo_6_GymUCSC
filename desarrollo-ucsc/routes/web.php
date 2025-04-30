@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\NewsController;
 use App\Models\News;
 use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\ControlSalasController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', [NewsController::class, 'index'])->name('home');
@@ -17,8 +18,13 @@ Route::prefix('admin')->group(function () {
     
     // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
+    Route::get('/gestion-qr', [ControlSalasController::class, 'mostrarQR'])->name('control_salas.gestion_qr');
 });
 
+Route::middleware(['auth'])->group(function () {
+    // Ruta para la vista del registro, accesible solo para usuarios logueados
+    Route::get('/registro-sala', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
+});
 
 // Rutas de autenticación
 Route::get('/login', [LoginController::class, 'create'])->name('login'); // Formulario de inicio de sesión
@@ -40,9 +46,6 @@ Route::get('/welcome', function () {
     return view('welcome', compact('news')); // Pasa la variable $news a la vista
 })->name('welcome');
 
-// Noticias públicas
-Route::get('/noticias', [NewsController::class, 'index'])->name('home');
-Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('home');
 
 // CRUD para administradores
 Route::middleware(['auth', 'is_admin'])->group(function () {
