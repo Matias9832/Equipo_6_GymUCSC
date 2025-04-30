@@ -3,6 +3,32 @@
 @section('title', 'Lista de Alumnos')
 
 @section('content')
+
+    @if(session('warning'))
+        <div class="alert alert-warning">
+            <strong>{{ session('warning') }}</strong>
+
+            @if(session('import_errors_missing_rut'))
+                <h5>Errores por RUT faltante:</h5>
+                <ul>
+                    @foreach (session('import_errors_missing_rut') as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            @endif
+
+            @if(session('import_errors_incomplete_data'))
+                <h5>Errores por datos incompletos:</h5>
+                <ul>
+                    @foreach (session('import_errors_incomplete_data') as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
+    @endif
+
+
     <!-- Formulario para cargar el archivo Excel -->
     <form action="{{ route('alumnos.import') }}" method="POST" enctype="multipart/form-data" class="mb-4">
         @csrf
