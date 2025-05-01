@@ -14,13 +14,18 @@
                 <i class="bi bi-people me-2"></i> Alumnos
             </a>
         </li>
+
         <!-- Configuraciones para editar página web -->
         <li class="nav-item mb-2">
             <a href="{{ route('maquinas.index') }}" class="nav-link text-dark">
                 <i class="bi bi-gear me-2"></i> Maquinas
             </a>
         </li>
-        
+        <li class="nav-item mb-2">
+            <a href="{{ route('marcas.index') }}" class="nav-link text-dark">
+                <i class="bi bi-gear me-2"></i> Marcas
+            </a>
+        </li>
         <li class="nav-item mb-2">
             <a href="{{ route('espacios.index') }}" class="nav-link text-dark">
                 <i class="bi bi-rocket-takeoff"></i> Espacios
