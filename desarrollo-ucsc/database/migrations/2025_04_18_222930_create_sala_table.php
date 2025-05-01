@@ -12,13 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sala', function (Blueprint $table) {
-            $table->id('id_sala');
-            
-            $table->integer('id_suc');
-            $table->foreign('id_suc')->references('id_suc')->on('sucursal');
-            
+            $table->id('id_sala'); // Clave primaria
             $table->string('nombre_sala');
             $table->integer('aforo_sala');
+            $table->timestamps();
+            $table->engine = 'InnoDB'; // Asegura que se use InnoDB
         });
     }
 

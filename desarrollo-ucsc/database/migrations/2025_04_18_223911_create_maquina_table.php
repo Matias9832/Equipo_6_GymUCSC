@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('maquina', function (Blueprint $table) {
-            $table->id('id_maq'); // Define 'id_maq' como clave primaria autoincremental
-            $table->string('nombre_maq'); // Nombre de la máquina
-            $table->boolean('estado_maq'); // Estado de la máquina (activo/inactivo)
-            $table->timestamps(); // Columnas created_at y updated_at
+            $table->id('id_maq'); // Clave primaria
+            $table->string('nombre_maq');
+            $table->boolean('estado_maq');
+            $table->timestamps();
+            $table->engine = 'InnoDB'; // Asegura que se use InnoDB
         });
     }
 
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('maquina'); // Elimina la tabla si existe
+        Schema::dropIfExists('maquina');
     }
 };
