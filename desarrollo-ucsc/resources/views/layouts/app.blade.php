@@ -15,11 +15,20 @@
     <style>
         html, body {
             height: 100%;
+            margin: 0;
             display: flex;
             flex-direction: column;
         }
+        #app {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
         main {
-            flex: 1;
+            flex: 1; /* El contenido principal ocupa el espacio restante */
+        }
+        footer {
+            flex-shrink: 0; /* El footer no se encoge ni se superpone */
         }
     </style>
     @stack('styles')

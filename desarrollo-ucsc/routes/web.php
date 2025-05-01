@@ -17,8 +17,10 @@ use App\Http\Controllers\RegionController;
 use App\Http\Controllers\CiudadController;
 
 // Página principal: Mostrar noticias públicas
-Route::get('/', [NewsController::class, 'index'])->name('home');
-
+Route::get('/', function () {
+    $news = News::all();
+    return view('welcome', compact('news'));
+})->name('welcome');
 // Grupo de rutas para mantenedores
 Route::prefix('admin')->group(function () {
     Route::resource('alumnos', AlumnoController::class);

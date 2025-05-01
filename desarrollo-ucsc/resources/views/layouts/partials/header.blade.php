@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg bg-white border-bottom shadow-sm px-4">
-    <a class="navbar-brand d-flex align-items-center" href="#">
+    <a class="navbar-brand d-flex align-items-center" href="{{ route('welcome') }}">
         <img src="{{ asset('images/gym_logo.png') }}" alt="Logo GYM" style="height: 30px;" class="me-3">
         <img src="{{ asset('images/ucsc_logo.png') }}" alt="Logo UCSC" style="height: 30px;" class="me-3">
     </a>

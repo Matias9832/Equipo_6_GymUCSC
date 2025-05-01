@@ -5,7 +5,7 @@
     <h5 class="mb-4">Panel de Control</h5>
     <ul class="nav flex-column">
         <li class="nav-item mb-2">
-            <a href="welcome" class="nav-link text-dark">
+            <a href="{{ route('welcome') }}" class="nav-link text-dark">
                 <i class="bi bi-house-door me-2"></i> Inicio
             </a>
         </li>
