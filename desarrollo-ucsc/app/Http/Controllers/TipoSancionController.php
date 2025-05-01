@@ -20,11 +20,12 @@ class TipoSancionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            
-            'nombre_tipo_sancion' => 'required|string|max:255',
-        ]);
 
-        TipoSancion::create($request->only('nombre_tipo_sancion'));
+            'nombre_tipo_sancion' => 'required|string|max:255',
+            'descripcion_tipo_sancion' => 'required|string|max:255',
+        ]);
+        
+        TipoSancion::create($request->only('nombre_tipo_sancion', 'descripcion_tipo_sancion'));
 
         return redirect()->route('tipos_sancion.index')->with('success', 'Tipo de sanción creado correctamente.');
     }
@@ -38,9 +39,10 @@ class TipoSancionController extends Controller
     {
         $request->validate([
             'nombre_tipo_sancion' => 'required|string|max:255',
+            'descripcion_tipo_sancion' => 'required|string|max:255',
         ]);
 
-        $tipoSancion->update($request->only('nombre_tipo_sancion'));
+        $tipoSancion->update($request->only('nombre_tipo_sancion', 'descripcion_tipo_sancion'));
 
         return redirect()->route('tipos_sancion.index')->with('success', 'Tipo de sanción actualizado correctamente.');
     }

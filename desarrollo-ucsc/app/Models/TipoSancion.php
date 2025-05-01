@@ -12,7 +12,7 @@ class TipoSancion extends Model
 
     public $timestamps = false;    
 
-    protected $fillable = ['nombre_tipo_sancion'];
+    protected $fillable = ['nombre_tipo_sancion', 'descripcion_tipo_sancion'];
 
     public function getRouteKeyName()
     {
