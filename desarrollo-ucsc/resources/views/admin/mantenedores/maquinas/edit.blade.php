@@ -14,8 +14,8 @@
         <div class="mb-3">
             <label for="estado_maq" class="form-label">Estado</label>
             <select name="estado_maq" id="estado_maq" class="form-control" required>
-                <option value="1" {{ $maquina->estado_maq ? 'selected' : '' }}>Activo</option>
-                <option value="0" {{ !$maquina->estado_maq ? 'selected' : '' }}>Inactivo</option>
+                <option value="1" {{ $maquina->estado_maq ? 'selected' : '' }}>Disponible</option>
+                <option value="0" {{ !$maquina->estado_maq ? 'selected' : '' }}>En mantenimineto</option>
             </select>
         </div>
         <button type="submit" class="btn btn-success">Guardar Cambios</button>
