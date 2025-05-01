@@ -11,18 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('sala_maquina')) {
-            Schema::create('sala_maquina', function (Blueprint $table) {
-                $table->integer('id_sala');
-                $table->integer('id_maq');
-                $table->primary(['id_sala', 'id_maq']);
+        Schema::create('sala_maquina', function (Blueprint $table) {
+            $table->id('id'); // Clave primaria
+            $table->unsignedBigInteger('id_sala'); // Clave foránea hacia sala
+            $table->unsignedBigInteger('id_maq'); // Clave foránea hacia maquina
 
-                $table->foreign('id_sala')->references('id_sala')->on('sala');
-                $table->foreign('id_maq')->references('id_maq')->on('maquina');
+            // Definición de claves foráneas
+            $table->foreign('id_sala')->references('id_sala')->on('sala')->onDelete('cascade');
+            $table->foreign('id_maq')->references('id_maq')->on('maquina')->onDelete('cascade');
 
-                $table->integer('cantidad_maq');
-            });
-        }
+            $table->integer('cantidad_maq');
+            $table->timestamps();
+            $table->engine = 'InnoDB'; // Asegura que se use InnoDB
+        });
     }
 
     /**

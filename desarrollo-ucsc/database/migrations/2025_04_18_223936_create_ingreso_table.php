@@ -12,19 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ingreso', function (Blueprint $table) {
-            $table->integer('id_ingreso');
-            $table->primary('id_ingreso');
-            
-            $table->integer('id_sala');
-            $table->unsignedBigInteger('id_usuario'); // Cambiado a 'unsignedBigInteger'
+            $table->id('id_ingreso'); // Clave primaria
+            $table->unsignedBigInteger('id_sala'); // Clave foránea hacia sala
+            $table->unsignedBigInteger('id_usuario'); // Clave foránea hacia usuario
 
-            $table->foreign('id_sala')->references('id_sala')->on('sala');
-            $table->foreign('id_usuario')->references('id_usuario')->on('usuario'); 
+            $table->foreign('id_sala')->references('id_sala')->on('sala')->onDelete('cascade');
+            $table->foreign('id_usuario')->references('id_usuario')->on('usuario')->onDelete('cascade');
 
             $table->date('fecha_ingreso');
             $table->time('hora_ingreso');
             $table->time('hora_salida');
             $table->time('tiempo_uso');
+            $table->timestamps();
+            $table->engine = 'InnoDB'; // Asegura que se use InnoDB
         });
     }
 
