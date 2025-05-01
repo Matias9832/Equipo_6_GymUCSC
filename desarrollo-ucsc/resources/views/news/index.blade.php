@@ -1,49 +1,143 @@
 @extends('layouts.app')
 
-@section('content')
-<div class="container py-4">
-    @auth
-        <div class="alert alert-info d-flex align-items-center" role="alert">
-            <i class="bi bi-person-circle me-2"></i>
-            ¡Hola, {{ Auth::user()->name }}! Bienvenido(a) al portal de noticias del gimnasio.
+@if(session('success') || session('update') || session('delete'))
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100; margin-top: 70px;">
+        <div id="toastSuccess" class="toast align-items-center {{ session('success') ? 'text-bg-success' : (session('update') ? 'text-bg-primary' : 'text-bg-danger') }} border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    {{ session('success') ?? session('update') ?? session('delete') }}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+            </div>
         </div>
-    @endauth
+    </div>
 
-    {{-- Mostrar botón solo a administradores --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toastLiveExample = document.getElementById('toastSuccess');
+            if (toastLiveExample) {
+                const toast = new bootstrap.Toast(toastLiveExample, {
+                    delay: 3000 // Se cierra a los 3 segundos
+                });
+                toast.show();
+            }
+        });
+    </script>
+@endif
+
+
+@section('content')
+<div class="container">
+    <h1>Noticias</h1>
+
     @if(Auth::check() && Auth::user()->is_admin)
-        <a href="{{ route('noticias.create') }}" class="btn btn-primary mb-4">Crear nueva noticia</a>
+        <a href="{{ route('news.create') }}" class="btn btn-primary mb-4">Crear nueva noticia</a>
     @endif
 
-    @foreach($news as $noticia)
-        <div class="border p-3 mb-3 rounded bg-white shadow">
-            <h3 class="text-xl font-semibold">{{ $noticia->titulo }}</h3>
-            <p class="mt-2">{{ $noticia->contenido }}</p>
+    @foreach ($news as $noticias)
+    <div class="card mb-3 position-relative" style="min-height: 200px;">
+        @if(Auth::check() && Auth::user()->is_admin)
+            <!-- Botones de editar y eliminar -->
+            <div class="position-absolute top-0 end-0 m-2 d-flex gap-2 z-3">
+                <a href="{{ route('news.edit', $noticias->id) }}" 
+                   class="btn btn-warning btn-sm d-flex align-items-center justify-content-center p-0" 
+                   title="Editar"
+                   style="width: 40px; height: 40px;">
+                    <i class="bi bi-pen-fill"></i>
+                </a>
             
-            @if($noticia->imagen)
-                <img src="{{ asset('storage/' . $noticia->imagen) }}" alt="Imagen de la noticia" class="img-fluid mt-2" style="max-width: 100%; height: auto;">
-            @endif
+                <form action="{{ route('news.destroy', $noticias->id) }}" method="POST" class="d-inline form-eliminar">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" 
+                            class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-0 btn-mostrar-modal" 
+                            title="Eliminar"
+                            style="width: 40px; height: 40px;"
+                            data-id="{{ $noticias->id }}">
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                </form>
+            </div>
+        @endif
 
-            <small class="text-muted d-block mt-2">{{ $noticia->created_at->format('d M Y') }}</small>
-            
-            {{-- Mostrar opciones solo a administradores --}}
-            @if(Auth::check() && Auth::user()->is_admin)
-                <div class="mt-3">
-                    <a href="{{ route('noticias.edit', $noticia) }}" class="btn btn-sm btn-warning">Editar</a>
-
-                    <form action="{{ route('noticias.destroy', $noticia) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('DELETE')
-                        <button class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar esta noticia?')">Eliminar</button>
-                    </form>
+        <div class="row g-0 flex-column flex-md-row">
+            <div class="col-md-4 d-flex align-items-center justify-content-center bg-light" style="padding: 10px;">
+                @if ($noticias->imagen)
+                    <img src="{{ asset('storage/' . $noticias->imagen) }}" 
+                        class="img-fluid rounded-start p-2" 
+                        alt="Imagen de la noticia" 
+                        style="max-height: 200px; object-fit: cover; width: 100%;">
+                @else
+                    <div class="d-flex flex-column align-items-center justify-content-center text-muted" style="height: 180px; width: 100%;">
+                        <i class="bi bi-image" style="font-size: 3rem;"></i>
+                        <small>Imagen no disponible</small>
+                    </div>
+                @endif
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <a href="{{ route('news.show', $noticias->id) }}" class="text-decoration-none text-dark">
+                        <h5 class="card-title">{{ $noticias->titulo }}</h5>
+                        <p class="card-text">{{ Str::limit($noticias->contenido, 100, '...') }}</p>
+                    </a>
                 </div>
-            @endif
+                <div class="card-footer bg-transparent">
+                    <small class="text-muted">{{ $noticias->published_at->format('d M Y') }} - {{ $noticias->author }}</small>
+                </div>
+            </div>
         </div>
-    @endforeach
+    </div>
+@endforeach
 
-    {{-- Paginación --}}
-    <div class="mt-4">
+    <div class="d-flex justify-content-center">
         {{ $news->links() }}
     </div>
 </div>
 @endsection
 
+<!-- Modal de Confirmación -->
+<div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmarEliminarModalLabel">Confirmar eliminación</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        
+        <div class="modal-body">
+          ¿Estás seguro de que quieres eliminar esta noticia?
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">Sí, eliminar</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let idEliminar = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const botonesEliminar = document.querySelectorAll('.btn-mostrar-modal');
+
+        botonesEliminar.forEach(boton => {
+            boton.addEventListener('click', function () {
+                idEliminar = this.getAttribute('data-id');
+                const modalEliminar = new bootstrap.Modal(document.getElementById('confirmarEliminarModal'));
+                modalEliminar.show();
+            });
+        });
+
+        const btnConfirmarEliminar = document.getElementById('btnConfirmarEliminar');
+        btnConfirmarEliminar.addEventListener('click', function () {
+            if (idEliminar) {
+                const form = document.querySelector(`form[action*="/news/${idEliminar}"]`);
+                form.submit();
+            }
+        });
+    });
+</script>

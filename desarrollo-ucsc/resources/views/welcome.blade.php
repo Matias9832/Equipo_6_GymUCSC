@@ -6,6 +6,19 @@
 <div class="row">
     <div class="col-lg-8">
         <h4 class="mb-4">Noticias</h4>
+        @auth
+            <div class="alert alert-info d-flex align-items-center" role="alert">
+                <i class="bi bi-person-circle me-2"></i>
+                ¡Hola {{ Auth::user()->name }}! Bienvenido(a) al portal de noticias del gimnasio.
+            </div>
+            
+            {{-- Mostrar botón solo a administradores --}}
+            @if(Auth::check() && Auth::user()->is_admin)
+                <a href="{{ route('news.create') }}" class="btn btn-primary mb-4">Crear nueva noticia</a>
+            @endif
+
+        @endauth
+        
 
         @if($news->isEmpty())
             <div class="card shadow-sm text-center p-5">
