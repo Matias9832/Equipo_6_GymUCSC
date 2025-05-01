@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('sala', function (Blueprint $table) {
             $table->id('id_sala'); // Clave primaria
+
             $table->string('nombre_sala');
             $table->integer('aforo_sala');
-            $table->timestamps();
-            $table->engine = 'InnoDB'; // Asegura que se use InnoDB
+
+            $table->unsignedBigInteger('id_suc');
+            $table->foreign('id_suc')->references('id_suc')->on('sucursal');
         });
     }
 

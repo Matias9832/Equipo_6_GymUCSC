@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sucursal', function (Blueprint $table) {
-            $table->integer('id_suc');
-            $table->primary('id_suc');
+            $table->id('id_suc');
 
             $table->unsignedBigInteger('id_ciudad');
             $table->foreign('id_ciudad')->references('id_ciudad')->on('ciudad');

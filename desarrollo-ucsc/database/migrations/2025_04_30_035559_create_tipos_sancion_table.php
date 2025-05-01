@@ -12,11 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tipos_sancion', function (Blueprint $table) {
-            
-            $table->primary('id_tipo_sancion');
-            $table->unsignedBigInteger('id_tipo_sancion'); // Esto es obligatorio por defecto
+            $table->id('id_tipo_sancion');
 
             $table->string('nombre_tipo_sancion');
+            $table->string('descripcion_tipo_sancion');
         });
     }
 
