@@ -21,6 +21,12 @@ Route::get('/', function () {
     $news = News::all();
     return view('welcome', compact('news'));
 })->name('welcome');
+
+// Ruta para la página de administradores
+Route::get('/admin', function () {
+    return view('admin.index');
+})->name('admin');
+
 // Grupo de rutas para mantenedores
 Route::prefix('admin')->group(function () {
     Route::resource('alumnos', AlumnoController::class);
