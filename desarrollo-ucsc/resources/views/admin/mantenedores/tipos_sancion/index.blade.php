@@ -18,18 +18,20 @@
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
+                <th>Descripción</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            @forelse ($tipos as $tipos)
+            @forelse ($tipos as $tipo)
                 <tr>
-                    <td>{{ $tipos->id_tipo_sancion }}</td>
-                    <td>{{ $tipos->nombre_tipo_sancion}}</td>
+                    <td>{{ $tipo->id_tipo_sancion }}</td>
+                    <td>{{ $tipo->nombre_tipo_sancion}}</td>
+                    <td>{{ $tipo->descripcion_tipo_sancion }}</td>
                     <td>
-                        <a href="{{ route('tipos_sancion.edit', $tipos-> id_tipo_sancion) }}" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="{{ route('tipos_sancion.edit', $tipo-> id_tipo_sancion) }}" class="btn btn-sm btn-warning">Editar</a>
 
-                        <form action="{{ route('tipos_sancion.destroy', $tipos-> id_tipo_sancion) }}" method="POST" style="display:inline-block;">
+                        <form action="{{ route('tipos_sancion.destroy', $tipo-> id_tipo_sancion) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este tipo de sasncion?')">Eliminar</button>

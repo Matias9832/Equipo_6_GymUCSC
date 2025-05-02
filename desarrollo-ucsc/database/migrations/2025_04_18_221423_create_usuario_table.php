@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('usuario', function (Blueprint $table) {
-            $table->id('id_usuario'); // Esto crea un campo AUTO_INCREMENT y PRIMARY KEY
-            $table->string('rut_alumno');
+            $table->id('id_usuario');
+            $table->string('rut')->unique();
             $table->boolean('bloqueado_usuario')->default(0);
             $table->boolean('activado_usuario')->default(1);
             $table->string('correo_usuario');

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('rol_admin', function (Blueprint $table) {
             $table->integer('id_rol');
-            $table->integer('id_admin');
+            $table->unsignedBigInteger('id_admin');
             $table->primary(['id_rol', 'id_admin']);
 
             $table->foreign('id_rol')->references('id_rol')->on('rol');
