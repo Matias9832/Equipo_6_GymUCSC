@@ -15,6 +15,11 @@
             </a>
         </li>
         <li class="nav-item mb-2">
+            <a href="{{ route('usuarios.index') }}" class="nav-link text-dark {{ Request::is('admin/usuarios') ? 'fw-bold' : '' }}">
+                <i class="bi bi-person me-2"></i> Usuarios
+            </a>
+        </li>
+        <li class="nav-item mb-2">
             <a href="{{ route('deportes.index') }}" class="nav-link text-dark {{ Request::is('admin/deportes') ? 'fw-bold' : '' }}">
                 <i class="bi bi-trophy me-2"></i> Deportes
             </a>

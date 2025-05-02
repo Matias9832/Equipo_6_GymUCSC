@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\NewsController;
 use App\Models\News;
 use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ControlSalasController;
 use App\Http\Controllers\EspacioController;
 use App\Http\Controllers\TipoEspacioController;
@@ -38,6 +39,7 @@ Route::prefix('admin')->group(function () {
     
     Route::resource('maquinas', MaquinaController::class);
     Route::resource('deportes', DeporteController::class);
+    Route::resource('usuarios', UsuarioController::class);
 
     Route::resource('paises', PaisController::class);
     Route::resource('regiones', RegionController::class);
