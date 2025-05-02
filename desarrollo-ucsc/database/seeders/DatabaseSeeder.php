@@ -24,5 +24,8 @@ class DatabaseSeeder extends Seeder
 
         //Seeder sucursales
         $this->call(SucursalSeeder::class);
+
+        //Seeder deportes
+        $this->call(DeporteSeeder::class);
     }
 }

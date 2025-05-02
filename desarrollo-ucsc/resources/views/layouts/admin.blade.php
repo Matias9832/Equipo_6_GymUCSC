@@ -15,7 +15,7 @@
             </a>
         </li>
         <li class="nav-item mb-2">
-            <a href="{{ route('sucursales.index') }}" class="nav-link text-dark {{ Request::is('admin/sucursales/sucursal*') ? 'fw-bold' : '' }}">
+            <a href="{{ route('sucursales.index') }}" class="nav-link text-dark {{ Request::is('admin/sucursales*') ? 'fw-bold' : '' }}">
                 <i class="bi bi-people me-2"></i> Sucursales
             </a>
         </li>
