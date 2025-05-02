@@ -29,7 +29,8 @@
     @endif
 
     <!-- Footer -->
-    @include('layouts.partials.footer')
-
+    @if (!Request::is('admin*')) <!-- Oculta el footer en rutas que comiencen con "admin" -->
+        @include('layouts.partials.footer')
+    @endif
 </body>
 </html>
