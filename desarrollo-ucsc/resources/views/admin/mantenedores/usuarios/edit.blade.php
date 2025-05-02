@@ -8,8 +8,8 @@
         @csrf
         @method('PUT')
         <div class="mb-3">
-            <label for="rut_alumno" class="form-label">RUT</label>
-            <input type="text" name="rut_alumno" id="rut_alumno" class="form-control" value="{{ $usuario->rut_alumno }}" required>
+            <label for="rut" class="form-label">RUT</label>
+            <input type="text" name="rut" id="rut" class="form-control" value="{{ $usuario->rut }}" required>
         </div>
         <div class="mb-3">
             <label for="correo_usuario" class="form-label">Correo</label>

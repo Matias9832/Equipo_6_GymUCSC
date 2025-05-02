@@ -15,7 +15,7 @@ class Usuario extends Authenticatable
     protected $keyType = 'int'; // Tipo de dato de la clave primaria
 
     protected $fillable = [
-        'rut_alumno',
+        'rut',
         'correo_usuario',
         'contrasenia_usuario',
         'bloqueado_usuario',

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio de Sesión</title>
+    <title>Iniciar Sesión</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -13,7 +13,7 @@
             <div class="text-center">
                 <!-- Logo -->
                 <img src="{{ asset('images/logo_ucsc.png') }}" alt="Logo UCSC" style="width: 100px;">
-                <h3 class="mt-3 text-danger">Inicio de Sesión</h3>
+                <h3 class="mt-3 text-danger">Iniciar Sesión</h3>
             </div>
 
             <!-- Mostrar errores generales -->
@@ -30,12 +30,18 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="mb-3">
-                    <label for="rut_alumno" class="form-label">RUT</label>
-                    <input type="text" name="rut_alumno" id="rut_alumno" class="form-control" placeholder="Ingrese su RUT" value="{{ old('rut_alumno') }}" required>
+                    <label for="rut" class="form-label">RUT</label>
+                    <input type="text" name="rut" id="rut" class="form-control" placeholder="Sin puntos, ni dígito verificador" value="{{ old('rut') }}" required>
+                    @error('rut')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Contraseña</label>
                     <input type="password" name="password" id="password" class="form-control" placeholder="Ingrese su contraseña" required>
+                    @error('password')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
                 <button type="submit" class="btn btn-danger w-100">Iniciar Sesión</button>
             </form>

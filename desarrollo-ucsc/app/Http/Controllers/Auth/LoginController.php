@@ -28,26 +28,21 @@ class LoginController extends Controller
     {
         // Validar los datos del formulario
         $credentials = $request->validate([
-            'rut_alumno' => 'required',
+            'rut' => 'required', // Cambiado a 'rut'
             'password' => 'required',
         ], [
-            'rut_alumno.required' => 'El campo RUT es obligatorio.',
+            'rut.required' => 'El campo RUT es obligatorio.',
             'password.required' => 'El campo contraseña es obligatorio.',
         ]);
 
         // Verificar si el RUT existe en la base de datos
-        $usuario = Usuario::where('rut_alumno', $credentials['rut_alumno'])->first();
+        $usuario = Usuario::where('rut', $credentials['rut'])->first(); // Cambiado a 'rut'
         if (!$usuario) {
             return back()->withErrors([
-                'rut_alumno' => 'El RUT ingresado no está asociado a ningún usuario registrado.',
+                'rut' => 'El RUT ingresado no está asociado a ningún usuario registrado.',
             ]);
         }
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended($this->redirectTo);
-        }
-        
         // Verificar si la contraseña es correcta
         if (!Hash::check($credentials['password'], $usuario->contrasenia_usuario)) {
             return back()->withErrors([
@@ -59,9 +54,7 @@ class LoginController extends Controller
         Auth::login($usuario);
         $request->session()->regenerate();
 
-        // Redirigir al usuario autenticado (sin modificar la redirección existente)
-        $news = News::all(); // Obtener todas las noticias para mostrarlas en la vista de inicio
-        return view('welcome', compact('news')); // Redirigir al usuario autenticado
+        return redirect()->intended($this->redirectTo);
     }
 
     /**
@@ -72,7 +65,7 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        $news = News::all(); 
+
         return redirect('/')->with('success', 'Sesión cerrada correctamente.');
     }
 }

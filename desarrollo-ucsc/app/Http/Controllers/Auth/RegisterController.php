@@ -39,7 +39,7 @@ class RegisterController extends Controller
             'contraseña' => 'required|confirmed|min:6',
             'rut' => [
                 'required',
-                'unique:usuario,rut_alumno',
+                'unique:usuario,rut', // Cambiado a 'rut'
                 function ($attribute, $value, $fail) {
                     if (!\DB::table('alumno')->where('rut_alumno', $value)->exists()) {
                         $fail('El RUT ingresado no está registrado en la tabla de alumnos.');
@@ -62,7 +62,7 @@ class RegisterController extends Controller
             $usuario = Usuario::create([
                 'correo_usuario' => $request->correo,
                 'contrasenia_usuario' => Hash::make($request->contraseña),
-                'rut_alumno' => $request->rut,
+                'rut' => $request->rut, // Cambiado a 'rut'
                 'bloqueado_usuario' => 0,
                 'activado_usuario' => 1,
                 'tipo_usuario' => 'estudiante',

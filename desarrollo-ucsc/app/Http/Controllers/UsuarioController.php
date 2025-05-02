@@ -30,14 +30,14 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'rut_alumno' => 'required|string|unique:usuario,rut_alumno',
+            'rut' => 'required|string|unique:usuario,rut', // Cambiado a 'rut'
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
             'contrasenia_usuario' => 'required|string|min:6',
             'tipo_usuario' => 'required|in:admin,normal,seleccionado',
         ]);
 
         Usuario::create([
-            'rut_alumno' => $request->rut_alumno,
+            'rut' => $request->rut, // Cambiado a 'rut'
             'correo_usuario' => $request->correo_usuario,
             'contrasenia_usuario' => bcrypt($request->contrasenia_usuario),
             'tipo_usuario' => $request->tipo_usuario,
@@ -60,13 +60,13 @@ class UsuarioController extends Controller
     public function update(Request $request, Usuario $usuario)
     {
         $request->validate([
-            'rut_alumno' => 'required|string|unique:usuario,rut_alumno,' . $usuario->id_usuario . ',id_usuario',
+            'rut' => 'required|string|unique:usuario,rut,' . $usuario->id_usuario . ',id_usuario', // Cambiado a 'rut'
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $usuario->id_usuario . ',id_usuario',
             'tipo_usuario' => 'required|in:admin,normal,seleccionado',
             'contrasenia_usuario' => 'nullable|string|min:6', // Validación para la nueva contraseña
         ]);
 
-        $data = $request->only(['rut_alumno', 'correo_usuario', 'tipo_usuario']);
+        $data = $request->only(['rut', 'correo_usuario', 'tipo_usuario']); // Cambiado a 'rut'
 
         // Si se proporciona una nueva contraseña, encriptarla y agregarla a los datos
         if ($request->filled('contrasenia_usuario')) {
