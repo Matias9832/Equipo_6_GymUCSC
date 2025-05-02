@@ -21,5 +21,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             GeographicSeeder::class
         ]);
+
+        //Seeder sucursales
+        $this->call(SucursalSeeder::class);
     }
 }

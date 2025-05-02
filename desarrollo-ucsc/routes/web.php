@@ -15,6 +15,7 @@ use App\Http\Controllers\MarcasController;
 use App\Http\Controllers\PaisController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\CiudadController;
+use App\Http\Controllers\SucursalController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', function () {
@@ -30,7 +31,6 @@ Route::get('/admin', function () {
 // Grupo de rutas para mantenedores
 Route::prefix('admin')->group(function () {
     Route::resource('alumnos', AlumnoController::class);
-    Route::resource('espacios', EspacioController::class);
     Route::resource('tipos_espacio', TipoEspacioController::class)->parameters(['tipos_espacio' => 'tipoEspacio']);
     Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
     Route::resource('marcas', MarcasController::class);
@@ -38,6 +38,9 @@ Route::prefix('admin')->group(function () {
     Route::resource('paises', PaisController::class);
     Route::resource('regiones', RegionController::class);
     Route::resource('ciudades', CiudadController::class);
+    
+    Route::resource('sucursales', SucursalController::class);
+    Route::resource('espacios', EspacioController::class);
     
     // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
@@ -65,10 +68,10 @@ Route::get('/bienvenido', function () {
 })->name('bienvenido');
 
 // Ruta para la página de bienvenida
-Route::get('/welcome', function () {
-    $news = News::all();
-    return view('welcome', compact('news'));
-})->name('welcome');
+// Route::get('/welcome', function () {
+//     $news = News::all();
+//     return view('welcome', compact('news'));
+// })->name('welcome');
 
 // Noticias públicas
 //Route::get('/noticias', [NewsController::class, 'index'])->name('home');
