@@ -14,9 +14,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(AlumnoSeeder::class);
         
-        $this->call([
-            UsuarioSeeder::class,
-        ]);
+        $this->call(AdministradorSeeder::class);
+        
         //Seeder marcas
         $this->call(MarcaSeeder::class);
 

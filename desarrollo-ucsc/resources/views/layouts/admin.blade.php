@@ -83,7 +83,11 @@
                 </ul>
             </div>
         </li>
-        
+        <li class="nav-item mb-2">
+            <a href="{{ route('administradores.index') }}" class="nav-link text-dark {{ Request::is('admin/administradores*') ? 'fw-bold' : '' }}">
+                <i class="bi bi-person-badge me-2"></i> Administradores
+            </a>
+        </li>
     </ul>
 </div>
 @endsection

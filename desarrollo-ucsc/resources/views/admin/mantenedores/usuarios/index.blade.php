@@ -5,7 +5,8 @@
 
 @section('content')
     <h1 class="h3">Lista de Usuarios</h1>
-    <a href="{{ route('usuarios.create') }}" class="btn btn-primary mb-3">Crear Usuario</a>
+    <!-- Por ahora no crearemos administradores desde la tabla de usuarios -->
+    <!-- <a href="{{ route('usuarios.create') }}" class="btn btn-primary mb-3">Crear Usuario</a> -->
     <table class="table table-striped">
         <thead>
             <tr>

@@ -18,6 +18,7 @@ use App\Http\Controllers\PaisController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\CiudadController;
 use App\Http\Controllers\SucursalController;
+use App\Http\Controllers\AdministradorController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', function () {
@@ -84,7 +85,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', function () {
         return view('admin.index');
     })->name('admin.index');
-
+    Route::resource('administradores', AdministradorController::class)->parameters([
+        'administradores' => 'administrador',
+    ]);
     
 });
 
