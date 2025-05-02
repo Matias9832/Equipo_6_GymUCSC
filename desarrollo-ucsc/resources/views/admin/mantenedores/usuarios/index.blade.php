@@ -20,7 +20,7 @@
             @foreach($usuarios as $usuario)
                 <tr>
                     <td>{{ $usuario->id_usuario }}</td>
-                    <td>{{ $usuario->rut_alumno }}</td>
+                    <td>{{ $usuario->rut }}</td>
                     <td>{{ $usuario->correo_usuario }}</td>
                     <td>{{ ucfirst($usuario->tipo_usuario) }}</td>
                     <td>
