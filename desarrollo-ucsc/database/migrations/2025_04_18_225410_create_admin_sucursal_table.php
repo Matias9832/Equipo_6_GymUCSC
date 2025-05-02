@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_admin');
             $table->primary(['id_suc', 'id_admin']);
 
+            $table->boolean('activa');
+
             $table->foreign('id_suc')->references('id_suc')->on('sucursal');
             $table->foreign('id_admin')->references('id_admin')->on('administrador');
         });

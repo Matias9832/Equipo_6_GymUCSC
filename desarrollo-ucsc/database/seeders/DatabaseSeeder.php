@@ -29,5 +29,7 @@ class DatabaseSeeder extends Seeder
 
         //Seeder deportes
         $this->call(DeporteSeeder::class);
+
+        $this->call([AdminSucursalSeeder::class]);
     }
 }
