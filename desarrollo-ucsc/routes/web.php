@@ -80,9 +80,11 @@ Route::get('/bienvenido', function () {
 // CRUD para administradores
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('news', NewsController::class)->except(['index', 'show']);
+    // Ruta para el panel de administración
+    Route::get('/admin', function () {
+        return view('admin.index');
+    })->name('admin.index');
+
+    
 });
 
-// Ruta para el panel de administración
-Route::get('/admin', function () {
-    return view('admin.index');
-})->name('admin.index');

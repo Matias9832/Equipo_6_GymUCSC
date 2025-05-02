@@ -12,14 +12,14 @@ class AdminMiddleware
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->is_admin) {
+        if (Auth::check() && Auth::user()->tipo_usuario === 'admin') {
             return $next($request);
         }
-        
+
+        // Redirigir si no es administrador
+        return redirect('/')->with('error', 'No tienes acceso a esta sección.');
     }
 }
