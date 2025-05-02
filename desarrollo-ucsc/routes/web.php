@@ -11,6 +11,7 @@ use App\Http\Controllers\EspacioController;
 use App\Http\Controllers\TipoEspacioController;
 use App\Http\Controllers\TipoSancionController;
 use App\Http\Controllers\MaquinaController;
+use App\Http\Controllers\DeporteController;
 use App\Http\Controllers\MarcasController;
 use App\Http\Controllers\PaisController;
 use App\Http\Controllers\RegionController;
@@ -35,6 +36,9 @@ Route::prefix('admin')->group(function () {
     Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
     Route::resource('marcas', MarcasController::class);
     
+    Route::resource('maquinas', MaquinaController::class);
+    Route::resource('deportes', DeporteController::class);
+
     Route::resource('paises', PaisController::class);
     Route::resource('regiones', RegionController::class);
     Route::resource('ciudades', CiudadController::class);
@@ -46,8 +50,8 @@ Route::prefix('admin')->group(function () {
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
     Route::get('/gestion-qr', [ControlSalasController::class, 'mostrarQR'])->name('control_salas.gestion_qr');
 
-    // Rutas para el CRUD de máquinas
-    Route::resource('maquinas', MaquinaController::class);
+    
+
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -66,12 +70,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/bienvenido', function () {
     return redirect()->route('home');
 })->name('bienvenido');
-
-// Ruta para la página de bienvenida
-// Route::get('/welcome', function () {
-//     $news = News::all();
-//     return view('welcome', compact('news'));
-// })->name('welcome');
 
 // Noticias públicas
 //Route::get('/noticias', [NewsController::class, 'index'])->name('home');
