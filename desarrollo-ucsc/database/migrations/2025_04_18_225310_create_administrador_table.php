@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('administrador', function (Blueprint $table) {
             $table->id('id_admin');
 
+            $table->string('rut_admin');
+            $table->foreign('rut_admin')->references('rut')->on('usuario');
+
             $table->string('nombre_admin');
             $table->timestamp('fecha_creacion');
         });
