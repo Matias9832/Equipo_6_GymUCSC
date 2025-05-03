@@ -34,6 +34,7 @@ Route::get('/admin', function () {
 // Grupo de rutas para mantenedores
 Route::prefix('admin')->group(function () {
     Route::resource('alumnos', AlumnoController::class);
+
     Route::resource('tipos_espacio', TipoEspacioController::class)->parameters(['tipos_espacio' => 'tipoEspacio']);
     Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
     Route::resource('marcas', MarcasController::class);

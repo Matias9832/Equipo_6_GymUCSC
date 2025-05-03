@@ -21,7 +21,7 @@
         </li>
         <li class="nav-item mb-2">
             <a href="{{ route('sucursales.index') }}" class="nav-link text-dark {{ Request::is('admin/sucursales*') ? 'fw-bold' : '' }}">
-                <i class="bi bi-people me-2"></i> Sucursales
+                <i class="bi bi-shop me-2"></i> Sucursales
             </a>
         </li>
 
@@ -92,7 +92,32 @@
 </div>
 @endsection
 
+
 @section('content')
     <h1 class="h3">Este es el panel de control</h1>
     <p>Bienvenido al panel de administración. Aquí puedes gestionar las configuraciones y recursos del sistema.</p>
 @endsection
+
+@if(session('success'))
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1100; margin-top: 60px;">
+    <div id="successToast" class="toast align-items-center text-white bg-success border-0 show" role="alert">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{ session('success') }}
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
+<script>
+    setTimeout(() => {
+        const toast = document.getElementById('successToast');
+        if (toast) {
+            // Usa Bootstrap 5 para ocultar el toast
+            const bsToast = bootstrap.Toast.getOrCreateInstance(toast);
+            bsToast.hide();
+        }
+    }, 3000);
+</script>
+

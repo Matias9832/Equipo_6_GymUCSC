@@ -10,13 +10,14 @@ class EspacioController extends Controller
     public function index()
     {
         $espacios = Espacio::with(['tipo'])->get();
-        return view('admin.sucursales.espacio.index', compact('espacios'));
+        return view('admin.sucursales.espacios.index', compact('espacios'));
     }
 
     public function create()
     {
         $tipos = \App\Models\TipoEspacio::all();
-        return view('admin.sucursales.espacio.create', compact('tipos'));
+        $sucursales = \App\Models\Sucursal::all();
+        return view('admin.sucursales.espacios.create', compact('tipos', 'sucursales'));
     }
 
     public function store(Request $request)
@@ -29,13 +30,15 @@ class EspacioController extends Controller
 
         Espacio::create($request->all());
 
-        return redirect()->route('espacio.index')->with('success', 'Espacio creado correctamente.');
+        return redirect()->route('espacios.index')->with('success', 'Espacio creado correctamente.');
     }
 
     public function edit($espacio)
     {
         $espacio = Espacio::findOrFail($espacio);
-        return view('admin.sucursales.espacio.edit', compact('espacio'));
+        $tipos = \App\Models\TipoEspacio::all();
+        $sucursales = \App\Models\Sucursal::all();
+        return view('admin.sucursales.espacios.edit', compact('espacio', 'tipos', 'sucursales'));
     }
 
     public function update(Request $request, Espacio $espacio)
@@ -50,13 +53,13 @@ class EspacioController extends Controller
 
         $espacio->update($request->all());
 
-        return redirect()->route('espacio.index')->with('success', 'Espacio actualizado correctamente.');
+        return redirect()->route('espacios.index')->with('success', 'Espacio actualizado correctamente.');
     }
 
     public function destroy( Espacio $espacio)
     {
         $espacio->delete();
 
-        return redirect()->route('espacio.index')->with('success', 'Espacio eliminado correctamente.');
+        return redirect()->route('espacios.index')->with('success', 'Espacio eliminado correctamente.');
     }
 }

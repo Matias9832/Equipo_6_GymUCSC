@@ -5,11 +5,7 @@
 @section('content')
     <h1>Listado de Espacios</h1>
 
-    @if (session('success'))
-        <div style="color: green;">
-            {{ session('success') }}
-        </div>
-    @endif
+   
 
     <a href="{{ route('espacios.create') }}" class="btn btn-primary mb-3">Crear Nuevo Espacio</a>
 

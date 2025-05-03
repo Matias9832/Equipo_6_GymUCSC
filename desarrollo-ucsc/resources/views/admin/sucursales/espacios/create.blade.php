@@ -22,14 +22,14 @@
     
         <div class="mb-3">
             <label for="id_suc" class="form-label">Sucursal</label>
-            <input type="text" name="id_suc" id="id_suc" class="form-control" placeholder="ID sucursal" required>
+            <select name="id_suc" id="id_suc" class="form-select" required>
+                <option value="">Seleccione una sucursal</option>
+                @foreach($sucursales as $sucursal)
+                    <option value="{{ $sucursal->id_suc }}">{{ $sucursal->nombre_suc }}</option>
+                @endforeach
+            </select>
         </div>
-        <!--select name="tipo" required>
-            <option value="cancha">Cancha</option>
-            <option value="piscina">Piscina</option>
-            <option value="tenis">Tenis</option>
-        </select><br-->
-    
+           
         
         <!--select name="sucursal_id" required>
             @ foreach($sucursales as $sucursal)
