@@ -31,5 +31,9 @@ class DatabaseSeeder extends Seeder
         $this->call(DeporteSeeder::class);
 
         $this->call([AdminSucursalSeeder::class]);
+
+        //Seeder de las Sedes
+        $this->call(SalaSeeder::class);
+        $this->call(TipoSeeder::class);
     }
 }

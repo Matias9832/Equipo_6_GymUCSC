@@ -9,7 +9,12 @@ class EspacioController extends Controller
 {
     public function index()
     {
-        $espacios = Espacio::with(['tipo'])->get();
+        $sucursalActiva = session('sucursal_activa');
+
+        $espacios = Espacio::with(['tipo'])
+            ->where('id_suc', $sucursalActiva)
+            ->get();
+
         return view('admin.sucursales.espacio.index', compact('espacios'));
     }
 
@@ -29,18 +34,19 @@ class EspacioController extends Controller
 
         Espacio::create($request->all());
 
-        return redirect()->route('espacio.index')->with('success', 'Espacio creado correctamente.');
+        return redirect()->route('espacios.index')->with('success', 'Espacio creado correctamente.');
     }
 
     public function edit($espacio)
     {
         $espacio = Espacio::findOrFail($espacio);
-        return view('admin.sucursales.espacio.edit', compact('espacio'));
+        $tipos = \App\Models\TipoEspacio::all();
+        return view('admin.sucursales.espacio.edit', compact('espacio', 'tipos'));
     }
 
     public function update(Request $request, Espacio $espacio)
     {
-        
+
 
         $request->validate([
             'nombre_espacio' => 'required|string|max:255',
@@ -50,13 +56,13 @@ class EspacioController extends Controller
 
         $espacio->update($request->all());
 
-        return redirect()->route('espacio.index')->with('success', 'Espacio actualizado correctamente.');
+        return redirect()->route('espacios.index')->with('success', 'Espacio actualizado correctamente.');
     }
 
-    public function destroy( Espacio $espacio)
+    public function destroy(Espacio $espacio)
     {
         $espacio->delete();
 
-        return redirect()->route('espacio.index')->with('success', 'Espacio eliminado correctamente.');
+        return redirect()->route('espacios.index')->with('success', 'Espacio eliminado correctamente.');
     }
 }

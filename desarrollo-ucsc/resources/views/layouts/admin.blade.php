@@ -24,6 +24,16 @@
                 <i class="bi bi-people me-2"></i> Sucursales
             </a>
         </li>
+        <li class="nav-item mb-2">
+            <a href="{{ route('espacios.index') }}" class="nav-link text-dark {{ Request::is('admin/espacios*') ? 'fw-bold' : '' }}">
+                <i class="bi bi-rocket-takeoff"></i> Espacios
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a href="{{ route('salas.index') }}" class="nav-link text-dark {{ Request::is('admin/salas*') ? 'fw-bold' : '' }}">
+                <i class="bi bi-rocket-takeoff"></i> Salas
+            </a>
+        </li>
 
 
         <!-- Configuraciones para editar página web -->
@@ -35,11 +45,6 @@
         <li class="nav-item mb-2">
             <a href="{{ route('maquinas.index') }}" class="nav-link text-dark {{ Request::is('admin/maquinas*') ? 'fw-bold' : '' }}">
                 <i class="bi bi-gear me-2"></i> Máquinas
-            </a>
-        </li>
-        <li class="nav-item mb-2">
-            <a href="{{ route('espacios.index') }}" class="nav-link text-dark {{ Request::is('admin/espacios*') ? 'fw-bold' : '' }}">
-                <i class="bi bi-rocket-takeoff"></i> Espacios
             </a>
         </li>
         <li class="nav-item mb-2">

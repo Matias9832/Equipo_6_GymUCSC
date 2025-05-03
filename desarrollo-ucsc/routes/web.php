@@ -19,6 +19,7 @@ use App\Http\Controllers\RegionController;
 use App\Http\Controllers\CiudadController;
 use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\AdministradorController;
+use App\Http\Controllers\SalaController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', function () {
@@ -48,7 +49,8 @@ Route::prefix('admin')->group(function () {
     
     Route::resource('sucursales', SucursalController::class);
     Route::resource('espacios', EspacioController::class);
-    
+    Route::resource('salas', SalaController::class);
+
     // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
     Route::get('/gestion-qr', [ControlSalasController::class, 'mostrarQR'])->name('control_salas.gestion_qr');
