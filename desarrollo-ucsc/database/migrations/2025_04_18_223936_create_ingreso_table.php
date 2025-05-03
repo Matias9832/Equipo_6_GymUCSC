@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -21,8 +20,8 @@ return new class extends Migration
 
             $table->date('fecha_ingreso');
             $table->time('hora_ingreso');
-            $table->time('hora_salida');
-            $table->time('tiempo_uso');
+            $table->time('hora_salida')->nullable();
+            $table->time('tiempo_uso')->nullable();
             $table->timestamps();
             $table->engine = 'InnoDB'; // Asegura que se use InnoDB
         });

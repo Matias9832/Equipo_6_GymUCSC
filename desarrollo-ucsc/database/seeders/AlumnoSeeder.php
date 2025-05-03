@@ -86,12 +86,12 @@ class AlumnoSeeder extends Seeder
                 'estado_alumno' => 'Activo',
             ],
             [
-                'rut_alumno' => '11112222-0',
-                'apellido_paterno' => 'Vega',
-                'apellido_materno' => 'Navarro',
-                'nombre_alumno' => 'Valentina',
-                'carrera' => 'Educación Física',
-                'estado_alumno' => 'Inactivo',
+                'rut_alumno' => '21080600',
+                'apellido_paterno' => 'Carrasco',
+                'apellido_materno' => 'Aguayo',
+                'nombre_alumno' => 'Matías',
+                'carrera' => 'Ingienería Civil Informática',
+                'estado_alumno' => 'Activo',
             ],
         ]);
     }

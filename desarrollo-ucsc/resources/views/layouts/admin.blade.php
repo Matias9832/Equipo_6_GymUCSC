@@ -58,7 +58,7 @@
             </a>
         </li>
         <li class="nav-item mb-2">
-            <a href="{{ route('control_salas.gestion_qr') }}" class="nav-link text-dark {{ Request::is('admin/control_salas/gestion-qr') ? 'fw-bold' : '' }}">
+            <a href="{{ route('control-salas.seleccionar') }}" class="nav-link text-dark {{ Request::is('control-salas/seleccionar') ? 'fw-bold' : '' }}">
                 <i class="bi bi-people me-2"></i> Gestión de QR
             </a>
         </li>

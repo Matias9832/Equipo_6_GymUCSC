@@ -32,11 +32,6 @@ Route::get('/admin', function () {
     return view('admin.index');
 })->name('admin');
 
-Route::middleware(['auth'])->group(function () {
-    // Ruta para la vista del registro, accesible solo para usuarios logueados
-    Route::get('/registro-sala', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
-});
-
 // Rutas de autenticación
 Route::get('/login', [LoginController::class, 'create'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate']);
@@ -85,9 +80,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
         // Ruta para importar el archivo Excel
         Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
-        Route::get('/gestion-qr', [ControlSalasController::class, 'mostrarQR'])->name('control_salas.gestion_qr');
+        Route::get('/control-salas/seleccionar', [ControlSalasController::class, 'seleccionarSala'])->name('control-salas.seleccionar');
+        Route::post('/control-salas/generar-qr', [ControlSalasController::class, 'generarQR'])->name('control-salas.generarQR');
 
     });
 
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Ruta para la vista del registro, accesible solo para usuarios alumnos logueados
+    Route::get('/ingreso/registro', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
 });
 
