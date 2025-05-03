@@ -32,33 +32,6 @@ Route::get('/admin', function () {
     return view('admin.index');
 })->name('admin');
 
-// Grupo de rutas para mantenedores
-Route::prefix('admin')->group(function () {
-    Route::resource('alumnos', AlumnoController::class);
-    Route::resource('tipos_espacio', TipoEspacioController::class)->parameters(['tipos_espacio' => 'tipoEspacio']);
-    Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
-    Route::resource('marcas', MarcasController::class);
-    
-    Route::resource('maquinas', MaquinaController::class);
-    Route::resource('deportes', DeporteController::class);
-    Route::resource('usuarios', UsuarioController::class);
-
-    Route::resource('paises', PaisController::class);
-    Route::resource('regiones', RegionController::class);
-    Route::resource('ciudades', CiudadController::class);
-    
-    Route::resource('sucursales', SucursalController::class);
-    Route::resource('espacios', EspacioController::class);
-    Route::resource('salas', SalaController::class);
-
-    // Ruta para importar el archivo Excel
-    Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
-    Route::get('/gestion-qr', [ControlSalasController::class, 'mostrarQR'])->name('control_salas.gestion_qr');
-
-    
-
-});
-
 Route::middleware(['auth'])->group(function () {
     // Ruta para la vista del registro, accesible solo para usuarios logueados
     Route::get('/registro-sala', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
@@ -90,6 +63,31 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('administradores', AdministradorController::class)->parameters([
         'administradores' => 'administrador',
     ]);
-    
+
+    // Grupo de rutas para mantenedores
+    Route::prefix('admin')->group(function () {
+        Route::resource('alumnos', AlumnoController::class);
+        Route::resource('tipos_espacio', TipoEspacioController::class)->parameters(['tipos_espacio' => 'tipoEspacio']);
+        Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
+        Route::resource('marcas', MarcasController::class);
+
+        Route::resource('maquinas', MaquinaController::class);
+        Route::resource('deportes', DeporteController::class);
+        Route::resource('usuarios', UsuarioController::class);
+
+        Route::resource('paises', PaisController::class);
+        Route::resource('regiones', RegionController::class);
+        Route::resource('ciudades', CiudadController::class);
+
+        Route::resource('sucursales', SucursalController::class);
+        Route::resource('espacios', EspacioController::class);
+        Route::resource('salas', SalaController::class);
+
+        // Ruta para importar el archivo Excel
+        Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
+        Route::get('/gestion-qr', [ControlSalasController::class, 'mostrarQR'])->name('control_salas.gestion_qr');
+
+    });
+
 });
 
