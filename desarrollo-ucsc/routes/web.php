@@ -90,5 +90,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     // Ruta para la vista del registro, accesible solo para usuarios alumnos logueados
     Route::get('/ingreso/registro', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
+    Route::post('/sala/salida', [ControlSalasController::class, 'registrarSalida'])->name('sala.registrarSalida');
+    Route::get('/ingreso/actual', [ControlSalasController::class, 'mostrarIngreso'])
+        ->name('ingreso.mostrar')
+        ->middleware('auth');   
 });
 

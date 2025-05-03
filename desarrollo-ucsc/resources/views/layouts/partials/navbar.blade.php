@@ -14,6 +14,9 @@
                             </a>
                         </li>
                     @endif
+                    <li class="nav-item text-secondary">
+                        <a class="nav-link" href="{{ route('ingreso.mostrar') }}">Ingresar a Sala</a>
+                    </li>
                     <li class="nav-item d-flex align-items-center text-secondary small">
                         <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
                     </li>

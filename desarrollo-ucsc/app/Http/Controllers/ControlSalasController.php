@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Ingreso;
@@ -25,7 +24,6 @@ class ControlSalasController extends Controller
             return back()->withErrors(['aforo' => 'El aforo excede el máximo permitido para esta sala.']);
         }
 
-        // Encriptar el id_sala
         $encryptedId = Crypt::encrypt($sala->id_sala);
 
         $urlQR = route('sala.registro', [
@@ -33,7 +31,6 @@ class ControlSalasController extends Controller
             'aforo' => $request->aforo,
         ]);
 
-        // Generar el QR
         $qrCode = QrCode::size(300)->generate($urlQR);
 
         return view('admin.control_salas.gestion_qr', [
@@ -62,14 +59,13 @@ class ControlSalasController extends Controller
 
         $usuario = Auth::user();
 
-        // Evitar duplicados opcionalmente
-        $existe = Ingreso::where('id_sala', $idSala)
+        $registro = Ingreso::where('id_sala', $idSala)
             ->where('id_usuario', $usuario->id_usuario)
             ->where('fecha_ingreso', $fecha)
-            ->exists();
+            ->first();
 
-        if (!$existe) {
-            Ingreso::create([
+        if (!$registro) {
+            $registro = Ingreso::create([
                 'id_sala' => $idSala,
                 'id_usuario' => $usuario->id_usuario,
                 'fecha_ingreso' => $fecha,
@@ -79,14 +75,75 @@ class ControlSalasController extends Controller
             ]);
         }
 
-        return view('usuarios.ingreso.registro_confirmado', compact('fecha'));
+        return view('usuarios.ingreso.mostrar_ingreso', [
+            'fecha' => $fecha,
+            'horaIngreso' => $registro->hora_ingreso,
+            'idSala' => $idSala,
+        ]);
     }
+
+    public function mostrarIngreso()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $usuario = Auth::user();
+        $fecha = now()->format('Y-m-d');
+
+        $registro = Ingreso::where('id_usuario', $usuario->id_usuario)
+            ->where('fecha_ingreso', $fecha)
+            ->whereNull('hora_salida') // Solo si aún no ha salido
+            ->first();
+
+        if (!$registro) {
+            return view('usuarios.ingreso.mostrar_ingreso', [
+                'mensaje' => 'No te encuentras dentro de una Sala.',
+            ]);
+        }
+
+        return view('usuarios.ingreso.mostrar_ingreso', [
+            'fecha' => $registro->fecha_ingreso,
+            'horaIngreso' => $registro->hora_ingreso,
+            'idSala' => $registro->id_sala,
+            'mensaje' => null,
+        ]);
+    }
+
+    public function registrarSalida(Request $request)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $usuario = Auth::user();
+        $fecha = now()->format('Y-m-d');
+
+        $registro = Ingreso::where('id_usuario', $usuario->id_usuario)
+            ->where('id_sala', $request->id_sala)
+            ->where('fecha_ingreso', $fecha)
+            ->whereNull('hora_salida')
+            ->first();
+
+        if ($registro) {
+            $horaSalida = now();
+            $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
+            $tiempoUso = $horaIngreso->diffInSeconds($horaSalida);
+
+            $registro->hora_salida = $horaSalida->format('H:i:s');
+            $registro->tiempo_uso = $tiempoUso;
+            $registro->save();
+        }
+
+        return redirect()->route('ingreso.mostrar');
+    }
+
+
 
     public function seleccionarSala()
     {
         $sucursalActiva = session('sucursal_activa');
 
-        // Obtener solo las salas de la sucursal activa
         $salas = Sala::where('id_suc', $sucursalActiva)->get();
 
         return view('admin.control_salas.seleccionar_sala', compact('salas'));
