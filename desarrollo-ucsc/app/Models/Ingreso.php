@@ -18,5 +18,12 @@ class Ingreso extends Model
         'tiempo_uso',
     ];
 
+    // Ingreso.php
+    public function sala()
+    {
+        return $this->belongsTo(Sala::class, 'id_sala');
+    }
+
+
     public $timestamps = true;
 }

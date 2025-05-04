@@ -1,13 +1,9 @@
-@extends('layouts.app') {{-- Usa tu layout base, cambia si usas otro --}}
+@extends('layouts.app')
 
 @section('content')
 <div class="container text-center">
-    <h1 class="mb-4">Registro en Sala</h1>
+    <h2 class="mb-4">Acceder a {{ $nombreSala }}</h2>
 
-    {{-- Mostrar la fecha obtenida del QR --}}
-    <p>Fecha del registro: {{ $fecha }}</p>
-
-    {{-- Mostrar botón de registro si el usuario está logueado --}}
     @auth
         <form action="#" method="POST">
             @csrf

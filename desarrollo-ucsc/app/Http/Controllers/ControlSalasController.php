@@ -25,17 +25,19 @@ class ControlSalasController extends Controller
         }
 
         $encryptedId = Crypt::encrypt($sala->id_sala);
-
-        $urlQR = route('sala.registro', [
-            'id_sala' => $encryptedId,
-            'aforo' => $request->aforo,
-        ]);
+        $urlQR = route('sala.registro', ['id_sala' => $encryptedId, 'aforo' => $request->aforo]);
 
         $qrCode = QrCode::size(300)->generate($urlQR);
+
+        $usuariosActivos = Ingreso::where('id_sala', $sala->id_sala)
+            ->whereNull('hora_salida')
+            ->count();
 
         return view('admin.control_salas.gestion_qr', [
             'qrCode' => $qrCode,
             'desdeQR' => false,
+            'aforoPermitido' => $request->aforo,
+            'usuariosActivos' => $usuariosActivos,
         ]);
     }
 
@@ -48,37 +50,62 @@ class ControlSalasController extends Controller
             abort(403, 'ID de sala inválido o modificado.');
         }
 
-        $fecha = now()->format('Y-m-d');
+        $aforo = $request->query('aforo');
+        $usuariosActivos = Ingreso::where('id_sala', $idSala)
+            ->whereNull('hora_salida')
+            ->count();
+
+        if ($usuariosActivos >= $aforo) {
+            return view('usuarios.ingreso.registro', [
+                'mensaje' => 'La sala está llena. No se pueden registrar más usuarios.',
+                'aforo' => $aforo,
+                'id_sala' => $idSala,
+            ]);
+        }
+
+        $sala = Sala::findOrFail($idSala);
 
         if (!Auth::check()) {
             return view('usuarios.ingreso.registro', [
                 'qrCode' => null,
                 'desdeQR' => true,
+                'aforo' => $aforo,
+                'id_sala' => $idSala,
+                'nombreSala' => $sala->nombre,
             ]);
         }
 
         $usuario = Auth::user();
 
-        $registro = Ingreso::where('id_sala', $idSala)
+        $registroActivo = Ingreso::where('id_sala', $idSala)
             ->where('id_usuario', $usuario->id_usuario)
-            ->where('fecha_ingreso', $fecha)
+            ->whereNull('hora_salida')
             ->first();
 
-        if (!$registro) {
-            $registro = Ingreso::create([
+        if ($registroActivo) {
+            return view('usuarios.ingreso.registro', [
+                'mensaje' => 'Ya tienes un ingreso activo en esta sala. Debes registrar tu salida antes de poder ingresar nuevamente.',
+                'aforo' => $aforo,
                 'id_sala' => $idSala,
-                'id_usuario' => $usuario->id_usuario,
-                'fecha_ingreso' => $fecha,
-                'hora_ingreso' => now()->format('H:i:s'),
-                'hora_salida' => null,
-                'tiempo_uso' => null,
+                'nombreSala' => $sala->nombre,
             ]);
         }
 
+        $registro = Ingreso::create([
+            'id_sala' => $idSala,
+            'id_usuario' => $usuario->id_usuario,
+            'fecha_ingreso' => now()->format('Y-m-d'),
+            'hora_ingreso' => now()->format('H:i:s'),
+            'hora_salida' => null,
+            'tiempo_uso' => null,
+        ]);
+
         return view('usuarios.ingreso.mostrar_ingreso', [
-            'fecha' => $fecha,
+            'fecha' => now()->format('Y-m-d'),
             'horaIngreso' => $registro->hora_ingreso,
             'idSala' => $idSala,
+            'nombreSala' => $sala->nombre,
+            'mensaje' => null,
         ]);
     }
 
@@ -93,20 +120,25 @@ class ControlSalasController extends Controller
 
         $registro = Ingreso::where('id_usuario', $usuario->id_usuario)
             ->where('fecha_ingreso', $fecha)
-            ->whereNull('hora_salida') // Solo si aún no ha salido
+            ->whereNull('hora_salida')
             ->first();
 
-        if (!$registro) {
+        if ($registro) {
             return view('usuarios.ingreso.mostrar_ingreso', [
-                'mensaje' => 'No te encuentras dentro de una Sala.',
+                'mensaje' => null,
+                'fecha' => $registro->fecha_ingreso,
+                'horaIngreso' => $registro->hora_ingreso,
+                'idSala' => $registro->id_sala,
+                'nombreSala' => $registro->sala->nombre,
             ]);
         }
 
         return view('usuarios.ingreso.mostrar_ingreso', [
-            'fecha' => $registro->fecha_ingreso,
-            'horaIngreso' => $registro->hora_ingreso,
-            'idSala' => $registro->id_sala,
-            'mensaje' => null,
+            'mensaje' => 'Escanea el código QR para ingresar a una sala.',
+            'fecha' => null,
+            'horaIngreso' => null,
+            'idSala' => null,
+            'nombreSala' => null,
         ]);
     }
 
@@ -138,12 +170,9 @@ class ControlSalasController extends Controller
         return redirect()->route('ingreso.mostrar');
     }
 
-
-
     public function seleccionarSala()
     {
         $sucursalActiva = session('sucursal_activa');
-
         $salas = Sala::where('id_suc', $sucursalActiva)->get();
 
         return view('admin.control_salas.seleccionar_sala', compact('salas'));
