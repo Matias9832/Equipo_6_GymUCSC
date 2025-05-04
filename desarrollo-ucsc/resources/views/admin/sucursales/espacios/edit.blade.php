@@ -16,11 +16,21 @@
         </div>
         <div class="mb-3">
             <label for="tipo_espacio" class="form-label">Tipo de espacio</label>
-            <select name="tipo_espacio" id="tipo_espacio" class="form-select" required>
-                <option value="">Seleccione un tipo</option>
+             <select name="tipo_espacio" id="tipo_espacio" class="form-select" required>
                 @foreach($tipos as $tipo)
-                    <option value="{{ $tipo->id }}" {{ $espacio->tipo_espacio == $tipo->id ? 'selected' : '' }}>
+                    <option value="{{ $tipo->id }}" {{ $tipo->id == $espacio->tipo_espacio ? 'selected' : '' }}>
                         {{ $tipo->nombre_tipo }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    
+        <div class="mb-3">
+            <label for="id_suc" class="form-label">Sucursal</label>
+            <select name="id_suc" id="id_suc" class="form-select" required>
+                @foreach($sucursales as $sucursal)
+                    <option value="{{ $sucursal->id_suc }}" {{ $sucursal->id_suc == $espacio->id_suc ? 'selected' : '' }}>
+                        {{ $sucursal->nombre_suc }}
                     </option>
                 @endforeach
             </select>

@@ -5,12 +5,7 @@
 @section('content')
     <h1>Listado Tipos de Sanciones</h1>
 
-    @if (session('success'))
-        <div style="color: green;">
-            {{ session('success') }}
-        </div>
-    @endif
-
+    
     <a href="{{ route('tipos_sancion.create') }}" class="btn btn-primary mb-3">Crear Nuevo Tipo de Sanción</a>
 
     <table class="table table-striped">
@@ -34,7 +29,9 @@
                         <form action="{{ route('tipos_sancion.destroy', $tipo-> id_tipo_sancion) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este tipo de sasncion?')">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm p-1" onclick="return confirm('¿Estás seguro de que quieres eliminar este tipo de sanción?')">
+                                Eliminar
+                            </button>
                         </form>
                     </td>
                 </tr>

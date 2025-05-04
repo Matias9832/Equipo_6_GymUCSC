@@ -5,23 +5,25 @@
 
     <form action="{{ route('news.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
+        
         <div>
-            <label>Título:</label>
-            <input type="text" name="titulo" class="form-control" required>
+            <label for="images" class="form-label">Imagenes:</label>
+            <input type="file" name="images[]" multiple class="form-control">
         </div>
 
         <div>
-            <label>Contenido:</label>
-            <textarea name="contenido" class="form-control" required></textarea>
+            <label for="nombre_noticia" class="form-label">Título:</label>
+            <input type="text" name="nombre_noticia" class="form-control" required>
         </div>
 
         <div>
-            <label>Imagen:</label>
-            <input type="file" name="imagen" class="form-control">
+            <label for="descripcion_noticia" class="form-label">Contenido:</label>
+            <textarea name="descripcion_noticia" class="form-control" required></textarea>
         </div>
+
         <div class="mb-3">
-            <label for="category" class="form-label">Categoría</label>
-            <input type="text" class="form-control" id="category" name="category" required>
+            <label for="tipo_deporte" class="form-label">Categoría</label>
+            <input type="text" class="form-control" id="tipo_deporte" name="tipo_deporte" required>
         </div>
         
 

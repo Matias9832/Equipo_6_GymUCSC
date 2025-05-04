@@ -9,19 +9,15 @@ class EspacioController extends Controller
 {
     public function index()
     {
-        $sucursalActiva = session('sucursal_activa');
-
-        $espacios = Espacio::with(['tipo'])
-            ->where('id_suc', $sucursalActiva)
-            ->get();
-
-        return view('admin.sucursales.espacio.index', compact('espacios'));
+        $espacios = Espacio::with(['tipo'])->get();
+        return view('admin.sucursales.espacios.index', compact('espacios'));
     }
 
     public function create()
     {
         $tipos = \App\Models\TipoEspacio::all();
-        return view('admin.sucursales.espacio.create', compact('tipos'));
+        $sucursales = \App\Models\Sucursal::all();
+        return view('admin.sucursales.espacios.create', compact('tipos', 'sucursales'));
     }
 
     public function store(Request $request)
@@ -42,6 +38,8 @@ class EspacioController extends Controller
         $espacio = Espacio::findOrFail($espacio);
         $tipos = \App\Models\TipoEspacio::all();
         return view('admin.sucursales.espacio.edit', compact('espacio', 'tipos'));
+        $sucursales = \App\Models\Sucursal::all();
+        return view('admin.sucursales.espacios.edit', compact('espacio', 'tipos', 'sucursales'));
     }
 
     public function update(Request $request, Espacio $espacio)
