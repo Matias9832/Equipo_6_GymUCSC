@@ -37,8 +37,6 @@
         </div>
 
 
-        <input type="hidden" name="id_suc" value="{{ session('sucursal_activa') }}">
-
         <button type="submit" class="btn btn-success">Guardar Cambios</button>
         <a href="{{ route('espacios.index') }}" class="btn btn-secondary">Cancelar</a>
     </form>

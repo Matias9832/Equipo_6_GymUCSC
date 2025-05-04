@@ -37,7 +37,6 @@ class EspacioController extends Controller
     {
         $espacio = Espacio::findOrFail($espacio);
         $tipos = \App\Models\TipoEspacio::all();
-        return view('admin.sucursales.espacio.edit', compact('espacio', 'tipos'));
         $sucursales = \App\Models\Sucursal::all();
         return view('admin.sucursales.espacios.edit', compact('espacio', 'tipos', 'sucursales'));
     }
