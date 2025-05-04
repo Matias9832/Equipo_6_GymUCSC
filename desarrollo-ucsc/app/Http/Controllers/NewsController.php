@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\News;
 use App\Models\NewsImage;
 use App\Models\Administrador;
+use App\Models\Deporte;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,7 +25,8 @@ class NewsController extends Controller
 
     public function create()
     {
-        return view('news.create');
+        $deportes = Deporte::all(); // O puedes seleccionar campos específicos si prefieres
+        return view('news.create', compact('deportes'));
     }
 
     public function store(Request $request)
@@ -74,7 +76,8 @@ class NewsController extends Controller
     public function edit($id)
     {
         $news = News::with('images')->findOrFail($id);
-        return view('news.edit', compact('news'));
+        $deportes = Deporte::all();
+        return view('news.edit', compact('news', 'deportes'));
     }
 
     public function update(Request $request, $id)

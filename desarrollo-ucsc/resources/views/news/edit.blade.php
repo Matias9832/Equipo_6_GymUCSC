@@ -56,7 +56,16 @@
 
     <div>
         <label>Categoría:</label>
-        <input name="tipo_deporte" class="form-control" value="{{ $news->tipo_deporte }}" required>
+        <select class="form-control" id="tipo_deporte" name="tipo_deporte" required>
+            <option value="">Seleccione una categoría</option>
+            @foreach($deportes as $deporte)
+                <option value="{{ $deporte->nombre_deporte }}" 
+                    {{ $news->tipo_deporte == $deporte->nombre_deporte ? 'selected' : '' }}>
+                    {{ $deporte->nombre_deporte }}
+                </option>
+            @endforeach
+        </select>
+        
     </div>
 
     <button class="btn btn-primary mt-2">Actualizar</button>

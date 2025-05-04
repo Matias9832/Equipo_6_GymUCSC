@@ -23,7 +23,12 @@
 
         <div class="mb-3">
             <label for="tipo_deporte" class="form-label">Categoría</label>
-            <input type="text" class="form-control" id="tipo_deporte" name="tipo_deporte" required>
+            <select class="form-control" id="tipo_deporte" name="tipo_deporte" required>
+                <option value="">Seleccione una categoría</option>
+                @foreach($deportes as $deporte)
+                    <option value="{{ $deporte->nombre_deporte }}">{{ $deporte->nombre_deporte }}</option>
+                @endforeach
+            </select>
         </div>
         
 
