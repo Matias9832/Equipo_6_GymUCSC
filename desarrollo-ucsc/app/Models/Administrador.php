@@ -25,5 +25,9 @@ class Administrador extends Model
         'fecha_creacion',
     ];
 
-
+    //Asociación con la tabla de roles, permite que un administrador tenga un unico rol
+    public function roles()
+    {
+        return $this->belongsTo(Rol::class, 'id_rol', 'id_rol');
+    }
 }

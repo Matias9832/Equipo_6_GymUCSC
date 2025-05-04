@@ -20,6 +20,7 @@ use App\Http\Controllers\CiudadController;
 use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\SalaController;
+use App\Http\Controllers\RolController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', function () {
@@ -55,7 +56,9 @@ Route::prefix('admin')->group(function () {
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
     Route::get('/gestion-qr', [ControlSalasController::class, 'mostrarQR'])->name('control_salas.gestion_qr');
 
-    
+    Route::resource('roles', RolController::class)->parameters([
+        'roles' => 'rol',
+    ]);
 
 });
 
@@ -90,6 +93,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('administradores', AdministradorController::class)->parameters([
         'administradores' => 'administrador',
     ]);
-    
+                                                     
 });
 
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('asignar-roles', AsignarRolController::class)->only(['index', 'edit', 'update']);
+});

@@ -11,7 +11,7 @@
                 <th>RUT</th>
                 <th>Nombre</th>
                 <th>Correo</th>
-                <th>Permisos</th>
+                <th>Rol</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -27,6 +27,7 @@
                     <td>{{ $usuario->correo_usuario ?? 'N/A' }}</td>
                     <td>--</td> <!-- Campo de permisos vacío por ahora -->
                     <td>
+                    <a href="{{ route('administradores.editRol', $administrador->id_admin) }}" class="btn btn-success btn-sm">Editar Rol</a>
                         <a href="{{ route('administradores.edit', $administrador) }}" class="btn btn-warning btn-sm">Editar</a>
                         <form action="{{ route('administradores.destroy', $administrador) }}" method="POST" class="d-inline">
                             @csrf

@@ -93,6 +93,11 @@
                 <i class="bi bi-person-badge me-2"></i> Administradores
             </a>
         </li>
+        <li class="nav-item mb-2">
+            <a href="{{ route('roles.index') }}" class="nav-link text-dark {{ Request::is('admin/roles*') ? 'fw-bold' : '' }}">
+                <i class="bi bi-shield-lock me-2"></i> Roles
+            </a>
+        </li>
     </ul>
 </div>
 @endsection

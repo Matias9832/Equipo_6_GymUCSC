@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Administrador;
 use App\Models\Usuario;
+use App\Models\Rol;
 
 class AdministradorController extends Controller
 {
@@ -32,6 +33,7 @@ class AdministradorController extends Controller
      */
     public function create()
     {
+        $roles = Rol::all();
         return view('admin.mantenedores.administradores.create');
     }
 
@@ -43,6 +45,7 @@ class AdministradorController extends Controller
         $request->validate([
             'rut_admin' => 'required|string|unique:administrador,rut_admin|unique:usuario,rut',
             'nombre_admin' => 'required|string|max:255',
+            'id_rol' => 'required|exists:rol,id_rol',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
             'contrasenia_usuario' => 'required|string|min:6',
         ]);
@@ -59,6 +62,7 @@ class AdministradorController extends Controller
         Administrador::create([
             'rut_admin' => $request->rut_admin,
             'nombre_admin' => $request->nombre_admin,
+            'id_rol' => $request->id_rol,
             'fecha_creacion' => now(),
         ]);
     
@@ -71,6 +75,7 @@ class AdministradorController extends Controller
     public function edit(Administrador $administrador)
     {
         $usuario = DB::table('usuario')->where('rut', $administrador->rut_admin)->first();
+        $roles = Rol::all();
         return view('admin.mantenedores.administradores.edit', compact('administrador', 'usuario'));
     }
     /**
@@ -80,6 +85,7 @@ class AdministradorController extends Controller
     {
         $request->validate([
             'nombre_admin' => 'required|string|max:255',
+            'id_rol' => 'required|exists:rol,id_rol',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $administrador->rut_admin . ',rut',
         ]);
 
@@ -91,6 +97,7 @@ class AdministradorController extends Controller
         // Actualizar el administrador
         $administrador->update([
             'nombre_admin' => $request->nombre_admin,
+            'id_rol' => $request->id_rol,
         ]);
 
         return redirect()->route('administradores.index')->with('success', 'Administrador actualizado correctamente.');
