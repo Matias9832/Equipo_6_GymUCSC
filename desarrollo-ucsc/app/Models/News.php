@@ -7,13 +7,32 @@ use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
 {
-    use HasFactory;
+    protected $table = 'news'; 
+
+    protected $primaryKey = 'id_noticia';
+    public $incrementing = true; 
+    protected $keyType = 'int' ;
+
+    public $timestamps = false; 
 
     protected $fillable = [
-        'titulo', 'contenido', 'imagen', 'category', 'author', 'published_at'
+        
+        'nombre_noticia',
+        'encargado_noticia',
+        'descripcion_noticia',
+        'fecha_noticia',
+        'tipo_deporte',
+        'id_admin',
     ];
-  
-    protected $casts = [
-        'published_at' => 'datetime',
-    ];
+
+    public function administrador()
+    {
+        return $this->belongsTo(Administrador::class, 'id_admin');
+    }
+
+    public function images()
+{
+    return $this->hasMany(NewsImage::class, 'id_noticia', 'id_noticia');
+}
+
 }

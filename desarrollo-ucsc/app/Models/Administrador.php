@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\News;
 
 class Administrador extends Model
 {
@@ -24,6 +25,11 @@ class Administrador extends Model
         'nombre_admin',
         'fecha_creacion',
     ];
+
+        public function news()
+    {
+        return $this->hasMany(News::class, 'id_admin');
+    }
 
 
 }

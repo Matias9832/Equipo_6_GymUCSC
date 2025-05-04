@@ -32,7 +32,9 @@
                         <form action="{{ route('espacios.destroy', $espacio) }}" method="POST" style="display:inline-block;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este espacio?')">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm p-1" onclick="return confirm('¿Estás seguro de que quieres eliminar este espacio?')">
+                                Eliminar
+                            </button>
                         </form>
                     </td>
                 </tr>

@@ -27,7 +27,9 @@
                         <form action="{{ route('deportes.destroy', $deporte->id_deporte) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm p-1" onclick="return confirm('¿Estás seguro de que quieres eliminar este deporte?')">
+                                Eliminar
+                            </button>
                         </form>
                     </td>
                 </tr>
