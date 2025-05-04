@@ -6,13 +6,14 @@
 
         <!-- Imagen principal -->
         @if($news->images->count())
-            <div id="carouselNews{{ $news->id }}" class="carousel slide mb-4" data-bs-ride="carousel" style="height: 500px; overflow: hidden; position: relative;">
-                <div class="carousel-inner">
+            <div id="carouselNews{{ $news->id }}" class="carousel slide mb-4" data-bs-ride="carousel"
+                style="height: 500px; overflow: hidden; position: relative; p-1">
+                <div class="carousel-inner h-100">
                     @foreach($news->images as $index => $image)
-                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                        <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }}">
                             <img src="{{ asset('storage/' . $image->image_path) }}" 
-                            class="d-block w-450 h-200" 
-                            style="max-height: 500px; object-fit: contain; margin: auto;">
+                                    class="d-block mx-auto"
+                                    style="height: 80%; width: auto; object-fit: contain;">
                         </div>
                     @endforeach
                 </div>
