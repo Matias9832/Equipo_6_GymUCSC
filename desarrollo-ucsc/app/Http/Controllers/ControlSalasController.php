@@ -71,7 +71,7 @@ class ControlSalasController extends Controller
                 'desdeQR' => true,
                 'aforo' => $aforo,
                 'id_sala' => $idSala,
-                'nombreSala' => $sala->nombre,
+                'nombreSala' => $sala->nombre_sala,
             ]);
         }
 
@@ -84,10 +84,10 @@ class ControlSalasController extends Controller
 
         if ($registroActivo) {
             return view('usuarios.ingreso.registro', [
-                'mensaje' => 'Ya tienes un ingreso activo en esta sala. Debes registrar tu salida antes de poder ingresar nuevamente.',
+                'mensaje' => 'Ya ingresaste a la sala previamente',
                 'aforo' => $aforo,
                 'id_sala' => $idSala,
-                'nombreSala' => $sala->nombre,
+                'nombreSala' => $sala->nombre_sala,
             ]);
         }
 
@@ -104,7 +104,7 @@ class ControlSalasController extends Controller
             'fecha' => now()->format('Y-m-d'),
             'horaIngreso' => $registro->hora_ingreso,
             'idSala' => $idSala,
-            'nombreSala' => $sala->nombre,
+            'nombreSala' => $sala->nombre_sala,
             'mensaje' => null,
         ]);
     }
