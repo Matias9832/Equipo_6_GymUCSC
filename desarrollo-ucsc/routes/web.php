@@ -44,7 +44,7 @@ Route::prefix('admin')->group(function () {
     Route::resource('tipos_espacio', TipoEspacioController::class)->parameters(['tipos_espacio' => 'tipoEspacio']);
     Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
     Route::resource('marcas', MarcasController::class);
-    
+
     Route::resource('maquinas', MaquinaController::class);
     Route::resource('deportes', DeporteController::class);
     Route::resource('usuarios', UsuarioController::class);
@@ -52,14 +52,14 @@ Route::prefix('admin')->group(function () {
     Route::resource('paises', PaisController::class);
     Route::resource('regiones', RegionController::class);
     Route::resource('ciudades', CiudadController::class);
-    
+
     Route::resource('sucursales', SucursalController::class);
     Route::resource('espacios', EspacioController::class);
     Route::resource('salas', SalaController::class);
 
     Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
 
-    
+
     // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
     Route::get('/control-salas/seleccionar', [ControlSalasController::class, 'seleccionarSala'])->name('control-salas.seleccionar');
@@ -74,8 +74,12 @@ Route::prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    // Ruta para la vista del registro, accesible solo para usuarios logueados
-    Route::get('/registro-sala', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
+    // Ruta para la vista del registro, accesible solo para usuarios alumnos logueados
+    Route::get('/ingreso/registro', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
+    Route::post('/sala/salida', [ControlSalasController::class, 'registrarSalida'])->name('sala.registrarSalida');
+    Route::match(['get', 'post'], '/ingreso/actual', [ControlSalasController::class, 'mostrarIngreso'])
+        ->name('ingreso.mostrar')
+        ->middleware('auth');
 });
 
 // Rutas de autenticación
@@ -101,15 +105,4 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('administradores', AdministradorController::class)->parameters([
         'administradores' => 'administrador',
     ]);
-                                                     
 });
-
-Route::middleware(['auth'])->group(function () {
-    // Ruta para la vista del registro, accesible solo para usuarios alumnos logueados
-    Route::get('/ingreso/registro', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
-    Route::post('/sala/salida', [ControlSalasController::class, 'registrarSalida'])->name('sala.registrarSalida');
-    Route::match(['get', 'post'], '/ingreso/actual', [ControlSalasController::class, 'mostrarIngreso'])
-        ->name('ingreso.mostrar')
-        ->middleware('auth');
-});
-
