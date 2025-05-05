@@ -11,11 +11,12 @@
                 <th>RUT</th>
                 <th>Nombre</th>
                 <th>Correo</th>
-                <th>Permisos</th>
+                <th>Rol</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
+           
             @foreach ($administradores as $administrador)
                 @php
                     // Buscar el usuario relacionado con el administrador
@@ -25,13 +26,16 @@
                     <td>{{ $administrador->rut_admin }}</td>
                     <td>{{ $administrador->nombre_admin }}</td>
                     <td>{{ $usuario->correo_usuario ?? 'N/A' }}</td>
-                    <td>--</td> <!-- Campo de permisos vacío por ahora -->
+                    <td>{{ $administrador->rol->nombre_rol }}</td>
                     <td>
+                    <a href="{{ route('administradores.rol', $administrador->id_admin) }}" class="btn btn-success btn-sm">Editar Rol</a>
                         <a href="{{ route('administradores.edit', $administrador) }}" class="btn btn-warning btn-sm">Editar</a>
                         <form action="{{ route('administradores.destroy', $administrador) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm p-1" onclick="return confirm('¿Estás seguro de que quieres eliminar este administrador?')">
+                                Eliminar
+                            </button>
                         </form>
                     </td>
                 </tr>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\News;
 
 class Administrador extends Model
 {
@@ -22,8 +23,19 @@ class Administrador extends Model
     protected $fillable = [
         'rut_admin',
         'nombre_admin',
+        'id_rol',
         'fecha_creacion',
     ];
+
+    //Asociación con la tabla de roles, permite que un administrador tenga un unico rol
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'id_rol', 'id_rol');
+    }
+        public function news()
+    {
+        return $this->hasMany(News::class, 'id_admin');
+    }
 
 
 }

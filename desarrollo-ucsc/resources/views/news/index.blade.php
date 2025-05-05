@@ -2,10 +2,10 @@
 
 @if(session('success') || session('update') || session('delete'))
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100; margin-top: 70px;">
-        <div id="toastSuccess" class="toast align-items-center {{ session('success') ? 'text-bg-success' : (session('update') ? 'text-bg-primary' : 'text-bg-danger') }} border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="toastSuccess" class="toast align-items-center { { session('success') ? 'text-bg-success' : (session('update') ? 'text-bg-primary' : 'text-bg-danger') }} border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
-                    {{ session('success') ?? session('update') ?? session('delete') }}
+                    { { session('success') ?? session('update') ?? session('delete') }}
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
             </div>
@@ -37,23 +37,22 @@
     @foreach ($news as $noticias)
     <div class="card mb-3 position-relative" style="min-height: 200px;">
         @if(Auth::check() && Auth::user()->is_admin)
-            <!-- Botones de editar y eliminar -->
             <div class="position-absolute top-0 end-0 m-2 d-flex gap-2 z-3">
-                <a href="{{ route('news.edit', $noticias->id) }}" 
+                <a href="{{ route('news.edit', $noticias->id_noticia) }}" 
                    class="btn btn-warning btn-sm d-flex align-items-center justify-content-center p-0" 
                    title="Editar"
                    style="width: 40px; height: 40px;">
                     <i class="bi bi-pen-fill"></i>
                 </a>
             
-                <form action="{{ route('news.destroy', $noticias->id) }}" method="POST" class="d-inline form-eliminar">
+                <form id="form-eliminar-{{ $noticias->id_noticia }}" action="{{ route('news.destroy', $noticias->id_noticia) }}" method="POST" class="d-inline form-eliminar">
                     @csrf
                     @method('DELETE')
                     <button type="button" 
                             class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-0 btn-mostrar-modal" 
                             title="Eliminar"
                             style="width: 40px; height: 40px;"
-                            data-id="{{ $noticias->id }}">
+                            data-id="{{ $noticias->id_noticia }}">
                         <i class="bi bi-trash3-fill"></i>
                     </button>
                 </form>
@@ -61,12 +60,12 @@
         @endif
 
         <div class="row g-0 flex-column flex-md-row">
-            <div class="col-md-4 d-flex align-items-center justify-content-center bg-light" style="padding: 10px;">
-                @if ($noticias->imagen)
-                    <img src="{{ asset('storage/' . $noticias->imagen) }}" 
-                        class="img-fluid rounded-start p-2" 
-                        alt="Imagen de la noticia" 
-                        style="max-height: 200px; object-fit: cover; width: 100%;">
+            <div class="col-md-4 d-flex align-items-center justify-content-center bg-light" style="padding: 5px;">
+                @if ($noticias->images->count())
+                        <img src="{{ asset('storage/' . $noticias->images->first()->image_path) }}"  
+                         class="img-fluid rounded-start p-2" 
+                         alt="Imagen de la noticia" 
+                         style="max-height: 200px; object-fit: contain; width: 100%;">
                 @else
                     <div class="d-flex flex-column align-items-center justify-content-center text-muted" style="height: 180px; width: 100%;">
                         <i class="bi bi-image" style="font-size: 3rem;"></i>
@@ -74,20 +73,27 @@
                     </div>
                 @endif
             </div>
+
             <div class="col-md-8">
                 <div class="card-body">
-                    <a href="{{ route('news.show', $noticias->id) }}" class="text-decoration-none text-dark">
-                        <h5 class="card-title">{{ $noticias->titulo }}</h5>
-                        <p class="card-text">{{ Str::limit($noticias->contenido, 100, '...') }}</p>
+                    <a href="{{ route('news.show', $noticias->id_noticia) }}" class="text-decoration-none text-dark">
+                        <h5 class="card-title">{{ $noticias->nombre_noticia }}</h5>
+                        <p class="card-text">{{ Str::limit($noticias->descripcion_noticia, 100, '...') }}</p>
                     </a>
                 </div>
+
                 <div class="card-footer bg-transparent">
-                    <small class="text-muted">{{ $noticias->published_at->format('d M Y') }} - {{ $noticias->author }}</small>
+                    <small class="text-muted">
+                        {{ \Carbon\Carbon::parse($noticias->fecha_noticia)->format('d M Y') }} -
+                        {{ $noticias->administrador->nombre_admin }} -
+                        {{ $noticias->tipo_deporte }}
+                    </small>
                 </div>
             </div>
         </div>
     </div>
 @endforeach
+
 
     <div class="d-flex justify-content-center">
         {{ $news->links() }}
@@ -140,4 +146,6 @@
             }
         });
     });
+
 </script>
+

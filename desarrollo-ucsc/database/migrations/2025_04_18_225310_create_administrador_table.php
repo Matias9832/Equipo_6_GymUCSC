@@ -18,6 +18,10 @@ return new class extends Migration
             $table->foreign('rut_admin')->references('rut')->on('usuario');
 
             $table->string('nombre_admin');
+
+            $table->unsignedBigInteger('id_rol');
+            $table->foreign('id_rol')->references('id_rol')->on('rol');
+
             $table->timestamp('fecha_creacion');
         });
     }
