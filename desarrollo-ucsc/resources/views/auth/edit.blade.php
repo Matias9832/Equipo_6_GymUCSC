@@ -77,6 +77,11 @@
                 <a href="{{ route('news.index') }}" class="btn btn-secondary w-100">Cancelar</a>
             </div>
         </form>
+        <div class="mt-3 text-center">
+            <a href="{{ route('salud.edit') }}" class="btn btn-outline-danger w-100">
+                Editar Información de Salud
+            </a>
+        </div>
     </div>
 </div>
 

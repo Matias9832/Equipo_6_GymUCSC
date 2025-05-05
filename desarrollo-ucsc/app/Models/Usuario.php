@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Salud;
 
 class Usuario extends Authenticatable
 {
@@ -40,6 +41,10 @@ class Usuario extends Authenticatable
         return $this->tipo_usuario === 'admin'; // o el valor que uses para admins
     }
 
+    public function salud()
+    {
+        return $this->hasOne(Salud::class, 'id_usuario', 'id_usuario');
+    }
     
 
 }
