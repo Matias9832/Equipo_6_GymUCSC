@@ -54,7 +54,8 @@
                 <label for="contrasenia_usuario" class="form-label">Nueva Contraseña</label>
                 <div class="input-group">
                     <input type="password" name="contrasenia_usuario" id="contrasenia_usuario" class="form-control" placeholder="Dejar en blanco si no deseas cambiarla">
-                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">👁️</button>
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword" tabindex="-1"><i class="bi bi-eye"></i></button>
+                    
                 </div>
                 @error('contrasenia_usuario')
                     <span class="text-danger">{{ $message }}</span>
@@ -65,7 +66,8 @@
                 <label for="contrasenia_usuario_confirmation" class="form-label">Confirmar Contraseña</label>
                 <div class="input-group">
                     <input type="password" name="contrasenia_usuario_confirmation" id="contrasenia_usuario_confirmation" class="form-control" placeholder="Confirme su nueva contraseña">
-                    <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">👁️</button>
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword" tabindex="-1"><i class="bi bi-eye"></i></button>
+
                 </div>
             </div>
 
@@ -77,20 +79,18 @@
         </form>
     </div>
 </div>
-@endsection
 
-@push('scripts')
 <script>
     document.getElementById('togglePassword').addEventListener('click', function () {
         const input = document.getElementById('contrasenia_usuario');
         input.type = input.type === 'password' ? 'text' : 'password';
     });
-
+    
     document.getElementById('toggleConfirmPassword').addEventListener('click', function () {
         const input = document.getElementById('contrasenia_usuario_confirmation');
         input.type = input.type === 'password' ? 'text' : 'password';
     });
 </script>
-@endpush
 
+@endsection
 
