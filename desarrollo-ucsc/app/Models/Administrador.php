@@ -37,6 +37,8 @@ class Administrador extends Model
     {
         return $this->hasMany(News::class, 'id_admin');
     }
-
-
+    public function permisos()
+    {
+        return $this->rol->permisos();
+    }
 }

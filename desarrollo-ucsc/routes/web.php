@@ -21,6 +21,10 @@ use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\RolController;
 
+
+
+
+
 // Página principal: Mostrar noticias públicas
 Route::get('/', function () {
     return redirect()->route('news.index');
@@ -29,6 +33,10 @@ Route::get('/', function () {
 // Noticias públicas
 Route::get('/noticias', [NewsController::class, 'index'])->name('news.index');
 Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
+
+
+
+
 
 // Ruta para la página de administradores
 Route::get('/admin', function () {
@@ -57,6 +65,20 @@ Route::prefix('admin')->group(function () {
 
     Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
 
+    // CRUD para administradores
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::resource('news', NewsController::class)->except(['index', 'show']);
+        // Ruta para el panel de administración
+        Route::get('/admin', function () {
+            return view('admin.index');
+        })->name('admin.index');
+        Route::resource('administradores', AdministradorController::class)->parameters([
+            'administradores' => 'administrador',
+        ]);
+    });
+
+
+
 
     // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
@@ -71,6 +93,11 @@ Route::prefix('admin')->group(function () {
     Route::post('administradores/{id}/update-rol', [AdministradorController::class, 'updateRol'])->name('administradores.updateRol');
 });
 
+
+
+
+
+
 Route::middleware(['auth'])->group(function () {
     // Ruta para la vista del registro, accesible solo para usuarios alumnos logueados
     Route::get('/ingreso/registro', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
@@ -83,6 +110,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/mi-perfil', [LoginController::class, 'updateProfile'])->middleware('auth')->name('mi-perfil.update');
 });
 
+
+
+
+
+
 // Rutas de autenticación
 Route::get('/login', [LoginController::class, 'create'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate']);
@@ -91,14 +123,3 @@ Route::post('/register', [RegisterController::class, 'store']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
-// CRUD para administradores
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('news', NewsController::class)->except(['index', 'show']);
-    // Ruta para el panel de administración
-    Route::get('/admin', function () {
-        return view('admin.index');
-    })->name('admin.index');
-    Route::resource('administradores', AdministradorController::class)->parameters([
-        'administradores' => 'administrador',
-    ]);
-});
