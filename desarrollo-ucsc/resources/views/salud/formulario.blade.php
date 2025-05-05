@@ -1,13 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div class="container d-flex justify-content-center mt-5">
     <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
         <div class="text-center mb-3">
             <img src="{{ asset('images/logo_ucsc.png') }}" alt="Logo UCSC" style="width: 100px;">
             <h3 class="mt-3 text-danger">Formulario de Salud</h3>
         </div>
+
+
+    <form method="POST" action="{{ route('salud.store') }}">
+        @csrf
 
         <div class="form-group mb-3">
             <label>¿Tiene alguna enfermedad o condición médica?</label>
