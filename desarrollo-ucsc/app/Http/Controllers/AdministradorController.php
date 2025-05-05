@@ -16,9 +16,8 @@ class AdministradorController extends Controller
      */
     public function index()
     {
-        // Obtener todos los administradores
-        $administradores = Administrador::all();
-
+        // Obtener los administradores con sus roles y usuarios relacionados
+        $administradores = Administrador::with('rol')->get();
         // Obtener los usuarios relacionados con los administradores
         $usuarios = DB::table('usuario')
             ->join('administrador', 'usuario.rut', '=', 'administrador.rut_admin')
@@ -34,7 +33,7 @@ class AdministradorController extends Controller
     public function create()
     {
         $roles = Rol::all();
-        return view('admin.mantenedores.administradores.create');
+        return view('admin.mantenedores.administradores.create', compact('roles'));
     }
 
     /**
@@ -103,9 +102,27 @@ class AdministradorController extends Controller
         return redirect()->route('administradores.index')->with('success', 'Administrador actualizado correctamente.');
     }
 
-    /**
-     * Elimina un administrador de la base de datos.
-     */
+    public function editRol($id)
+    {
+        $administrador = Administrador::findOrFail($id);
+        $roles = Rol::all(); // Obtener todos los roles disponibles
+        return view('admin.mantenedores.administradores.rol', compact('administrador', 'roles'));
+    }
+    
+    public function updateRol(Request $request, $id)
+    {
+        $request->validate([
+            'id_rol' => 'required|exists:rol,id_rol',
+        ]);
+
+        $administrador = Administrador::findOrFail($id);
+        $administrador->update([
+            'id_rol' => $request->id_rol,
+        ]);
+
+        return redirect()->route('administradores.index')->with('success', 'Rol del administrador actualizado correctamente.');
+    }
+
     public function destroy(Administrador $administrador)
     {
         // Eliminar el usuario asociado

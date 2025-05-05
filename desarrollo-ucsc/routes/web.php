@@ -56,10 +56,12 @@ Route::prefix('admin')->group(function () {
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
     Route::get('/gestion-qr', [ControlSalasController::class, 'mostrarQR'])->name('control_salas.gestion_qr');
 
+    //Asignación de roles a administradores
     Route::resource('roles', RolController::class)->parameters([
         'roles' => 'rol',
     ]);
-
+    Route::get('administradores/{id}/edit-rol', [AdministradorController::class, 'editRol'])->name('administradores.rol');
+    Route::post('administradores/{id}/update-rol', [AdministradorController::class, 'updateRol'])->name('administradores.updateRol');
 });
 
 Route::middleware(['auth'])->group(function () {
