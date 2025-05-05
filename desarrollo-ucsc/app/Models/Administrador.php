@@ -25,6 +25,7 @@ class Administrador extends Model
         'nombre_admin',
         'id_rol',
         'fecha_creacion',
+        'correo_usuario',
     ];
 
     //Asociación con la tabla de roles, permite que un administrador tenga un unico rol

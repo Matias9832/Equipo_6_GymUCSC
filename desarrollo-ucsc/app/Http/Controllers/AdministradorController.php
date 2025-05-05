@@ -84,9 +84,9 @@ class AdministradorController extends Controller
     {
         $request->validate([
             'nombre_admin' => 'required|string|max:255',
-            'id_rol' => 'required|exists:rol,id_rol',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $administrador->rut_admin . ',rut',
         ]);
+        
 
         // Actualizar el usuario
         DB::table('usuario')->where('rut', $administrador->rut_admin)->update([
@@ -96,7 +96,6 @@ class AdministradorController extends Controller
         // Actualizar el administrador
         $administrador->update([
             'nombre_admin' => $request->nombre_admin,
-            'id_rol' => $request->id_rol,
         ]);
 
         return redirect()->route('administradores.index')->with('success', 'Administrador actualizado correctamente.');
@@ -125,11 +124,10 @@ class AdministradorController extends Controller
 
     public function destroy(Administrador $administrador)
     {
-        // Eliminar el usuario asociado
-        Usuario::where('rut', $administrador->rut_admin)->delete();
-
         // Eliminar el administrador
         $administrador->delete();
+        // Eliminar el usuario asociado
+        Usuario::where('rut', $administrador->rut_admin)->delete();
 
         return redirect()->route('administradores.index')->with('success', 'Administrador eliminado correctamente.');
     }

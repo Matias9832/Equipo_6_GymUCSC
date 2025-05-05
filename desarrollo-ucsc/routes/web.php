@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\NewsController;
-use App\Models\News;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ControlSalasController;
@@ -21,7 +20,6 @@ use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\RolController;
-use App\Http\Controllers\NewsImageController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', function () {

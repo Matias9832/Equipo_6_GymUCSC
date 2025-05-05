@@ -46,8 +46,13 @@ class RolController extends Controller
 
     public function destroy(Rol $rol)
     {
-        $rol->delete();
+        try {
+            // Intentar eliminar el rol
+            $rol->delete();
 
-        return redirect()->route('roles.index')->with('success', 'Rol eliminado correctamente.');
+            return redirect()->route('roles.index')->with('success', 'Rol eliminado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('roles.index')->with('error', 'Ocurrió un error al intentar eliminar el rol.');
+        }
     }
 }
