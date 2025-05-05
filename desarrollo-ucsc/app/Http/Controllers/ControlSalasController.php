@@ -57,7 +57,7 @@ class ControlSalasController extends Controller
 
         if ($usuariosActivos >= $aforo) {
             return view('usuarios.ingreso.registro', [
-                'mensaje' => 'La sala está llena. No se pueden registrar más usuarios.',
+                'mensaje' => 'La sala está llena. Intenta más tarde.',
                 'aforo' => $aforo,
                 'id_sala' => $idSala,
             ]);
@@ -129,7 +129,7 @@ class ControlSalasController extends Controller
                 'fecha' => $registro->fecha_ingreso,
                 'horaIngreso' => $registro->hora_ingreso,
                 'idSala' => $registro->id_sala,
-                'nombreSala' => $registro->sala->nombre,
+                'nombreSala' => $registro->sala->nombre_sala,
             ]);
         }
 
@@ -151,6 +151,7 @@ class ControlSalasController extends Controller
         $usuario = Auth::user();
         $fecha = now()->format('Y-m-d');
 
+        // Buscar el registro de ingreso del usuario en la sala
         $registro = Ingreso::where('id_usuario', $usuario->id_usuario)
             ->where('id_sala', $request->id_sala)
             ->where('fecha_ingreso', $fecha)
@@ -158,16 +159,22 @@ class ControlSalasController extends Controller
             ->first();
 
         if ($registro) {
+            // Registrar la salida
             $horaSalida = now();
             $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
-            $tiempoUso = $horaIngreso->diffInSeconds($horaSalida);
+            $tiempoUsoSegundos = $horaIngreso->diffInSeconds($horaSalida); // Diferencia en segundos
 
+            // Convertir los segundos a formato HH:mm:ss
+            $horaUso = gmdate("H:i:s", $tiempoUsoSegundos); // "gmdate" convierte los segundos a formato de hora
+
+            // Guardar la hora de salida y el tiempo de uso en formato TIME (HH:mm:ss)
             $registro->hora_salida = $horaSalida->format('H:i:s');
-            $registro->tiempo_uso = $tiempoUso;
+            $registro->tiempo_uso = $horaUso; // Guardar en formato TIME
             $registro->save();
         }
 
-        return redirect()->route('ingreso.mostrar');
+        // Redirigir de nuevo con un mensaje de éxito
+        return redirect()->route('ingreso.mostrar')->with('mensaje', 'Gracias por asistir');
     }
 
     public function seleccionarSala()

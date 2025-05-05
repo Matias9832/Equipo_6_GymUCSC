@@ -3,7 +3,10 @@
 @section('content')
     <div class="container-fluid d-flex flex-column align-items-center justify-content-center"
         style="max-width: 500px; margin: 0 auto; height: 50vh;">
-        <h2 class="text-center mb-4">Acceder a {{ $nombreSala }}</h2>   
+
+        @if (isset($nombreSala))
+            <h2 class="text-center mb-4">Acceder a {{ $nombreSala }}</h2>   
+        @endif
 
         @if (isset($mensaje))
             <div class="alert alert-info text-center w-100">
