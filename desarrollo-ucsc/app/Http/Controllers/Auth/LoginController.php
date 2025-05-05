@@ -107,34 +107,43 @@ class LoginController extends Controller
 
 
         public function updateProfile(Request $request)
-{
-    $usuario = Auth::user();
+        {
+            $usuario = Auth::user();
 
-    $validated = $request->validate([
-        'contrasenia_usuario' => 'nullable|min:6|confirmed',
-        'correo_usuario' => 'nullable|email|max:255',
-    ]);
+            $validated = $request->validate([
+                'contrasenia_usuario' => 'nullable|min:6|confirmed',
+                'correo_usuario' => 'nullable|email|max:255',
+            ]);
 
-    if ($usuario->is_admin) {
-        $profile = Administrador::where('rut_admin', $usuario->rut)->first();
-    } else {
-        $profile = Alumno::where('rut_alumno', $usuario->rut)->first();
-    }
+            if ($usuario->is_admin) {
+                $profile = Administrador::where('rut_admin', $usuario->rut)->first();
+            } else {
+                $profile = Alumno::where('rut_alumno', $usuario->rut)->first();
+            }
 
-    // Solo actualiza contraseña si se envía
-    if ($request->filled('contrasenia_usuario')) {
-        $usuario->contrasenia_usuario = Hash::make($request->contrasenia_usuario);
-    }
+            // Solo actualiza contraseña si se envía
+            if ($request->filled('contrasenia_usuario')) {
+                $usuario->contrasenia_usuario = Hash::make($request->contrasenia_usuario);
+            }
 
-    // Actualiza correo si se envía
-    if ($request->filled('correo_usuario')) {
-        $usuario->correo_usuario = $request->correo_usuario;
-    }
+            // Actualiza correo si se envía
+            if ($request->filled('correo_usuario')) {
+                $usuario->correo_usuario = $request->correo_usuario;
+            }
 
-    $usuario->save(); // Guarda cambios del usuario
+            $usuario->save(); // Guarda cambios del usuario
 
-    return redirect()->route('news.index')->with('success', 'Perfil actualizado correctamente');
-}
+            return redirect()->route('news.index')->with('success', 'Perfil actualizado correctamente');
+        }
+
+        public function index()
+        {
+            if (!Auth::user()->salud) {
+                return redirect()->route('salud.create');
+            }
+
+            return view('news.index');
+        }
 
 
 

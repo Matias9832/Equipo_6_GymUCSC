@@ -21,7 +21,7 @@ use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\RolController;
-use App\Http\Controllers\NewsImageController;
+use App\Http\Controllers\SaludController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', function () {
@@ -83,6 +83,12 @@ Route::middleware(['auth'])->group(function () {
         
     Route::get('/mi-perfil', [LoginController::class, 'editProfile'])->middleware('auth')->name('mi-perfil.edit');
     Route::post('/mi-perfil', [LoginController::class, 'updateProfile'])->middleware('auth')->name('mi-perfil.update');
+
+    // Ruta para el formulario de salud
+    Route::get('/salud', [SaludController::class, 'create'])->name('salud.create');
+    Route::post('/salud', [SaludController::class, 'store'])->name('salud.store');
+    Route::get('/salud/edit', [SaludController::class, 'edit'])->name('salud.edit');
+    Route::post('/salud/edit', [SaludController::class, 'update'])->name('salud.update');
 });
 
 // Rutas de autenticación
