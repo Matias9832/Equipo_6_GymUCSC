@@ -14,6 +14,7 @@
 
             <div class="form-group mb-3">
                 <label>¿Tiene alguna enfermedad o condición médica?</label>
+                <span>(Ya sea enfermedad cornica, alegias u indicaciones medicas)</span>
                 <div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="tiene_enfermedad" id="enfermedad_si" value="si" onchange="toggleFormularioSalud()" {{ $salud->enfermo_cronico || $salud->alergias || $salud->indicaciones_medicas ? 'checked' : '' }}>

@@ -17,7 +17,9 @@ return new class extends Migration
             $table->boolean('alergias')->default(false);
             $table->boolean('indicaciones_medicas')->default(false);
             $table->text('informacion_salud')->nullable();
-            $table->foreignId('id_usuario')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('id_usuario'); 
+            
+            $table->foreign('id_usuario')->references('id_usuario')->on('usuario')->onDelete('cascade');
             $table->timestamps();
         });
     }
