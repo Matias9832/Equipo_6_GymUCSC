@@ -29,8 +29,8 @@ Route::get('/', function () {
 })->name('welcome');
 
 // Noticias públicas
-//Route::get('/noticias', [NewsController::class, 'index'])->name('home');
-//Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/noticias', [NewsController::class, 'index'])->name('news.index');
+Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
 
 // Ruta para la página de administradores
 Route::get('/admin', function () {
@@ -80,6 +80,9 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], '/ingreso/actual', [ControlSalasController::class, 'mostrarIngreso'])
         ->name('ingreso.mostrar')
         ->middleware('auth');
+        
+    Route::get('/mi-perfil', [LoginController::class, 'editProfile'])->middleware('auth')->name('mi-perfil.edit');
+    Route::post('/mi-perfil', [LoginController::class, 'updateProfile'])->middleware('auth')->name('mi-perfil.update');
 });
 
 // Rutas de autenticación
@@ -89,15 +92,10 @@ Route::get('/register', [RegisterController::class, 'create'])->name('register')
 Route::post('/register', [RegisterController::class, 'store']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Página de bienvenida
-Route::get('/bienvenido', function () {
-    return redirect()->route('home');
-})->name('bienvenido');
-
 
 // CRUD para administradores
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('news', NewsController::class);
+    Route::resource('news', NewsController::class)->except(['index', 'show']);
     // Ruta para el panel de administración
     Route::get('/admin', function () {
         return view('admin.index');
