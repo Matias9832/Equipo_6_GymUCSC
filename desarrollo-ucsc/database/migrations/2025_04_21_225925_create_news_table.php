@@ -12,14 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('news', function (Blueprint $table) {
-            $table->id();
-            $table->string('titulo');
-            $table->text('contenido');
-            $table->string('imagen')->nullable();
-            $table->string('category');
-            $table->string('author');
-            $table->date('published_at');
-            $table->timestamps();
+            $table->id('id_noticia');
+            $table->string('nombre_noticia');
+            $table->string('encargado_noticia');
+            $table->text('descripcion_noticia');
+            $table->timestamp('fecha_noticia');
+            $table->string('tipo_deporte');
+            $table->unsignedBigInteger('id_admin');
+
+            $table->foreign('id_admin')->references('id_admin')->on('administrador')->onDelete('cascade');
         });
         
     }

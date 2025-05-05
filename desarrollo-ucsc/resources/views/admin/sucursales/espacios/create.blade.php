@@ -21,6 +21,24 @@
         </div>
     
         <input type="hidden" name="id_suc" value="{{ session('sucursal_activa') }}">
+        <div class="mb-3">
+            <label for="id_suc" class="form-label">Sucursal</label>
+            <select name="id_suc" id="id_suc" class="form-select" required>
+                <option value="">Seleccione una sucursal</option>
+                @foreach($sucursales as $sucursal)
+                    <option value="{{ $sucursal->id_suc }}">{{ $sucursal->nombre_suc }}</option>
+                @endforeach
+            </select>
+        </div>
+           
+        
+        <!--select name="sucursal_id" required>
+            @ foreach($sucursales as $sucursal)
+                <option value="{ { $sucursal->id }}">{ { $sucursal->nombre }}</option>
+            @ endforeach
+        </select><br-->
+        
+        <!--borrar esta linea cuando se agreguen las sucursales y descomentar lo de arriba-->
        
         <button type="submit" class="btn btn-primary">Crear Espacio</button>
         <a href="{{ route('espacios.index') }}" class="btn btn-secondary">Cancelar</a>

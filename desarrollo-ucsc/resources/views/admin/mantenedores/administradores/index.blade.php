@@ -16,6 +16,7 @@
             </tr>
         </thead>
         <tbody>
+           
             @foreach ($administradores as $administrador)
                 @php
                     // Buscar el usuario relacionado con el administrador
@@ -32,7 +33,9 @@
                         <form action="{{ route('administradores.destroy', $administrador) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            <button type="submit" class="btn btn-danger btn-sm p-1" onclick="return confirm('¿Estás seguro de que quieres eliminar este administrador?')">
+                                Eliminar
+                            </button>
                         </form>
                     </td>
                 </tr>

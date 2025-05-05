@@ -40,4 +40,6 @@ class Usuario extends Authenticatable
         return $this->tipo_usuario === 'admin'; // o el valor que uses para admins
     }
 
+    
+
 }

@@ -21,12 +21,16 @@ use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\RolController;
+use App\Http\Controllers\NewsImageController;
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', function () {
-    $news = News::all();
-    return view('welcome', compact('news'));
+    return redirect()->route('news.index');
 })->name('welcome');
+
+// Noticias públicas
+//Route::get('/noticias', [NewsController::class, 'index'])->name('home');
+//Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
 
 // Ruta para la página de administradores
 Route::get('/admin', function () {
@@ -36,6 +40,7 @@ Route::get('/admin', function () {
 // Grupo de rutas para mantenedores
 Route::prefix('admin')->group(function () {
     Route::resource('alumnos', AlumnoController::class);
+
     Route::resource('tipos_espacio', TipoEspacioController::class)->parameters(['tipos_espacio' => 'tipoEspacio']);
     Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
     Route::resource('marcas', MarcasController::class);
@@ -52,6 +57,9 @@ Route::prefix('admin')->group(function () {
     Route::resource('espacios', EspacioController::class);
     Route::resource('salas', SalaController::class);
 
+    Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
+
+    
     // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
     Route::get('/gestion-qr', [ControlSalasController::class, 'mostrarQR'])->name('control_salas.gestion_qr');
@@ -81,13 +89,10 @@ Route::get('/bienvenido', function () {
     return redirect()->route('home');
 })->name('bienvenido');
 
-// Noticias públicas
-//Route::get('/noticias', [NewsController::class, 'index'])->name('home');
-//Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
 
 // CRUD para administradores
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('news', NewsController::class)->except(['index', 'show']);
+    Route::resource('news', NewsController::class);
     // Ruta para el panel de administración
     Route::get('/admin', function () {
         return view('admin.index');
@@ -98,6 +103,3 @@ Route::middleware(['auth', 'admin'])->group(function () {
                                                      
 });
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('asignar-roles', AsignarRolController::class)->only(['index', 'edit', 'update']);
-});

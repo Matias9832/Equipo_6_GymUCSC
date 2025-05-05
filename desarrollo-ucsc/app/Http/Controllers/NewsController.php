@@ -3,122 +3,132 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
-use App\Models\Event;
+use App\Models\NewsImage;
+use App\Models\Administrador;
+use App\Models\Deporte;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Alumno;
 
 class NewsController extends Controller
 {
-    
     public function __construct()
     {
-        
         $this->middleware('auth')->except(['index', 'show']);
         $this->middleware('admin')->except(['index', 'show']);
     }
 
-
     public function index()
     {
-        $news = News::latest()->paginate(3);
-       
+        $news = News::with('administrador')->orderByDesc('fecha_noticia')->paginate(3);
         return view('news.index', compact('news'));
     }
 
     public function create()
     {
-        return view('news.create');
+        $deportes = Deporte::all(); // O puedes seleccionar campos específicos si prefieres
+        return view('news.create', compact('deportes'));
     }
-    
 
     public function store(Request $request)
-{
-    $request->validate([
-        'titulo' => 'required',
-        'contenido' => 'required',
-        'category' => 'required',
-        'imagen' => 'nullable|image',
-    ]);
-
-    // Guardar la imagen si está presente
-    $nombreImagen = null;
-    if ($request->hasFile('imagen')) {
-        $nombreImagen = time().'.'.$request->imagen->extension();
-        $request->imagen->storeAs('public', $nombreImagen);
-    }
-
-    $rutUsuario = auth()->user()->rut_alumno;
-    $alumno= Alumno::where('rut_alumno', $rutUsuario)->first();
-
-    News::create([
-        'titulo' => $request->titulo,
-        'contenido' => $request->contenido,
-        'category' => $request->category,
-        'author' => $alumno->nombre_alumno,
-        'published_at' => now(),
-        'imagen' => $nombreImagen,
-    ]);
-
-    return redirect('/')->with('success', 'Noticia creada con éxito.');
-}
-
-public function show($id)
-{
-    $news = News::findOrFail($id);
-    return view('news.show', compact('news'));
-}
-
-public function edit($id)
-{
-    $news = News::findOrFail($id);
-    return view('news.edit', compact('news'));
-}
-
-public function update(Request $request, $id)
-{
-    $news = News::findOrFail($id);
-
-    // Validación de campos
-    $request->validate([
-        'titulo' => 'required',
-        'contenido' => 'required',
-        'category' => 'required',
-        'imagen' => 'nullable|image',  // Imagen opcional
-    ]);
-
-    // Si se ha subido una nueva imagen, reemplazar la anterior
-    if ($request->hasFile('imagen')) {
-        // Eliminar la imagen antigua si existe
-        if ($news->imagen) {
-            Storage::delete('public/' . $news->imagen);
-        }
-        // Guardar la nueva imagen
-        $nombreImagen = time() . '.' . $request->imagen->extension();
-        $request->imagen->storeAs('public', $nombreImagen);
-        $news->imagen = $nombreImagen;
-    }
-
-    // Actualizar los demás campos
-    $news->titulo = $request->titulo;
-    $news->contenido = $request->contenido;
-    $news->category = $request->category;
-    
-
-    // Guardar la noticia actualizada
-    $news->save();
-
-    // Redirigir con mensaje de éxito
-    return redirect('/')->with('update', 'Noticia actualizada.');
-}
-
-    public function destroy(News $news)
     {
-        if ($news->imagen) {
-            Storage::delete('public/' . $news->imagen);
+        $data = $request->validate([
+            
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'nombre_noticia' => 'required|string|max:255',
+            'descripcion_noticia' => 'required',
+            'tipo_deporte' => 'required|string',
+        ]);
+
+        $rutUsuario = auth()->user()->rut;
+        $admin = Administrador::where('rut_admin', $rutUsuario)->first();
+        
+        
+
+        
+        $news = News::create([
+            'nombre_noticia' => $data['nombre_noticia'],
+            'descripcion_noticia' => $data['descripcion_noticia'],
+            'tipo_deporte' => $data['tipo_deporte'],
+            'encargado_noticia' => $admin->nombre_admin,
+            'fecha_noticia' => now(),
+            'id_admin' => $admin->id_admin,
+        ]);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('news_images', 'public');
+                
+                NewsImage::create([
+                    'id_noticia' => $news->id_noticia,
+                    'image_path' => $path,
+                ]);
+            }
         }
+        return redirect('/')->with('success', 'Noticia creada con éxito.');
+    }
+
+    public function show($id)
+    {
+        $news = News::with('images')->findOrFail($id);
+        return view('news.show', compact('news'));
+    }
+
+    public function edit($id)
+    {
+        $news = News::with('images')->findOrFail($id);
+        $deportes = Deporte::all();
+        return view('news.edit', compact('news', 'deportes'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $news = News::findOrFail($id);
+
+        $data = $request->validate([
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'nombre_noticia' => 'required|string|max:255',
+            'descripcion_noticia' => 'required',
+            'tipo_deporte' => 'required|string',
+        ]);
+
+        $news->update([
+            'nombre_noticia' => $request->nombre_noticia,
+            'descripcion_noticia' => $request->descripcion_noticia,
+            'tipo_deporte' => $request->tipo_deporte,
+        ]);
+
+        // Eliminar imágenes seleccionadas
+        if ($request->has('delete_images') && is_array($request->delete_images)) {
+            foreach ($request->delete_images as $imageId) {
+                $image = NewsImage::findOrFail($imageId);
+                Storage::disk('public')->delete($image->image_path);
+                $image->delete();
+            }
+        }
+       
+         // Subir nuevas imágenes
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('news_images', 'public');
+                $news->images()->create(['image_path' => $path]);
+            }
+        }
+
+        return redirect('/')->with('update', 'Noticia actualizada.');
+    }
+
+    public function destroy($id)
+    {
+        $news = News::findOrFail($id);
+
+        // Elimina todas las imágenes asociadas
+        foreach ($news->images as $image) {
+            Storage::delete('public/' . $image->image_path);
+            $image->delete();
+        }
+
         $news->delete();
         return redirect('/')->with('delete', 'Noticia eliminada.');
     }
 }
-

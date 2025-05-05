@@ -4,6 +4,7 @@
 <!-- Encabezado -->
 @include('layouts.partials.header') 
 
+
 <body class="bg-light">
 
     <!-- Navbar -->
