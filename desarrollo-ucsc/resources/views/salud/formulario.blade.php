@@ -1,11 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
-    <h2>Formulario de Salud</h2>
 
-    <form method="POST" action="{{ route('salud.store') }}">
-        @csrf
+<div class="container d-flex justify-content-center mt-5">
+    <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
+        <div class="text-center mb-3">
+            <img src="{{ asset('images/logo_ucsc.png') }}" alt="Logo UCSC" style="width: 100px;">
+            <h3 class="mt-3 text-danger">Formulario de Salud</h3>
+        </div>
 
         <div class="form-group mb-3">
             <label>¿Tiene alguna enfermedad o condición médica?</label>
@@ -59,20 +61,21 @@
 
 <script>
     function toggleFormularioSalud() {
-        const seleccion = document.getElementById('tiene_enfermedad').value;
+        const si = document.getElementById('enfermedad_si').checked;
         const formulario = document.getElementById('formulario_salud');
         const declaracion = document.getElementById('declaracion_veracidad');
 
-        if (seleccion === 'si') {
+        if (si) {
             formulario.style.display = 'block';
-            declaracion.style.display = 'block';
-        } else if (seleccion === 'no') {
-            formulario.style.display = 'none';
             declaracion.style.display = 'block';
         } else {
             formulario.style.display = 'none';
-            declaracion.style.display = 'none';
+            declaracion.style.display = 'block';
         }
     }
+
+    // Ejecutar al cargar la página para mantener visibilidad si ya hay datos
+    window.onload = toggleFormularioSalud;
 </script>
+
 @endsection
