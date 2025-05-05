@@ -28,8 +28,8 @@ Route::get('/', function () {
 })->name('welcome');
 
 // Noticias públicas
-//Route::get('/noticias', [NewsController::class, 'index'])->name('home');
-//Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/noticias', [NewsController::class, 'index'])->name('news.index');
+Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
 
 // Ruta para la página de administradores
 Route::get('/admin', function () {
@@ -67,6 +67,8 @@ Route::prefix('admin')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/mi-perfil', [LoginController::class, 'editProfile'])->middleware('auth')->name('mi-perfil.edit');
+    Route::post('/mi-perfil', [LoginController::class, 'updateProfile'])->middleware('auth')->name('mi-perfil.update');
     // Ruta para la vista del registro, accesible solo para usuarios logueados
     Route::get('/registro-sala', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
 });
@@ -78,15 +80,10 @@ Route::get('/register', [RegisterController::class, 'create'])->name('register')
 Route::post('/register', [RegisterController::class, 'store']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Página de bienvenida
-Route::get('/bienvenido', function () {
-    return redirect()->route('home');
-})->name('bienvenido');
-
 
 // CRUD para administradores
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('news', NewsController::class);
+    Route::resource('news', NewsController::class)->except(['index', 'show']);
     // Ruta para el panel de administración
     Route::get('/admin', function () {
         return view('admin.index');
@@ -94,6 +91,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('administradores', AdministradorController::class)->parameters([
         'administradores' => 'administrador',
     ]);
+
 
     // Grupo de rutas para mantenedores
     Route::prefix('admin')->group(function () {

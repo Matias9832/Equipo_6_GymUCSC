@@ -24,9 +24,12 @@
                                 </a>
                             </li>
                         @endif
-                        <li class="nav-item text-secondary small me-3">
-                            <i class="bi bi-person-circle me-1"></i> {{ Auth::user()->name }}
+                        <li class="nav-item me-2">
+                            <a class="btn btn-light btn-sm" href="{{ route('mi-perfil.edit') }}">
+                                <i class="bi bi-person-circle me-1"></i>  Mi Perfil
+                            </a>
                         </li>
+                        
                         <li class="nav-item">
                             <form method="POST" action="{{ route('logout') }}" class="d-inline">
                                 @csrf
