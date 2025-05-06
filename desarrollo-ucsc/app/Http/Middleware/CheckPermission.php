@@ -13,13 +13,10 @@ class CheckPermission
      */
     public function handle(Request $request, Closure $next, $permiso)
     {
-        $administrador = Auth::user()->administrador; // Obtener el administrador autenticado
-
-        // Verificar si el administrador tiene el permiso
-        if (!$administrador || !$administrador->permisos()->where('nombre_permiso', $permiso)->exists()) {
-            return redirect()->route('home')->with('error', 'No tienes permiso para acceder a esta sección.');
+        if (!auth()->user()->hasPermissionTo($permiso)) {
+            return redirect()->route('admin.index')->with('error', 'No tienes permiso para acceder a esta sección.');
         }
-
+    
         return $next($request);
     }
 }

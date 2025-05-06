@@ -4,16 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class Usuario extends Authenticatable
 {
     use HasFactory;
-
+    use HasRoles;
     protected $table = 'usuario'; // Nombre de la tabla
     protected $primaryKey = 'id_usuario'; // Clave primaria
     public $incrementing = true; // Indica que la clave primaria es autoincremental
     protected $keyType = 'int'; // Tipo de dato de la clave primaria
 
+    protected $guard_name = 'web';
     protected $fillable = [
         'rut',
         'correo_usuario',

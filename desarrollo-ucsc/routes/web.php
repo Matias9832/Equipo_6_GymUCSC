@@ -32,39 +32,69 @@ Route::get('/', function () {
 Route::get('/noticias', [NewsController::class, 'index'])->name('news.index');
 Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
 
-
-
-
-
 // Ruta para la página de administradores
 Route::get('/admin', function () {
     return view('admin.index');
 })->name('admin');
 
 // Grupo de rutas para mantenedores
-Route::prefix('admin')->group(function () {
-    Route::resource('alumnos', AlumnoController::class);
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    
+    Route::middleware(['role:Super Admin'])->group(function () {
+        Route::resource('alumnos', AlumnoController::class);
+    });
 
-    Route::resource('tipos_espacio', TipoEspacioController::class)->parameters(['tipos_espacio' => 'tipoEspacio']);
-    Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
-    Route::resource('marcas', MarcasController::class);
+    Route::middleware(['permission:Acceso al Mantenedor de Tipos de Espacios'])->group(function () {
+        Route::resource('tipos_espacio', TipoEspacioController::class)->parameters(['tipos_espacio' => 'tipoEspacio']);
+    });
 
-    Route::resource('maquinas', MaquinaController::class);
-    Route::resource('deportes', DeporteController::class);
-    Route::resource('usuarios', UsuarioController::class);
+    Route::middleware(['permission:Acceso al Mantenedor de Tipos de Sanción'])->group(function () {
+        Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
+    });
 
-    Route::resource('paises', PaisController::class);
-    Route::resource('regiones', RegionController::class);
-    Route::resource('ciudades', CiudadController::class);
+    Route::middleware(['permission:Acceso al Mantenedor de Marcas'])->group(function () {
+        Route::resource('marcas', MarcasController::class);
+    });
 
-    Route::resource('sucursales', SucursalController::class);
-    Route::resource('espacios', EspacioController::class);
-    Route::resource('salas', SalaController::class);
+    Route::middleware(['permission:Acceso al Mantenedor de Máquinas'])->group(function () {
+        Route::resource('maquinas', MaquinaController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Deportes'])->group(function () {
+        Route::resource('deportes', DeporteController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Usuarios'])->group(function () {
+        Route::resource('usuarios', UsuarioController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Países'])->group(function () {
+        Route::resource('paises', PaisController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Regiones'])->group(function () {
+        Route::resource('regiones', RegionController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Ciudades'])->group(function () {
+        Route::resource('ciudades', CiudadController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Sucursales'])->group(function () {
+        Route::resource('sucursales', SucursalController::class);
+    });
+    Route::middleware(['permission:Acceso al Mantenedor de Espacios'])->group(function () {
+        Route::resource('espacios', EspacioController::class);
+    });
+    Route::middleware(['permission:Acceso al Mantenedor de Salas'])->group(function () {
+        Route::resource('salas', SalaController::class);
+    });
+    
 
     Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
 
     // CRUD para administradores
-    Route::middleware(['auth', 'admin'])->group(function () {
+    Route::middleware(['auth', 'admin','permission:Acceso al Mantenedor de Administradores'])->group(function () {
         Route::resource('news', NewsController::class)->except(['index', 'show']);
         // Ruta para el panel de administración
         Route::get('/admin', function () {
@@ -102,5 +132,4 @@ Route::post('/login', [LoginController::class, 'authenticate']);
 Route::get('/register', [RegisterController::class, 'create'])->name('register');
 Route::post('/register', [RegisterController::class, 'store']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
 
