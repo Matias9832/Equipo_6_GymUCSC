@@ -18,7 +18,14 @@ class Salud extends Model
         'alergias',
         'indicaciones_medicas',
         'informacion_salud',
+        'detalle_alergias',
+        'detalle_indicaciones',
+        'cronicas',
         'id_usuario',
+    ];
+
+    protected $casts = [
+        'cronicas' => 'array',
     ];
 
     public function user()
