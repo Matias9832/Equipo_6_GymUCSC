@@ -16,6 +16,9 @@ class SalaSeeder extends Seeder
     {
         DB::table('sala')->insert([
             'nombre_sala' => 'Sala Musculación',
+            'horario_apertura' => '08:00:00',
+            'horario_cierre' => '19:00:00',
+            'activo' => false,
             'aforo_sala' => 60,
             'id_suc' => 1,
         ]);

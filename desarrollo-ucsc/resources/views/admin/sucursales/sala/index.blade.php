@@ -22,6 +22,7 @@
                 <th>ID</th>
                 <th>Nombre</th>
                 <th>Aforo</th>
+                <th>Horario</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -31,6 +32,8 @@
                     <td>{{ $sala->id_sala }}</td>
                     <td>{{ $sala->nombre_sala }}</td>
                     <td>{{ $sala->aforo_sala }}</td>
+                    <td>{{ \Carbon\Carbon::parse($sala->horario_apertura)->format('H:i') }} -
+                        {{ \Carbon\Carbon::parse($sala->horario_cierre)->format('H:i') }}</td>
                     <td>
                         <a href="{{ route('salas.edit', $sala) }}" class="btn btn-sm btn-warning">Editar</a>
 
@@ -44,9 +47,10 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4">No hay salas disponibles.</td>
+                    <td colspan="5">No hay salas disponibles.</td>
                 </tr>
             @endforelse
         </tbody>
     </table>
+
 @endsection

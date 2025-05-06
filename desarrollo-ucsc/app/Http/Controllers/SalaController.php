@@ -26,10 +26,13 @@ class SalaController extends Controller
         $request->validate([
             'nombre_sala' => 'required|string|max:255',
             'aforo_sala' => 'required|integer|min:1',
+            'horario_apertura' => 'required|date_format:H:i',
+            'horario_cierre' => 'required|date_format:H:i|after:horario_apertura',
         ]);
 
         $data = $request->all();
         $data['id_suc'] = session('sucursal_activa');
+        $data['activo'] = false;
 
         Sala::create($data);
 

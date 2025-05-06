@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('nombre_sala');
             $table->integer('aforo_sala');
 
+            $table->time('horario_apertura');
+            $table->time('horario_cierre');
+            $table->boolean('activo')->default(false);
+            $table->integer('aforo_qr')->nullable();
+
             $table->unsignedBigInteger('id_suc');
             $table->foreign('id_suc')->references('id_suc')->on('sucursal');
         });

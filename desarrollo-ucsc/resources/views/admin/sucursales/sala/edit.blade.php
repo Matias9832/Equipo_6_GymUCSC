@@ -19,6 +19,15 @@
             <input type="number" name="aforo_sala" id="aforo_sala" class="form-control" value="{{ $sala->aforo_sala }}" required>
         </div>
 
+        <div class="mb-3">
+            <label class="form-label">Horario (Apertura - Cierre)</label>
+            <div class="d-flex gap-2">
+                <input type="time" name="horario_apertura" class="form-control" value="{{ $sala->horario_apertura }}" required>
+                <span class="align-self-center">-</span>
+                <input type="time" name="horario_cierre" class="form-control" value="{{ $sala->horario_cierre }}" required>
+            </div>
+        </div>
+
         <button type="submit" class="btn btn-success">Actualizar</button>
         <a href="{{ route('salas.index') }}" class="btn btn-secondary">Cancelar</a>
     </form>
