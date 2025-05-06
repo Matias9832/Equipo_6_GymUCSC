@@ -10,12 +10,12 @@ class CreateEquipoUsuarioTable extends Migration
     {
         Schema::create('equipo_usuario', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('equipo_id');
-            $table->unsignedBigInteger('usuario_id');
+            $table->unsignedBigInteger('equipo_id'); // Debe coincidir con la clave primaria de la tabla equipos
+            $table->unsignedBigInteger('usuario_id'); // Debe coincidir con la clave primaria de la tabla usuario
             $table->timestamps();
 
             $table->foreign('equipo_id')->references('id')->on('equipos')->onDelete('cascade');
-            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');
+            $table->foreign('usuario_id')->references('id_usuario')->on('usuario')->onDelete('cascade'); // Referencia corregida
         });
     }
 

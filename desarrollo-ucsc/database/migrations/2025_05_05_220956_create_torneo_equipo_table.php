@@ -6,10 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateTorneoEquipoTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('torneo_equipo', function (Blueprint $table) {
             $table->id();
@@ -17,16 +14,12 @@ class CreateTorneoEquipoTable extends Migration
             $table->unsignedBigInteger('equipo_id');
             $table->timestamps();
 
-            // Claves foráneas
             $table->foreign('torneo_id')->references('id')->on('torneos')->onDelete('cascade');
             $table->foreign('equipo_id')->references('id')->on('equipos')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('torneo_equipo');
     }

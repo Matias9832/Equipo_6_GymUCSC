@@ -6,12 +6,13 @@ use App\Models\Torneo;
 use Illuminate\Http\Request;
 use App\Models\Sucursal;
 use App\Models\Deporte;
+use App\Models\Equipo;
 
 class TorneoController extends Controller
 {
     public function index()
     {
-        $torneos = Torneo::with('equipos')->get();
+        $torneos = Torneo::with(['equipos', 'sucursal', 'deporte'])->get(); // Cargar relaciones necesarias
         return view('admin.mantenedores.torneos.index', compact('torneos'));
     }
 
@@ -43,19 +44,33 @@ class TorneoController extends Controller
 
     public function edit(Torneo $torneo)
     {
-        $equipos = $torneo->equipos; // Cargar los equipos relacionados con el torneo
+        $equipos = Equipo::where('id_deporte', $torneo->id_deporte)->get(); // Cargar equipos del mismo deporte
         $sucursales = Sucursal::all(); // Cargar todas las sucursales disponibles
         return view('admin.mantenedores.torneos.edit', compact('torneo', 'equipos', 'sucursales'));
     }
+    
     public function update(Request $request, Torneo $torneo)
     {
+        // Validar los datos enviados desde el formulario
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'max_equipos' => 'required|integer|min:1',
+            'nombre_torneo' => 'required|string|max:255',
+            'equipos' => 'nullable|array', // Validar que sea un array
+            'equipos.*' => 'exists:equipos,id', // Validar que los equipos existan
         ]);
-
-        $torneo->update($request->only(['nombre', 'max_equipos']));
-
+    
+        // Actualizar el nombre del torneo
+        $torneo->update([
+            'nombre_torneo' => $request->nombre_torneo,
+        ]);
+    
+        // Sincronizar los equipos seleccionados
+        if ($request->has('equipos')) {
+            $torneo->equipos()->sync($request->equipos);
+        } else {
+            $torneo->equipos()->detach(); // Si no se seleccionaron equipos, eliminar todos
+        }
+    
+        // Redirigir con un mensaje de éxito
         return redirect()->route('torneos.index')->with('success', 'Torneo actualizado correctamente.');
     }
 
