@@ -8,12 +8,6 @@
         <span class="text-muted">{{ session('nombre_sucursal') }}</span>
     </h1>
 
-    @if (session('success'))
-        <div style="color: green;">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <a href="{{ route('salas.create') }}" class="btn btn-primary mb-3">Crear Nueva Sala</a>
 
     <table class="table table-striped">
