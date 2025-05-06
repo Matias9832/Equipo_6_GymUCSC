@@ -117,6 +117,33 @@
             @endforeach
         @endif
     </div>    
+
+     <!-- Salas por Sucursal -->
+     <div class="col-lg-4">
+        <h4 class="mb-4">Conoce Nuestras Salas</h4>
+
+        @foreach($sucursalesConSalas as $sucursal)
+            <h5>{{ $sucursal->nombre_suc }}</h5>
+            @if($sucursal->salas->isNotEmpty())
+                <ul>
+                @foreach($sucursal->salas as $sala)
+                    <li class="d-flex justify-content-between mb-3">
+                        <span class="tw-bold">
+                            <strong>{{ $sala->nombre_sala }}</strong>
+                        </span>
+                        <span class="text-info">
+                            {{ \Carbon\Carbon::parse($sala->horario_apertura)->format('H:i') }} a 
+                            {{ \Carbon\Carbon::parse($sala->horario_cierre)->format('H:i') }}
+                        </span>
+                    </li>
+                @endforeach
+                </ul>
+            @else
+                <p>No hay salas disponibles en esta sucursal.</p>
+            @endif
+        @endforeach
+    </div> 
+
     <div class="d-flex justify-content-center">
         {{ $news->links() }}
     </div>

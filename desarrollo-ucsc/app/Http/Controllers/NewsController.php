@@ -6,6 +6,7 @@ use App\Models\News;
 use App\Models\NewsImage;
 use App\Models\Administrador;
 use App\Models\Deporte;
+use App\Models\Sucursal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -20,7 +21,13 @@ class NewsController extends Controller
     public function index()
     {
         $news = News::with('administrador')->orderByDesc('fecha_noticia')->paginate(3);
-        return view('news.index', compact('news'));
+    
+        $sucursalesConSalas = Sucursal::with('salas')
+            ->where('id_marca', 1)
+            ->whereHas('salas')
+            ->get();
+    
+        return view('news.index', compact('news', 'sucursalesConSalas'));
     }
 
     public function create()
@@ -32,7 +39,7 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            
+
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'nombre_noticia' => 'required|string|max:255',
             'descripcion_noticia' => 'required',
@@ -41,10 +48,10 @@ class NewsController extends Controller
 
         $rutUsuario = auth()->user()->rut;
         $admin = Administrador::where('rut_admin', $rutUsuario)->first();
-        
-        
 
-        
+
+
+
         $news = News::create([
             'nombre_noticia' => $data['nombre_noticia'],
             'descripcion_noticia' => $data['descripcion_noticia'],
@@ -57,7 +64,7 @@ class NewsController extends Controller
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $path = $image->store('news_images', 'public');
-                
+
                 NewsImage::create([
                     'id_noticia' => $news->id_noticia,
                     'image_path' => $path,
@@ -106,8 +113,8 @@ class NewsController extends Controller
                 $image->delete();
             }
         }
-       
-         // Subir nuevas imágenes
+
+        // Subir nuevas imágenes
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $path = $image->store('news_images', 'public');

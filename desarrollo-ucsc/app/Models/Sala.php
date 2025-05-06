@@ -19,4 +19,10 @@ class Sala extends Model
         'aforo_qr',
         'id_suc',
     ];
+
+    public function sucursal()
+    {
+        return $this->belongsTo(Sucursal::class, 'id_suc');
+    }
+
 }
