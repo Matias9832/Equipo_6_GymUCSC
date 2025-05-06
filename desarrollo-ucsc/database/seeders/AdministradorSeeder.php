@@ -13,7 +13,9 @@ class AdministradorSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crear el usuario 
+        //SUPER ADMIN ------------------------------------
+
+        // Crear el usuario super admin
         $usuario = Usuario::create([
             'rut' => '1234',
             'correo_usuario' => 'admin@example.com',
@@ -30,6 +32,32 @@ class AdministradorSeeder extends Seeder
         // Asignar el rol de Super Admin al usuario con todos los permisos
         $usuario->assignRole('Super Admin');
 
-    
+        //DIRECTOR ------------------------------------
+        $usuario = Usuario::create([
+            'rut' => '12345',
+            'correo_usuario' => 'director@example.com',
+            'tipo_usuario' => 'admin',
+            'contrasenia_usuario' => Hash::make('123456'),
+        ]);
+        Administrador::create([
+            'rut_admin' => '12345',
+            'nombre_admin' => 'Director Principal',
+            'fecha_creacion' => now(),
+        ]);
+        $usuario->assignRole('Director');
+
+        // DOCENTE ------------------------------------
+        $usuario = Usuario::create([
+            'rut' => '123456',
+            'correo_usuario' => 'admin@example.com',
+            'tipo_usuario' => 'admin',
+            'contrasenia_usuario' => Hash::make('123456'),
+        ]);
+        Administrador::create([
+            'rut_admin' => '123456',
+            'nombre_admin' => 'Primer Docente',
+            'fecha_creacion' => now(),
+        ]);
+        $usuario->assignRole('Docente');
     }
 }

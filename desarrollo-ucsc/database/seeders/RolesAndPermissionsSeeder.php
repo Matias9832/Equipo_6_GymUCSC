@@ -12,16 +12,20 @@ class RolesAndPermissionsSeeder extends Seeder
         $permissions = [
             'Acceso al Mantenedor de Alumnos',
             'Acceso al Mantenedor de Usuarios',
-            'Acceso al Mantenedor de Roles',
             'Acceso al Mantenedor de Deportes',
             'Acceso al Mantenedor de Máquinas',
             'Acceso al Mantenedor de Marcas',
             'Acceso al Mantenedor de Países',
             'Acceso al Mantenedor de Regiones',
             'Acceso al Mantenedor de Ciudades',
+            'Acceso al Mantenedor de Sucursales',
+            'Acceso al Mantenedor de Espacios',
+            'Acceso al Mantenedor de Salas',
             'Acceso al Mantenedor de Tipos de Espacios',
             'Acceso al Mantenedor de Tipos de Sanción',
             'Acceso al Mantenedor de Gestión de QR',
+            'Acceso al Mantenedor de Administradores',
+            'Acceso al Mantenedor de Roles',
         ];
 
         foreach ($permissions as $permission) {
@@ -52,7 +56,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'Acceso al Mantenedor de Tipos de Espacios',
             'Acceso al Mantenedor de Tipos de Sanción',
             'Acceso al Mantenedor de Gestión de QR',
-            'Acceso al Mantenedor de Administradores',
         ]);
 
         // Asignar permisos específicos al Docente
