@@ -46,5 +46,9 @@ class Usuario extends Authenticatable
         return $this->hasOne(Salud::class, 'id_usuario', 'id_usuario');
     }
     
+    public function equipos()
+    {
+        return $this->belongsToMany(Equipo::class, 'equipo_usuario', 'usuario_id', 'equipo_id');
+    }
 
 }
