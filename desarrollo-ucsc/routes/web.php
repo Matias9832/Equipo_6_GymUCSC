@@ -22,6 +22,9 @@ use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\RolController;
 use App\Http\Controllers\SaludController;
+use App\Http\Controllers\EquipoController;
+use App\Http\Controllers\TorneoController;
+
 
 // Página principal: Mostrar noticias públicas
 Route::get('/', function () {
@@ -48,6 +51,7 @@ Route::prefix('admin')->group(function () {
     Route::resource('maquinas', MaquinaController::class);
     Route::resource('deportes', DeporteController::class);
     Route::resource('usuarios', UsuarioController::class);
+    
 
     Route::resource('paises', PaisController::class);
     Route::resource('regiones', RegionController::class);
@@ -56,6 +60,10 @@ Route::prefix('admin')->group(function () {
     Route::resource('sucursales', SucursalController::class);
     Route::resource('espacios', EspacioController::class);
     Route::resource('salas', SalaController::class);
+
+    Route::resource('equipos', EquipoController::class);
+    Route::resource('torneos', TorneoController::class);
+
 
     Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
 
