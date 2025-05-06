@@ -28,7 +28,6 @@ class AdministradorSeeder extends Seeder
             'rut_admin' => '1234', // Debe coincidir con el RUT del usuario
             'nombre_admin' => 'Administrador Principal',
             'fecha_creacion' => now(),
-            'id_rol' => 1,
         ]);
     }
 }

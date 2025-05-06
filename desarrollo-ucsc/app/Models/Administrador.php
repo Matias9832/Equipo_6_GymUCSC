@@ -23,22 +23,12 @@ class Administrador extends Model
     protected $fillable = [
         'rut_admin',
         'nombre_admin',
-        'id_rol',
         'fecha_creacion',
         'correo_usuario',
     ];
-
-    //Asociación con la tabla de roles, permite que un administrador tenga un unico rol
-    public function rol()
-    {
-        return $this->belongsTo(Rol::class, 'id_rol', 'id_rol');
-    }
         public function news()
     {
         return $this->hasMany(News::class, 'id_admin');
     }
-    public function permisos()
-    {
-        return $this->rol->permisos();
-    }
+   
 }

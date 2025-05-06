@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Administrador;
 use App\Models\Usuario;
-use App\Models\Rol;
 
 class AdministradorController extends Controller
 {
@@ -16,8 +15,8 @@ class AdministradorController extends Controller
      */
     public function index()
     {
-        // Obtener los administradores con sus roles y usuarios relacionados
-        $administradores = Administrador::with('rol')->get();
+        // Obtener los administradores y usuarios relacionados
+        $administradores = Administrador::all();
         // Obtener los usuarios relacionados con los administradores
         $usuarios = DB::table('usuario')
             ->join('administrador', 'usuario.rut', '=', 'administrador.rut_admin')
@@ -32,8 +31,7 @@ class AdministradorController extends Controller
      */
     public function create()
     {
-        $roles = Rol::all();
-        return view('admin.mantenedores.administradores.create', compact('roles'));
+        return view('admin.mantenedores.administradores.create');
     }
 
     /**
@@ -44,7 +42,6 @@ class AdministradorController extends Controller
         $request->validate([
             'rut_admin' => 'required|string|unique:administrador,rut_admin|unique:usuario,rut',
             'nombre_admin' => 'required|string|max:255',
-            'id_rol' => 'required|exists:rol,id_rol',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
             'contrasenia_usuario' => 'required|string|min:6',
         ]);
@@ -61,7 +58,6 @@ class AdministradorController extends Controller
         Administrador::create([
             'rut_admin' => $request->rut_admin,
             'nombre_admin' => $request->nombre_admin,
-            'id_rol' => $request->id_rol,
             'fecha_creacion' => now(),
         ]);
     
@@ -74,7 +70,6 @@ class AdministradorController extends Controller
     public function edit(Administrador $administrador)
     {
         $usuario = DB::table('usuario')->where('rut', $administrador->rut_admin)->first();
-        $roles = Rol::all();
         return view('admin.mantenedores.administradores.edit', compact('administrador', 'usuario'));
     }
     /**
@@ -101,27 +96,7 @@ class AdministradorController extends Controller
         return redirect()->route('administradores.index')->with('success', 'Administrador actualizado correctamente.');
     }
 
-    public function editRol($id)
-    {
-        $administrador = Administrador::findOrFail($id);
-        $roles = Rol::all(); // Obtener todos los roles disponibles
-        return view('admin.mantenedores.administradores.rol', compact('administrador', 'roles'));
-    }
     
-    public function updateRol(Request $request, $id)
-    {
-        $request->validate([
-            'id_rol' => 'required|exists:rol,id_rol',
-        ]);
-
-        $administrador = Administrador::findOrFail($id);
-        $administrador->update([
-            'id_rol' => $request->id_rol,
-        ]);
-
-        return redirect()->route('administradores.index')->with('success', 'Rol del administrador actualizado correctamente.');
-    }
-
     public function destroy(Administrador $administrador)
     {
         // Eliminar el administrador

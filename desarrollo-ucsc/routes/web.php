@@ -19,8 +19,6 @@ use App\Http\Controllers\CiudadController;
 use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\SalaController;
-use App\Http\Controllers\RolController;
-
 
 
 
@@ -77,25 +75,11 @@ Route::prefix('admin')->group(function () {
         ]);
     });
 
-
-
-
     // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
     Route::get('/control-salas/seleccionar', [ControlSalasController::class, 'seleccionarSala'])->name('control-salas.seleccionar');
     Route::post('/control-salas/generar-qr', [ControlSalasController::class, 'generarQR'])->name('control-salas.generarQR');
-
-    //Asignación de roles a administradores
-    Route::resource('roles', RolController::class)->parameters([
-        'roles' => 'rol',
-    ]);
-    Route::get('administradores/{id}/edit-rol', [AdministradorController::class, 'editRol'])->name('administradores.rol');
-    Route::post('administradores/{id}/update-rol', [AdministradorController::class, 'updateRol'])->name('administradores.updateRol');
 });
-
-
-
-
 
 
 Route::middleware(['auth'])->group(function () {
@@ -109,9 +93,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/mi-perfil', [LoginController::class, 'editProfile'])->middleware('auth')->name('mi-perfil.edit');
     Route::post('/mi-perfil', [LoginController::class, 'updateProfile'])->middleware('auth')->name('mi-perfil.update');
 });
-
-
-
 
 
 
