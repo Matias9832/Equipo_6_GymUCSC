@@ -17,5 +17,20 @@ class AdminSucursalSeeder extends Seeder
             'id_suc' => 1,
             'activa' => true,
         ]);
+        DB::table('admin_sucursal')->insert([
+            'id_admin' => 2,
+            'id_suc' => 1,
+            'activa' => true,
+        ]);
+        DB::table('admin_sucursal')->insert([
+            'id_admin' => 3,
+            'id_suc' => 1,
+            'activa' => true,
+        ]);
+        DB::table('admin_sucursal')->insert([
+            'id_admin' => 4,
+            'id_suc' => 2,
+            'activa' => true,
+        ]);
     }
 }

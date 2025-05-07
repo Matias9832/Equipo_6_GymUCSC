@@ -21,6 +21,7 @@ class AdministradorSeeder extends Seeder
             'correo_usuario' => 'admin@example.com',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
+            'activado_usuario' => 1,
         ]);
 
         // Crear el administrador asociado
@@ -38,6 +39,7 @@ class AdministradorSeeder extends Seeder
             'correo_usuario' => 'director@example.com',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
+            'activado_usuario' => 1,
         ]);
         Administrador::create([
             'rut_admin' => '12345',
@@ -52,6 +54,7 @@ class AdministradorSeeder extends Seeder
             'correo_usuario' => 'admin@example.com',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
+            'activado_usuario' => 1,
         ]);
         Administrador::create([
             'rut_admin' => '123456',
@@ -59,5 +62,20 @@ class AdministradorSeeder extends Seeder
             'fecha_creacion' => now(),
         ]);
         $usuario->assignRole('Docente');
+
+        // ADMINISTRADOR SUCURSAL 2
+        $usuario = Usuario::create([
+            'rut' => '22222',
+            'correo_usuario' => 'admin2@example.com',
+            'tipo_usuario' => 'admin',
+            'contrasenia_usuario' => Hash::make('123456'),
+            'activado_usuario' => 1,
+        ]);
+        Administrador::create([
+            'rut_admin' => '22222',
+            'nombre_admin' => 'Administrador IT Chillán',
+            'fecha_creacion' => now(),
+        ]);
+        $usuario->assignRole('Super Admin');
     }
 }

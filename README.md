@@ -17,7 +17,10 @@ Repositorio Git para plataforma Web UCSC
     composer require simplesoftwareio/simple-qrcode
     composer require spatie/laravel-permission
     
-
+### Hacer:
+    php artisan config:clear
+    php artisan cache:clear
+    php artisan config:cache
 
 ## Para el manejo de la base de datos:
     1. php artisan migrate :    Migra la base de datos
