@@ -307,5 +307,37 @@ class ControlSalasController extends Controller
         return back()->with('mensaje', 'Sala cerrada correctamente y salidas registradas.');
     }
 
+    public function sacarUsuario(Request $request)
+    {
+        $ingreso = Ingreso::find($request->id_ingreso);
+
+        if ($ingreso && is_null($ingreso->hora_salida)) {
+            $horaSalida = now();
+            $horaIngreso = Carbon::parse($ingreso->hora_ingreso);
+            $tiempoUsoSegundos = $horaIngreso->diffInSeconds($horaSalida);
+
+            $ingreso->hora_salida = $horaSalida->format('H:i:s');
+            $ingreso->tiempo_uso = gmdate("H:i:s", $tiempoUsoSegundos);
+            $ingreso->save();
+        }
+
+        return back()->with('success', 'Usuario retirado correctamente.');
+    }
+
+
+    public function verUsuarios($id_sala)
+    {
+        $sala = Sala::where('activo', true)->where('id_sala', $id_sala)->firstOrFail();
+
+        $sala->ingresos = Ingreso::where('id_sala', $sala->id_sala)
+            ->whereNull('hora_salida')
+            ->whereDate('fecha_ingreso', today())
+            ->with(['usuario.alumno', 'usuario.administrador'])
+            ->get();
+
+        return view('admin.control_salas.ver_usuarios', compact('sala'));
+    }
+
+
 
 }

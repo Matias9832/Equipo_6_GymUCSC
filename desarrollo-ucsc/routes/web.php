@@ -118,8 +118,14 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('control-salas/ver-qr', [ControlSalasController::class, 'verQR'])->name('control-salas.verQR');
     Route::post('/control-salas/cambiar-aforo', [ControlSalasController::class, 'cambiarAforo'])->name('control_salas.cambiar_aforo');
     Route::post('admin/control-salas/cerrar-sala', [ControlSalasController::class, 'cerrarSala'])
-    ->name('admin.control_salas.cerrar_sala')
-    ->middleware('auth');
+        ->name('admin.control_salas.cerrar_sala')
+        ->middleware('auth');
+    Route::post('/control-salas/sacar-usuario', [ControlSalasController::class, 'sacarUsuario'])
+        ->name('admin.control_salas.sacar_usuario');
+    Route::get('/admin/control-salas/ver-usuarios/{id_sala}', [ControlSalasController::class, 'verUsuarios'])
+        ->name('admin.control_salas.ver_usuarios');
+
+
 
 });
 

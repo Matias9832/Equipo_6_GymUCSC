@@ -44,7 +44,7 @@
                                 <th>Nombre de la Sala</th>
                                 <th>Aforo QR</th>
                                 <th>Personas Activas</th>
-                                <th>Acciones</th>
+                                <th style="width: 40%;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,19 +57,25 @@
                                 \App\Models\Ingreso::where('id_sala', $sala->id_sala)
                                     ->whereNull('hora_salida')
                                     ->count()
-                                                                                            }}
+                                                                                                                                                                                                                                                            }}
                                             </td>
                                             <td>
                                                 <a href="{{ route('control-salas.verQR', ['id_sala' => $sala->id_sala, 'aforo_qr' => $sala->aforo_qr]) }}"
-                                                    class="btn btn-primary">
+                                                    class="btn btn-primary btn-sm">
                                                     Ver QR
                                                 </a>
 
                                                 <!-- Botón Cambiar Aforo -->
-                                                <button class="btn btn-warning ms-2" data-bs-toggle="modal"
+                                                <button class="btn btn-sm btn-warning ms-2" data-bs-toggle="modal"
                                                     data-bs-target="#cambiarAforoModal{{ $sala->id_sala }}">
                                                     Cambiar Aforo
                                                 </button>
+
+                                                <a href="{{ route('admin.control_salas.ver_usuarios', $sala->id_sala) }}"
+                                                    class="btn btn-info btn-sm ms-1">
+                                                    Ver Ingresos
+                                                </a>
+
 
                                                 <form action="{{ route('admin.control_salas.cerrar_sala') }}" method="POST"
                                                     class="d-inline ms-1">
