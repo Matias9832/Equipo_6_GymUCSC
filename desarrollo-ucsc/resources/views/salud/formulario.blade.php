@@ -51,7 +51,7 @@
             <div id="detalle_alergias" style="display: none;" class="mb-3">
                 <label for="detalle_alergias">Especifique sus alergias</label>
                 <span>(ya sea estacional, alimentaria o a medicamentos)</span>
-                <input type="text" name="detalle_alergias" id="detalle_alergias_input" class="form-control" value="{{ $salud->detalle_alergias }}">
+                <input type="text" name="detalle_alergias" value="{{ old('detalle_alergias', $salud?->detalle_alergias) }}">
             </div>
 
             <div class="form-check mb-2">
@@ -61,7 +61,7 @@
 
             <div id="detalle_indicaciones" style="display: none;" class="form-group mb-3">
                 <label for="detalle_indicaciones">Indicaciones Médicas:</label>
-                <input type="text" name="detalle_indicaciones" id="detalle_indicaciones_input" class="form-control" value="{{ $salud->detalle_indicaciones }}">
+                <input type="text" name="detalle_indicaciones" value="{{ old('detalle_indicaciones', $salud?->detalle_indicaciones) }}">
             </div>
             
         </div>
