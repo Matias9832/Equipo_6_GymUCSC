@@ -9,15 +9,36 @@
 
     <!-- Navbar -->
     @include('layouts.partials.navbar')
-
+    
     <!-- Contenido principal -->
+    
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show shadow"
+            role="alert"
+            style="position: fixed; top: 70px; right: 20px; z-index: 1055; min-width: 300px;">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+
+        <script>
+            setTimeout(() => {
+                const alert = document.querySelector('.alert.alert-success');
+                if (alert) {
+                    alert.classList.remove('show');
+                    alert.classList.add('fade');
+                    setTimeout(() => alert.remove(), 500);
+                }
+            }, 3000);
+        </script>
+    @endif
+    
     @if(View::hasSection('sidebar'))
     <div class="d-flex" style="min-height: 100vh;">
         <!-- Sidebar -->
         <aside class="bg-light border-end" style="width: 250px; min-height: 100vh;">
             @yield('sidebar')
         </aside>
-
+        
         <!-- Main Content -->
         <main class="flex-grow-1 p-4">
             @yield('content')
