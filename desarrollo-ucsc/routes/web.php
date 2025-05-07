@@ -23,7 +23,6 @@ use App\Http\Controllers\SaludController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\TorneoController;
 
-
 // Página principal: Mostrar noticias públicas
 Route::get('/', function () {
     return redirect()->route('news.index');
@@ -154,3 +153,20 @@ Route::get('/register', [RegisterController::class, 'create'])->name('register')
 Route::post('/register', [RegisterController::class, 'store']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+
+
+// Rutas para la verificación de usuario
+Route::get('/verificar', [RegisterController::class, 'verificarVista'])->name('verificar.vista');
+Route::post('/verificar', [RegisterController::class, 'verificarCodigo'])->name('verificar.codigo');
+
+// CRUD para administradores
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('news', NewsController::class)->except(['index', 'show']);
+    // Ruta para el panel de administración
+    Route::get('/admin', function () {
+        return view('admin.index');
+    })->name('admin.index');
+    Route::resource('administradores', AdministradorController::class)->parameters([
+        'administradores' => 'administrador',
+    ]);
+});

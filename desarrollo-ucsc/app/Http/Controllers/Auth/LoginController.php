@@ -36,45 +36,41 @@ class LoginController extends Controller
             'rut.required' => 'El campo RUT es obligatorio.',
             'password.required' => 'El campo contraseña es obligatorio.',
         ]);
-
+    
         // Buscar al usuario
         $usuario = Usuario::where('rut', $credentials['rut'])->first();
-
+    
         if (!$usuario) {
             return back()->withErrors([
                 'rut' => 'El RUT ingresado no está asociado a ningún usuario registrado.',
             ]);
         }
-
+    
+        // Verificar si el usuario está bloqueado
+        if ($usuario->bloqueado_usuario == 1) {
+            return back()->withErrors([
+                'bloqueado' => 'Tu cuenta está bloqueada. Contacta al administrador.',
+            ]);
+        }
+    
+        // Verificar si la cuenta está activa
+        if ($usuario->activado_usuario == 0) {
+            return redirect()->route('verificar.vista')->withErrors([
+                'activado' => 'Tu cuenta no está activa. Verifica tu correo para activarla.',
+            ]);
+        }
+    
         // Validar la contraseña
         if (!Hash::check($credentials['password'], $usuario->contrasenia_usuario)) {
             return back()->withErrors([
                 'password' => 'La contraseña ingresada no corresponde al RUT ingresado.',
             ]);
         }
-
+    
         // Autenticar
         Auth::login($usuario);
         $request->session()->regenerate();
-
-        // Si es administrador tiene una sucursal asociada
-        if ($usuario->tipo_usuario === 'admin') {
-            $sucursal = \DB::table('admin_sucursal')
-                ->join('sucursal', 'admin_sucursal.id_suc', '=', 'sucursal.id_suc')
-                ->where('admin_sucursal.id_admin', $usuario->id_usuario) // Usa el campo correcto
-                ->where('admin_sucursal.activa', true)
-                ->select('sucursal.id_suc', 'sucursal.nombre_suc')
-                ->first();
-
-            if ($sucursal) {
-                session()->put('sucursal_activa', $sucursal->id_suc);
-                session()->put('nombre_sucursal', $sucursal->nombre_suc);
-            } else {
-                \Log::warning('No se encontró sucursal activa para admin ID: ' . $usuario->id_usuario);
-            }
-        }
-
-
+    
         return redirect()->intended($this->redirectTo);
     }
 
