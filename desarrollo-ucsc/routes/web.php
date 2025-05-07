@@ -103,7 +103,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/salud', [SaludController::class, 'create'])->name('salud.create');
     Route::post('/salud', [SaludController::class, 'store'])->name('salud.store');
     Route::get('/salud/edit', [SaludController::class, 'edit'])->name('salud.edit');
-    Route::post('/salud/edit', [SaludController::class, 'update'])->name('salud.update');
+    // Route::post('/salud/edit', [SaludController::class, 'update'])->name('salud.update');
     Route::put('/salud', [SaludController::class, 'update'])->name('salud.update');
 
 });

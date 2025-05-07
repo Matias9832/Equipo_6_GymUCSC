@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Ingreso;
 use App\Models\Sala;
+use Carbon\Carbon;
 
 class ControlSalasController extends Controller
 {
@@ -83,6 +84,30 @@ class ControlSalasController extends Controller
         }
 
         $aforo = $request->query('aforo');
+        $sala = Sala::findOrFail($idSala);
+
+        if (!$sala->activo) {
+            return view('usuarios.ingreso.registro', [
+                'mensaje' => 'En este momento no se puede acceder a la sala.',
+                'aforo' => $aforo,
+                'id_sala' => $idSala,
+                'nombreSala' => $sala->nombre_sala,
+            ]);
+        }
+
+        $horaActual = now();
+        $horaApertura = Carbon::createFromTimeString($sala->horario_apertura);
+        $horaCierre = Carbon::createFromTimeString($sala->horario_cierre);
+
+        if ($horaActual->lt($horaApertura) || $horaActual->gt($horaCierre)) {
+            return view('usuarios.ingreso.registro', [
+                'mensaje' => "La sala no está disponible en este horario.\nHorario permitido: " . $sala->horario_apertura . " a " . $sala->horario_cierre,
+                'aforo' => $aforo,
+                'id_sala' => $idSala,
+                'nombreSala' => $sala->nombre_sala,
+            ]);
+        }
+
         $usuariosActivos = Ingreso::where('id_sala', $idSala)
             ->whereNull('hora_salida')
             ->count();
@@ -92,10 +117,9 @@ class ControlSalasController extends Controller
                 'mensaje' => 'La sala está llena. Intenta más tarde.',
                 'aforo' => $aforo,
                 'id_sala' => $idSala,
+                'nombreSala' => $sala->nombre_sala,
             ]);
         }
-
-        $sala = Sala::findOrFail($idSala);
 
         if (!Auth::check()) {
             return view('usuarios.ingreso.registro', [
@@ -116,7 +140,7 @@ class ControlSalasController extends Controller
 
         if ($registroActivo) {
             return view('usuarios.ingreso.registro', [
-                'mensaje' => 'Ya ingresaste a la sala previamente',
+                'mensaje' => 'Ya ingresaste a la sala previamente.',
                 'aforo' => $aforo,
                 'id_sala' => $idSala,
                 'nombreSala' => $sala->nombre_sala,
@@ -140,6 +164,7 @@ class ControlSalasController extends Controller
             'mensaje' => null,
         ]);
     }
+
 
     public function mostrarIngreso()
     {
