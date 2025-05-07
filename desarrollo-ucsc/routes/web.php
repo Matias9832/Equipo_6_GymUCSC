@@ -159,14 +159,3 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/verificar', [RegisterController::class, 'verificarVista'])->name('verificar.vista');
 Route::post('/verificar', [RegisterController::class, 'verificarCodigo'])->name('verificar.codigo');
 
-// CRUD para administradores
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('news', NewsController::class)->except(['index', 'show']);
-    // Ruta para el panel de administración
-    Route::get('/admin', function () {
-        return view('admin.index');
-    })->name('admin.index');
-    Route::resource('administradores', AdministradorController::class)->parameters([
-        'administradores' => 'administrador',
-    ]);
-});
