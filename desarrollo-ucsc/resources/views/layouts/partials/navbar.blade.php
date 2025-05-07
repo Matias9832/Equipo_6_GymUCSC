@@ -24,21 +24,33 @@
                                 </a>
                             </li>
                         @endif
-                        <li class="nav-item me-2">
-                            <a class="btn btn-light btn-sm" href="{{ route('mi-perfil.edit') }}">
-                                <i class="bi bi-person-circle me-1"></i>  Mi Perfil
+                        <li class="nav-item dropdown">
+                            <a class="btn btn-light btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <i class="bi bi-person-circle me-1"></i> Mi Cuenta
                             </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('mi-perfil.edit') }}">
+                                        <i class="bi bi-person"></i> Mi Perfil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('ingreso.mostrar') }}">
+                                        <i class="bi bi-door-open"></i> Salas
+                                    </a>
+                                </li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item text-danger">
+                                            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
                         </li>
-                        
-                        <li class="nav-item">
-                            <a class="btn btn-outline-danger btn-sm mr-3" href="{{ route('ingreso.mostrar') }}">Salas</a>
-                        </li>
-                        <li class="nav-item">
-                            <form method="POST" action="{{ route('logout') }}" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-outline-danger btn-sm">Cerrar sesión</button>
-                            </form>
-                        </li>
+
                     @else
                         <li class="nav-item me-2">
                             <a href="{{ route('login') }}" class="btn btn-danger btn-sm">Iniciar sesión</a>

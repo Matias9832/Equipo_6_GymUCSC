@@ -31,7 +31,7 @@
 @section('content')
 <div class="row">
     <div class="col-lg-8">
-        <h4 class="mb-4">Noticias</h4>
+        <h4 class="mb-4 mt-4">Noticias</h4>
         @auth
             <div class="alert alert-info d-flex align-items-center" role="alert">
                 <i class="bi bi-person-circle me-2"></i>
@@ -120,7 +120,7 @@
 
      <!-- Salas por Sucursal -->
      <div class="col-lg-4">
-        <h4 class="mb-4">Conoce Nuestras Salas</h4>
+        <h4 class="mb-4 mt-4">Conoce Nuestras Salas</h4>
 
         @foreach($sucursalesConSalas as $sucursal)
             <h5>{{ $sucursal->nombre_suc }}</h5>
