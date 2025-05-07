@@ -13,7 +13,7 @@
             {!! nl2br(e($mensaje)) !!}
             </div>
 
-            @if ($mensaje == 'Ya ingresaste a la sala previamente')
+            @if ($mensaje == 'Ya ingresaste a la sala previamente.')
                 <a href="{{ route('ingreso.mostrar') }}" class="btn btn-primary btn-block mt-3 w-100">Ver tu acceso</a>
             @endif
         @else

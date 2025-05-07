@@ -39,7 +39,7 @@ Route::get('/admin', function () {
 
 // Grupo de rutas para mantenedores
 Route::prefix('admin')->middleware(['auth'])->group(function () {
-    
+
     Route::middleware(['role:Super Admin'])->group(function () {
         Route::resource('alumnos', AlumnoController::class);
     });
@@ -89,7 +89,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::middleware(['permission:Acceso al Mantenedor de Salas'])->group(function () {
         Route::resource('salas', SalaController::class);
     });
-    
+
 
     Route::resource('equipos', EquipoController::class);
     Route::resource('torneos', TorneoController::class);
@@ -98,7 +98,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
 
     // CRUD para administradores
-    Route::middleware(['auth', 'admin','permission:Acceso al Mantenedor de Administradores'])->group(function () {
+    Route::middleware(['auth', 'admin', 'permission:Acceso al Mantenedor de Administradores'])->group(function () {
         Route::resource('news', NewsController::class)->except(['index', 'show']);
         // Ruta para el panel de administración
         Route::get('/admin', function () {
@@ -131,7 +131,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], '/ingreso/actual', [ControlSalasController::class, 'mostrarIngreso'])
         ->name('ingreso.mostrar')
         ->middleware('auth');
-        
+
     Route::get('/mi-perfil', [LoginController::class, 'editProfile'])->middleware('auth')->name('mi-perfil.edit');
     Route::post('/mi-perfil', [LoginController::class, 'updateProfile'])->middleware('auth')->name('mi-perfil.update');
 

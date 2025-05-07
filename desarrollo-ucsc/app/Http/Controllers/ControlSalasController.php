@@ -108,19 +108,6 @@ class ControlSalasController extends Controller
             ]);
         }
 
-        $usuariosActivos = Ingreso::where('id_sala', $idSala)
-            ->whereNull('hora_salida')
-            ->count();
-
-        if ($usuariosActivos >= $aforo) {
-            return view('usuarios.ingreso.registro', [
-                'mensaje' => 'La sala está llena. Intenta más tarde.',
-                'aforo' => $aforo,
-                'id_sala' => $idSala,
-                'nombreSala' => $sala->nombre_sala,
-            ]);
-        }
-
         if (!Auth::check()) {
             return view('usuarios.ingreso.registro', [
                 'qrCode' => null,
@@ -147,6 +134,19 @@ class ControlSalasController extends Controller
             ]);
         }
 
+        $usuariosActivos = Ingreso::where('id_sala', $idSala)
+            ->whereNull('hora_salida')
+            ->count();
+
+        if ($usuariosActivos >= $aforo) {
+            return view('usuarios.ingreso.registro', [
+                'mensaje' => 'La sala está llena. Intenta más tarde.',
+                'aforo' => $aforo,
+                'id_sala' => $idSala,
+                'nombreSala' => $sala->nombre_sala,
+            ]);
+        }
+
         $registro = Ingreso::create([
             'id_sala' => $idSala,
             'id_usuario' => $usuario->id_usuario,
@@ -161,6 +161,7 @@ class ControlSalasController extends Controller
             'horaIngreso' => $registro->hora_ingreso,
             'idSala' => $idSala,
             'nombreSala' => $sala->nombre_sala,
+            'horarioCierre' => $sala->horario_cierre,
             'mensaje' => null,
         ]);
     }
@@ -181,12 +182,15 @@ class ControlSalasController extends Controller
             ->first();
 
         if ($registro) {
+            $sala = $registro->sala;
+
             return view('usuarios.ingreso.mostrar_ingreso', [
                 'mensaje' => null,
                 'fecha' => $registro->fecha_ingreso,
                 'horaIngreso' => $registro->hora_ingreso,
                 'idSala' => $registro->id_sala,
-                'nombreSala' => $registro->sala->nombre_sala,
+                'nombreSala' => $sala->nombre_sala,
+                'horarioCierre' => $sala->horario_cierre,
             ]);
         }
 
@@ -196,8 +200,10 @@ class ControlSalasController extends Controller
             'horaIngreso' => null,
             'idSala' => null,
             'nombreSala' => null,
+            'horarioCierre' => null,
         ]);
     }
+
 
     public function registrarSalida(Request $request)
     {
@@ -218,7 +224,7 @@ class ControlSalasController extends Controller
         if ($registro) {
             // Registrar la salida
             $horaSalida = now();
-            $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
+            $horaIngreso = Carbon::parse($registro->hora_ingreso);
             $tiempoUsoSegundos = $horaIngreso->diffInSeconds($horaSalida); // Diferencia en segundos
 
             // Convertir los segundos a formato HH:mm:ss
@@ -291,7 +297,7 @@ class ControlSalasController extends Controller
 
         foreach ($ingresos as $registro) {
             $horaSalida = now();
-            $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
+            $horaIngreso = Carbon::parse($registro->hora_ingreso);
             $tiempoUsoSegundos = $horaIngreso->diffInSeconds($horaSalida);
             $registro->hora_salida = $horaSalida->format('H:i:s');
             $registro->tiempo_uso = gmdate("H:i:s", $tiempoUsoSegundos);

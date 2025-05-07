@@ -9,7 +9,8 @@ use App\Models\Salud;
 
 class Usuario extends Authenticatable
 {
-    use HasFactory, HasRoles;
+    use HasFactory;
+    use HasRoles;
 
     protected $table = 'usuario'; // Nombre de la tabla
     protected $primaryKey = 'id_usuario'; // Clave primaria
@@ -17,12 +18,12 @@ class Usuario extends Authenticatable
     protected $keyType = 'int'; // Tipo de dato de la clave primaria
 
     protected $guard_name = 'web';
-    
+
     protected $attributes = [
         'bloqueado_usuario' => 0,
         'activado_usuario' => 0,
     ];
-    
+
     protected $fillable = [
         'rut',
         'correo_usuario',
@@ -55,10 +56,20 @@ class Usuario extends Authenticatable
     {
         return $this->hasOne(Salud::class, 'id_usuario', 'id_usuario');
     }
-    
+
     public function equipos()
     {
         return $this->belongsToMany(Equipo::class, 'equipo_usuario', 'usuario_id', 'equipo_id');
+    }
+
+    public function alumno()
+    {
+        return $this->hasOne(Alumno::class, 'rut_alumno', 'rut');
+    }
+
+    public function administrador()
+    {
+        return $this->hasOne(Administrador::class, 'rut_admin', 'rut');
     }
 
 }

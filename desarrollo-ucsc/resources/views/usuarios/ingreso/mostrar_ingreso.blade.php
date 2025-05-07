@@ -16,8 +16,10 @@
             @php
                 $ingreso = \Carbon\Carbon::parse($horaIngreso);
                 $limite = $ingreso->copy()->addMinutes(90);
-                $horaMax = $limite->greaterThan(\Carbon\Carbon::parse('18:00')) ? '18:00' : $limite->format('H:i');
+                $cierre = \Carbon\Carbon::parse($horarioCierre);
+                $horaMax = $limite->greaterThan($cierre) ? $cierre->format('H:i') : $limite->format('H:i');
             @endphp
+
 
             <p>Tienes acceso hasta: <strong>{{ $horaMax }}</strong></p>
 

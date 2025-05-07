@@ -24,6 +24,10 @@ class Ingreso extends Model
         return $this->belongsTo(Sala::class, 'id_sala');
     }
 
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'id_usuario');
+    }
 
     public $timestamps = true;
 }
