@@ -15,7 +15,7 @@ class SaludController extends Controller
             return redirect()->route('home');
         }
 
-        return view('salud.formulario');
+        return view('salud.formulario', ['salud' => null]);
     }
 
     public function store(Request $request)

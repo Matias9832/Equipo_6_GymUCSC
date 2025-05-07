@@ -114,14 +114,6 @@
                             <button type="submit" class="btn btn-primary">Actualizar Aforo</button>
                         </form>
                     </div>
-                    <form action="{{ route('admin.control_salas.cerrar_sala') }}" method="POST" class="d-inline ms-1">
-                        @csrf
-                        <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
-                        <button type="submit" class="btn btn-danger btn-sm"
-                            onclick="return confirm('¿Estás seguro de cerrar la sala {{ $sala->nombre_sala }}?')">
-                            Cerrar Sala
-                        </button>
-                    </form>
                 </div>
             </div>
         </div>

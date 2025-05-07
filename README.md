@@ -14,7 +14,9 @@ Repositorio Git para plataforma Web UCSC
 
 ### Dependencias adicionales:
     composer require maatwebsite/excel
-    composer require simplesoftwareio/simple-qrcode
+    composer require simplesoftwareio/
+    composer require spatie/laravel-permission
+    simple-qrcode
 
 
 ## Para el manejo de la base de datos:

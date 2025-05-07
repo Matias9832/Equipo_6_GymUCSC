@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\NewsController;
-use App\Models\News;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ControlSalasController;
@@ -20,7 +19,6 @@ use App\Http\Controllers\CiudadController;
 use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\SalaController;
-use App\Http\Controllers\RolController;
 use App\Http\Controllers\SaludController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\TorneoController;
@@ -41,25 +39,58 @@ Route::get('/admin', function () {
 })->name('admin');
 
 // Grupo de rutas para mantenedores
-Route::prefix('admin')->group(function () {
-    Route::resource('alumnos', AlumnoController::class);
-
-    Route::resource('tipos_espacio', TipoEspacioController::class)->parameters(['tipos_espacio' => 'tipoEspacio']);
-    Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
-    Route::resource('marcas', MarcasController::class);
-
-    Route::resource('maquinas', MaquinaController::class);
-    Route::resource('deportes', DeporteController::class);
-    Route::resource('usuarios', UsuarioController::class);
+Route::prefix('admin')->middleware(['auth'])->group(function () {
     
+    Route::middleware(['role:Super Admin'])->group(function () {
+        Route::resource('alumnos', AlumnoController::class);
+    });
 
-    Route::resource('paises', PaisController::class);
-    Route::resource('regiones', RegionController::class);
-    Route::resource('ciudades', CiudadController::class);
+    Route::middleware(['permission:Acceso al Mantenedor de Tipos de Espacios'])->group(function () {
+        Route::resource('tipos_espacio', TipoEspacioController::class)->parameters(['tipos_espacio' => 'tipoEspacio']);
+    });
 
-    Route::resource('sucursales', SucursalController::class);
-    Route::resource('espacios', EspacioController::class);
-    Route::resource('salas', SalaController::class);
+    Route::middleware(['permission:Acceso al Mantenedor de Tipos de Sanción'])->group(function () {
+        Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Marcas'])->group(function () {
+        Route::resource('marcas', MarcasController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Máquinas'])->group(function () {
+        Route::resource('maquinas', MaquinaController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Deportes'])->group(function () {
+        Route::resource('deportes', DeporteController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Usuarios'])->group(function () {
+        Route::resource('usuarios', UsuarioController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Países'])->group(function () {
+        Route::resource('paises', PaisController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Regiones'])->group(function () {
+        Route::resource('regiones', RegionController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Ciudades'])->group(function () {
+        Route::resource('ciudades', CiudadController::class);
+    });
+
+    Route::middleware(['permission:Acceso al Mantenedor de Sucursales'])->group(function () {
+        Route::resource('sucursales', SucursalController::class);
+    });
+    Route::middleware(['permission:Acceso al Mantenedor de Espacios'])->group(function () {
+        Route::resource('espacios', EspacioController::class);
+    });
+    Route::middleware(['permission:Acceso al Mantenedor de Salas'])->group(function () {
+        Route::resource('salas', SalaController::class);
+    });
+    
 
     Route::resource('equipos', EquipoController::class);
     Route::resource('torneos', TorneoController::class);
@@ -67,6 +98,17 @@ Route::prefix('admin')->group(function () {
 
     Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
 
+    // CRUD para administradores
+    Route::middleware(['auth', 'admin','permission:Acceso al Mantenedor de Administradores'])->group(function () {
+        Route::resource('news', NewsController::class)->except(['index', 'show']);
+        // Ruta para el panel de administración
+        Route::get('/admin', function () {
+            return view('admin.index');
+        })->name('admin.index');
+        Route::resource('administradores', AdministradorController::class)->parameters([
+            'administradores' => 'administrador',
+        ]);
+    });
 
     // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
@@ -80,13 +122,8 @@ Route::prefix('admin')->group(function () {
     ->name('admin.control_salas.cerrar_sala')
     ->middleware('auth');
 
-    //Asignación de roles a administradores
-    Route::resource('roles', RolController::class)->parameters([
-        'roles' => 'rol',
-    ]);
-    Route::get('administradores/{id}/edit-rol', [AdministradorController::class, 'editRol'])->name('administradores.rol');
-    Route::post('administradores/{id}/update-rol', [AdministradorController::class, 'updateRol'])->name('administradores.updateRol');
 });
+
 
 Route::middleware(['auth'])->group(function () {
     // Ruta para la vista del registro, accesible solo para usuarios alumnos logueados
@@ -103,10 +140,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/salud', [SaludController::class, 'create'])->name('salud.create');
     Route::post('/salud', [SaludController::class, 'store'])->name('salud.store');
     Route::get('/salud/edit', [SaludController::class, 'edit'])->name('salud.edit');
-    Route::post('/salud/edit', [SaludController::class, 'update'])->name('salud.update');
+    // Route::post('/salud/edit', [SaludController::class, 'update'])->name('salud.update');
     Route::put('/salud', [SaludController::class, 'update'])->name('salud.update');
 
 });
+
+
 
 // Rutas de autenticación
 Route::get('/login', [LoginController::class, 'create'])->name('login');
@@ -115,15 +154,3 @@ Route::get('/register', [RegisterController::class, 'create'])->name('register')
 Route::post('/register', [RegisterController::class, 'store']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-
-// CRUD para administradores
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::resource('news', NewsController::class)->except(['index', 'show']);
-    // Ruta para el panel de administración
-    Route::get('/admin', function () {
-        return view('admin.index');
-    })->name('admin.index');
-    Route::resource('administradores', AdministradorController::class)->parameters([
-        'administradores' => 'administrador',
-    ]);
-});

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use \App\Models\Administrador;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 
@@ -83,6 +84,7 @@ class UsuarioController extends Controller
      */
     public function destroy(Usuario $usuario)
     {
+        Administrador::where('rut_admin', $usuario->rut)->delete(); // Eliminar el administrador asociado
         $usuario->delete();
         return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado correctamente.');
     }

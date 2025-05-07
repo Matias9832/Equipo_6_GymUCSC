@@ -10,7 +10,7 @@
 
         @if (isset($mensaje))
             <div class="alert alert-info text-center w-100">
-                {{ $mensaje }}
+            {!! nl2br(e($mensaje)) !!}
             </div>
 
             @if ($mensaje == 'Ya ingresaste a la sala previamente')

@@ -19,6 +19,8 @@
                 <i class="bi bi-person me-2"></i> Usuarios
             </a>
         </li>
+
+        @role('Super Admin|Director') 
         <li class="nav-item mb-2">
             <a href="{{ route('sucursales.index') }}" class="nav-link text-dark {{ Request::is('admin/sucursales*') ? 'fw-bold' : '' }}">
                 <i class="bi bi-shop me-2"></i> Sucursales
@@ -64,12 +66,13 @@
                 <i class="bi bi-hourglass-split"></i> Tipos de Sanción
             </a>
         </li>
+        @endrole
         <li class="nav-item mb-2">
             <a href="{{ route('control-salas.seleccionar') }}" class="nav-link text-dark {{ Request::is('control-salas/seleccionar') ? 'fw-bold' : '' }}">
                 <i class="bi bi-people me-2"></i> Gestión de QR
             </a>
         </li>
-        <!-- Menú desplegable: Mantenedores Geográficos -->
+        @role('Super Admin') 
         <li class="nav-item mb-2">
             <a class="nav-link text-dark d-flex align-items-center" data-bs-toggle="collapse" href="#mantenedoresGeograficos" role="button" aria-expanded="false" aria-controls="mantenedoresGeograficos">
                 <i class="bi bi-geo-alt me-2"></i> Mantenedores Geográficos
@@ -101,10 +104,11 @@
             </a>
         </li>
         <li class="nav-item mb-2">
-            <a href="{{ route('roles.index') }}" class="nav-link text-dark {{ Request::is('admin/roles*') ? 'fw-bold' : '' }}">
+            <a href="#" class="nav-link text-dark {{ Request::is('admin/roles*') ? 'fw-bold' : '' }}">
                 <i class="bi bi-shield-lock me-2"></i> Roles
             </a>
         </li>
+        @endrole
     </ul>
 </div>
 @endsection
@@ -113,6 +117,7 @@
 @section('content')
     <h1 class="h3">Este es el panel de control</h1>
     <p>Bienvenido al panel de administración. Aquí puedes gestionar las configuraciones y recursos del sistema.</p>
+    
 @endsection
 
 @if(session('success'))
@@ -131,7 +136,6 @@
     setTimeout(() => {
         const toast = document.getElementById('successToast');
         if (toast) {
-            // Usa Bootstrap 5 para ocultar el toast
             const bsToast = bootstrap.Toast.getOrCreateInstance(toast);
             bsToast.hide();
         }
