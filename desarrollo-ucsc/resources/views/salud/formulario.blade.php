@@ -3,12 +3,7 @@
 
 @section('content')
 <div class="container d-flex justify-content-center mt-5">
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show w-100" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-        </div>
-    @endif
+    
     <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
         <div class="text-center mb-3">
             <img src="{{ asset('images/logo_ucsc.png') }}" alt="Logo UCSC" style="width: 100px;">
