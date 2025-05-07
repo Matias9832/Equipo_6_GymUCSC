@@ -1,32 +1,5 @@
 @extends('layouts.app')
 
-@if(session('success') || session('update') || session('delete'))
-<div class="position-fixed top-0 end-0 p-3" style="z-index: 1100; margin-top: 70px;">
-    <div id="toastSuccess" class="toast align-items-center text-white 
-        {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
-        border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body text-center w-100">
-                {{ session('success') ?? session('update') ?? session('delete') }}
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
-        </div>
-    </div>
-</div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toastLiveExample = document.getElementById('toastSuccess');
-            if (toastLiveExample) {
-                const toast = new bootstrap.Toast(toastLiveExample, {
-                    delay: 3000 // Se cierra a los 3 segundos
-                });
-                toast.show();
-            }
-        });
-    </script>
-@endif
-
 
 @section('content')
 <div class="row">
