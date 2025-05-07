@@ -10,11 +10,17 @@ class Usuario extends Authenticatable
 {
     use HasFactory;
 
+
     protected $table = 'usuario'; // Nombre de la tabla
     protected $primaryKey = 'id_usuario'; // Clave primaria
     public $incrementing = true; // Indica que la clave primaria es autoincremental
     protected $keyType = 'int'; // Tipo de dato de la clave primaria
 
+    protected $attributes = [
+        'bloqueado_usuario' => 0,
+        'activado_usuario' => 0,
+    ];
+    
     protected $fillable = [
         'rut',
         'correo_usuario',
@@ -22,10 +28,12 @@ class Usuario extends Authenticatable
         'bloqueado_usuario',
         'activado_usuario',
         'tipo_usuario',
+        'codigo_verificacion',
     ];
 
     protected $hidden = [
         'contrasenia_usuario', // Ocultar la contraseña en las respuestas JSON
+        'codigo_verificacion',
     ];
 
     /**

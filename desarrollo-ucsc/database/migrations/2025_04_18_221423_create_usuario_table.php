@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('correo_usuario');
             $table->string('contrasenia_usuario');
             $table->string('tipo_usuario');
+            $table->integer('codigo_verificacion')->nullable();
             $table->timestamps();
         });
     }
