@@ -120,24 +120,3 @@
     
 @endsection
 
-@if(session('success'))
-<div class="position-fixed top-0 end-0 p-3" style="z-index: 1100; margin-top: 60px;">
-    <div id="successToast" class="toast align-items-center text-white bg-success border-0 show" role="alert">
-        <div class="d-flex">
-            <div class="toast-body">
-                {{ session('success') }}
-            </div>
-        </div>
-    </div>
-</div>
-@endif
-
-<script>
-    setTimeout(() => {
-        const toast = document.getElementById('successToast');
-        if (toast) {
-            const bsToast = bootstrap.Toast.getOrCreateInstance(toast);
-            bsToast.hide();
-        }
-    }, 3000);
-</script>

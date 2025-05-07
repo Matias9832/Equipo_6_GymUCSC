@@ -12,25 +12,32 @@
     
     <!-- Contenido principal -->
     
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show shadow"
-            role="alert"
-            style="position: fixed; top: 70px; right: 20px; z-index: 1055; min-width: 300px;">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    @if(session('success') || session('update') || session('delete'))
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100; margin-top: 70px;">
+            <div id="toastSuccess" class="toast align-items-center text-white 
+                {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
+                border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body text-center w-100">
+                        {{ session('success') ?? session('update') ?? session('delete') }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                </div>
+            </div>
         </div>
 
-        <script>
-            setTimeout(() => {
-                const alert = document.querySelector('.alert.alert-success');
-                if (alert) {
-                    alert.classList.remove('show');
-                    alert.classList.add('fade');
-                    setTimeout(() => alert.remove(), 500);
-                }
-            }, 3000);
-        </script>
-    @endif
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const toastLiveExample = document.getElementById('toastSuccess');
+                    if (toastLiveExample) {
+                        const toast = new bootstrap.Toast(toastLiveExample, {
+                            delay: 3000 // Se cierra a los 3 segundos
+                        });
+                        toast.show();
+                    }
+                });
+            </script>
+        @endif
     
     @if(View::hasSection('sidebar'))
     <div class="d-flex" style="min-height: 100vh;">
