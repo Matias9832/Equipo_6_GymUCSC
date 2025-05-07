@@ -27,6 +27,20 @@
                 </div>
             @endif
 
+            <!-- Mostrar mensaje si el usuario está bloqueado -->
+            @if ($errors->has('bloqueado'))
+                <div class="alert alert-danger">
+                    {{ $errors->first('bloqueado') }}
+                </div>
+            @endif
+
+            <!-- Mostrar mensaje si la cuenta no está activa -->
+            @if ($errors->has('activado'))
+                <div class="alert alert-warning">
+                    {{ $errors->first('activado') }}
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="mb-3">
