@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container text-center">
-        <h1 class="mb-4">Gestión de QR</h1>
+        <h1 class="mb-4">Gestión de QR: {{ $sala->nombre_sala }}</h1> <!-- Aquí se agrega el nombre de la sala -->
 
         @if (isset($qrCode))
             <div class="row justify-content-center align-items-center mb-4">
@@ -19,19 +19,6 @@
                     </div>
                 </div>
             </div>
-        @endif
-
-        @if ($desdeQR ?? false)
-            @auth
-                <form action="#" method="POST">
-                    @csrf
-                    <button class="btn btn-success">Registrarse en sala</button>
-                </form>
-            @else
-                <div class="alert alert-warning">
-                    Debes iniciar sesión para registrarte en la sala.
-                </div>
-            @endauth
         @endif
     </div>
 @endsection

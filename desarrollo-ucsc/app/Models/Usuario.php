@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Salud;
 
 class Usuario extends Authenticatable
 {
@@ -42,6 +43,14 @@ class Usuario extends Authenticatable
         return $this->tipo_usuario === 'admin'; // o el valor que uses para admins
     }
 
+    public function salud()
+    {
+        return $this->hasOne(Salud::class, 'id_usuario', 'id_usuario');
+    }
     
+    public function equipos()
+    {
+        return $this->belongsToMany(Equipo::class, 'equipo_usuario', 'usuario_id', 'equipo_id');
+    }
 
 }

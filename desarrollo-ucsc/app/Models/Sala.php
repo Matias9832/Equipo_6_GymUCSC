@@ -13,6 +13,16 @@ class Sala extends Model
     protected $fillable = [
         'nombre_sala',
         'aforo_sala',
+        'horario_apertura',
+        'horario_cierre',
+        'activo',
+        'aforo_qr',
         'id_suc',
     ];
+
+    public function sucursal()
+    {
+        return $this->belongsTo(Sucursal::class, 'id_suc');
+    }
+
 }

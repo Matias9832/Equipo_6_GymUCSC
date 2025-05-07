@@ -19,8 +19,9 @@ use App\Http\Controllers\CiudadController;
 use App\Http\Controllers\SucursalController;
 use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\SalaController;
-
-
+use App\Http\Controllers\SaludController;
+use App\Http\Controllers\EquipoController;
+use App\Http\Controllers\TorneoController;
 
 
 // Página principal: Mostrar noticias públicas
@@ -91,6 +92,10 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     });
     
 
+    Route::resource('equipos', EquipoController::class);
+    Route::resource('torneos', TorneoController::class);
+
+
     Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
 
     // CRUD para administradores
@@ -107,8 +112,16 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
+
+    // Ruta para la gestión de QR
     Route::get('/control-salas/seleccionar', [ControlSalasController::class, 'seleccionarSala'])->name('control-salas.seleccionar');
     Route::post('/control-salas/generar-qr', [ControlSalasController::class, 'generarQR'])->name('control-salas.generarQR');
+    Route::get('control-salas/ver-qr', [ControlSalasController::class, 'verQR'])->name('control-salas.verQR');
+    Route::post('/control-salas/cambiar-aforo', [ControlSalasController::class, 'cambiarAforo'])->name('control_salas.cambiar_aforo');
+    Route::post('admin/control-salas/cerrar-sala', [ControlSalasController::class, 'cerrarSala'])
+    ->name('admin.control_salas.cerrar_sala')
+    ->middleware('auth');
+
 });
 
 
@@ -122,6 +135,14 @@ Route::middleware(['auth'])->group(function () {
         
     Route::get('/mi-perfil', [LoginController::class, 'editProfile'])->middleware('auth')->name('mi-perfil.edit');
     Route::post('/mi-perfil', [LoginController::class, 'updateProfile'])->middleware('auth')->name('mi-perfil.update');
+
+    // Ruta para el formulario de salud
+    Route::get('/salud', [SaludController::class, 'create'])->name('salud.create');
+    Route::post('/salud', [SaludController::class, 'store'])->name('salud.store');
+    Route::get('/salud/edit', [SaludController::class, 'edit'])->name('salud.edit');
+    Route::post('/salud/edit', [SaludController::class, 'update'])->name('salud.update');
+    Route::put('/salud', [SaludController::class, 'update'])->name('salud.update');
+
 });
 
 

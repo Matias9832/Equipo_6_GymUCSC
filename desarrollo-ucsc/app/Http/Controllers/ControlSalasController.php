@@ -24,6 +24,10 @@ class ControlSalasController extends Controller
             return back()->withErrors(['aforo' => 'El aforo excede el máximo permitido para esta sala.']);
         }
 
+        $sala->activo = true;
+        $sala->aforo_qr = $request->aforo;
+        $sala->save();
+
         $encryptedId = Crypt::encrypt($sala->id_sala);
         $urlQR = route('sala.registro', ['id_sala' => $encryptedId, 'aforo' => $request->aforo]);
 
@@ -35,9 +39,37 @@ class ControlSalasController extends Controller
 
         return view('admin.control_salas.gestion_qr', [
             'qrCode' => $qrCode,
-            'desdeQR' => false,
+            'desdeQR' => true,
             'aforoPermitido' => $request->aforo,
             'usuariosActivos' => $usuariosActivos,
+            'sala' => $sala,
+        ]);
+    }
+
+    public function verQR(Request $request)
+    {
+        $request->validate([
+            'id_sala' => 'required|exists:sala,id_sala',
+            'aforo_qr' => 'required|integer|min:1',
+        ]);
+
+        $sala = Sala::findOrFail($request->id_sala);
+
+        $encryptedId = Crypt::encrypt($sala->id_sala);
+        $urlQR = route('sala.registro', ['id_sala' => $encryptedId, 'aforo' => $request->aforo_qr]);
+
+        $qrCode = QrCode::size(300)->generate($urlQR);
+
+        $usuariosActivos = Ingreso::where('id_sala', $sala->id_sala)
+            ->whereNull('hora_salida')
+            ->count();
+
+        return view('admin.control_salas.gestion_qr', [
+            'qrCode' => $qrCode,
+            'desdeQR' => true,
+            'aforoPermitido' => $request->aforo_qr,
+            'usuariosActivos' => $usuariosActivos,
+            'sala' => $sala,
         ]);
     }
 
@@ -180,8 +212,69 @@ class ControlSalasController extends Controller
     public function seleccionarSala()
     {
         $sucursalActiva = session('sucursal_activa');
-        $salas = Sala::where('id_suc', $sucursalActiva)->get();
 
-        return view('admin.control_salas.seleccionar_sala', compact('salas'));
+        $salas = Sala::where('id_suc', $sucursalActiva)
+            ->where('activo', false)
+            ->get();
+
+        $salasActivas = Sala::where('id_suc', $sucursalActiva)
+            ->where('activo', true)
+            ->get();
+
+        return view('admin.control_salas.seleccionar_sala', compact('salas', 'salasActivas'));
     }
+
+    public function cambiarAforo(Request $request)
+    {
+        // Validar los datos
+        $request->validate([
+            'id_sala' => 'required|exists:sala,id_sala',
+            'aforo_qr' => 'required|integer|min:1',
+        ]);
+
+        // Buscar la sala
+        $sala = Sala::findOrFail($request->id_sala);
+
+        // Verificar si el aforo no excede el máximo
+        if ($request->aforo_qr > $sala->aforo_sala) {
+            return back()->withErrors(['aforo_qr' => 'El aforo excede el máximo permitido para esta sala.']);
+        }
+
+        // Modificar el aforo QR
+        $sala->aforo_qr = $request->aforo_qr;
+        $sala->save();
+
+        // Redirigir a la vista de gestión de QR con los nuevos datos
+        return redirect()->route('control-salas.seleccionar', []);
+    }
+
+    public function cerrarSala(Request $request)
+    {
+        $request->validate([
+            'id_sala' => 'required|exists:sala,id_sala',
+        ]);
+
+        $sala = Sala::findOrFail($request->id_sala);
+        $sala->activo = false;
+        $sala->aforo_qr = null;
+        $sala->save();
+
+        // Cerrar salida de todos los ingresos activos en esa sala
+        $ingresos = Ingreso::where('id_sala', $sala->id_sala)
+            ->whereNull('hora_salida')
+            ->get();
+
+        foreach ($ingresos as $registro) {
+            $horaSalida = now();
+            $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
+            $tiempoUsoSegundos = $horaIngreso->diffInSeconds($horaSalida);
+            $registro->hora_salida = $horaSalida->format('H:i:s');
+            $registro->tiempo_uso = gmdate("H:i:s", $tiempoUsoSegundos);
+            $registro->save();
+        }
+
+        return back()->with('mensaje', 'Sala cerrada correctamente y salidas registradas.');
+    }
+
+
 }

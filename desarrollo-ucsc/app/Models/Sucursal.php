@@ -29,4 +29,10 @@ class Sucursal extends Model
     {
         return $this->belongsTo(Marca::class, 'id_marca', 'id_marca');
     }
+
+    public function salas()
+    {
+        return $this->hasMany(Sala::class, 'id_suc');
+    }
+
 }

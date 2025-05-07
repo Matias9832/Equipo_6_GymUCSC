@@ -29,73 +29,120 @@
 
 
 @section('content')
-<div class="container">
-    <h1>Noticias</h1>
-
-    @if(Auth::check() && Auth::user()->is_admin)
-        <a href="{{ route('news.create') }}" class="btn btn-primary mb-4">Crear nueva noticia</a>
-    @endif
-
-    @foreach ($news as $noticias)
-    <div class="card mb-3 position-relative" style="min-height: 200px;">
-        @if(Auth::check() && Auth::user()->is_admin)
-            <div class="position-absolute top-0 end-0 m-2 d-flex gap-2 z-3">
-                <a href="{{ route('news.edit', $noticias->id_noticia) }}" 
-                   class="btn btn-warning btn-sm d-flex align-items-center justify-content-center p-0" 
-                   title="Editar"
-                   style="width: 40px; height: 40px;">
-                    <i class="bi bi-pen-fill"></i>
-                </a>
+<div class="row">
+    <div class="col-lg-8">
+        <h4 class="mb-4">Noticias</h4>
+        @auth
+            <div class="alert alert-info d-flex align-items-center" role="alert">
+                <i class="bi bi-person-circle me-2"></i>
+                ¡Hola {{ Auth::user()->name }}! Bienvenido(a) al portal de noticias del gimnasio.
+            </div>
             
-                <form id="form-eliminar-{{ $noticias->id_noticia }}" action="{{ route('news.destroy', $noticias->id_noticia) }}" method="POST" class="d-inline form-eliminar">
-                    @csrf
-                    @method('DELETE')
-                    <button type="button" 
-                            class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-0 btn-mostrar-modal" 
-                            title="Eliminar"
-                            style="width: 40px; height: 40px;"
-                            data-id="{{ $noticias->id_noticia }}">
-                        <i class="bi bi-trash3-fill"></i>
-                    </button>
-                </form>
-            </div>
-        @endif
+            {{-- Mostrar botón solo a administradores --}}
+            @if(Auth::check() && Auth::user()->is_admin)
+                <a href="{{ route('news.create') }}" class="btn btn-primary mb-4">Crear nueva noticia</a>
+            @endif
 
-        <div class="row g-0 flex-column flex-md-row">
-            <div class="col-md-4 d-flex align-items-center justify-content-center bg-light" style="padding: 5px;">
-                @if ($noticias->images->count())
-                        <img src="{{ asset('storage/' . $noticias->images->first()->image_path) }}"  
-                         class="img-fluid rounded-start p-2" 
-                         alt="Imagen de la noticia" 
-                         style="max-height: 200px; object-fit: contain; width: 100%;">
-                @else
-                    <div class="d-flex flex-column align-items-center justify-content-center text-muted" style="height: 180px; width: 100%;">
-                        <i class="bi bi-image" style="font-size: 3rem;"></i>
-                        <small>Imagen no disponible</small>
-                    </div>
-                @endif
-            </div>
+        @endauth
+        
 
-            <div class="col-md-8">
+        @if($news->isEmpty())
+            <div class="card shadow-sm text-center p-5">
                 <div class="card-body">
-                    <a href="{{ route('news.show', $noticias->id_noticia) }}" class="text-decoration-none text-dark">
-                        <h5 class="card-title">{{ $noticias->nombre_noticia }}</h5>
-                        <p class="card-text">{{ Str::limit($noticias->descripcion_noticia, 100, '...') }}</p>
-                    </a>
-                </div>
-
-                <div class="card-footer bg-transparent">
-                    <small class="text-muted">
-                        {{ \Carbon\Carbon::parse($noticias->fecha_noticia)->format('d M Y') }} -
-                        {{ $noticias->administrador->nombre_admin }} -
-                        {{ $noticias->tipo_deporte }}
-                    </small>
+                    <i class="bi bi-info-circle display-4 text-secondary mb-3"></i>
+                    <h5 class="card-title">No hay noticias disponibles</h5>
+                    <p class="card-text text-muted">Vuelve pronto. Aquí aparecerán las últimas novedades del gimnasio.</p>
                 </div>
             </div>
-        </div>
-    </div>
-@endforeach
+        @else
 
+                @foreach ($news as $noticias)
+                <div class="card mb-3 position-relative" style="min-height: 200px;">
+                    @if(Auth::check() && Auth::user()->is_admin)
+                        <div class="position-absolute top-0 end-0 m-2 d-flex gap-2 z-3">
+                            <a href="{{ route('news.edit', $noticias->id_noticia) }}" 
+                            class="btn btn-warning btn-sm d-flex align-items-center justify-content-center p-0" 
+                            title="Editar"
+                            style="width: 40px; height: 40px;">
+                                <i class="bi bi-pen-fill"></i>
+                            </a>
+                        
+                            <form id="form-eliminar-{{ $noticias->id_noticia }}" action="{{ route('news.destroy', $noticias->id_noticia) }}" method="POST" class="d-inline form-eliminar">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" 
+                                        class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-0 btn-mostrar-modal" 
+                                        title="Eliminar"
+                                        style="width: 40px; height: 40px;"
+                                        data-id="{{ $noticias->id_noticia }}">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+
+                    <div class="row g-0 flex-column flex-md-row">
+                        <div class="col-md-4 d-flex align-items-center justify-content-center bg-light" style="padding: 5px;">
+                            @if ($noticias->images->count())
+                                    <img src="{{ asset('storage/' . $noticias->images->first()->image_path) }}"  
+                                    class="img-fluid rounded-start p-2" 
+                                    alt="Imagen de la noticia" 
+                                    style="max-height: 200px; object-fit: contain; width: 100%;">
+                            @else
+                                <div class="d-flex flex-column align-items-center justify-content-center text-muted" style="height: 180px; width: 100%;">
+                                    <i class="bi bi-image" style="font-size: 3rem;"></i>
+                                    <small>Imagen no disponible</small>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <a href="{{ route('news.show', $noticias->id_noticia) }}" class="text-decoration-none text-dark">
+                                    <h5 class="card-title">{{ $noticias->nombre_noticia }}</h5>
+                                    <p class="card-text">{{ Str::limit($noticias->descripcion_noticia, 100, '...') }}</p>
+                                </a>
+                            </div>
+
+                            <div class="card-footer bg-transparent">
+                                <small class="text-muted">
+                                    {{ \Carbon\Carbon::parse($noticias->fecha_noticia)->format('d M Y') }} -
+                                    {{ $noticias->administrador->nombre_admin }} -
+                                    {{ $noticias->tipo_deporte }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        @endif
+    </div>    
+
+     <!-- Salas por Sucursal -->
+     <div class="col-lg-4">
+        <h4 class="mb-4">Conoce Nuestras Salas</h4>
+
+        @foreach($sucursalesConSalas as $sucursal)
+            <h5>{{ $sucursal->nombre_suc }}</h5>
+            @if($sucursal->salas->isNotEmpty())
+                <ul>
+                @foreach($sucursal->salas as $sala)
+                    <li class="d-flex justify-content-between mb-3">
+                        <span class="tw-bold">
+                            <strong>{{ $sala->nombre_sala }}</strong>
+                        </span>
+                        <span class="text-info">
+                            {{ \Carbon\Carbon::parse($sala->horario_apertura)->format('H:i') }} a 
+                            {{ \Carbon\Carbon::parse($sala->horario_cierre)->format('H:i') }}
+                        </span>
+                    </li>
+                @endforeach
+                </ul>
+            @else
+                <p>No hay salas disponibles en esta sucursal.</p>
+            @endif
+        @endforeach
+    </div> 
 
     <div class="d-flex justify-content-center">
         {{ $news->links() }}
