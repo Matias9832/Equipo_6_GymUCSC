@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show w-100" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+@endif
+
 @section('content')
 <div class="container d-flex justify-content-center mt-5">
     <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
