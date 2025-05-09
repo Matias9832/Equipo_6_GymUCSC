@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MusculacionExport;
+use App\Exports\SalaExport;
 use App\Models\Sala;
 use Illuminate\Http\Request;
+use App\Exports\IngresosExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SalaController extends Controller
 {
@@ -56,6 +60,40 @@ class SalaController extends Controller
         $sala->update($request->all());
 
         return redirect()->route('salas.index')->with('success', 'Sala actualizada correctamente.');
+    }
+
+    public function exportIngresos(Request $request)
+    {
+        $request->validate([
+            'sala_id' => 'required|integer|exists:sala,id_sala',
+            'fecha' => 'required|date',
+            'tipo' => 'required|in:diario,semanal,mensual',
+        ]);
+
+        $fecha = \Carbon\Carbon::parse($request->fecha);
+        $inicio = $fecha->copy();
+        $fin = $fecha->copy();
+
+        switch ($request->tipo) {
+            case 'semanal':
+                $inicio->startOfWeek();
+                $fin->endOfWeek();
+                break;
+            case 'mensual':
+                $inicio->startOfMonth();
+                $fin->endOfMonth();
+                break;
+            case 'diario':
+            default:
+                $inicio->startOfDay();
+                $fin->endOfDay();
+                break;
+        }
+
+        $sala = Sala::find($request->sala_id);
+        $nombre_excel = 'ingresos_' . $sala->nombre_sala . '_' . $request->tipo . '.xlsx';
+
+        return Excel::download(new SalaExport($request->sala_id, $inicio, $fin), $nombre_excel);
     }
 
     public function destroy(Sala $sala)

@@ -12,12 +12,22 @@ class IngresoSeeder extends Seeder
     public function run(): void
     {
         $usuarios = Usuario::where('rut', '!=', '21080600')->get();
-        $cantidadRegistros = 1;
+        $cantidadRegistros = 10000;
 
         for ($i = 0; $i < $cantidadRegistros; $i++) {
-            $usuario = $usuarios->random();
+            $usuario = $usuarios->filter(function ($usuario) {
+                return $usuario->tipo_usuario !== 'admin';
+            })->random();
             $idSala = rand(1, 3);
-            $fechaIngreso = Carbon::today()->subMonths(rand(0, 1));
+
+            $mesAleatorio = rand(0, 1) === 0 ? now()->month : now()->subMonth()->month;
+            $anioActual = now()->year;
+
+            $inicioMes = Carbon::create($anioActual, $mesAleatorio, 1);
+            $finMes = $inicioMes->copy()->endOfMonth();
+
+            $fechaIngreso = Carbon::createFromTimestamp(rand($inicioMes->timestamp, $finMes->timestamp));
+
             $horaIngreso = Carbon::createFromFormat('H:i', rand(8, 10) . ':' . str_pad(rand(0, 59), 2, '0', STR_PAD_LEFT));
             $horaSalida = $horaIngreso->copy()->addMinutes(rand(10, 90));
             $tiempoUso = $horaSalida->diff($horaIngreso);

@@ -88,6 +88,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     });
     Route::middleware(['permission:Acceso al Mantenedor de Salas'])->group(function () {
         Route::resource('salas', SalaController::class);
+        Route::get('/exportar-ingresos', [SalaController::class, 'exportIngresos'])->name('salas.exportar');
     });
 
     Route::middleware(['permission:Acceso al Mantenedor de equipos'])->group(function () {
