@@ -22,6 +22,7 @@ class AdministradorController extends Controller
             ->join('administrador', 'usuario.rut', '=', 'administrador.rut_admin')
             ->select('usuario.*', 'administrador.nombre_admin')
             ->get();
+        // Obtener los roles de los usuarios    
         $usuarios = \App\Models\Usuario::with('roles')->get();
         return view('admin.mantenedores.administradores.index', compact('administradores', 'usuarios'));
     }
@@ -34,15 +35,13 @@ class AdministradorController extends Controller
         return view('admin.mantenedores.administradores.create');
     }
 
-    /**
-     * Almacena un nuevo administrador en la base de datos.
-     */
     public function store(Request $request)
     {
         $request->validate([
             'rut_admin' => 'required|string|unique:administrador,rut_admin|unique:usuario,rut',
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
+            'rol' => 'required|in:Director,Docente,Coordinador',
         ]);
     
         //Crear contraseña aleatoria
@@ -55,9 +54,11 @@ class AdministradorController extends Controller
             'tipo_usuario' => 'admin',
             'bloqueado_usuario' => 0,
             'activado_usuario' => 1,
+            'contrasenia_usuario' => '123456', // Shevi saca esto después y lo reemplaza por la función de generar contraseña aleatoria
         ]);
         // Asignar rol Docente
-        $usuario->assignRole('Docente');
+        $usuario->assignRole($request->rol);
+
         // Crear el administrador
         Administrador::create([
             'rut_admin' => $request->rut_admin,
@@ -71,31 +72,36 @@ class AdministradorController extends Controller
     /**
      * Muestra el formulario para editar un administrador existente.
      */
-    public function edit(Administrador $administrador)
+    public function edit($id)
     {
-        $usuario = DB::table('usuario')->where('rut', $administrador->rut_admin)->first();
+        $administrador = Administrador::findOrFail($id);
+        $usuario = Usuario::where('rut', $administrador->rut_admin)->firstOrFail();
         return view('admin.mantenedores.administradores.edit', compact('administrador', 'usuario'));
     }
     /**
      * Actualiza un administrador existente en la base de datos.
      */
-    public function update(Request $request, Administrador $administrador)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'nombre_admin' => 'required|string|max:255',
-            'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $administrador->rut_admin . ',rut',
+            'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $request->rut_admin . ',rut',
+            'rol' => 'required|in:Director,Docente,Coordinador',
         ]);
         
-
-        // Actualizar el usuario
-        DB::table('usuario')->where('rut', $administrador->rut_admin)->update([
-            'correo_usuario' => $request->correo_usuario,
-        ]);
-
         // Actualizar el administrador
+        $administrador = Administrador::findOrFail($id);
         $administrador->update([
             'nombre_admin' => $request->nombre_admin,
         ]);
+
+        // Actualizar el usuario
+        $usuario = Usuario::where('rut', $administrador->rut_admin)->first();
+        $usuario->update([
+            'correo_usuario' => $request->correo_usuario,
+        ]);
+        $usuario->syncRoles([$request->rol]); // Cambiar rol
+
 
         return redirect()->route('administradores.index')->with('success', 'Administrador actualizado correctamente.');
     }

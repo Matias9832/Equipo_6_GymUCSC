@@ -12,6 +12,14 @@
             <input type="text" name="nombre_admin" id="nombre_admin" class="form-control" value="{{ $administrador->nombre_admin }}" required>
         </div>
         <div class="mb-3">
+            <label for="rol" class="form-label">Rol</label>
+            <select name="rol" id="rol" class="form-control" required>
+                <option value="Director" {{ $usuario->hasRole('Director') ? 'selected' : '' }}>Director</option>
+                <option value="Docente" {{ $usuario->hasRole('Docente') ? 'selected' : '' }}>Docente</option>
+                <option value="Coordinador" {{ $usuario->hasRole('Coordinador') ? 'selected' : '' }}>Coordinador</option>
+            </select>
+        </div>
+        <div class="mb-3">
             <label for="correo_usuario" class="form-label">Correo</label>
             <input type="email" name="correo_usuario" id="correo_usuario" class="form-control" value="{{ $usuario->correo_usuario ?? '' }}" required>
         </div>

@@ -39,6 +39,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $superAdmin = Role::create(['name' => 'Super Admin']);
         $director = Role::create(['name' => 'Director']);
         $docente = Role::create(['name' => 'Docente']);
+        $coordinador = Role::create(['name' => 'Coordinador']);
         $visor_qr = Role::create(['name' => 'Visor QR']);
         
         // Asignar todos los permisos al Super Admin
@@ -68,6 +69,25 @@ class RolesAndPermissionsSeeder extends Seeder
         $docente->givePermissionTo([
             'Acceso al Mantenedor de Alumnos',
             'Acceso al Mantenedor de Usuarios',
+            'Acceso al Mantenedor de Gestión de QR',
+        ]);
+
+        // Asignar permisos específicos al Coordinador
+        $coordinador->givePermissionTo([
+            'Acceso al Mantenedor de Alumnos',
+            'Acceso al Mantenedor de Usuarios',
+            'Acceso al Mantenedor de Deportes',
+            'Acceso al Mantenedor de Máquinas',
+            'Acceso al Mantenedor de Espacios',
+            'Acceso al Mantenedor de Salas',
+            'Acceso al Mantenedor de Tipos de Espacios',
+            'Acceso al Mantenedor de Tipos de Sanción',
+            'Acceso al Mantenedor de Gestión de QR',
+            'Acceso al Mantenedor de Equipos',
+            'Acceso al Mantenedor de Torneos',
+        ]);
+        // Asignar permisos específicos al Visor QR
+        $visor_qr->givePermissionTo([
             'Acceso al Mantenedor de Gestión de QR',
         ]);
     }
