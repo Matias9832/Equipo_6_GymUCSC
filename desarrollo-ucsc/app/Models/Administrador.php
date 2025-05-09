@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\News;
+use App\Models\Sucursal;
 class Administrador extends Model
 {
     use HasFactory;
@@ -19,9 +20,15 @@ class Administrador extends Model
         'fecha_creacion',
         'correo_usuario',
     ];
-        public function news()
+    public function news()
     {
         return $this->hasMany(News::class, 'id_admin');
     }
-   
+    
+    public function sucursales()
+    {
+        return $this->belongsToMany(Sucursal::class, 'admin_sucursal', 'id_admin', 'id_suc')
+                    ->withPivot('activa');
+    }
+
 }

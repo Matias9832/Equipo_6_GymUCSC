@@ -33,13 +33,11 @@
                     <!-- Rol -->
                     <td>{{ $usuario ? $usuario->getRoleNames()->implode(', ') : 'Sin rol' }}</td>
                     <!-- Sucursal (falta) -->
-                    <td>{{ $administrador->nombre_admin }}</td>
+                    <td>{{ $administrador->sucursales->first()->nombre_suc ?? 'Sin sucursal' }}</td>
                     <!-- Acciones -->
                     <td>
                         <!-- Editar -->
                         <a href="{{ route('administradores.edit', $administrador) }}" class="btn btn-warning btn-sm">Editar</a>
-                        <!-- Cambiar Sucursal -->
-                        <a href="{{ route('administradores.edit', $administrador) }}" class="btn btn-warning btn-sm">Cambiar sucursal</a>
                         <!-- Eliminar -->
                         <form action="{{ route('administradores.destroy', $administrador) }}" method="POST" class="d-inline">
                             @csrf

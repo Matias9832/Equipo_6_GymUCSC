@@ -7,26 +7,26 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Administrador;
 use App\Models\Usuario;
+use App\Models\Sucursal;
 
 class AdministradorController extends Controller
 {
     public function index()
     {
-        // Obtener los administradores y usuarios relacionados
-        $administradores = Administrador::all();
-        // Obtener los usuarios relacionados con los administradores
-        $usuarios = DB::table('usuario')
-            ->join('administrador', 'usuario.rut', '=', 'administrador.rut_admin')
-            ->select('usuario.*', 'administrador.nombre_admin')
-            ->get();
-        // Obtener los roles de los usuarios    
+        $administradores = Administrador::with(['sucursales' => function ($query) {
+            $query->wherePivot('activa', true);
+        }])->get();
+
         $usuarios = Usuario::with('roles')->get();
+
         return view('admin.mantenedores.administradores.index', compact('administradores', 'usuarios'));
     }
 
     public function create()
     {
-        return view('admin.mantenedores.administradores.create');
+        // Obtener todas las sucursales
+        $sucursales = Sucursal::all();
+        return view('admin.mantenedores.administradores.create', compact('sucursales'));
     }
 
     public function store(Request $request)
@@ -54,12 +54,18 @@ class AdministradorController extends Controller
         $usuario->assignRole($request->rol);
 
         // Crear el administrador
-        Administrador::create([
+        $administrador = Administrador::create([
             'rut_admin' => $request->rut_admin,
             'nombre_admin' => $request->nombre_admin,
             'fecha_creacion' => now(),
         ]);
-    
+        // Asignar la sucursal al administrador
+        DB::table('admin_sucursal')->insert([
+            'id_admin' => $administrador->id_admin,
+            'id_suc' => $request->sucursal_id,
+            'activa' => true,
+        ]);
+
         return redirect()->route('administradores.index')->with('success', 'Administrador creado correctamente con rol de Docente.');
     }
 
@@ -70,7 +76,12 @@ class AdministradorController extends Controller
     {
         $administrador = Administrador::findOrFail($id);
         $usuario = Usuario::where('rut', $administrador->rut_admin)->firstOrFail();
-        return view('admin.mantenedores.administradores.edit', compact('administrador', 'usuario'));
+        $sucursales = Sucursal::all();
+        $sucursalSeleccionada = DB::table('admin_sucursal')
+            ->where('id_admin', $id)
+            ->where('activa', true)
+            ->first();
+        return view('admin.mantenedores.administradores.edit', compact('administrador', 'usuario', 'sucursales', 'sucursalSeleccionada'));
     }
     /**
      * Actualiza un administrador existente en la base de datos.
@@ -98,7 +109,16 @@ class AdministradorController extends Controller
         ]);
         $usuario->syncRoles([$request->rol]); // Cambiar rol
 
+        // Actualizar la sucursal
+        DB::table('admin_sucursal')
+            ->where('id_admin', $administrador->id_admin)
+            ->delete();
 
+        DB::table('admin_sucursal')->insert([
+            'id_admin' => $administrador->id_admin,
+            'id_suc' => $request->sucursal_id,
+            'activa' => true,
+        ]);
         return redirect()->route('administradores.index')->with('success', 'Administrador actualizado correctamente.');
     }
 
