@@ -91,7 +91,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::get('/exportar-ingresos', [SalaController::class, 'exportIngresos'])->name('salas.exportar');
     });
 
-    Route::middleware(['permission:Acceso al Mantenedor de equipos'])->group(function () {
+    Route::middleware(['permission:Acceso al Mantenedor de Equipos'])->group(function () {
         Route::resource('equipos', EquipoController::class);
     });
     
@@ -117,17 +117,19 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
 
     // Ruta para la gestión de QR, cualquier docente puede acceder
-    Route::get('/control-salas/seleccionar', [ControlSalasController::class, 'seleccionarSala'])->name('control-salas.seleccionar');
-    Route::post('/control-salas/generar-qr', [ControlSalasController::class, 'generarQR'])->name('control-salas.generarQR');
-    Route::get('control-salas/ver-qr', [ControlSalasController::class, 'verQR'])->name('control-salas.verQR');
-    Route::post('/control-salas/cambiar-aforo', [ControlSalasController::class, 'cambiarAforo'])->name('control_salas.cambiar_aforo');
-    Route::post('admin/control-salas/cerrar-sala', [ControlSalasController::class, 'cerrarSala'])
-        ->name('admin.control_salas.cerrar_sala')
-        ->middleware('auth');
-    Route::post('/control-salas/sacar-usuario', [ControlSalasController::class, 'sacarUsuario'])
-        ->name('admin.control_salas.sacar_usuario');
-    Route::get('/admin/control-salas/ver-usuarios/{id_sala}', [ControlSalasController::class, 'verUsuarios'])
-        ->name('admin.control_salas.ver_usuarios');
+    Route::middleware(['permission:Acceso al Mantenedor de Gestión de QR'])->group(function () {
+        Route::get('/control-salas/seleccionar', [ControlSalasController::class, 'seleccionarSala'])->name('control-salas.seleccionar');
+        Route::post('/control-salas/generar-qr', [ControlSalasController::class, 'generarQR'])->name('control-salas.generarQR');
+        Route::get('control-salas/ver-qr', [ControlSalasController::class, 'verQR'])->name('control-salas.verQR');
+        Route::post('/control-salas/cambiar-aforo', [ControlSalasController::class, 'cambiarAforo'])->name('control_salas.cambiar_aforo');
+        Route::post('admin/control-salas/cerrar-sala', [ControlSalasController::class, 'cerrarSala'])
+            ->name('admin.control_salas.cerrar_sala')
+            ->middleware('auth');
+        Route::post('/control-salas/sacar-usuario', [ControlSalasController::class, 'sacarUsuario'])
+            ->name('admin.control_salas.sacar_usuario');
+        Route::get('/admin/control-salas/ver-usuarios/{id_sala}', [ControlSalasController::class, 'verUsuarios'])
+            ->name('admin.control_salas.ver_usuarios');
+    });
 
 });
 

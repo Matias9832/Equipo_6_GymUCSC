@@ -12,23 +12,33 @@
                 <th>Nombre</th>
                 <th>Correo</th>
                 <th>Rol</th>
+                <th>Sucursal</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-           
+
             @foreach ($administradores as $administrador)
                 @php
                     // Buscar el usuario relacionado con el administrador
                     $usuario = $usuarios->firstWhere('rut', $administrador->rut_admin);
                 @endphp
                 <tr>
+                    <!-- RUT -->
                     <td>{{ $administrador->rut_admin }}</td>
+                    <!-- Nombre -->
                     <td>{{ $administrador->nombre_admin }}</td>
+                    <!-- Correo -->
                     <td>{{ $usuario->correo_usuario ?? 'N/A' }}</td>
-                    <td>--</td>
+                    <!-- Rol -->
+                    <td>{{ $usuario ? $usuario->getRoleNames()->implode(', ') : 'Sin rol' }}</td>
+                    <!-- Sucursal (falta) -->
+                    <td>{{ $administrador->sucursales->first()->nombre_suc ?? 'Sin sucursal' }}</td>
+                    <!-- Acciones -->
                     <td>
+                        <!-- Editar -->
                         <a href="{{ route('administradores.edit', $administrador) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <!-- Eliminar -->
                         <form action="{{ route('administradores.destroy', $administrador) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')

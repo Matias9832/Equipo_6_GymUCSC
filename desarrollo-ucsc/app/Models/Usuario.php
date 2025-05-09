@@ -11,13 +11,13 @@ class Usuario extends Authenticatable
 {
     use HasFactory;
     use HasRoles;
-
+    protected $guard_name = 'web';
     protected $table = 'usuario'; // Nombre de la tabla
     protected $primaryKey = 'id_usuario'; // Clave primaria
     public $incrementing = true; // Indica que la clave primaria es autoincremental
     protected $keyType = 'int'; // Tipo de dato de la clave primaria
 
-    protected $guard_name = 'web';
+    
 
     protected $attributes = [
         'bloqueado_usuario' => 0,

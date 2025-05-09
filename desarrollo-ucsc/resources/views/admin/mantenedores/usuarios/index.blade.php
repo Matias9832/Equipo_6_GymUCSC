@@ -1,35 +1,49 @@
-
 @extends('layouts.admin')
 
 @section('title', 'Lista de Usuarios')
 
 @section('content')
     <h1 class="h3">Lista de Usuarios</h1>
-    <!-- Por ahora no crearemos administradores desde la tabla de usuarios -->
-    <!-- <a href="{{ route('usuarios.create') }}" class="btn btn-primary mb-3">Crear Usuario</a> -->
+    <a href="{{ route('usuarios.create') }}" class="btn btn-primary mb-3">Crear Usuario</a> 
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>RUT</th>
+                <th>Nombre</th>
                 <th>Correo</th>
-                <th>Tipo</th>
+                <th>Rol / Tipo de usuario</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             @foreach($usuarios as $usuario)
+                @php
+                    $nombre = 'Sin nombre';
+                    $rolOTipo = '';
+
+                    if ($usuario->tipo_usuario === 'admin') {
+                        $admin = \App\Models\Administrador::where('rut_admin', $usuario->rut)->first();
+                        $nombre = $admin ? $admin->nombre_admin : 'Sin nombre';
+                        $rolOTipo = $usuario->getRoleNames()->implode(', ') ?: 'Sin rol';
+                    } else {
+                        $alumno = \App\Models\Alumno::where('rut_alumno', $usuario->rut)->first();
+                        $nombre = $alumno 
+                            ? $alumno->nombre_alumno . ' ' . $alumno->apellido_paterno . ' ' . $alumno->apellido_materno 
+                            : 'Sin nombre';
+                        $rolOTipo = $usuario->tipo_usuario === 'normal' ? 'Estudiante' : 'Seleccionado';
+                    }
+                @endphp
                 <tr>
-                    <td>{{ $usuario->id_usuario }}</td>
                     <td>{{ $usuario->rut }}</td>
+                    <td>{{ $nombre }}</td>
                     <td>{{ $usuario->correo_usuario }}</td>
-                    <td>{{ ucfirst($usuario->tipo_usuario) }}</td>
+                    <td>{{ $rolOTipo }}</td>
                     <td>
                         <a href="{{ route('usuarios.edit', $usuario->id_usuario) }}" class="btn btn-sm btn-warning">Editar</a>
                         <form action="{{ route('usuarios.destroy', $usuario->id_usuario) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm p-1" onclick="return confirm('¿Estás seguro de que quieres eliminar este usario?')">
+                            <button type="submit" class="btn btn-danger btn-sm p-1" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?')">
                                 Eliminar
                             </button>
                         </form>

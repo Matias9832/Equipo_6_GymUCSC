@@ -12,20 +12,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        //Seeder de los Alumnos
         $this->call(AlumnoSeeder::class);
         $this->call(UsuarioSeeder::class);
 
+        //Seeder de los Roles y Permisos
         $this->call(RolesAndPermissionsSeeder::class);
 
+        //Seeder de los Administradores
         $this->call(AdministradorSeeder::class);
         
         //Seeder marcas
         $this->call(MarcaSeeder::class);
 
         //Seeder geograficos
-        $this->call([
-            GeographicSeeder::class
-        ]);
+        $this->call(GeographicSeeder::class);
 
         //Seeder sucursales
         $this->call(SucursalSeeder::class);
@@ -33,7 +34,8 @@ class DatabaseSeeder extends Seeder
         //Seeder deportes
         $this->call(DeporteSeeder::class);
 
-        $this->call([AdminSucursalSeeder::class]);
+        //Seeder de los administradores de las sucursales
+        $this->call(AdminSucursalSeeder::class);
 
         //Seeder de las Sedes
         $this->call(SalaSeeder::class);

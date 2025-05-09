@@ -15,18 +15,27 @@
             <input type="text" name="nombre_admin" id="nombre_admin" class="form-control" required>
         </div>
         <div class="mb-3">
+            <label for="rol" class="form-label">Rol</label>
+            <select name="rol" id="rol" class="form-control" required>
+                <option value="">Selecciona un rol</option>
+                <option value="Director">Director</option>
+                <option value="Docente">Docente</option>
+                <option value="Coordinador">Coordinador</option>
+            </select>
+        </div>
+        <div class="mb-3">
             <label for="correo_usuario" class="form-label">Correo</label>
             <input type="email" name="correo_usuario" id="correo_usuario" class="form-control" required>
         </div>
         <div class="mb-3">
-            <label for="contrasenia_usuario" class="form-label">Contraseña</label>
-            <input type="password" name="contrasenia_usuario" id="contrasenia_usuario" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="id_rol" class="form-label">Rol</label>
-            <select name="id_rol" id="id_rol" class="form-control" required>
-                @foreach ($roles as $rol)
-                    <option value="{{ $rol->id_rol }}">{{ $rol->nombre_rol }}</option>
+            <label for="sucursal_id" class="form-label">Sucursal</label>
+            <select name="sucursal_id" id="sucursal_id" class="form-control" required>
+                <option value="">Selecciona una sucursal</option>
+                @foreach($sucursales as $sucursal)
+                    <option value="{{ $sucursal->id_suc }}"
+                        {{ (isset($sucursalSeleccionada) && $sucursalSeleccionada->id_suc == $sucursal->id_suc) ? 'selected' : '' }}>
+                        {{ $sucursal->nombre_suc }}
+                    </option>
                 @endforeach
             </select>
         </div>
