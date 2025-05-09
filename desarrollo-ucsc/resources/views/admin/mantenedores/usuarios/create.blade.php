@@ -4,6 +4,15 @@
 
 @section('content')
     <h1 class="h3">Crear Usuario</h1>
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     <form action="{{ route('usuarios.store') }}" method="POST">
         @csrf
         <div class="mb-3">
@@ -11,19 +20,19 @@
             <input type="text" name="rut" id="rut" class="form-control" placeholder="RUT del usuario" required>
         </div>
         <div class="mb-3">
+            <label for="nombre_admin" class="form-label">Nombre</label>
+            <input type="text" name="nombre_admin" id="nombre_admin" class="form-control" placeholder="Nombre del usuario" required>
+        </div>
+        <div class="mb-3">
             <label for="correo_usuario" class="form-label">Correo</label>
             <input type="email" name="correo_usuario" id="correo_usuario" class="form-control" placeholder="Correo del usuario" required>
         </div>
         <div class="mb-3">
-            <label for="contrasenia_usuario" class="form-label">Contraseña</label>
-            <input type="password" name="contrasenia_usuario" id="contrasenia_usuario" class="form-control" placeholder="Contraseña" required>
-        </div>
-        <div class="mb-3">
-            <label for="tipo_usuario" class="form-label">Tipo de Usuario</label>
-            <select name="tipo_usuario" id="tipo_usuario" class="form-control" required>
-                <option value="admin">Admin</option>
-                <option value="normal">Normal</option>
-                <option value="seleccionado">Seleccionado</option>
+            <label for="rol" class="form-label">Rol de usuario </label>
+            <select name="rol" id="rol" class="form-control" required>
+                <option value="">Selecciona un rol</option>
+                <option value="Docente">Docente</option>
+                <option value="Coordinador">Coordinador</option>
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Crear Usuario</button>

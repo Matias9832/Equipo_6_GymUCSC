@@ -10,9 +10,6 @@ use App\Models\Usuario;
 
 class AdministradorController extends Controller
 {
-    /**
-     * Muestra la lista de administradores.
-     */
     public function index()
     {
         // Obtener los administradores y usuarios relacionados
@@ -23,13 +20,10 @@ class AdministradorController extends Controller
             ->select('usuario.*', 'administrador.nombre_admin')
             ->get();
         // Obtener los roles de los usuarios    
-        $usuarios = \App\Models\Usuario::with('roles')->get();
+        $usuarios = Usuario::with('roles')->get();
         return view('admin.mantenedores.administradores.index', compact('administradores', 'usuarios'));
     }
 
-    /**
-     * Muestra el formulario para crear un nuevo administrador.
-     */
     public function create()
     {
         return view('admin.mantenedores.administradores.create');

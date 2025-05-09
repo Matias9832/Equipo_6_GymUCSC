@@ -8,60 +8,59 @@ use Illuminate\Http\Request;
 
 class UsuarioController extends Controller
 {
-    /**
-     * Muestra la lista de usuarios.
-     */
+   
     public function index()
     {
         $usuarios = Usuario::all();
         return view('admin.mantenedores.usuarios.index', compact('usuarios'));
     }
 
-    /**
-     * Muestra el formulario para crear un nuevo usuario.
-     */
     public function create()
     {
         return view('admin.mantenedores.usuarios.create');
     }
 
-    /**
-     * Almacena un nuevo usuario en la base de datos.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'rut' => 'required|string|unique:usuario,rut', // Cambiado a 'rut'
+            'rut' => 'required|string|unique:usuario,rut',
+            'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
-            'contrasenia_usuario' => 'required|string|min:6',
-            'tipo_usuario' => 'required|in:admin,normal,seleccionado',
+            'rol' => 'required|in:Docente,Coordinador', //Restricción para que solo pueda crear Docente y coordinador
         ]);
 
-        Usuario::create([
-            'rut' => $request->rut, // Cambiado a 'rut'
+        //Crear contraseña aleatoria
+        //Reemplazar con la función de generar contraseña aleatoria
+
+        // Crear el usuario 
+        $usuario = Usuario::create([
+            'rut' => $request->rut,
             'correo_usuario' => $request->correo_usuario,
-            'contrasenia_usuario' => bcrypt($request->contrasenia_usuario),
-            'tipo_usuario' => $request->tipo_usuario,
+            'tipo_usuario' => 'admin',
+            'bloqueado_usuario' => 0,
+            'activado_usuario' => 1,
+            'contrasenia_usuario' => '123456', // Shevi saca esto después y lo reemplaza por la función de generar contraseña aleatoria
         ]);
+        $usuario->assignRole($request->rol);
 
+            // Crear el administrador
+            Administrador::create([
+                'rut_admin' => $request->rut,
+                'nombre_admin' => $request->nombre_admin,
+                'fecha_creacion' => now(),
+            ]);
         return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente.');
     }
 
-    /**
-     * Muestra el formulario para editar un usuario existente.
-     */
     public function edit(Usuario $usuario)
     {
         return view('admin.mantenedores.usuarios.edit', compact('usuario'));
     }
 
-    /**
-     * Actualiza un usuario existente en la base de datos.
-     */
     public function update(Request $request, Usuario $usuario)
     {
         $request->validate([
-            'rut' => 'required|string|unique:usuario,rut,' . $usuario->id_usuario . ',id_usuario', // Cambiado a 'rut'
+            'rut' => 'required|string|unique:usuario,rut,' . $usuario->id_usuario . ',id_usuario',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $usuario->id_usuario . ',id_usuario',
             'tipo_usuario' => 'required|in:admin,normal,seleccionado',
             'contrasenia_usuario' => 'nullable|string|min:6', // Validación para la nueva contraseña
@@ -79,9 +78,6 @@ class UsuarioController extends Controller
         return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente.');
     }
 
-    /**
-     * Elimina un usuario de la base de datos.
-     */
     public function destroy(Usuario $usuario)
     {
         Administrador::where('rut_admin', $usuario->rut)->delete(); // Eliminar el administrador asociado

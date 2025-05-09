@@ -5,12 +5,10 @@
 
 @section('content')
     <h1 class="h3">Lista de Usuarios</h1>
-    <!-- Por ahora no crearemos administradores desde la tabla de usuarios -->
-    <!-- <a href="{{ route('usuarios.create') }}" class="btn btn-primary mb-3">Crear Usuario</a> -->
+    <a href="{{ route('usuarios.create') }}" class="btn btn-primary mb-3">Crear Usuario</a> 
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>RUT</th>
                 <th>Correo</th>
                 <th>Tipo</th>
@@ -20,7 +18,6 @@
         <tbody>
             @foreach($usuarios as $usuario)
                 <tr>
-                    <td>{{ $usuario->id_usuario }}</td>
                     <td>{{ $usuario->rut }}</td>
                     <td>{{ $usuario->correo_usuario }}</td>
                     <td>{{ ucfirst($usuario->tipo_usuario) }}</td>
