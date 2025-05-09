@@ -31,5 +31,14 @@ class SalaSeeder extends Seeder
             'aforo_sala' => 100,
             'id_suc' => 1,
         ]);
+
+        DB::table('sala')->insert([
+            'nombre_sala' => 'Sala Musculación IT',
+            'horario_apertura' => '08:00:00',
+            'horario_cierre' => '19:00:00',
+            'activo' => false,
+            'aforo_sala' => 100,
+            'id_suc' => 2,
+        ]);
     }
 }

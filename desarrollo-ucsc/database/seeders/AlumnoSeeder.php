@@ -14,7 +14,7 @@ class AlumnoSeeder extends Seeder
     {
         DB::table('alumno')->insert([
             [
-                'rut_alumno' => '12345678-5',
+                'rut_alumno' => '12345678',
                 'apellido_paterno' => 'Pérez',
                 'apellido_materno' => 'González',
                 'nombre_alumno' => 'Juan',
@@ -22,7 +22,7 @@ class AlumnoSeeder extends Seeder
                 'estado_alumno' => 'Activo',
             ],
             [
-                'rut_alumno' => '87654321-9',
+                'rut_alumno' => '87654321',
                 'apellido_paterno' => 'González',
                 'apellido_materno' => 'Pérez',
                 'nombre_alumno' => 'María',
@@ -30,7 +30,7 @@ class AlumnoSeeder extends Seeder
                 'estado_alumno' => 'Activo',
             ],
             [
-                'rut_alumno' => '11222333-4',
+                'rut_alumno' => '11222333',
                 'apellido_paterno' => 'López',
                 'apellido_materno' => 'Sánchez',
                 'nombre_alumno' => 'Carlos',
@@ -38,7 +38,7 @@ class AlumnoSeeder extends Seeder
                 'estado_alumno' => 'Inactivo',
             ],
             [
-                'rut_alumno' => '33444555-6',
+                'rut_alumno' => '33444555',
                 'apellido_paterno' => 'Martínez',
                 'apellido_materno' => 'Fernández',
                 'nombre_alumno' => 'Ana',
@@ -46,7 +46,7 @@ class AlumnoSeeder extends Seeder
                 'estado_alumno' => 'Activo',
             ],
             [
-                'rut_alumno' => '55666777-8',
+                'rut_alumno' => '55666777',
                 'apellido_paterno' => 'Ramírez',
                 'apellido_materno' => 'Ortega',
                 'nombre_alumno' => 'Pedro',
@@ -54,7 +54,7 @@ class AlumnoSeeder extends Seeder
                 'estado_alumno' => 'Activo',
             ],
             [
-                'rut_alumno' => '77888999-1',
+                'rut_alumno' => '77888999',
                 'apellido_paterno' => 'Torres',
                 'apellido_materno' => 'Muñoz',
                 'nombre_alumno' => 'Sofía',
@@ -62,7 +62,7 @@ class AlumnoSeeder extends Seeder
                 'estado_alumno' => 'Inactivo',
             ],
             [
-                'rut_alumno' => '99887766-3',
+                'rut_alumno' => '99887766',
                 'apellido_paterno' => 'Fuentes',
                 'apellido_materno' => 'Castro',
                 'nombre_alumno' => 'Diego',
@@ -70,7 +70,7 @@ class AlumnoSeeder extends Seeder
                 'estado_alumno' => 'Activo',
             ],
             [
-                'rut_alumno' => '66554433-2',
+                'rut_alumno' => '66554433',
                 'apellido_paterno' => 'Rojas',
                 'apellido_materno' => 'Vargas',
                 'nombre_alumno' => 'Camila',
@@ -78,7 +78,7 @@ class AlumnoSeeder extends Seeder
                 'estado_alumno' => 'Activo',
             ],
             [
-                'rut_alumno' => '44332211-7',
+                'rut_alumno' => '44332211',
                 'apellido_paterno' => 'Morales',
                 'apellido_materno' => 'Herrera',
                 'nombre_alumno' => 'Javier',
