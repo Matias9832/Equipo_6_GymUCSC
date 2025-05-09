@@ -73,18 +73,25 @@ class LoginController extends Controller
 
         // Si es administrador tiene una sucursal asociada
         if ($usuario->tipo_usuario === 'admin') {
-            $sucursal = \DB::table('admin_sucursal')
-                ->join('sucursal', 'admin_sucursal.id_suc', '=', 'sucursal.id_suc')
-                ->where('admin_sucursal.id_admin', $usuario->id_usuario) // Usa el campo correcto
-                ->where('admin_sucursal.activa', true)
-                ->select('sucursal.id_suc', 'sucursal.nombre_suc')
-                ->first();
+            // Obtener el administrador vinculado al usuario logueado
+            $admin = Administrador::where('rut_admin', $usuario->rut)->first();
 
-            if ($sucursal) {
-                session()->put('sucursal_activa', $sucursal->id_suc);
-                session()->put('nombre_sucursal', $sucursal->nombre_suc);
+            if ($admin) {
+                $sucursal = \DB::table('admin_sucursal')
+                    ->join('sucursal', 'admin_sucursal.id_suc', '=', 'sucursal.id_suc')
+                    ->where('admin_sucursal.id_admin', $admin->id_admin)
+                    ->where('admin_sucursal.activa', true)
+                    ->select('sucursal.id_suc', 'sucursal.nombre_suc')
+                    ->first();
+
+                if ($sucursal) {
+                    session()->put('sucursal_activa', $sucursal->id_suc);
+                    session()->put('nombre_sucursal', $sucursal->nombre_suc);
+                } else {
+                    \Log::warning('No se encontró sucursal activa para admin ID: ' . $admin->id_admin);
+                }
             } else {
-                \Log::warning('No se encontró sucursal activa para admin ID: ' . $usuario->id_usuario);
+                \Log::warning('No se encontró administrador para el rut: ' . $usuario->rut);
             }
         }
 
