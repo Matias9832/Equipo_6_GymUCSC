@@ -77,9 +77,11 @@ class AdministradorController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $administrador = Administrador::findOrFail($id);
+
         $request->validate([
             'nombre_admin' => 'required|string|max:255',
-            'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $request->rut_admin . ',rut',
+            'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $administrador->rut_admin . ',rut',
             'rol' => 'required|in:Director,Docente,Coordinador',
         ]);
         
