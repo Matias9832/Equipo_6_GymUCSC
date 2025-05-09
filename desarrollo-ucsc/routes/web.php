@@ -90,7 +90,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::resource('salas', SalaController::class);
     });
 
-    Route::middleware(['permission:Acceso al Mantenedor de equipos'])->group(function () {
+    Route::middleware(['permission:Acceso al Mantenedor de Equipos'])->group(function () {
         Route::resource('equipos', EquipoController::class);
     });
     
