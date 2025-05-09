@@ -26,6 +26,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'Acceso al Mantenedor de Gestión de QR',
             'Acceso al Mantenedor de Administradores',
             'Acceso al Mantenedor de Roles',
+            'Acceso al Mantenedor de Equipos',
+            'Acceso al Mantenedor de Torneos',
+            
         ];
 
         foreach ($permissions as $permission) {
@@ -56,6 +59,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'Acceso al Mantenedor de Tipos de Espacios',
             'Acceso al Mantenedor de Tipos de Sanción',
             'Acceso al Mantenedor de Gestión de QR',
+            'Acceso al Mantenedor de Equipos',
+            'Acceso al Mantenedor de Torneos',
         ]);
 
         // Asignar permisos específicos al Docente

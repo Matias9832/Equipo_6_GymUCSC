@@ -40,7 +40,7 @@ Route::get('/admin', function () {
 // Grupo de rutas para mantenedores
 Route::prefix('admin')->middleware(['auth'])->group(function () {
 
-    Route::middleware(['role:Super Admin'])->group(function () {
+    Route::middleware(['permission:Acceso al Mantenedor de Alumnos'])->group(function () {
         Route::resource('alumnos', AlumnoController::class);
     });
 
@@ -90,10 +90,13 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::resource('salas', SalaController::class);
     });
 
-
-    Route::resource('equipos', EquipoController::class);
-    Route::resource('torneos', TorneoController::class);
-
+    Route::middleware(['permission:Acceso al Mantenedor de equipos'])->group(function () {
+        Route::resource('equipos', EquipoController::class);
+    });
+    
+    Route::middleware(['permission:Acceso al Mantenedor de Torneos'])->group(function () {
+        Route::resource('torneos', TorneoController::class);
+    });
 
     Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
 
@@ -112,7 +115,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     // Ruta para importar el archivo Excel
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
 
-    // Ruta para la gestión de QR
+    // Ruta para la gestión de QR, cualquier docente puede acceder
     Route::get('/control-salas/seleccionar', [ControlSalasController::class, 'seleccionarSala'])->name('control-salas.seleccionar');
     Route::post('/control-salas/generar-qr', [ControlSalasController::class, 'generarQR'])->name('control-salas.generarQR');
     Route::get('control-salas/ver-qr', [ControlSalasController::class, 'verQR'])->name('control-salas.verQR');
@@ -124,8 +127,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         ->name('admin.control_salas.sacar_usuario');
     Route::get('/admin/control-salas/ver-usuarios/{id_sala}', [ControlSalasController::class, 'verUsuarios'])
         ->name('admin.control_salas.ver_usuarios');
-
-
 
 });
 
