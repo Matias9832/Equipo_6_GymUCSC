@@ -39,7 +39,8 @@ class RolesAndPermissionsSeeder extends Seeder
         $superAdmin = Role::create(['name' => 'Super Admin']);
         $director = Role::create(['name' => 'Director']);
         $docente = Role::create(['name' => 'Docente']);
-
+        $visor_qr = Role::create(['name' => 'Visor QR']);
+        
         // Asignar todos los permisos al Super Admin
         $superAdmin->givePermissionTo(Permission::all());
 

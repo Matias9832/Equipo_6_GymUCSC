@@ -22,7 +22,7 @@ class AdministradorController extends Controller
             ->join('administrador', 'usuario.rut', '=', 'administrador.rut_admin')
             ->select('usuario.*', 'administrador.nombre_admin')
             ->get();
-
+        $usuarios = \App\Models\Usuario::with('roles')->get();
         return view('admin.mantenedores.administradores.index', compact('administradores', 'usuarios'));
     }
 
@@ -43,17 +43,21 @@ class AdministradorController extends Controller
             'rut_admin' => 'required|string|unique:administrador,rut_admin|unique:usuario,rut',
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
-            'contrasenia_usuario' => 'required|string|min:6',
         ]);
     
-        // Crear el usuario
-        DB::table('usuario')->insert([
+        //Crear contraseña aleatoria
+        //Reemplazar con la función de generar contraseña aleatoria
+
+        // Crear el usuario 
+        $usuario = Usuario::create([
             'rut' => $request->rut_admin,
             'correo_usuario' => $request->correo_usuario,
             'tipo_usuario' => 'admin',
-            'contrasenia_usuario' => bcrypt($request->contrasenia_usuario),
+            'bloqueado_usuario' => 0,
+            'activado_usuario' => 1,
         ]);
-    
+        // Asignar rol Docente
+        $usuario->assignRole('Docente');
         // Crear el administrador
         Administrador::create([
             'rut_admin' => $request->rut_admin,
@@ -61,7 +65,7 @@ class AdministradorController extends Controller
             'fecha_creacion' => now(),
         ]);
     
-        return redirect()->route('administradores.index')->with('success', 'Administrador creado correctamente.');
+        return redirect()->route('administradores.index')->with('success', 'Administrador creado correctamente con rol de Docente.');
     }
 
     /**
