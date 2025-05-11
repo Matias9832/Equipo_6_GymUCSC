@@ -9,7 +9,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>Bandera</th>
                 <th>Acciones</th>
@@ -18,7 +17,6 @@
         <tbody>
             @foreach($paises as $pais)
                 <tr>
-                    <td>{{ $pais->id_pais }}</td>
                     <td>{{ $pais->nombre_pais }}</td>
                     <td>
                         <img src="{{ $pais->bandera_pais }}" alt="Bandera de {{ $pais->nombre_pais }}" style="width: 50px; height: auto;">

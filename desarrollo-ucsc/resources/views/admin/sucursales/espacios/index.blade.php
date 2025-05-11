@@ -15,7 +15,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>Tipo</th>
                 <th>Acciones</th>
@@ -24,7 +23,6 @@
         <tbody>
             @forelse ($espacios as $espacio)
                 <tr>
-                    <td>{{ $espacio->id_espacio }}</td>
                     <td>{{ $espacio->nombre_espacio }}</td>
                     <td>{{ ucfirst($espacio->tipo_espacio) }}</td>
                     <td>

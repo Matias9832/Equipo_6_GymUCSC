@@ -9,7 +9,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>País</th>
                 <th>Acciones</th>
@@ -18,7 +17,6 @@
         <tbody>
             @foreach($regiones as $region)
                 <tr>
-                    <td>{{ $region->id_region }}</td>
                     <td>{{ $region->nombre_region }}</td>
                     <td>{{ $region->pais->nombre_pais }}</td>
                     <td>

@@ -8,7 +8,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>Jugadores por Equipo</th>
                 <th>Descripción</th>
@@ -18,7 +17,6 @@
         <tbody>
             @foreach($deportes as $deporte)
                 <tr>
-                    <td>{{ $deporte->id_deporte }}</td>
                     <td>{{ $deporte->nombre_deporte }}</td>
                     <td>{{ $deporte->jugadores_por_equipo }}</td>
                     <td>{{ $deporte->descripcion }}</td>

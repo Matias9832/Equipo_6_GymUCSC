@@ -11,7 +11,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th>Acciones</th>
@@ -20,7 +19,6 @@
         <tbody>
             @forelse ($tipos as $tipo)
                 <tr>
-                    <td>{{ $tipo->id_tipo_sancion }}</td>
                     <td>{{ $tipo->nombre_tipo_sancion}}</td>
                     <td>{{ $tipo->descripcion_tipo_sancion }}</td>
                     <td>

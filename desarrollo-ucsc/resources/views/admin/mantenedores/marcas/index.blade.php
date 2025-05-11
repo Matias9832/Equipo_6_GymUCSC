@@ -8,7 +8,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>Logo</th>
                 <th>Misión</th>
@@ -19,7 +18,6 @@
         <tbody>
             @foreach($marcas as $marca)
                 <tr>
-                    <td>{{ $marca->id_marca }}</td>
                     <td>{{ $marca->nombre_marca }}</td>
                     <td>
                         <img src="{{ asset('storage/' . $marca->logo_marca) }}" alt="Logo" width="60">

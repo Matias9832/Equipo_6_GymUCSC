@@ -13,7 +13,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>Aforo</th>
                 <th>Horario</th>
@@ -23,7 +22,6 @@
         <tbody>
             @forelse ($salas as $sala)
                 <tr>
-                    <td>{{ $sala->id_sala }}</td>
                     <td>{{ $sala->nombre_sala }}</td>
                     <td>{{ $sala->aforo_sala }}</td>
                     <td>{{ \Carbon\Carbon::parse($sala->horario_apertura)->format('H:i') }} -

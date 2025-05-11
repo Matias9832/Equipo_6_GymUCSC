@@ -11,7 +11,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>Acciones</th>
             </tr>
@@ -19,7 +18,6 @@
         <tbody>
             @forelse ($tipos as $tipos)
                 <tr>
-                    <td>{{ $tipos->id }}</td>
                     <td>{{ $tipos->nombre_tipo}}</td>
                     <td>
                         <a href="{{ route('tipos_espacio.edit', $tipos-> id) }}" class="btn btn-sm btn-warning" >Editar</a>

@@ -9,7 +9,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>Dirección</th>
                 <th>Ciudad</th>
@@ -22,7 +21,6 @@
         <tbody>
             @foreach ($sucursales as $sucursal)
                 <tr>
-                    <td>{{ $sucursal->id_suc }}</td>
                     <td>{{ $sucursal->nombre_suc }}</td>
                     <td>{{ $sucursal->direccion_suc }}</td>
                     <td>{{ $sucursal->ciudad->nombre_ciudad }}</td>

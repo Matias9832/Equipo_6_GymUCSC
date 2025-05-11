@@ -8,7 +8,6 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nombre</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -17,7 +16,6 @@
         <tbody>
             @foreach($maquinas as $maquina)
                 <tr>
-                    <td>{{ $maquina->id_maq }}</td>
                     <td>{{ $maquina->nombre_maq }}</td>
                     <td>{{ $maquina->estado_maq ? 'Activo' : 'Inactivo' }}</td>
                     <td>
