@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Administrador;
 use App\Models\Usuario;
 use App\Models\Sucursal;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log; // Importar la clase Log
 
 class AdministradorController extends Controller
 {
@@ -38,35 +40,46 @@ class AdministradorController extends Controller
             'rol' => 'required|in:Director,Docente,Coordinador',
         ]);
     
-        //Crear contraseña aleatoria
-        //Reemplazar con la función de generar contraseña aleatoria
-
-        // Crear el usuario 
-        $usuario = Usuario::create([
-            'rut' => $request->rut_admin,
-            'correo_usuario' => $request->correo_usuario,
-            'tipo_usuario' => 'admin',
-            'bloqueado_usuario' => 0,
-            'activado_usuario' => 1,
-            'contrasenia_usuario' => '123456', // Shevi saca esto después y lo reemplaza por la función de generar contraseña aleatoria
-        ]);
-        // Asignar rol Docente
-        $usuario->assignRole($request->rol);
-
-        // Crear el administrador
-        $administrador = Administrador::create([
-            'rut_admin' => $request->rut_admin,
-            'nombre_admin' => $request->nombre_admin,
-            'fecha_creacion' => now(),
-        ]);
-        // Asignar la sucursal al administrador
-        DB::table('admin_sucursal')->insert([
-            'id_admin' => $administrador->id_admin,
-            'id_suc' => $request->sucursal_id,
-            'activa' => true,
-        ]);
-
-        return redirect()->route('administradores.index')->with('success', 'Administrador creado correctamente con rol de Docente.');
+        try {
+            // Generar una contraseña aleatoria de 6 caracteres
+            $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6);
+    
+            // Crear el usuario
+            $usuario = Usuario::create([
+                'rut' => $request->rut_admin,
+                'correo_usuario' => $request->correo_usuario,
+                'tipo_usuario' => 'admin',
+                'bloqueado_usuario' => 0,
+                'activado_usuario' => 1,
+                'contrasenia_usuario' => Hash::make($password),
+            ]);
+    
+            // Asignar el rol
+            $usuario->assignRole($request->rol);
+    
+            // Crear el administrador
+            $administrador = Administrador::create([
+                'rut_admin' => $request->rut_admin,
+                'nombre_admin' => $request->nombre_admin,
+                'fecha_creacion' => now(),
+            ]);
+    
+            // Asignar la sucursal al administrador
+            DB::table('admin_sucursal')->insert([
+                'id_admin' => $administrador->id_admin,
+                'id_suc' => $request->sucursal_id,
+                'activa' => true,
+            ]);
+    
+            // Enviar el correo con la contraseña
+            Mail::to($usuario->correo_usuario)->send(new \App\Mail\AdministradorPasswordMail($request->nombre_admin, $password));
+    
+            return redirect()->route('administradores.index')->with('success', 'Administrador creado correctamente y se ha enviado la contraseña por correo.');
+        } catch (\Exception $e) {
+            // Manejar errores
+            Log::error('Error al crear administrador: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Ocurrió un error al crear el administrador. Inténtalo nuevamente.']);
+        }
     }
 
     /**
