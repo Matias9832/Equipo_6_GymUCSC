@@ -19,7 +19,7 @@
             <label for="tipo_espacio" class="form-label">Tipo de espacio</label>
             <select name="tipo_espacio" id="tipo_espacio" class="form-select" required>
                 @foreach($tipos as $tipo)
-                    <option value="{{ $tipo->id }}" {{ $tipo->id == $espacio->tipo_espacio ? 'selected' : '' }}>
+                    <option value="{{ $tipo->nombre_tipo }}" {{ $tipo->nombre_tipo == $espacio->tipo_espacio ? 'selected' : '' }}>
                         {{ $tipo->nombre_tipo }}
                     </option>
                 @endforeach

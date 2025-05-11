@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Espacio;
+use App\Models\TipoEspacio;
 use Illuminate\Http\Request;
 
 class EspacioController extends Controller
@@ -10,7 +11,7 @@ class EspacioController extends Controller
     public function index()
     {
         $sucursalActiva = session('sucursal_activa');
-        
+
         $espacios = Espacio::with(['tipo'])->where('id_suc', $sucursalActiva)->get();
 
         return view('admin.sucursales.espacios.index', compact('espacios'));
@@ -18,8 +19,8 @@ class EspacioController extends Controller
 
     public function create()
     {
-        $tipos = \App\Models\TipoEspacio::all();
-        
+        $tipos = TipoEspacio::all();
+
         return view('admin.sucursales.espacios.create', compact('tipos'));
     }
 
@@ -30,7 +31,12 @@ class EspacioController extends Controller
             'tipo_espacio' => 'required|integer|exists:tipos_espacio,id',
         ]);
 
-        $request->merge(['id_suc' => session('sucursal_activa')]);
+        $nombreTipo = TipoEspacio::find($request->tipo_espacio)->nombre_tipo;
+
+        $request->merge([
+            'tipo_espacio' => $nombreTipo,
+            'id_suc' => session('sucursal_activa')
+        ]);
 
         Espacio::create($request->all());
 
@@ -40,8 +46,8 @@ class EspacioController extends Controller
     public function edit($espacio)
     {
         $espacio = Espacio::findOrFail($espacio);
-        $tipos = \App\Models\TipoEspacio::all();
-        
+        $tipos = TipoEspacio::all();
+
         return view('admin.sucursales.espacios.edit', compact('espacio', 'tipos'));
     }
 
@@ -49,7 +55,7 @@ class EspacioController extends Controller
     {
         $request->validate([
             'nombre_espacio' => 'required|string|max:255',
-            'tipo_espacio' => 'required',
+            'tipo_espacio' => 'required|string|max:255',
         ]);
 
         $espacio->update($request->all());
