@@ -40,6 +40,11 @@ Route::get('/admin', function () {
 // Grupo de rutas para mantenedores
 Route::prefix('admin')->middleware(['auth'])->group(function () {
 
+    // Ruta para el panel de administración
+    Route::get('/admin', function () {
+        return view('admin.index');
+    })->name('admin.index');
+
     Route::middleware(['permission:Acceso al Mantenedor de Alumnos'])->group(function () {
         Route::resource('alumnos', AlumnoController::class);
     });
@@ -94,7 +99,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::middleware(['permission:Acceso al Mantenedor de Equipos'])->group(function () {
         Route::resource('equipos', EquipoController::class);
     });
-    
+
     Route::middleware(['permission:Acceso al Mantenedor de Torneos'])->group(function () {
         Route::resource('torneos', TorneoController::class);
     });
@@ -104,10 +109,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     // CRUD para administradores
     Route::middleware(['auth', 'admin', 'permission:Acceso al Mantenedor de Administradores'])->group(function () {
         Route::resource('news', NewsController::class)->except(['index', 'show']);
-        // Ruta para el panel de administración
-        Route::get('/admin', function () {
-            return view('admin.index');
-        })->name('admin.index');
         Route::resource('administradores', AdministradorController::class)->parameters([
             'administradores' => 'administrador',
         ]);

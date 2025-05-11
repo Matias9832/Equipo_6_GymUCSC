@@ -5,7 +5,7 @@
     <h5 class="mb-4">Panel de Control</h5>
     <ul class="nav flex-column">
         <li class="nav-item mb-2">
-            <a href="{{ route('admin.index') }}" class="nav-link text-dark {{ Request::is('admin') ? 'fw-bold' : '' }}">
+            <a href="{{ route('admin.index') }}" class="nav-link text-dark {{ Request::is('admin/admin') ? 'fw-bold' : '' }}">
                 <i class="bi bi-house-door me-2"></i> Inicio
             </a>
         </li>
@@ -68,7 +68,7 @@
         </li>
         @endrole
         <li class="nav-item mb-2">
-            <a href="{{ route('control-salas.seleccionar') }}" class="nav-link text-dark {{ Request::is('control-salas/seleccionar') ? 'fw-bold' : '' }}">
+            <a href="{{ route('control-salas.seleccionar') }}" class="nav-link text-dark {{ Request::is('admin/control-salas/seleccionar') ? 'fw-bold' : '' }}">
                 <i class="bi bi-people me-2"></i> Gestión de QR
             </a>
         </li>
