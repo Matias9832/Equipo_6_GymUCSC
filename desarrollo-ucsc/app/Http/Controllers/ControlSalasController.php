@@ -22,7 +22,7 @@ class ControlSalasController extends Controller
         $sala = Sala::findOrFail($request->id_sala);
 
         if ($request->aforo > $sala->aforo_sala) {
-            return back()->withErrors(['aforo' => 'El aforo excede el máximo permitido para esta sala.']);
+            return back()->with('error', 'El aforo excede el máximo permitido para esta sala.');
         }
 
         $sala->activo = true;
@@ -268,7 +268,7 @@ class ControlSalasController extends Controller
 
         // Verificar si el aforo no excede el máximo
         if ($request->aforo_qr > $sala->aforo_sala) {
-            return back()->withErrors(['aforo_qr' => 'El aforo excede el máximo permitido para esta sala.']);
+            return back()->with('error', 'El aforo excede el máximo permitido para esta sala.');
         }
 
         // Modificar el aforo QR

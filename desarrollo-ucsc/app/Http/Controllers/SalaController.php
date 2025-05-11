@@ -31,8 +31,12 @@ class SalaController extends Controller
             'nombre_sala' => 'required|string|max:255',
             'aforo_sala' => 'required|integer|min:1',
             'horario_apertura' => 'required|date_format:H:i',
-            'horario_cierre' => 'required|date_format:H:i|after:horario_apertura',
+            'horario_cierre' => 'required|date_format:H:i',
         ]);
+
+        if ($request->horario_apertura >= $request->horario_cierre) {
+            return back()->withInput()->with('error', 'La hora de apertura debe ser anterior a la de cierre.');
+        }
 
         $data = $request->all();
         $data['id_suc'] = session('sucursal_activa');
@@ -56,6 +60,10 @@ class SalaController extends Controller
             'nombre_sala' => 'required|string|max:255',
             'aforo_sala' => 'required|integer|min:1',
         ]);
+
+        if ($request->horario_apertura >= $request->horario_cierre) {
+            return back()->withInput()->with('error', 'La hora de apertura debe ser anterior a la de cierre.');
+        }
 
         $sala->update($request->all());
 
