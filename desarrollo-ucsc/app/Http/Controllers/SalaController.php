@@ -72,6 +72,10 @@ class SalaController extends Controller
 
     public function exportIngresos(Request $request)
     {
+        if (!$request->filled('fecha')) {
+            return back()->with('error', 'Debes ingresar una fecha para la exportación.');
+        }
+
         $request->validate([
             'sala_id' => 'required|integer|exists:sala,id_sala',
             'fecha' => 'required|date',
