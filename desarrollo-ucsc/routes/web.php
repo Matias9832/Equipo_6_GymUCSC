@@ -69,10 +69,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::resource('deportes', DeporteController::class);
     });
 
-    Route::middleware(['permission:Acceso al Mantenedor de Usuarios'])->group(function () {
-        Route::resource('usuarios', UsuarioController::class);
-    });
-
     Route::middleware(['permission:Acceso al Mantenedor de Países'])->group(function () {
         Route::resource('paises', PaisController::class);
     });
@@ -103,6 +99,30 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::middleware(['permission:Acceso al Mantenedor de Torneos'])->group(function () {
         Route::resource('torneos', TorneoController::class);
     });
+
+    // Mostrar usuarios (para todos los que tengan permiso de ver)
+    Route::middleware(['permission:Ver Usuarios'])->group(function () {
+        Route::get('usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+        Route::get('usuarios/{usuario}', [UsuarioController::class, 'show'])->name('usuarios.show');
+    });
+
+    // Crear, Editar, Eliminar usuarios (sólo para roles con esos permisos)
+    Route::middleware(['permission:Crear Usuarios'])->group(function () {
+        Route::get('usuarios/create', [UsuarioController::class, 'create'])->name('usuarios.create');
+        Route::post('usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');
+    });
+
+    Route::middleware(['permission:Editar Usuarios'])->group(function () {
+        Route::get('usuarios/{usuario}/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
+        Route::put('usuarios/{usuario}', [UsuarioController::class, 'update'])->name('usuarios.update');
+        Route::patch('usuarios/{usuario}', [UsuarioController::class, 'update']); // por si usas patch
+    });
+
+    Route::middleware(['permission:Eliminar Usuarios'])->group(function () {
+        Route::delete('usuarios/{usuario}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
+    });
+
+
 
     Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
 

@@ -4,7 +4,11 @@
 
 @section('content')
     <h1 class="h3">Lista de Usuarios</h1>
-    <a href="{{ route('usuarios.create') }}" class="btn btn-primary mb-3">Crear Usuario</a> 
+
+    @can('Crear Usuarios')
+        <a href="{{ route('usuarios.create') }}" class="btn btn-primary mb-3">Crear Usuario</a> 
+    @endcan
+
     <table class="table table-striped">
         <thead>
             <tr>
@@ -12,7 +16,9 @@
                 <th>Nombre</th>
                 <th>Correo</th>
                 <th>Rol / Tipo de usuario</th>
-                <th>Acciones</th>
+                @role('Super Admin|Director|Coordinador')
+                    <th>Acciones</th>
+                @endrole
             </tr>
         </thead>
         <tbody>
@@ -38,16 +44,23 @@
                     <td>{{ $nombre }}</td>
                     <td>{{ $usuario->correo_usuario }}</td>
                     <td>{{ $rolOTipo }}</td>
-                    <td>
-                        <a href="{{ route('usuarios.edit', $usuario->id_usuario) }}" class="btn btn-sm btn-warning">Editar</a>
-                        <form action="{{ route('usuarios.destroy', $usuario->id_usuario) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm p-1" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?')">
-                                Eliminar
-                            </button>
-                        </form>
-                    </td>
+                    @role('Super Admin|Director|Coordinador')
+                        <td>
+                            @can('Editar Usuarios')
+                                <a href="{{ route('usuarios.edit', $usuario->id_usuario) }}" class="btn btn-sm btn-warning">Editar</a>
+                            @endcan
+
+                            @can('Eliminar Usuarios')
+                                <form action="{{ route('usuarios.destroy', $usuario->id_usuario) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm p-1" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?')">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            @endcan
+                        </td>
+                    @endrole
                 </tr>
             @endforeach
         </tbody>
