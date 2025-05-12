@@ -30,7 +30,7 @@
                         $nombre = $alumno 
                             ? $alumno->nombre_alumno . ' ' . $alumno->apellido_paterno . ' ' . $alumno->apellido_materno 
                             : 'Sin nombre';
-                        $rolOTipo = $usuario->tipo_usuario === 'normal' ? 'Estudiante' : 'Seleccionado';
+                        $rolOTipo = $usuario->tipo_usuario === 'estudiante' ? 'Estudiante' : 'Seleccionado';
                     }
                 @endphp
                 <tr>

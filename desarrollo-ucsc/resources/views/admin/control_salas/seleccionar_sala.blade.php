@@ -57,7 +57,7 @@
                                 \App\Models\Ingreso::where('id_sala', $sala->id_sala)
                                     ->whereNull('hora_salida')
                                     ->count()
-                                                                                                                                                                                                                                                            }}
+                                                                                                                                                                                                                                                                                }}
                                             </td>
                                             <td>
                                                 <a href="{{ route('control-salas.verQR', ['id_sala' => $sala->id_sala, 'aforo_qr' => $sala->aforo_qr]) }}"

@@ -31,7 +31,6 @@ class DatosExport implements FromArray, WithTitle
 
         return [
             ['Período', $periodo],
-            ['Cantidad de ingresos de Administradores', $adminCount],
             ['Cantidad de ingresos de Estudiantes', $estudianteCount],
         ];
     }
