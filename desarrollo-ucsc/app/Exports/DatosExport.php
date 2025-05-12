@@ -26,7 +26,7 @@ class DatosExport implements FromArray, WithTitle
             ->get();
 
         $adminCount = $ingresos->where('usuario.tipo_usuario', 'admin')->count();
-        $estudianteCount = $ingresos->where('usuario.tipo_usuario',"!=", 'estudiante')->count();
+        $estudianteCount = $ingresos->where('usuario.tipo_usuario',"!=", 'admin')->count();
         $periodo = $this->inicio->toDateString() . ' a ' . $this->fin->toDateString();
 
         return [
