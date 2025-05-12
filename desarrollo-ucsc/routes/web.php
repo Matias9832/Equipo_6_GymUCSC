@@ -35,10 +35,10 @@ Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show
 // Ruta para la página de administradores
 Route::get('/admin', function () {
     return view('admin.index');
-})->name('admin');
+})->middleware(['auth', 'admin'])->name('admin');
 
 // Grupo de rutas para mantenedores
-Route::prefix('admin')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     // Ruta para el panel de administración
     Route::get('/admin', function () {
