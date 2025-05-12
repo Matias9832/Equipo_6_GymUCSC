@@ -39,7 +39,9 @@ Se debe montar la concección a travez de:
 
     1. npm install
     2. npm run dev
-
+## Manejo de imagenes
+    
+    1. php artisan storage:link
 
 # Creacion de tablas en laravel 10.x
 

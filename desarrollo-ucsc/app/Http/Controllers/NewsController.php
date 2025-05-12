@@ -131,7 +131,8 @@ class NewsController extends Controller
 
         // Elimina todas las imágenes asociadas
         foreach ($news->images as $image) {
-            Storage::delete('public/' . $image->image_path);
+            Storage::disk('public')->delete($image->image_path);
+
             $image->delete();
         }
 
