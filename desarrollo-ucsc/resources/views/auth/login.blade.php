@@ -27,35 +27,15 @@
                 </div>
             @endif
 
-            <!-- Mostrar mensaje si el usuario está bloqueado -->
-            @if ($errors->has('bloqueado'))
-                <div class="alert alert-danger">
-                    {{ $errors->first('bloqueado') }}
-                </div>
-            @endif
-
-            <!-- Mostrar mensaje si la cuenta no está activa -->
-            @if ($errors->has('activado'))
-                <div class="alert alert-warning">
-                    {{ $errors->first('activado') }}
-                </div>
-            @endif
-
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="mb-3">
                     <label for="rut" class="form-label">RUT</label>
                     <input type="text" name="rut" id="rut" class="form-control" placeholder="Sin puntos, ni dígito verificador" value="{{ old('rut') }}" required>
-                    @error('rut')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Contraseña</label>
                     <input type="password" name="password" id="password" class="form-control" placeholder="Ingrese su contraseña" required>
-                    @error('password')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
                 </div>
                 <button type="submit" class="btn btn-danger w-100">Iniciar Sesión</button>
             </form>
