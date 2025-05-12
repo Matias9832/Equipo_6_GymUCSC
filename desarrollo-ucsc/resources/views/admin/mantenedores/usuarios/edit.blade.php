@@ -31,7 +31,7 @@
             <div class="mb-3">
                 <label for="tipo_usuario" class="form-label">Tipo de Usuario</label>
                 <select name="tipo_usuario" id="tipo_usuario" class="form-control" required>
-                    <option value="normal" {{ $usuario->tipo_usuario == 'normal' ? 'selected' : '' }}>Normal</option>
+                    <option value="estudiante" {{ $usuario->tipo_usuario == 'estudiante' ? 'selected' : '' }}>Estudiante</option>
                     <option value="seleccionado" {{ $usuario->tipo_usuario == 'seleccionado' ? 'selected' : '' }}>Seleccionado</option>
                 </select>
             </div>
