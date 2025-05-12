@@ -6,10 +6,10 @@
     <div class="col-lg-8">
         <h4 class="mb-4 mt-4">Noticias</h4>
         @auth
-            <div class="alert alert-info d-flex align-items-center" role="alert">
+            <!-- <div class="alert alert-info d-flex align-items-center" role="alert">
                 <i class="bi bi-person-circle me-2"></i>
                 ¡Hola {{ Auth::user()->name }}! Bienvenido(a) al portal de noticias del gimnasio.
-            </div>
+            </div> -->
             
             {{-- Mostrar botón solo a administradores --}}
             @if(Auth::check() && Auth::user()->is_admin)
