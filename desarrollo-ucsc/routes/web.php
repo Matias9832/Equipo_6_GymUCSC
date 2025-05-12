@@ -103,7 +103,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     // Mostrar usuarios (para todos los que tengan permiso de ver)
     Route::middleware(['permission:Ver Usuarios'])->group(function () {
         Route::get('usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
-        Route::get('usuarios/{usuario}', [UsuarioController::class, 'show'])->name('usuarios.show');
     });
 
     // Crear, Editar, Eliminar usuarios (sólo para roles con esos permisos)
