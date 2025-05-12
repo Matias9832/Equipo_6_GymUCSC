@@ -11,7 +11,6 @@ class RolesAndPermissionsSeeder extends Seeder
         // Crear permisos
         $permissions = [
             'Acceso al Mantenedor de Alumnos',
-            'Acceso al Mantenedor de Usuarios',
             'Acceso al Mantenedor de Deportes',
             'Acceso al Mantenedor de Máquinas',
             'Acceso al Mantenedor de Marcas',
@@ -28,6 +27,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'Acceso al Mantenedor de Roles',
             'Acceso al Mantenedor de Equipos',
             'Acceso al Mantenedor de Torneos',
+            //Acceso al Mantenedor de Usuarios
+            'Ver Usuarios',
+            'Crear Usuarios',
+            'Editar Usuarios',
+            'Eliminar Usuarios',
             
         ];
 
@@ -48,7 +52,6 @@ class RolesAndPermissionsSeeder extends Seeder
         // Asignar permisos específicos al Director
         $director->givePermissionTo([
             'Acceso al Mantenedor de Alumnos',
-            'Acceso al Mantenedor de Usuarios',
             'Acceso al Mantenedor de Deportes',
             'Acceso al Mantenedor de Máquinas',
             'Acceso al Mantenedor de Marcas',
@@ -63,19 +66,23 @@ class RolesAndPermissionsSeeder extends Seeder
             'Acceso al Mantenedor de Gestión de QR',
             'Acceso al Mantenedor de Equipos',
             'Acceso al Mantenedor de Torneos',
+            //Acceso al Mantenedor de Usuarios
+            'Ver Usuarios',
+            'Crear Usuarios',
+            'Editar Usuarios',
+            'Eliminar Usuarios',
         ]);
 
         // Asignar permisos específicos al Docente
         $docente->givePermissionTo([
             'Acceso al Mantenedor de Alumnos',
-            'Acceso al Mantenedor de Usuarios',
             'Acceso al Mantenedor de Gestión de QR',
+            'Ver Usuarios',
         ]);
 
         // Asignar permisos específicos al Coordinador
         $coordinador->givePermissionTo([
             'Acceso al Mantenedor de Alumnos',
-            'Acceso al Mantenedor de Usuarios',
             'Acceso al Mantenedor de Deportes',
             'Acceso al Mantenedor de Máquinas',
             'Acceso al Mantenedor de Espacios',
@@ -85,6 +92,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'Acceso al Mantenedor de Gestión de QR',
             'Acceso al Mantenedor de Equipos',
             'Acceso al Mantenedor de Torneos',
+            'Ver Usuarios',
+            'Editar Usuarios',
         ]);
         // Asignar permisos específicos al Visor QR
         $visor_qr->givePermissionTo([
