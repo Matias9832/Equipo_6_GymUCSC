@@ -68,7 +68,7 @@ class UsuarioController extends Controller
         ];
         // Si el usuario NO es admin, entonces validamos tipo_usuario
         if ($usuario->tipo_usuario !== 'admin') {
-            $rules['tipo_usuario'] = 'required|in:normal,seleccionado';
+            $rules['tipo_usuario'] = 'required|in:estudiante,seleccionado';
         } else {
             $rules['rol'] = 'required|in:Docente,Coordinador'; // Si es admin, validamos el rol
         }
