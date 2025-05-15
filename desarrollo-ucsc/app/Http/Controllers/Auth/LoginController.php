@@ -42,7 +42,7 @@ class LoginController extends Controller
 
         if (!$usuario) {
             return back()->withErrors([
-                'rut' => 'El RUT ingresado no está asociado a ningún usuario registrado.',
+                'rut' => 'Rut o contraseña ingresada incorrecta.',
             ]);
         }
 
@@ -63,7 +63,7 @@ class LoginController extends Controller
         // Validar la contraseña
         if (!Hash::check($credentials['password'], $usuario->contrasenia_usuario)) {
             return back()->withErrors([
-                'password' => 'La contraseña ingresada no corresponde al RUT ingresado.',
+                'password' => 'Rut o contraseña ingresada incorrecta.',
             ]);
         }
 

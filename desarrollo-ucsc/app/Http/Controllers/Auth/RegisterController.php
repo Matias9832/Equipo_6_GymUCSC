@@ -36,13 +36,19 @@ class RegisterController extends Controller
                     }
                 },
             ],
-            'contraseña' => 'required|confirmed|min:6',
+            'contraseña' => [
+                'required',
+                'confirmed',
+                'min:8',
+                'regex:/[A-Z]/', // Al menos una letra mayúscula
+                'regex:/[0-9]/', // Al menos un número
+            ],
             'rut' => [
                 'required',
                 'unique:usuario,rut',
                 function ($attribute, $value, $fail) {
                     if (!\DB::table('alumno')->where('rut_alumno', $value)->exists()) {
-                        $fail('El RUT ingresado no está registrado en la tabla de alumnos.');
+                        $fail('Ingrese un rut valido RUT valido.');
                     }
                 },
             ],
@@ -52,9 +58,10 @@ class RegisterController extends Controller
             'correo.unique' => 'El correo ingresado ya está registrado.',
             'contraseña.required' => 'El campo contraseña es obligatorio.',
             'contraseña.confirmed' => 'Las contraseñas no coinciden.',
-            'contraseña.min' => 'La contraseña debe tener al menos 6 caracteres.',
+            'contraseña.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'contraseña.regex' => 'La contraseña debe incluir al menos una mayúscula y un número.',
             'rut.required' => 'El campo RUT es obligatorio.',
-            'rut.unique' => 'El RUT ingresado ya está registrado en la tabla de usuarios.',
+            'rut.unique' => 'El RUT ingresado ya está registrado.',
         ]);
 
         try {
