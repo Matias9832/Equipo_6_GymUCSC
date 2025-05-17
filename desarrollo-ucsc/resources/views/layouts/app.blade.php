@@ -100,5 +100,8 @@
     @if (!Request::is('admin*')) <!-- Oculta el footer en rutas que comiencen con "admin" -->
         @include('layouts.partials.footer')
     @endif
+
+    @stack('scripts')
+
 </body>
 </html>

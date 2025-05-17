@@ -23,6 +23,8 @@ use App\Http\Controllers\SaludController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\TorneoController;
 
+use App\Http\Controllers\ActividadController;
+
 // Página principal: Mostrar noticias públicas
 Route::get('/', function () {
     return redirect()->route('news.index');
@@ -171,6 +173,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/salud/edit', [SaludController::class, 'edit'])->name('salud.edit');
     // Route::post('/salud/edit', [SaludController::class, 'update'])->name('salud.update');
     Route::put('/salud', [SaludController::class, 'update'])->name('salud.update');
+
+    
+    Route::get('/mi-actividad', [ActividadController::class, 'actividadUsuario'])->name('actividad.usuario');
 
 });
 
