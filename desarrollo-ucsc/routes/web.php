@@ -176,6 +176,7 @@ Route::middleware(['auth'])->group(function () {
 
     
     Route::get('/mi-actividad', [ActividadController::class, 'actividadUsuario'])->name('actividad.usuario');
+    Route::get('/actividades', [ActividadController::class, 'eventosCalendario'])->middleware('auth');
 
 });
 
