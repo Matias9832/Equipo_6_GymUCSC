@@ -119,7 +119,7 @@ Esto generará automáticamente las rutas necesarias:
 
 ### ejemplo de index.blade.php:
 ```
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Lista de Cursos')
 
@@ -157,7 +157,7 @@ Esto generará automáticamente las rutas necesarias:
 ```
 ### Ejemplo de create.blade.php
 ```
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Crear Curso')
 
@@ -180,7 +180,7 @@ Esto generará automáticamente las rutas necesarias:
 ```
 ### Ejemplo de edit.blade.php
 ```
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Editar Curso')
 
