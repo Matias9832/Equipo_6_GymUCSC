@@ -17,9 +17,53 @@
                 initialView: 'dayGridMonth',
                 locale: 'es',
                 events: '/actividades',
-                eventDisplay: 'background', // fondo de día
-                eventClick: function(info) {
-                    alert('Actividad: ' + info.event.title);
+                eventDisplay: 'block',
+                eventContent: function(arg) {
+                    let horaIngreso = arg.event.extendedProps.hora_ingreso;
+                    let tiempoUso = parseInt(arg.event.extendedProps.tiempo_uso);
+                    let durationText = '-';
+                    let horaTexto = '';
+                    let now = new Date();
+
+                    // Validar hora_ingreso
+                    if (horaIngreso && horaIngreso.includes(':')) {
+                        let [h, m] = horaIngreso.split(':');
+                        horaTexto = `${h.padStart(2, '0')}:${m.padStart(2, '0')}`;
+
+                        // Construir fecha completa para comparar
+                        let startDate = new Date(arg.event.start);
+                        startDate.setHours(parseInt(h));
+                        startDate.setMinutes(parseInt(m));
+
+                        if (startDate < now && !isNaN(tiempoUso)) {
+                            if (tiempoUso >= 60) {
+                                let horas = Math.floor(tiempoUso / 60);
+                                let mins = tiempoUso % 60;
+                                durationText = mins > 0 ? `${horas}h ${mins}min` : `${horas}h`;
+                            } else {
+                                durationText = `${tiempoUso}min`;
+                            }
+                        }
+                    }
+
+                    // Mostrar contenido incluso si no hay hora_ingreso
+                    return {
+                        html: `
+                            <div style="
+                                color: #000;
+                                font-weight: 500;
+                                font-size: 12px;
+                                line-height: 1.2;
+                                word-wrap: break-word;
+                                white-space: normal;
+                                overflow-wrap: break-word;
+                                max-width: 100%;
+                            ">
+                                ${arg.event.title}<br>
+                                ${horaTexto ? `<small>Ingreso: ${horaTexto}</small><br>` : ''}
+                                <small>Duración: ${durationText}</small>
+                            </div>`
+                    };
                 }
             });
 
@@ -27,5 +71,3 @@
         });
     </script>
 @endpush
-
-

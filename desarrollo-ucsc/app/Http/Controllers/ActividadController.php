@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
+
 
 class ActividadController extends Controller
 {
@@ -43,6 +45,7 @@ class ActividadController extends Controller
                 'i.fecha_ingreso',
                 'i.hora_ingreso',
                 'i.hora_salida',
+                DB::raw('TIMESTAMPDIFF(MINUTE, i.hora_ingreso, i.hora_salida) as tiempo_uso'),
                 's.nombre_sala'
             )
             ->get();
@@ -51,10 +54,29 @@ class ActividadController extends Controller
             return [
                 'title' => $actividad->nombre_sala,
                 'start' => $actividad->fecha_ingreso,
-                'backgroundColor' => '#28a745', // fondo verde
+                'hora_ingreso' => $actividad->hora_ingreso,
+                'tiempo_uso' => $actividad->tiempo_uso,
+                'backgroundColor' => '#28a745',
                 'borderColor' => '#28a745',
                 'textColor' => '#fff',
-                'display' => 'background' // para pintar el fondo del día
+                'display' => 'block'
+            ];
+        });
+
+        return response()->json($eventos);
+    }
+   public function index()
+    {
+        $actividades = DB::table('ingreso as i') 
+            ->select('i.nombre', 'i.fecha_ingreso', 'i.hora_ingreso', 'tiempo_uso')
+            ->get();
+
+        $eventos = $actividades->map(function ($actividad) {
+            return [
+                'title' => $actividad->nombre,
+                'start' => Carbon::parse($actividad->fecha_ingreso)->toDateString(),
+                'hora_ingreso' => Carbon::parse($actividad->hora_ingreso)->format('H:i'),
+                'tiempo_uso' => $actividad->tiempo_uso
             ];
         });
 
