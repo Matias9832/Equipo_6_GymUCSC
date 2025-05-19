@@ -3,9 +3,7 @@
 @section('title', 'Lista de Alumnos')
 
 @section('argon-bg-header')
-    <div class="argon-bg-header" style="background-image: url('https://sitios.ucsc.cl/sube/wp-content/uploads/sites/46/2020/06/D70_7844-1150x440.jpg'); background-size:cover; background-position:center;">
-        <span class="mask bg-success opacity-6" style="min-height:300px; display:block;"></span>
-    </div>
+    <div class="argon-bg-header bg-primary"></div>
 @endsection
 
 @section('content')
@@ -34,7 +32,7 @@
         </div>
     @endif
 
-
+    <h1 class="h3">Lista de Alumnos</h1>
     <!-- Formulario para cargar el archivo Excel -->
     <form action="{{ route('alumnos.import') }}" method="POST" enctype="multipart/form-data" class="mb-4">
         @csrf
@@ -52,7 +50,7 @@
         </div>
     </form>
 
-    <h1 class="h3">Lista de Alumnos</h1>
+    
     <table class="table table-striped">
         <thead>
             <tr>

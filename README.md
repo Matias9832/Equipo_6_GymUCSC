@@ -243,7 +243,7 @@ Cada tabla tiene sus atributos y restricciones distintas que deben hacer seguimi
 ## Color específico
 ```
 @section('argon-bg-header')
-    <div class="argon-bg-header bg-success"></div>
+    <div class="argon-bg-header bg-primary"></div>
 @endsection
 ```
 ## Imágen
