@@ -1,13 +1,15 @@
 <div class="container position-sticky z-index-sticky top-0">
     <div class="row">
         <div class="col-12">
-            <!-- Navbar -->
-            <nav
-                class="navbar navbar-expand-lg blur border-radius-lg top-0 z-index-3 shadow position-absolute mt-4 py-2 start-0 end-0 mx-4">
+            <!-- Navbar estilo Argon, fondo sólido -->
+            <nav class="navbar navbar-expand-lg bg-white border-radius-lg shadow position-relative py-2 start-0 end-0 mx-4">
                 <div class="container-fluid">
-                    <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="{{ route('welcome') }}">
-                        Argon Dashboard 2 Laravel
+                    <!-- Logos -->
+                    <a class="navbar-brand d-flex align-items-center font-weight-bolder ms-lg-0 ms-3" href="{{ route('welcome') }}">
+                        <img src="{{ asset('images/gym_logo.png') }}" alt="Logo GYM" style="height: 30px;" class="me-2">
+                        <img src="{{ asset('images/ucsc_logo.png') }}" alt="Logo UCSC" style="height: 30px;" class="me-2">
                     </a>
+                    <!-- Botón de colapso para móviles -->
                     <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
                         aria-label="Toggle navigation">
@@ -18,32 +20,54 @@
                         </span>
                     </button>
                     <div class="collapse navbar-collapse" id="navigation">
-                        <ul class="navbar-nav mx-auto">
-                            <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center me-2 active" aria-current="page"
-                                    href="{{ route('welcome') }}">
-                                    <i class="fa fa-chart-pie opacity-6 text-dark me-1"></i>
-                                    Dashboard
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link me-2" href="{{ route('register') }}">
-                                    <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
-                                    Sign Up
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link me-2" href="{{ route('login') }}">
-                                    <i class="fas fa-key opacity-6 text-dark me-1"></i>
-                                    Sign In
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav d-lg-block d-none">
-                            <li class="nav-item">
-                                <a href="https://www.creative-tim.com/product/argon-dashboard-laravel" target="_blank"
-                                    class="btn btn-sm mb-0 me-1 btn-primary">Free Download</a>
-                            </li>
+                        <ul class="navbar-nav ms-auto align-items-center">
+
+                            @if (Route::has('login'))
+                                @auth
+                                    @if (Auth::user()->tipo_usuario === 'admin')
+                                        <li class="nav-item me-2">
+                                            <a class="btn btn-dark btn-sm" href="{{ route('admin.index') }}">
+                                                <i class="bi me-1"></i> Panel de Control
+                                            </a>
+                                        </li>
+                                    @endif
+                                    <li class="nav-item dropdown">
+                                        <a class="btn btn-light btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="bi bi-person-circle me-1"></i> Mi Cuenta
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('mi-perfil.edit') }}">
+                                                    <i class="bi bi-person"></i> Mi Perfil
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('ingreso.mostrar') }}">
+                                                    <i class="bi bi-door-open"></i> Salas
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <form method="POST" action="{{ route('logout') }}">
+                                                    @csrf
+                                                    <button type="submit" class="dropdown-item text-danger">
+                                                        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                @else
+                                    <li class="nav-item">
+                                        <a href="{{ route('login') }}" class="btn btn-danger btn-sm me-2 align-self-center">Iniciar sesión</a>
+                                    </li>
+                                    @if (Route::has('register'))
+                                        <li class="nav-item">
+                                            <a href="{{ route('register') }}" class="btn btn-outline-danger btn-sm align-self-center">Registrarse</a>
+                                        </li>
+                                    @endif
+                                @endauth
+                            @endif
                         </ul>
                     </div>
                 </div>

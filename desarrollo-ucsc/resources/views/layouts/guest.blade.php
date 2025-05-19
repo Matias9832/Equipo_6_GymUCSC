@@ -15,7 +15,7 @@
         top: 0;
         left: 0;
         width: 100%;
-        min-height: 300px;
+        min-height: 800px;
         z-index: 0;
     }
     .main-content {

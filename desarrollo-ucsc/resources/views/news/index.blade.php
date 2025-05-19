@@ -3,21 +3,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-lg-8">
-        <h4 class="mb-4 mt-4">Noticias</h4>
-        @auth
-            <!-- <div class="alert alert-info d-flex align-items-center" role="alert">
-                <i class="bi bi-person-circle me-2"></i>
-                ¡Hola {{ Auth::user()->name }}! Bienvenido(a) al portal de noticias del gimnasio.
-            </div> -->
-            
-            {{-- Mostrar botón solo a administradores --}}
-            @if(Auth::check() && Auth::user()->is_admin)
-                <a href="{{ route('news.create') }}" class="btn btn-primary mb-4">Crear nueva noticia</a>
-            @endif
-
-        @endauth
-        
+    <div class="col-lg-8 ">
 
         @if($news->isEmpty())
             <div class="card shadow-sm text-center p-5">
@@ -88,11 +74,16 @@
                 </div>
             @endforeach
         @endif
+    
+            {{-- Mostrar botón solo a administradores, esto debería estar modificable en en panel de control--}}
+            @if(Auth::check() && Auth::user()->is_admin)
+                <a href="{{ route('news.create') }}" class="btn btn-dark my-2">Crear nueva noticia</a>
+            @endif
     </div>    
 
      <!-- Salas por Sucursal -->
     <div class="col-lg-4">
-        <div class="card shadow-sm mb-4 mt-4">
+        <div class="card shadow-sm mb-4 ">
             <div class="card-body p-4">
                 <h4 class="mb-4">Conoce Nuestras Salas</h4>
                 @foreach($sucursalesConSalas as $sucursal)
@@ -120,7 +111,6 @@
         {{ $news->links() }}
     </div>
 </div>
-@endsection
 
 <!-- Modal de Confirmación -->
 <div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarModalLabel" aria-hidden="true">
@@ -145,28 +135,31 @@
     </div>
   </div>
 
-  <script>
-    let idEliminar = null;
+    <script>
+        let idEliminar = null;
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const botonesEliminar = document.querySelectorAll('.btn-mostrar-modal');
+        document.addEventListener('DOMContentLoaded', function () {
+            const botonesEliminar = document.querySelectorAll('.btn-mostrar-modal');
 
-        botonesEliminar.forEach(boton => {
-            boton.addEventListener('click', function () {
-                idEliminar = this.getAttribute('data-id');
-                const modalEliminar = new bootstrap.Modal(document.getElementById('confirmarEliminarModal'));
-                modalEliminar.show();
+            botonesEliminar.forEach(boton => {
+                boton.addEventListener('click', function () {
+                    idEliminar = this.getAttribute('data-id');
+                    const modalEliminar = new bootstrap.Modal(document.getElementById('confirmarEliminarModal'));
+                    modalEliminar.show();
+                });
+            });
+
+            const btnConfirmarEliminar = document.getElementById('btnConfirmarEliminar');
+            btnConfirmarEliminar.addEventListener('click', function () {
+                if (idEliminar) {
+                    const form = document.querySelector(`form[action*="/news/${idEliminar}"]`);
+                    form.submit();
+                }
             });
         });
 
-        const btnConfirmarEliminar = document.getElementById('btnConfirmarEliminar');
-        btnConfirmarEliminar.addEventListener('click', function () {
-            if (idEliminar) {
-                const form = document.querySelector(`form[action*="/news/${idEliminar}"]`);
-                form.submit();
-            }
-        });
-    });
+    </script>
+@endsection
 
-</script>
+  
 
