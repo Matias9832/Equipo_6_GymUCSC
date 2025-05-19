@@ -2,6 +2,12 @@
 
 @section('title', 'Lista de Alumnos')
 
+@section('argon-bg-header')
+    <div class="argon-bg-header" style="background-image: url('https://sitios.ucsc.cl/sube/wp-content/uploads/sites/46/2020/06/D70_7844-1150x440.jpg'); background-size:cover; background-position:center;">
+        <span class="mask bg-success opacity-6" style="min-height:300px; display:block;"></span>
+    </div>
+@endsection
+
 @section('content')
 
     @if(session('warning'))

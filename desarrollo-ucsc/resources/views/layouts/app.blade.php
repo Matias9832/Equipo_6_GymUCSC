@@ -34,20 +34,22 @@
 <body class="g-sidenav-show bg-gray-100 {{ $class ?? '' }}">
 
     @auth
-        @if (!in_array(request()->route()->getName(), ['profile', 'profile-static']))
+        <!-- Esto hace que pueda ser manipulable el fondo según la página -->
+        @yield('argon-bg-header')
+        @if (!View::hasSection('argon-bg-header'))
             <div class="argon-bg-header bg-primary"></div>
-        @elseif (in_array(request()->route()->getName(), ['profile-static', 'profile']))
-            <div class="argon-bg-header" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg'); background-size:cover; background-position:center;">
-                <span class="mask bg-primary opacity-6" style="min-height:300px; display:block;"></span>
-            </div>
         @endif
 
-        @include('layouts.navbars.auth.sidenav')
+        {{-- Mostrar sidebar solo en rutas admin --}}
+        @if(Request::is('admin*'))
+            @include('layouts.navbars.auth.sidenav')
+        @endif
+
         <main class="main-content border-radius-lg">
             <div class="container-fluid py-4">
                 <div class="card card-body">
-                @yield('content')
-            </div>
+                    @yield('content')
+                </div>
             </div>
         </main>
     @endauth

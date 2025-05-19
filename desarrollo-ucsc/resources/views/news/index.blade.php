@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 
 @section('content')
@@ -28,8 +28,7 @@
                 </div>
             </div>
         @else
-
-                @foreach ($news as $noticias)
+            @foreach ($news as $noticias)
                 <div class="card mb-3 position-relative" style="min-height: 200px;">
                     @if(Auth::check() && Auth::user()->is_admin)
                         <div class="position-absolute top-0 end-0 m-2 d-flex gap-2 z-3">
@@ -92,31 +91,31 @@
     </div>    
 
      <!-- Salas por Sucursal -->
-     <div class="col-lg-4">
-        <h4 class="mb-4 mt-4">Conoce Nuestras Salas</h4>
-
-        @foreach($sucursalesConSalas as $sucursal)
-            <h5>{{ $sucursal->nombre_suc }}</h5>
-            @if($sucursal->salas->isNotEmpty())
-                <ul>
-                @foreach($sucursal->salas as $sala)
-                    <li class="d-flex justify-content-between mb-3">
-                        <span class="tw-bold">
-                            <strong>{{ $sala->nombre_sala }}</strong>
-                        </span>
-                        <span class="text-info">
-                            {{ \Carbon\Carbon::parse($sala->horario_apertura)->format('H:i') }} a 
-                            {{ \Carbon\Carbon::parse($sala->horario_cierre)->format('H:i') }}
-                        </span>
-                    </li>
+    <div class="col-lg-4">
+        <div class="card shadow-sm mb-4 mt-4">
+            <div class="card-body p-4">
+                <h4 class="mb-4">Conoce Nuestras Salas</h4>
+                @foreach($sucursalesConSalas as $sucursal)
+                    <h5 class="mb-2">{{ $sucursal->nombre_suc }}</h5>
+                    @if($sucursal->salas->isNotEmpty())
+                        <ul class="list-unstyled mb-4">
+                        @foreach($sucursal->salas as $sala)
+                            <li class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold">{{ $sala->nombre_sala }}</span>
+                                <span class="text-info small">
+                                    {{ \Carbon\Carbon::parse($sala->horario_apertura)->format('H:i') }} a 
+                                    {{ \Carbon\Carbon::parse($sala->horario_cierre)->format('H:i') }}
+                                </span>
+                            </li>
+                        @endforeach
+                        </ul>
+                    @else
+                        <p class="text-muted mb-4">No hay salas disponibles en esta sucursal.</p>
+                    @endif
                 @endforeach
-                </ul>
-            @else
-                <p>No hay salas disponibles en esta sucursal.</p>
-            @endif
-        @endforeach
-    </div> 
-
+            </div>
+        </div>
+    </div>
     <div class="d-flex justify-content-center">
         {{ $news->links() }}
     </div>

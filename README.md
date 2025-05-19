@@ -238,3 +238,19 @@ resources/views/layouts/admin.blade.php
 ## Paso 5: Probar el CRUD
 
 Cada tabla tiene sus atributos y restricciones distintas que deben hacer seguimiento de errores.
+
+# Cómo Cambiar el Fondo de una página
+## Color específico
+```
+@section('argon-bg-header')
+    <div class="argon-bg-header bg-success"></div>
+@endsection
+```
+## Imágen
+```
+@section('argon-bg-header')
+    <div class="argon-bg-header" style="background-image: url('URL_AQUI'); background-size:cover; background-position:center;">
+        <span class="mask bg-success opacity-6" style="min-height:300px; display:block;"></span>
+    </div>
+@endsection
+```
