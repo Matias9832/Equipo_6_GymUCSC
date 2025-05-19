@@ -42,7 +42,7 @@
 
         {{-- Mostrar sidebar solo en rutas admin --}}
         @if(Request::is('admin*'))
-            @include('layouts.navbars.auth.sidenav')
+            @include('layouts.navbars.admin.sidenav')
         @endif
 
         <main class="main-content border-radius-lg">
