@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Usuario;
+use App\Models\VerificacionUsuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -76,7 +77,13 @@ class RegisterController extends Controller
                 'bloqueado_usuario' => 0,
                 'activado_usuario' => 0,
                 'tipo_usuario' => 'estudiante',
-                'codigo_verificacion' => $codigoVerificacion, // Guardar el código
+            ]);
+
+            // Crear registro de verificación
+            VerificacionUsuario::create([
+                'id_usuario' => $usuario->id_usuario,
+                'codigo_verificacion' => $codigoVerificacion,
+                'intentos' => 0,
             ]);
 
             // Enviar el código de verificación por correo
@@ -109,18 +116,50 @@ class RegisterController extends Controller
         $request->validate([
             'codigo' => 'required|numeric',
         ]);
-
-        $usuario = Usuario::where('codigo_verificacion', $request->codigo)->first();
-
-        if (!$usuario) {
-            return back()->withErrors(['codigo' => 'El código es inválido.']);
+    
+        $verificacion = \App\Models\VerificacionUsuario::where('codigo_verificacion', $request->codigo)->first();
+    
+        if (!$verificacion) {
+            $usuario = \App\Models\Usuario::orderBy('created_at', 'desc')->first();
+            if ($usuario) {
+                $verificacion = $usuario->verificacion;
+            }
+        } else {
+            $usuario = $verificacion->usuario;
         }
-
+    
+        if (!$verificacion || !$usuario) {
+            // Solo mostrar el mensaje arriba, no en los errores generales
+            return back()->with('info', 'El código es inválido.');
+        }
+    
+        if ($verificacion->codigo_verificacion != $request->codigo) {
+            $verificacion->intentos += 1;
+    
+            if ($verificacion->intentos >= 5) {
+                // Generar nuevo código y reiniciar intentos
+                $nuevoCodigo = rand(100000, 999999);
+                $verificacion->codigo_verificacion = $nuevoCodigo;
+                $verificacion->intentos = 0; // Reiniciar a 0
+                $verificacion->save();
+    
+                // Reenviar correo
+                Mail::to($usuario->correo_usuario)->send(new \App\Mail\VerificacionUsuarioMail($usuario->rut, $nuevoCodigo));
+    
+                return back()->with('info', 'Se ha enviado un nuevo código de verificación a tu correo.');
+            } else {
+                $intentosRestantes = 5 - $verificacion->intentos;
+                $verificacion->save();
+                return back()->with('info', "Código incorrecto. Te quedan {$intentosRestantes} intentos.");
+            }
+        }
+    
+        // Código correcto
         $usuario->update([
             'activado_usuario' => 1,
-            'codigo_verificacion' => null, // Eliminar el código después de usarlo
         ]);
-
+        $verificacion->delete();
+    
         return redirect()->route('login')->with('success', 'Cuenta verificada correctamente.');
     }
 }

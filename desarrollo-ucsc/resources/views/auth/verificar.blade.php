@@ -23,12 +23,21 @@
                 </div>
             @endif
 
-            <!-- Mostrar errores generales -->
+            <!-- Mostrar mensaje informativo de intentos o reenvío -->
+            @if (session('info'))
+                <div class="alert alert-warning">
+                    {{ session('info') }}
+                </div>
+            @endif
+
+            <!-- Mostrar errores generales SOLO si no es el código inválido -->
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul class="mb-0">
                         @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
+                            @if ($error !== 'El código es inválido.')
+                                <li>{{ $error }}</li>
+                            @endif
                         @endforeach
                     </ul>
                 </div>

@@ -31,12 +31,10 @@ class Usuario extends Authenticatable
         'bloqueado_usuario',
         'activado_usuario',
         'tipo_usuario',
-        'codigo_verificacion',
     ];
 
     protected $hidden = [
         'contrasenia_usuario', // Ocultar la contraseña en las respuestas JSON
-        'codigo_verificacion',
     ];
 
     /**
