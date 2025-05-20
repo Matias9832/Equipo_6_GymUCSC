@@ -61,15 +61,37 @@ class ControlSalasController extends Controller
 
         $qrCode = QrCode::size(300)->generate($urlQR);
 
+        $ingresos = Ingreso::where('id_sala', $sala->id_sala)
+            ->whereNull('hora_salida')
+            ->with(['usuario.alumno', 'usuario.administrador'])
+            ->get();
+
         $usuariosActivos = Ingreso::where('id_sala', $sala->id_sala)
             ->whereNull('hora_salida')
             ->count();
 
+        
+        //contar los usuarios tipo estudiantes y tipo seleccionado.
+        $estudiantes = $ingresos->filter(function ($ingreso) {
+            return $ingreso->usuario->tipo_usuario === 'estudiante';
+        })->count();
+
+        $seleccionados = $ingresos->filter(function ($ingreso) {
+            return $ingreso->usuario->tipo_usuario === 'seleccionado';
+        })->count();
+        $personasConEnfermedad = $ingresos->filter(function ($ingreso) {
+            return $ingreso->usuario &&
+                $ingreso->usuario->salud &&
+                $ingreso->usuario->salud->enfermo_cronico == 1;
+        })->count();
         return view('admin.control_salas.gestion_qr', [
             'qrCode' => $qrCode,
             'desdeQR' => true,
             'aforoPermitido' => $request->aforo_qr,
             'usuariosActivos' => $usuariosActivos,
+            'personasConEnfermedad' => $personasConEnfermedad ,
+            'estudiantes' => $estudiantes,
+            'seleccionados' => $seleccionados,
             'sala' => $sala,
         ]);
     }
@@ -334,6 +356,7 @@ class ControlSalasController extends Controller
             ->whereDate('fecha_ingreso', today())
             ->with(['usuario.alumno', 'usuario.administrador'])
             ->get();
+    
 
         return view('admin.control_salas.ver_usuarios', compact('sala'));
     }
