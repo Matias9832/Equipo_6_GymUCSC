@@ -3,7 +3,8 @@
 @section('title', 'Lista de Alumnos')
 
 @section('argon-bg-header')
-    <div class="argon-bg-header bg-primary"></div>
+    <div class="argon-bg-header" style="background-image: url('https://facultades.ucsc.cl/content/uploads/sites/10/2023/07/Braulio-Quiero-Hernandez.jpg'); background-size:cover; background-position:center;">
+    </div>
 @endsection
 
 @section('content')

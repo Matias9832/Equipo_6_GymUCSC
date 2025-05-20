@@ -29,7 +29,7 @@
     @stack('styles')
 </head>
 <body>
-    @include('layouts.navbars.auth.navbar')
+    @include('layouts.navbars.guest.navbar')
     <div class="auth-content-wrapper">
         @yield('content')
     <script src="{{ asset('argon/js/core/popper.min.js') }}"></script>
