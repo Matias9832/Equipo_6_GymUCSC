@@ -1,6 +1,10 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Lista de Alumnos')
+
+@section('argon-bg-header')
+    <div class="argon-bg-header bg-primary"></div>
+@endsection
 
 @section('content')
 
@@ -28,7 +32,7 @@
         </div>
     @endif
 
-
+    <h1 class="h3">Lista de Alumnos</h1>
     <!-- Formulario para cargar el archivo Excel -->
     <form action="{{ route('alumnos.import') }}" method="POST" enctype="multipart/form-data" class="mb-4">
         @csrf
@@ -46,7 +50,7 @@
         </div>
     </form>
 
-    <h1 class="h3">Lista de Alumnos</h1>
+    
     <table class="table table-striped">
         <thead>
             <tr>

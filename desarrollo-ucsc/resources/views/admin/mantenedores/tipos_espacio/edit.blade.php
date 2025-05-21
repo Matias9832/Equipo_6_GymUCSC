@@ -1,5 +1,5 @@
 <!-- RECORDAR QUE PARA HACER UN UPDATE SE DEBE IMPORTAR UN EXCEL CON LAS TABLAS ORDENADAS CORRECTAMENTE -->
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Editar Tipos de Espacio')
 
