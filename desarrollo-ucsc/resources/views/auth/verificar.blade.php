@@ -45,6 +45,17 @@
 
             <form method="POST" action="{{ route('verificar.codigo') }}">
                 @csrf
+                @if (!session('verificacion_id_usuario'))
+                    <div class="mb-3">
+                        <label for="rut" class="form-label">RUT</label>
+                        <input type="text" name="rut" id="rut" class="form-control"
+                               value="{{ session('rut_verificacion') ?? old('rut') }}"
+                               placeholder="Ingrese su RUT" required>
+                        @error('rut')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                @endif
                 <div class="mb-3">
                     <label for="codigo" class="form-label">Código de Verificación</label>
                     <input type="text" name="codigo" id="codigo" class="form-control" placeholder="Ingrese el código enviado a su correo" required>
