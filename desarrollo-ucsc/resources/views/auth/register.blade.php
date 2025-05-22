@@ -1,74 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-    <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="card shadow p-4" style="width: 100%; max-width: 400px;">
-            <div class="text-center">
-                <!-- Logo -->
-                <img src="{{ asset('images/logo_ucsc.png') }}" alt="Logo UCSC" style="width: 100px;">
-                <h3 class="mt-3 text-danger">Registro de Usuario</h3>
-            </div>
+@extends('layouts.app')
 
-            <!-- Mostrar mensaje de éxito -->
-            @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
+@section('content')
+    @include('layouts.navbars.guest.navbar')
+    <main class="main-content  mt-0">
+        <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg"
+            style="background-image: url('https://ucsc.cl/content/uploads/2023/08/hero-facultad.jpg'); background-position: top;">
+            <span class="mask bg-gradient-dark opacity-6"></span>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-5 text-center mx-auto">
+                        <h1 class="text-white mb-2 mt-5">¡Bienvenido a la comunidad!</h1>
+                        <p class="text-lead text-white">Accede a talleres, torneos y al gimnasio desde un solo lugar.</p>
+                    </div>
                 </div>
-            @endif
-
-            <!-- Mostrar errores generales -->
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('register') }}">
-                @csrf
-                <div class="mb-3">
-                    <label for="rut" class="form-label">RUT</label>
-                    <input type="text" name="rut" id="rut" class="form-control" placeholder="Sin puntos, ni dígito verificador" value="{{ old('rut') }}" required>
-                    @error('rut')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="mb-3">
-                    <label for="correo" class="form-label">Correo Electrónico</label>
-                    <input type="email" name="correo" id="correo" class="form-control" placeholder="Ingrese su correo" value="{{ old('correo') }}" required>
-                    @error('correo')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="mb-3">
-                    <label for="contraseña" class="form-label">Contraseña</label>
-                    <input type="password" name="contraseña" id="contraseña" class="form-control" placeholder="Ingrese su contraseña" required>
-                    @error('contraseña')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="mb-3">
-                    <label for="contraseña_confirmation" class="form-label">Confirmar Contraseña</label>
-                    <input type="password" name="contraseña_confirmation" id="contraseña_confirmation" class="form-control" placeholder="Confirme su contraseña" required>
-                </div>
-                <button type="submit" class="btn btn-danger w-100">Registrarse</button>
-            </form>
-            <div class="text-center mt-3">
-                <a href="{{ route('login') }}" class="text-decoration-none text-danger">¿Ya tienes una cuenta? Inicia sesión</a>
             </div>
         </div>
-    </div>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+        <div class="container">
+            <div class="row mt-lg-n10 mt-md-n11 mt-n10 justify-content-center">
+                <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
+                    <div class="card z-index-0">
+                        <div class="card-header text-center pt-4">
+                            <h5>Registro de Usuario</h5>
+                        </div>
+                        <div class="card-body">
+                            {{-- Mensaje de éxito --}}
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            {{-- Errores generales --}}
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul class="mb-0">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <form method="POST" action="{{ route('register.perform') }}">
+                                @csrf
+                                <div class="flex flex-col mb-3">
+                                    <input type="text" name="rut" class="form-control" placeholder="RUT sin puntos ni dígito verificador" value="{{ old('rut') }}" required>
+                                    @error('rut') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
+                                </div>
+                                <div class="flex flex-col mb-3">
+                                    <input type="email" name="correo" class="form-control" placeholder="Correo electrónico" value="{{ old('correo') }}" required>
+                                    @error('correo') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
+                                </div>
+                                <div class="flex flex-col mb-3">
+                                    <input type="password" name="contraseña" class="form-control" placeholder="Contraseña" required>
+                                    @error('contraseña') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
+                                </div>
+                                <div class="flex flex-col mb-3">
+                                    <input type="password" name="contraseña_confirmation" class="form-control" placeholder="Confirmar contraseña" required>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Registrarse</button>
+                                </div>
+                                <p class="text-sm mt-3 mb-0">¿Ya tienes una cuenta? <a href="{{ route('login') }}"
+                                        class="text-dark font-weight-bolder">Inicia sesión</a></p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    @include('layouts.footers.guest.footer')
+@endsection

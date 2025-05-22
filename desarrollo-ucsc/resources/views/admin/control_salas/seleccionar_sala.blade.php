@@ -1,8 +1,9 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Seleccionar Sala')
 
 @section('content')
+    @include('layouts.navbars.auth.topnav', ['title' => 'Seleccionar Sala'])
     <div class="container">
         <h1 class="mb-1 text-center">Seleccionar Sala y Aforo</h1>
         <h2 class="mb-4 text-center text-secondary">{{ session('nombre_sucursal') }}</h2>

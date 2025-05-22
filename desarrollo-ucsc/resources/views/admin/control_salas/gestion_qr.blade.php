@@ -1,8 +1,12 @@
 @extends('layouts.app')
 
+@section('title', 'Gestor de Qr')
+
 @section('content')
+    @include('layouts.navbars.auth.topnav', ['title' => 'Gestor de QR'])
+
     <div class="container text-center">
-        <h1 class="mb-4">Gestión de QR: {{ $sala->nombre_sala }}</h1> <!-- Aquí se agrega el nombre de la sala -->
+        <h1 class="mb-4">Gestión de QR: {{ $sala->nombre_sala }}</h1>
 
         @if (isset($qrCode))
             <div class="row justify-content-center align-items-center mb-4">

@@ -16,6 +16,8 @@ Repositorio Git para plataforma Web UCSC
     composer require maatwebsite/excel
     composer require simplesoftwareio/simple-qrcode
     composer require spatie/laravel-permission
+    composer require laravel/ui
+    composer require laravel-frontend-presets/argon
     
 ### Hacer:
     php artisan config:clear
@@ -119,7 +121,7 @@ Esto generará automáticamente las rutas necesarias:
 
 ### ejemplo de index.blade.php:
 ```
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Lista de Cursos')
 
@@ -157,7 +159,7 @@ Esto generará automáticamente las rutas necesarias:
 ```
 ### Ejemplo de create.blade.php
 ```
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Crear Curso')
 
@@ -180,7 +182,7 @@ Esto generará automáticamente las rutas necesarias:
 ```
 ### Ejemplo de edit.blade.php
 ```
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title', 'Editar Curso')
 
@@ -238,3 +240,19 @@ resources/views/layouts/admin.blade.php
 ## Paso 5: Probar el CRUD
 
 Cada tabla tiene sus atributos y restricciones distintas que deben hacer seguimiento de errores.
+
+# Cómo Cambiar el Fondo de una página
+## Color específico
+```
+@section('argon-bg-header')
+    <div class="argon-bg-header bg-primary"></div>
+@endsection
+```
+## Imágen
+```
+@section('argon-bg-header')
+    <div class="argon-bg-header" style="background-image: url('URL_AQUI'); background-size:cover; background-position:center;">
+        <span class="mask bg-success opacity-6" style="min-height:300px; display:block;"></span>
+    </div>
+@endsection
+```
