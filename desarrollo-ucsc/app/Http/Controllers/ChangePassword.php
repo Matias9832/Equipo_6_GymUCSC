@@ -13,15 +13,28 @@ class ChangePassword extends Controller
 
     public function __construct()
     {
-        Auth::logout();
-
-        $id = intval(request()->id);
-        $this->user = User::find($id);
+       
     }
 
-    public function show()
+    public function show(Request $request)
     {
-        return view('auth.change-password');
+        // Verifica si el usuario está autenticado
+            if (Auth::check()) {
+                return redirect('home');
+            }
+
+            // Si no está autenticado, continúa con el flujo normal
+        {
+            Auth::logout(); // Ahora está aquí
+            $id = intval($request->id);
+            $user = User::find($id);
+
+            if (!$user) {
+                return abort(404, 'Usuario no encontrado');
+            }
+
+            return view('auth.change-password', ['user' => $user]);
+        }
     }
 
     public function update(Request $request)
