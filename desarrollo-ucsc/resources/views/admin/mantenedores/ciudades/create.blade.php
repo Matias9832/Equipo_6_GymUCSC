@@ -1,25 +1,31 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Ciudad')
+@section('title', 'Crear Deporte')
 
 @section('content')
-    <h1 class="h3">Crear Ciudad</h1>
-    <form action="{{ route('ciudades.store') }}" method="POST">
-        @csrf
-        <div class="mb-3">
-            <label for="id_region" class="form-label">Región</label>
-            <select name="id_region" id="id_region" class="form-control" required>
-                <option value="">Seleccione una región</option>
-                @foreach($regiones as $region)
-                    <option value="{{ $region->id_region }}">{{ $region->nombre_region }}</option>
-                @endforeach
-            </select>
+@include('layouts.navbars.auth.topnav', ['title' => 'Crear Deporte'])
+
+<div class="container-fluid py-4">
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ route('deportes.store') }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <label for="nombre_deporte" class="form-label">Nombre</label>
+                    <input type="text" name="nombre_deporte" id="nombre_deporte" class="form-control" placeholder="Nombre del deporte" required>
+                </div>
+                <div class="mb-3">
+                    <label for="jugadores_por_equipo" class="form-label">Jugadores por Equipo</label>
+                    <input type="number" name="jugadores_por_equipo" id="jugadores_por_equipo" class="form-control" placeholder="Número de jugadores por equipo">
+                </div>
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <textarea name="descripcion" id="descripcion" class="form-control" rows="3" placeholder="Descripción del deporte"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Crear Deporte</button>
+                <a href="{{ route('deportes.index') }}" class="btn btn-secondary">Cancelar</a>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="nombre_ciudad" class="form-label">Nombre</label>
-            <input type="text" name="nombre_ciudad" id="nombre_ciudad" class="form-control" placeholder="Nombre de la ciudad" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Crear Ciudad</button>
-        <a href="{{ route('ciudades.index') }}" class="btn btn-secondary">Cancelar</a>
-    </form>
+    </div>
+</div>
 @endsection

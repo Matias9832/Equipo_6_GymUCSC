@@ -16,6 +16,8 @@ Repositorio Git para plataforma Web UCSC
     composer require maatwebsite/excel
     composer require simplesoftwareio/simple-qrcode
     composer require spatie/laravel-permission
+    composer require laravel/ui
+    composer require laravel-frontend-presets/argon
     
 ### Hacer:
     php artisan config:clear

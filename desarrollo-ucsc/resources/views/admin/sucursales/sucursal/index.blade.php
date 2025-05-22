@@ -1,44 +1,62 @@
 @extends('layouts.app')
 
-@section('title', 'Lista de Sucursales')
+@section('title', 'Sucursales')
 
 @section('content')
-    <h1 class="h3">Lista de Sucursales</h1>
-    <a href="{{ route('sucursales.create') }}" class="btn btn-primary mb-3">Crear Sucursal</a>
+@include('layouts.navbars.auth.topnav', ['title' => 'Sucursales'])
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Dirección</th>
-                <th>Ciudad</th>
-                <th>Región</th>
-                <th>País</th>
-                <th>Marca</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($sucursales as $sucursal)
-                <tr>
-                    <td>{{ $sucursal->nombre_suc }}</td>
-                    <td>{{ $sucursal->direccion_suc }}</td>
-                    <td>{{ $sucursal->ciudad->nombre_ciudad }}</td>
-                    <td>{{ $sucursal->ciudad->region->nombre_region }}</td>
-                    <td>{{ $sucursal->ciudad->region->pais->nombre_pais }}</td>
-                    <td>{{ $sucursal->marca->nombre_marca }}</td>
-                    <td>
-                        <a href="{{ route('sucursales.edit', $sucursal->id_suc) }}" class="btn btn-sm btn-warning" >Editar</a>
-                        <form action="{{ route('sucursales.destroy', $sucursal->id_suc) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm p-1" onclick="return confirm('¿Estás seguro de que quieres eliminar esta sucursal?')">
-                                Eliminar
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+                    <h6>Listado de Sucursales</h6>
+                    <a href="{{ route('sucursales.create') }}" class="btn btn-primary btn-sm">Crear Sucursal</a>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">Nombre</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Dirección</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comuna</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Región</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($sucursales as $sucursal)
+                                    <tr>
+                                        <td class="text-sm ps-3">{{ $sucursal->nombre_suc }}</td>
+                                        <td class="text-sm">{{ $sucursal->direccion_suc }}</td>
+                                        <td class="text-sm">{{ $sucursal->comuna->nombre_comuna ?? 'Sin comuna' }}</td>
+                                        <td class="text-sm">{{ $sucursal->comuna->region->nombre_region ?? 'Sin región' }}</td>
+                                        <td class="text-center">
+                                                <a href="{{ route('sucursales.edit', $sucursal->id_suc) }}" class="text-warning me-2" title="Editar">
+                                                    <i class="ni ni-ruler-pencil"></i>
+                                                </a>
+                                                <form action="{{ route('sucursales.destroy', $sucursal->id_suc) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-link text-danger p-0" onclick="return confirm('¿Estás seguro de que quieres eliminar esta sucursal?')" title="Eliminar">
+                                                        <i class="ni ni-fat-remove"></i>
+                                                    </button>
+                                                </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted py-3">No hay sucursales registradas.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @include('layouts.footers.auth.footer')
+</div>
 @endsection

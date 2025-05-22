@@ -15,7 +15,7 @@ class AlumnoController extends Controller
 {
     public function index()
     {
-        $alumnos = Alumno::all(); // Obtén todos los alumnos
+        $alumnos = Alumno::paginate(20);
         return view('admin.mantenedores.alumnos.index', compact('alumnos'));
     }
 
