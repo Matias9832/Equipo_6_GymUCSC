@@ -3,7 +3,11 @@
 @section('title', 'Editar Usuario')
 
 @section('content')
-    <h1 class="h3">Editar Usuario</h1>
+<div class="card shadow rounded-4 p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 mb-0">Editar Usuario</h2>
+    </div>
+
     <form action="{{ route('usuarios.update', $usuario->id_usuario) }}" method="POST">
         @csrf
         @method('PUT')
@@ -18,8 +22,7 @@
             <input type="email" name="correo_usuario" id="correo_usuario" class="form-control" value="{{ $usuario->correo_usuario }}" required>
         </div>
 
-        <!-- Distinción para tipo de usuario -->
-        @if($usuario->tipo_usuario === 'admin') 
+        @if($usuario->tipo_usuario === 'admin')
             <div class="mb-3">
                 <label for="rol" class="form-label">Rol</label>
                 <select name="rol" id="rol" class="form-control">
@@ -37,7 +40,10 @@
             </div>
         @endif
 
-        <button type="submit" class="btn btn-success">Guardar Cambios</button>
-        <a href="{{ route('usuarios.index') }}" class="btn btn-secondary">Cancelar</a>
+        <div class="d-flex justify-content-end">
+            <a href="{{ route('usuarios.index') }}" class="btn btn-outline-secondary me-2">Cancelar</a>
+            <button type="submit" class="btn btn-success">Guardar Cambios</button>
+        </div>
     </form>
+</div>
 @endsection

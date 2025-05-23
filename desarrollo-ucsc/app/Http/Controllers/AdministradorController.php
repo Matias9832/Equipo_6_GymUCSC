@@ -15,9 +15,10 @@ class AdministradorController extends Controller
 {
     public function index()
     {
+        // Paginar administradores (20 por página), manteniendo relación con sucursales activas
         $administradores = Administrador::with(['sucursales' => function ($query) {
             $query->wherePivot('activa', true);
-        }])->get();
+        }])->paginate(20); 
 
         $usuarios = Usuario::with('roles')->get();
 

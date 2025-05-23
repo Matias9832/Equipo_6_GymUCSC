@@ -60,10 +60,10 @@ return [
     */
 
     'providers' => [
-    'users' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\Usuario::class, // Cambiar a Usuario
-    ],  
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Usuario::class,
+        ],
 
         // 'users' => [
         //     'driver' => 'database',

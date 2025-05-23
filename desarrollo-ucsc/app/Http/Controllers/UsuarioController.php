@@ -12,7 +12,7 @@ class UsuarioController extends Controller
    
     public function index()
     {
-        $usuarios = Usuario::all();
+        $usuarios = Usuario::paginate(20);
         $administradores = Administrador::all(); 
         $alumnos = Alumno::all();
         return view('admin.mantenedores.usuarios.index', compact('usuarios'));

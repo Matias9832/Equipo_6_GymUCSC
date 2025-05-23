@@ -47,7 +47,7 @@ class Usuario extends Authenticatable
 
     public function getIsAdminAttribute()
     {
-        return $this->tipo_usuario === 'admin'; // o el valor que uses para admins
+        return $this->tipo_usuario === 'admin'; 
     }
 
     public function salud()
