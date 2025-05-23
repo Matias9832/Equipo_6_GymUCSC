@@ -3,72 +3,87 @@
 @section('content')
     @include('layouts.navbars.guest.navbar')
     <main class="main-content  mt-0">
-        <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg"
-            style="background-image: url('https://ucsc.cl/content/uploads/2023/08/hero-facultad.jpg'); background-position: top;">
-            <span class="mask bg-gradient-dark opacity-6"></span>
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-5 text-center mx-auto">
-                        <h1 class="text-white mb-2 mt-5">¡Bienvenido a la comunidad!</h1>
-                        <p class="text-lead text-white">Accede a talleres, torneos y al gimnasio desde un solo lugar.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="row mt-lg-n10 mt-md-n11 mt-n10 justify-content-center">
-                <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
-                    <div class="card z-index-0">
-                        <div class="card-header text-center pt-4">
-                            <h5>Registro de Usuario</h5>
+        <section>
+            <div class="page-header min-vh-100">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
+                            <div class="card card-plain">
+                                <div class="card-header pb-0 text-start">
+                                    <h4 class="font-weight-bolder">Registrarse</h4>
+                                    <p class="mb-0">Crea tu cuenta</p>
+                                </div>
+                                <div class="card-body">
+                                    <form role="form" method="POST" action="{{ route('register.perform') }}">
+                                        @csrf
+
+                                        <div class="flex flex-col mb-3">
+                                            <input type="text" name="rut" class="form-control" placeholder="RUT" value="{{ old('rut') }}" required>
+                                            @error('rut') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                        </div>
+                                        <div class="flex flex-col mb-3">
+                                            <input type="email" name="correo" class="form-control" placeholder="Correo" value="{{ old('correo') }}" required>
+                                            @error('correo') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                                        </div>
+                                        <div class="flex flex-col mb-3">
+                                            <div class="input-group">
+                                                <input type="password" name="contraseña" id="register-password" class="form-control" placeholder="Contraseña" required>
+                                                <button type="button" class="btn btn-outline-secondary" tabindex="-1" onclick="togglePassword('register-password', this)">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </div>
+                                            @error('contraseña') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
+                                        </div>
+                                        <div class="flex flex-col mb-3">
+                                            <div class="input-group">
+                                                <input type="password" name="contraseña_confirmation" id="register-password-confirm" class="form-control" placeholder="Confirmar contraseña" required>
+                                                <button type="button" class="btn btn-outline-secondary" tabindex="-1" onclick="togglePassword('register-password-confirm', this)">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Registrarse</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="alert">
+                                    @include('components.alert')
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            {{-- Mensaje de éxito --}}
-                            @if (session('success'))
-                                <div class="alert alert-success">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
-
-                            {{-- Errores generales --}}
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul class="mb-0">
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
-                            <form method="POST" action="{{ route('register.perform') }}">
-                                @csrf
-                                <div class="flex flex-col mb-3">
-                                    <input type="text" name="rut" class="form-control" placeholder="RUT sin puntos ni dígito verificador" value="{{ old('rut') }}" required>
-                                    @error('rut') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
-                                </div>
-                                <div class="flex flex-col mb-3">
-                                    <input type="email" name="correo" class="form-control" placeholder="Correo electrónico" value="{{ old('correo') }}" required>
-                                    @error('correo') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
-                                </div>
-                                <div class="flex flex-col mb-3">
-                                    <input type="password" name="contraseña" class="form-control" placeholder="Contraseña" required>
-                                    @error('contraseña') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
-                                </div>
-                                <div class="flex flex-col mb-3">
-                                    <input type="password" name="contraseña_confirmation" class="form-control" placeholder="Confirmar contraseña" required>
-                                </div>
-                                <div class="text-center">
-                                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Registrarse</button>
-                                </div>
-                                <p class="text-sm mt-3 mb-0">¿Ya tienes una cuenta? <a href="{{ route('login') }}"
-                                        class="text-dark font-weight-bolder">Inicia sesión</a></p>
-                            </form>
+                        <div
+                            class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
+                            <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden"
+                                style="background-image: url('https://sitios.ucsc.cl/dsi/wp-content/uploads/sites/63/2022/08/gestion-institucional-ucsc.jpg');
+              background-size: cover;">
+                                <span class="mask bg-gradient-primary opacity-2"></span>
+                                <h4 class="mt-5 text-white font-weight-bolder position-relative">"Somos comunidad en movimiento"</h4>
+                                <p class="text-white position-relative">Unimos deporte, talleres y gestión en una plataforma pensada para todos.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
     @include('layouts.footers.guest.footer')
 @endsection
+
+@push('js')
+<script>
+function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon = btn.querySelector('i');
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = "password";
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
+@endpush
