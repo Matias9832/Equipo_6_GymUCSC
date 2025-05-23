@@ -55,6 +55,7 @@ class LoginController extends Controller
 
         // Verificar si la cuenta está activa
         if ($usuario->activado_usuario == 0) {
+            session(['rut_verificacion' => $usuario->rut]); // <-- Agregado para pasar el rut a la verificación
             return redirect()->route('verificar.vista')->withErrors([
                 'activado' => 'Tu cuenta no está activa. Verifica tu correo para activarla.',
             ]);
@@ -164,7 +165,4 @@ class LoginController extends Controller
 
         return view('news.index');
     }
-
-
-
 }
