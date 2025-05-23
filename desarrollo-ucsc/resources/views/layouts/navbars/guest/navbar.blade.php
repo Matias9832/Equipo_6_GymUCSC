@@ -45,6 +45,11 @@
                                             </a>
                                         </li>
                                         <li>
+                                            <a class="dropdown-item" href="{{ route('actividad.usuario') }}">
+                                                <i class="bi bi-graph-up"></i> Mi Actividad
+                                            </a>
+                                        </li>
+                                        <li>
                                             <form method="POST" action="{{ route('logout') }}">
                                                 @csrf
                                                 <button type="submit" class="dropdown-item text-danger">

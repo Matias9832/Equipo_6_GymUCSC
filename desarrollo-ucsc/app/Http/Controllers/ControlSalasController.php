@@ -38,7 +38,7 @@ class ControlSalasController extends Controller
             ->whereNull('hora_salida')
             ->count();
 
-        return view('admin.control_salas.gestion_qr', [
+        return view('admin.control-salas.gestion_qr', [
             'qrCode' => $qrCode,
             'desdeQR' => true,
             'aforoPermitido' => $request->aforo,
@@ -84,7 +84,7 @@ class ControlSalasController extends Controller
                 $ingreso->usuario->salud &&
                 $ingreso->usuario->salud->enfermo_cronico == 1;
         })->count();
-        return view('admin.control_salas.gestion_qr', [
+        return view('admin.control-salas.gestion_qr', [
             'qrCode' => $qrCode,
             'desdeQR' => true,
             'aforoPermitido' => $request->aforo_qr,
@@ -274,7 +274,7 @@ class ControlSalasController extends Controller
             ->where('activo', true)
             ->get();
 
-        return view('admin.control_salas.seleccionar_sala', compact('salas', 'salasActivas'));
+        return view('admin.control-salas.seleccionar_sala', compact('salas', 'salasActivas'));
     }
 
     public function cambiarAforo(Request $request)
@@ -358,7 +358,7 @@ class ControlSalasController extends Controller
             ->get();
     
 
-        return view('admin.control_salas.ver_usuarios', compact('sala'));
+        return view('admin.control-salas.ver_usuarios', compact('sala'));
     }
 
 

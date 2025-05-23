@@ -40,7 +40,7 @@
                                 </td>
                                 <td>{{ $ingreso->hora_ingreso }}</td>
                                 <td class="text-center">
-                                    <form action="{{ route('admin.control_salas.sacar_usuario') }}" method="POST"
+                                    <form action="{{ route('admin.control-salas.sacar_usuario') }}" method="POST"
                                         onsubmit="return confirm('¿Seguro que deseas sacar a este usuario?')">
                                         @csrf
                                         <input type="hidden" name="id_ingreso" value="{{ $ingreso->id_ingreso }}">

@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h2 class="mb-4">Mi Actividad</h2>
-    <div id="calendarioActividad"></div>
+    <div id="calendarioActividad" style="min-height: 600px;"></div>
 </div>
 @endsection
 
