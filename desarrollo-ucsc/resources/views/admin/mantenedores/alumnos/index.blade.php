@@ -3,27 +3,6 @@
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Alumnos'])
     <div class="container-fluid py-4">
-        @if(session('warning'))
-            <div class="alert alert-warning">
-                <strong>{{ session('warning') }}</strong>
-                @if(session('import_errors_missing_rut'))
-                    <h5>Errores por RUT faltante:</h5>
-                    <ul>
-                        @foreach (session('import_errors_missing_rut') as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-                @if(session('import_errors_incomplete_data'))
-                    <h5>Errores por datos incompletos:</h5>
-                    <ul>
-                        @foreach (session('import_errors_incomplete_data') as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-            </div>
-        @endif
 
         <div class="row">
             <div class="col-12">
@@ -58,6 +37,27 @@
                                 </label>
                             </div>
                         </form>
+                        @if(session('warning'))
+                            <div class="alert alert-warning">
+                                <strong>{{ session('warning') }}</strong>
+                                @if(session('import_errors_missing_rut'))
+                                    <h5>Errores por RUT faltante:</h5>
+                                    <ul>
+                                        @foreach (session('import_errors_missing_rut') as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                                @if(session('import_errors_incomplete_data'))
+                                    <h5>Errores por datos incompletos:</h5>
+                                    <ul>
+                                        @foreach (session('import_errors_incomplete_data') as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </div>
+                        @endif
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">

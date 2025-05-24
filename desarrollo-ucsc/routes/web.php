@@ -31,6 +31,8 @@ use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\TorneoController;
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\TallerController;
+use App\Http\Controllers\CarreraController;
+
 
 // Página principal
 Route::get('/', function () {
@@ -180,6 +182,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     // Importar alumnos
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
+
+    Route::resource('carreras', CarreraController::class)->only(['index']);
 
     // Gestión de QR
     Route::middleware(['permission:Acceso al Mantenedor de Gestión de QR'])->group(function () {

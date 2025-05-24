@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
+use App\Http\Controllers\CarreraController;
+
 //Manejo de excel
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\AlumnoImport;
@@ -74,6 +76,7 @@ class AlumnoController extends Controller
                 ->with('import_errors_incomplete_data', $errores_datos);
         }
 
+        (new CarreraController)->actualizarCarrerasDesdeAlumnos();
         return redirect()->route('alumnos.index')->with('success', 'Alumnos importados exitosamente.');
     }
 
