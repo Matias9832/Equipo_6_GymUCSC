@@ -26,7 +26,7 @@
                         <h2 class="text-primary">{{ $aforoPermitido }}</h2>
                         <hr>
                         <h6 class="text-muted">Usuarios registrados</h6>
-                        <h1 class="text-danger">{{ $usuariosActivos }}</h1>
+                        <h1 class="text-danger" id="aforo-actual">{{ $usuariosActivos }}</h1>
                     </div>
 
                     <div class="card shadow-sm p-4">
@@ -46,7 +46,82 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- Formulario de ingreso manual con RUT y contraseña --}}
+                <div class="col-md-12 mt-4">
+                    <div class="card shadow-sm p-4">
+                        <h5 class="mb-3 text-center">Registrar ingreso manual</h5>
+                        <form id="form-registro-manual" action="{{ route('registro.manual') }}" method="POST">
+
+                            @csrf
+                            <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
+
+                            <div class="mb-3">
+                                <label for="rut" class="form-label">RUT</label>
+                                <input type="text" name="rut" id="rut" class="form-control" placeholder="12345678-9" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Contraseña</label>
+                                <input type="password" name="password" id="password" class="form-control" required>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Registrar ingreso</button>
+                            </div>
+                        </form>
+
+                        <div id="respuestaIngreso" class="mt-3"></div>
+                    </div>
+                </div>
+
             </div>
         @endif
     </div>
 @endsection
+
+
+
+@section('scripts')
+<script>
+    document.getElementById('form-registro-manual').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+        const idSala = document.getElementById('id_sala').value;
+
+        fetch(`/admin/control-salas/registro-manual`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            const mensajeDiv = document.getElementById('mensaje');
+            mensajeDiv.textContent = data.message;
+            mensajeDiv.style.color = data.success ? 'green' : 'red';
+
+            if (data.success) {
+                actualizarAforo(idSala);
+                form.reset(); // Opcional: limpiar campos si fue exitoso
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    function actualizarAforo(idSala) {
+        fetch(`/admin/control-salas/aforo/${idSala}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('aforo-actual').textContent = data.aforo;
+            });
+}
+</script>
+
+@endsection
+

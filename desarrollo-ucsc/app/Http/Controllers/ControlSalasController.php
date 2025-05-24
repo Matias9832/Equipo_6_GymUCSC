@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Ingreso;
+use App\Models\Usuario;
 use App\Models\Sala;
 use Carbon\Carbon;
 
@@ -361,6 +363,55 @@ class ControlSalasController extends Controller
         return view('admin.control-salas.ver_usuarios', compact('sala'));
     }
 
+    public function registroManual(Request $request)
+    {
+        
+        $request->validate([
+            'rut' => 'required|string',
+            'password' => 'required|string',
+            'id_sala' => 'required|exists:sala,id_sala',
+        ]);
+        
+        // Buscar el usuario por RUT
+        $usuario = Usuario::where('rut', $request->rut)->first();
+        
+        if (!$usuario || !Hash::check($request->password, $usuario->contrasenia_usuario)) {
+            return response()->json(['success' => false, 'message' => 'Credenciales inválidas.']);
+        }
+        
 
+        // Verificar si ya tiene un ingreso activo
+        $yaIngresado = Ingreso::where('id_usuario', $usuario->id_usuario)
+            ->where('id_sala', $request->id_sala)
+            ->whereDate('fecha_ingreso', today())
+            ->whereNull('hora_salida')
+            ->exists();
+
+        if ($yaIngresado) {
+            return response()->json(['success' => false, 'message' => 'Ya hay un ingreso activo para este usuario.']);
+        }
+
+        // Registrar el ingreso
+        Ingreso::create([
+            'id_sala' => $request->id_sala,
+            'id_usuario' => $usuario->id_usuario,
+            'fecha_ingreso' => now()->format('Y-m-d'),
+            'hora_ingreso' => now()->format('H:i:s'),
+            'hora_salida' => null,
+            'tiempo_uso' => null,
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Ingreso registrado exitosamente.']);
+    }
+
+    public function aforo($id_sala)
+    {
+        $aforo = Ingreso::where('id_sala', $id_sala)
+            ->whereDate('fecha_ingreso', today())
+            ->whereNull('hora_salida')
+            ->count();
+
+        return response()->json(['aforo' => $aforo]);
+    }
 
 }
