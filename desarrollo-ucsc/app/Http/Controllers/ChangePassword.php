@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Models\Usuario;
+use App\Models\User;
 
 class ChangePassword extends Controller
 {
@@ -17,7 +16,7 @@ class ChangePassword extends Controller
         Auth::logout();
 
         $id = intval(request()->id);
-        $this->user = Usuario::find($id);
+        $this->user = User::find($id);
     }
 
     public function show()
@@ -33,10 +32,10 @@ class ChangePassword extends Controller
             'confirm-password' => ['same:password']
         ]);
 
-        $existingUser = Usuario::where('correo_usuario', $attributes['email'])->first();
+        $existingUser = User::where('email', $attributes['email'])->first();
         if ($existingUser) {
             $existingUser->update([
-                'contrasenia_usuario' => Hash::make($attributes['password'])
+                'password' => $attributes['password']
             ]);
             return redirect('login');
         } else {
