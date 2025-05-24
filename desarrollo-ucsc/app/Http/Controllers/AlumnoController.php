@@ -6,6 +6,7 @@ use App\Models\Alumno;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 //Manejo de excel
 use Maatwebsite\Excel\Facades\Excel;
@@ -13,17 +14,29 @@ use App\Imports\AlumnoImport;
 
 class AlumnoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $alumnos = Alumno::paginate(20);
+        $query = Alumno::query();
+
+        if ($request->has('ocultar_inactivos') && $request->ocultar_inactivos == 'on') {
+            $query->where('estado_alumno', 'Activo');
+        }
+
+        $alumnos = $query->orderBy('apellido_paterno')->paginate(20);
+
         return view('admin.mantenedores.alumnos.index', compact('alumnos'));
     }
 
+
     public function import(Request $request)
     {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,csv'
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:xlsx,xls,csv',
         ]);
+
+        if ($validator->fails()) {
+            return back()->withInput()->with('error', 'Debes seleccionar un archivo válido para importar.');
+        }
 
         try {
             DB::transaction(function () use ($request) {
@@ -33,14 +46,14 @@ class AlumnoController extends Controller
                 // 2. Importar el archivo
                 Excel::import(new AlumnoImport, $request->file('file'));
 
-                // 3. Bloquear usuarios relacionados a alumnos que no quedaron activos
-                $alumnosInactivos = Alumno::where('estado_alumno', '!=', 'activo')->pluck('rut_alumno');
+                // 3. Obtener RUTs de alumnos activos desde el archivo
+                $alumnosActivos = Alumno::where('estado_alumno', 'Activo')->pluck('rut_alumno');
+
+                // 4. Bloquear usuarios relacionados a alumnos que quedaron inactivos
+                $alumnosInactivos = Alumno::where('estado_alumno', 'Inactivo')->pluck('rut_alumno');
 
                 Usuario::whereIn('rut', $alumnosInactivos)
                     ->update(['bloqueado_usuario' => true]);
-
-                // Desbloquear usuarios relacionados a alumnos activos
-                $alumnosActivos = Alumno::where('estado_alumno', 'activo')->pluck('rut_alumno');
 
                 Usuario::whereIn('rut', $alumnosActivos)
                     ->update(['bloqueado_usuario' => false]);
@@ -50,11 +63,10 @@ class AlumnoController extends Controller
                 ->with('warning', 'Error durante la importación: ' . $e->getMessage());
         }
 
-        // Recuperar errores que se guardaron en la sesión durante la importación
+        // Recuperar errores guardados durante la importación
         $errores_rut = session('import_errors_missing_rut', []);
         $errores_datos = session('import_errors_incomplete_data', []);
 
-        // Si hay errores, redireccionar con advertencias
         if (count($errores_rut) > 0 || count($errores_datos) > 0) {
             return redirect()->route('alumnos.index')
                 ->with('warning', 'Hubo problemas en algunos registros.')
@@ -62,7 +74,7 @@ class AlumnoController extends Controller
                 ->with('import_errors_incomplete_data', $errores_datos);
         }
 
-        // Redirigir con un mensaje de éxito
         return redirect()->route('alumnos.index')->with('success', 'Alumnos importados exitosamente.');
     }
+
 }
