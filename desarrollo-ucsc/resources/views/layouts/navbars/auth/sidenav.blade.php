@@ -125,6 +125,14 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'talleres.index' ? 'active' : '' }}" href="{{ route('talleres.index') }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-trophy text-warning text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">talleres</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'equipos.index' ? 'active' : '' }}" href="{{ route('equipos.index') }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-user-run text-info text-sm opacity-10"></i>
