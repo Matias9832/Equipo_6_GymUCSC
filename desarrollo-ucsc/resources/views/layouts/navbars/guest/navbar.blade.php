@@ -2,12 +2,15 @@
     <div class="row">
         <div class="col-12">
             <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg blur border-radius-lg top-0 z-index-3 shadow mt-4 py-2 mx-4">
+            <nav class="navbar navbar-expand-lg blur border-radius-lg top-0 z-index-3 shadow mt-4 py-2">
                 <div class="container-fluid">
                     <!-- Logos -->
-                    <a class="navbar-brand d-flex align-items-center font-weight-bolder ms-lg-0 ms-3" href="{{ route('welcome') }}">
-                        <img src="{{ asset('img/gym/deportes_logo.png') }}" alt="Logo GYM" style="height: 30px;" class="me-2">
-                        <img src="{{ asset('img/gym/ucsc_logo.png') }}" alt="Logo UCSC" style="height: 30px;" class="me-2">
+                    <a class="navbar-brand d-flex align-items-center font-weight-bolder ms-lg-0 ms-3"
+                        href="{{ route('welcome') }}">
+                        <img src="{{ asset('img/gym/deportes_logo.png') }}" alt="Logo GYM" style="height: 30px;"
+                            class="me-2">
+                        <img src="{{ asset('img/gym/ucsc_logo.png') }}" alt="Logo UCSC" style="height: 30px;"
+                            class="me-2">
                     </a>
                     <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
@@ -22,16 +25,19 @@
                         <ul class="navbar-nav ms-auto align-items-center">
                             @auth
                                 @if(auth()->user()->tipo_usuario === 'admin')
-                                    <li class="nav-item me-2">
-                                        <a href="{{ route('home') }}" class="btn btn-sm mb-0 btn-primary d-flex align-items-center">
+                                    <li class="nav-item me-2" style="width: 176px;">
+                                        <a href="{{ route('home') }}"
+                                            class="btn btn-sm mb-0 btn-primary d-flex align-items-center">
                                             <i class="fa fa-chart-pie opacity-6 text-white me-1"></i>
                                             Panel de control
                                         </a>
                                     </li>
                                 @endif
-                                <li class="nav-item dropdown">
-                                    <a class="btn btn-light btn-sm dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-user-circle me-1"></i> Mi Cuenta
+                                <li class="nav-item me-2 dropdown" style="width: 176px;">
+                                    <a class="btn btn-sm mb-0 btn-light dropdown-toggle d-flex align-items-center justify-content-center w-100" href="#"
+                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
+                                        Mi Cuenta
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
@@ -56,13 +62,15 @@
                                 </li>
                             @else
                                 <li class="nav-item me-2">
-                                    <a href="{{ route('register') }}" class="btn btn-sm mb-0 btn-outline-primary d-flex align-items-center">
+                                    <a href="{{ route('register') }}"
+                                        class="btn btn-sm mb-0 btn-outline-primary d-flex align-items-center">
                                         <i class="fas fa-user-circle opacity-6 text-primary me-1"></i>
                                         Registrarse
                                     </a>
                                 </li>
                                 <li class="nav-item me-2">
-                                    <a href="{{ route('login') }}" class="btn btn-sm mb-0 btn-primary d-flex align-items-center">
+                                    <a href="{{ route('login') }}"
+                                        class="btn btn-sm mb-0 btn-primary d-flex align-items-center">
                                         <i class="fas fa-key opacity-6 text-white me-1"></i>
                                         Iniciar Sesión
                                     </a>
