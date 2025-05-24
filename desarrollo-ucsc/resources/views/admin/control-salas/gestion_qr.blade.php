@@ -32,7 +32,7 @@
                     <div class="card shadow-sm p-4">
                         <div class="d-flex justify-content-around align-items-center gap-4 flex-wrap">
                             <div class="d-flex align-items-center gap-2">
-                                <i class="fas fa-user fs-4 {{ ($personasConEnfermedad ?? 0 ) > 0 ? 'text-info' : 'text-primary' }}"></i>
+                                <i class="fas fa-user fs-4 {{ ($personasConEnfermedad ?? 0 ) > 0 ? 'text-primary' : 'text-success' }}"></i>
                                 <div>
                                     <h4 class="fw-bold text-danger">{{ $estudiantes ?? 0 }}</h4>
                                 </div>
