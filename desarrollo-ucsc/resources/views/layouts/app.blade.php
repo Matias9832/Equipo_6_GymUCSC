@@ -83,6 +83,8 @@
 
     @endpush
     @stack('js')
+    @stack('scripts')
+
 </body>
 
 </html>

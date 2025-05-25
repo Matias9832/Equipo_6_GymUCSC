@@ -46,8 +46,9 @@
                                         </li>
                                         <li>
                                             <a class="dropdown-item" href="{{ route('actividad.usuario') }}">
-                                                <i class="bi bi-graph-up"></i> Mi Actividad
+                                                <i class="fas fa-calendar me-1"></i> Mi Actividad
                                             </a>
+                                            
                                         </li>
                                         <li>
                                             <form method="POST" action="{{ route('logout') }}">

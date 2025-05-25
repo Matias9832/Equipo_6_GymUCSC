@@ -75,7 +75,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Actividades
     Route::get('/mi-actividad', [ActividadController::class, 'actividadUsuario'])->name('actividad.usuario');
-    Route::get('/actividades', [ActividadController::class, 'eventosCalendario']);
+    Route::get('/actividades', [ActividadController::class, 'eventosCalendario'])->name('actividad.eventos');
 
     // Control de salas
     Route::get('/ingreso/registro', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
