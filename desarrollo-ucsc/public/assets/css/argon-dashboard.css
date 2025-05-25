@@ -24794,7 +24794,7 @@ pre[class*=language-] {
 
 .ps--active-x > .ps__rail-x,
 .ps--active-y > .ps__rail-y {
-  display: block;
+  /* display: block; */
   background-color: transparent;
 }
 

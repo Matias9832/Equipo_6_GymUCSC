@@ -117,9 +117,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::middleware(['permission:Acceso al Mantenedor de Tipos de Sanción'])->group(function () {
         Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
     });
-    Route::middleware(['permission:Acceso al Mantenedor de Marcas'])->group(function () {
-        Route::resource('marcas', MarcasController::class);
-    });
+    // Route::middleware(['permission:Acceso al Mantenedor de Marcas'])->group(function () {
+    //     Route::resource('marcas', MarcasController::class);
+    // });
     Route::middleware(['permission:Acceso al Mantenedor de Máquinas'])->group(function () {
         Route::resource('maquinas', MaquinaController::class);
     });
