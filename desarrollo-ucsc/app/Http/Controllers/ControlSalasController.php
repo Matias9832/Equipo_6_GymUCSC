@@ -401,7 +401,7 @@ class ControlSalasController extends Controller
             'tiempo_uso' => null,
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Ingreso registrado exitosamente.']);
+        return redirect()->back()->with('success', 'Ingreso registrado correctamente.');
     }
 
     public function aforo($id_sala)
