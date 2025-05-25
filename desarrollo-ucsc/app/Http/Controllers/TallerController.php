@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Administrador;
 use App\Models\Taller;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,8 @@ class TallerController extends Controller
 
     public function create()
     {
-        return view('admin.mantenedores.talleres.create');
+        $admins = Administrador::all();
+        return view('admin.mantenedores.talleres.create', compact('admins'));
     }
 
     public function store(Request $request)
@@ -25,6 +26,7 @@ class TallerController extends Controller
             'descripcion_taller' => 'required|string',
             'cupos_taller' => 'required|integer|min:1',
             'duracion_taller' => 'required|string|max:50',
+            'id_admin' => 'nullable|exists:administrador,id_admin',
             'activo_taller' => 'boolean',
             'horarios' => 'required|array|min:1',
             'horarios.*.dia' => 'nullable|string|in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo',
@@ -67,7 +69,8 @@ class TallerController extends Controller
     public function edit(Taller $taller)
     {
         $taller->load('horarios');
-        return view('admin.mantenedores.talleres.edit', compact('taller'));
+        $admins = Administrador::all();
+        return view('admin.mantenedores.talleres.edit', compact('taller', 'admins'));
     }
 
     public function update(Request $request, Taller $taller)
@@ -77,6 +80,7 @@ class TallerController extends Controller
             'descripcion_taller' => 'required|string',
             'cupos_taller' => 'required|integer|min:1',
             'duracion_taller' => 'required|string|max:50',
+            'id_admin' => 'nullable|exists:administrador,id_admin',
             'activo_taller' => 'boolean',
             'horarios' => 'required|array|min:1',
             'horarios.*.id' => 'nullable|integer|exists:horarios_talleres,id',

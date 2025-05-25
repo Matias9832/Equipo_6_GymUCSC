@@ -18,11 +18,16 @@ class Taller extends Model
         'cupos_taller',
         'indicaciones_taller',
         'activo_taller',
+        'id_admin',
         'duracion_taller',
     ];
 
     public function horarios()
     {
         return $this->hasMany(HorarioTaller::class, 'id_taller', 'id_taller');
+    }
+    public function administrador()
+    {
+        return $this->belongsTo(Administrador::class, 'id_admin', 'id_admin');
     }
 }

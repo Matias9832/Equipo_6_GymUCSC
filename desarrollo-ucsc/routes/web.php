@@ -154,6 +154,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::resource('talleres', TallerController::class)->parameters([
         'talleres' => 'taller'
     ]);
+    Route::get('admin/asistencia/{taller}/ver', [AsistenciaController::class, 'ver'])->name('asistencia.ver');
+    Route::get('admin/asistencia/{taller}/registrar', [AsistenciaController::class, 'registrar'])->name('asistencia.registrar');
 
     // Usuarios
     Route::middleware(['permission:Ver Usuarios'])->group(function () {

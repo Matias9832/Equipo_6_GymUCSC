@@ -29,6 +29,12 @@
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Horarios</th>
+                                        <th 
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Profesor </th>
+                                        <th 
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Asistencia</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Acciones</th>
@@ -56,6 +62,20 @@
                                                         @endforeach
                                                     </ul>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                @if($taller->administrador)
+                                                    <span class="text-xs">{{ $taller->administrador->nombre_admin }}</span>
+                                                @else
+                                                    <span class="text-muted text-xs">Sin asignar</span>
+                                                @endif
+                                            </td>
+
+                                            <td>
+                                                <div class="d-flex gap-1">
+                                                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-outline-secondary btn-sm">Ver</a>
+                                                    <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-outline-primary btn-sm">Registrar</a>
+                                                </div>
                                             </td>
                                             <td class="align-middle text-center">
                                                 <a href="{{ route('talleres.edit', $taller->id_taller) }}"

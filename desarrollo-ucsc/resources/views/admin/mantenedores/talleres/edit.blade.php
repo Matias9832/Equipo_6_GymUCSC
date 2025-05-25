@@ -41,6 +41,18 @@
                                 @error('duracion_taller') <small class="text-danger">{{ $message }}</small> @enderror
                             </div>
 
+                            <div class="mb-3">
+                                <label for="id_admin" class="form-label">Profesor asignado</label>
+                                <select name="id_admin" id="id_admin" class="form-select">
+                                    <option value="">-- Sin asignar --</option>
+                                    @foreach($admins as $admin)
+                                        <option value="{{ $admin->id_admin }}" {{ old('id_admin', $taller->id_admin) == $admin->id_admin ? 'selected' : '' }}>
+                                            {{ $admin->nombre_admin }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('id_admin') <small class="text-danger">{{ $message }}</small> @enderror
+                            </div>
                             <div class="mb-3 form-check">
                                 <input type="hidden" name="activo_taller" value="0">
                                 <input type="checkbox" name="activo_taller" id="activo_taller" class="form-check-input" 
