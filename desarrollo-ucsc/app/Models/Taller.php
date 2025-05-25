@@ -19,7 +19,6 @@ class Taller extends Model
         'indicaciones_taller',
         'activo_taller',
         'id_admin',
-        'duracion_taller',
     ];
 
     public function horarios()

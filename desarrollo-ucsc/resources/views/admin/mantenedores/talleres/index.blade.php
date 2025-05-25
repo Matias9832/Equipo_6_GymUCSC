@@ -19,9 +19,6 @@
                                             Nombre</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Duración</th>
-                                        <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Cupos</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -45,7 +42,6 @@
                                         <tr>
                                             <td><span class="text-xs font-weight-bold ps-3">{{ $taller->nombre_taller }}</span>
                                             </td>
-                                            <td><span class="text-xs">{{ $taller->duracion_taller }}</span></td>
                                             <td><span class="text-xs">{{ $taller->cupos_taller }}</span></td>
                                             <td>
                                                 <span class="badge bg-{{ $taller->activo_taller ? 'success' : 'secondary' }}">
@@ -58,7 +54,7 @@
                                                 @else
                                                     <ul class="mb-0 ps-3 text-xs">
                                                         @foreach($taller->horarios as $horario)
-                                                            <li>{{ $horario->dia_taller }} - {{ $horario->hora_taller }}</li>
+                                                            <li>{{ $horario->dia_taller }} - {{ $horario->hora_inicio }} a {{ $horario->hora_termino }}</li>
                                                         @endforeach
                                                     </ul>
                                                 @endif

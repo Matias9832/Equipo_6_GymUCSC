@@ -15,7 +15,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('id_taller');
             $table->foreign('id_taller')->references('id_taller')->on('talleres')->onDelete('cascade');
             $table->string('dia_taller', 20);
-            $table->string('hora_taller', 10);
+            $table->time('hora_inicio');
+            $table->time('hora_termino');
             $table->timestamps();
         });
 

@@ -25,19 +25,19 @@ class TallerController extends Controller
             'nombre_taller' => 'required|string|max:100',
             'descripcion_taller' => 'required|string',
             'cupos_taller' => 'required|integer|min:1',
-            'duracion_taller' => 'required|string|max:50',
             'id_admin' => 'nullable|exists:administrador,id_admin',
             'activo_taller' => 'boolean',
             'horarios' => 'required|array|min:1',
             'horarios.*.dia' => 'nullable|string|in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo',
-            'horarios.*.hora' => 'nullable|date_format:H:i',
+            'horarios.*.hora_inicio' => 'nullable|date_format:H:i',
+            'horarios.*.hora_termino' => 'nullable|date_format:H:i|after:horarios.*.hora_inicio',
         ]);
 
-        // Filtrar horarios válidos (con día y hora)
         $horariosValidos = collect($request->horarios)
-            ->filter(fn($h) => !empty($h['dia']) && !empty($h['hora']))
+            ->filter(fn($h) => !empty($h['dia']) && !empty($h['hora_inicio']) && !empty($h['hora_termino']))
             ->values()
             ->all();
+
 
         if (count($horariosValidos) === 0) {
             return back()
@@ -50,7 +50,6 @@ class TallerController extends Controller
             'nombre_taller' => $request->nombre_taller,
             'descripcion_taller' => $request->descripcion_taller,
             'cupos_taller' => $request->cupos_taller,
-            'duracion_taller' => $request->duracion_taller,
             'activo_taller' => $request->activo_taller,
         ]);
 
@@ -58,7 +57,8 @@ class TallerController extends Controller
         foreach ($horariosValidos as $h) {
             $taller->horarios()->create([
                 'dia_taller' => $h['dia'],
-                'hora_taller' => $h['hora'],
+                'hora_inicio' => $h['hora_inicio'],
+                'hora_termino' => $h['hora_termino'],
             ]);
         }
 
@@ -79,25 +79,24 @@ class TallerController extends Controller
             'nombre_taller' => 'required|string|max:100',
             'descripcion_taller' => 'required|string',
             'cupos_taller' => 'required|integer|min:1',
-            'duracion_taller' => 'required|string|max:50',
             'id_admin' => 'nullable|exists:administrador,id_admin',
             'activo_taller' => 'boolean',
             'horarios' => 'required|array|min:1',
             'horarios.*.id' => 'nullable|integer|exists:horarios_talleres,id',
             'horarios.*.dia' => 'nullable|string|in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo',
-            'horarios.*.hora' => 'nullable|date_format:H:i',
+            'horarios.*.hora_inicio' => 'nullable|date_format:H:i',
+            'horarios.*.hora_termino' => 'nullable|date_format:H:i|after:horarios.*.hora_inicio',
         ]);
 
         $taller->update([
             'nombre_taller' => $request->nombre_taller,
             'descripcion_taller' => $request->descripcion_taller,
             'cupos_taller' => $request->cupos_taller,
-            'duracion_taller' => $request->duracion_taller,
             'activo_taller' => $request->activo_taller,
         ]);
 
         $horariosEnviados = collect($request->horarios)
-            ->filter(fn($h) => !empty($h['dia']) && !empty($h['hora']))
+            ->filter(fn($h) => !empty($h['dia']) && !empty($h['hora_inicio']) && !empty($h['hora_termino']))
             ->values();
 
         if ($horariosEnviados->count() === 0) {
@@ -118,19 +117,19 @@ class TallerController extends Controller
 
         foreach ($horariosEnviados as $h) {
             if (!empty($h['id'])) {
-                // Actualizar horario existente
                 $horario = $taller->horarios()->find($h['id']);
                 if ($horario) {
                     $horario->update([
                         'dia_taller' => $h['dia'],
-                        'hora_taller' => $h['hora'],
+                        'hora_inicio' => $h['hora_inicio'],
+                        'hora_termino' => $h['hora_termino'],
                     ]);
                 }
             } else {
-                // Crear nuevo horario
                 $taller->horarios()->create([
                     'dia_taller' => $h['dia'],
-                    'hora_taller' => $h['hora'],
+                    'hora_inicio' => $h['hora_inicio'],
+                    'hora_termino' => $h['hora_termino'],
                 ]);
             }
         }

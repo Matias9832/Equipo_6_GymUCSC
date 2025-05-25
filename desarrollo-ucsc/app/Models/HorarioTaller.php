@@ -14,7 +14,8 @@ class HorarioTaller extends Model
     protected $fillable = [
         'id_taller',
         'dia_taller',
-        'hora_taller',
+        'hora_inicio',
+        'hora_termino',
     ];
 
     public function taller()

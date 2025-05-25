@@ -30,9 +30,9 @@ class ControlSalasController extends Controller
         $sala->save();
 
         $encryptedId = Crypt::encrypt($sala->id_sala);
-        $urlQR = route('sala.registro', ['id_sala' => $encryptedId, 'aforo' => $request->aforo]);
+        $urlQR = route('sala.registro', ['id_sala' => $encryptedId, 'aforo' => $request->aforo]); //Se pone la url de la ruta que se va a generar el QR
 
-        $qrCode = QrCode::size(300)->generate($urlQR);
+        $qrCode = QrCode::size(300)->generate($urlQR); // Generar el código QR
 
         $usuariosActivos = Ingreso::where('id_sala', $sala->id_sala)
             ->whereNull('hora_salida')
@@ -74,7 +74,7 @@ class ControlSalasController extends Controller
         ]);
     }
 
-    public function registroDesdeQR(Request $request)
+    public function registroDesdeQR(Request $request) //Aquí va la lógica del QR
     {
         try {
             $encryptedId = $request->query('id_sala');
