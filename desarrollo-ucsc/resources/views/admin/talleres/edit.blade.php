@@ -11,7 +11,6 @@
                 </div>
                 @if($errors->any())
                     <div class="alert alert-danger">
-                        <strong>Corrige los siguientes errores:</strong>
                         <ul class="mb-0">
                             @foreach($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -142,7 +141,18 @@ document.addEventListener('DOMContentLoaded', function () {
         container.appendChild(row);
         index++;
     });
-
+    document.addEventListener('input', function (e) {
+        if (e.target && e.target.matches('input[name$="[hora_termino]"]')) {
+            const termino = e.target;
+            // Busca el input de hora_inicio en el mismo horario-item
+            const row = termino.closest('.horario-item');
+            const inicio = row.querySelector('input[name$="[hora_inicio]"]');
+            termino.setCustomValidity('');
+            if (termino.value && inicio.value && termino.value <= inicio.value) {
+                termino.setCustomValidity('La hora término debe ser posterior a la hora inicio.');
+            }
+        }
+    });
     document.addEventListener('click', function (e) {
         if (e.target && e.target.classList.contains('remove-horario')) {
             e.target.closest('.horario-item').remove();

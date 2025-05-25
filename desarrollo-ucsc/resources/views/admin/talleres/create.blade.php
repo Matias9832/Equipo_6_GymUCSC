@@ -9,6 +9,15 @@
                     <div class="card-header pb-0">
                         <h6>Crear Taller</h6>
                     </div>
+                    @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <div class="card-body">
                         <form action="{{ route('talleres.store') }}" method="POST">
                             @csrf
@@ -118,6 +127,19 @@
             container.appendChild(clone);
             index++;
         });
+    });
+
+    document.addEventListener('input', function (e) {
+        if (e.target && e.target.matches('input[name$="[hora_termino]"]')) {
+            const termino = e.target;
+            // Busca el input de hora_inicio en el mismo horario-item
+            const row = termino.closest('.horario-item');
+            const inicio = row.querySelector('input[name$="[hora_inicio]"]');
+            termino.setCustomValidity('');
+            if (termino.value && inicio.value && termino.value <= inicio.value) {
+                termino.setCustomValidity('La hora término debe ser posterior a la hora inicio.');
+            }
+        }
     });
     </script>
     @endpush

@@ -11,13 +11,13 @@ class TallerController extends Controller
     public function index()
     {
         $talleres = Taller::with('horarios')->get();
-        return view('admin.mantenedores.talleres.index', compact('talleres'));
+        return view('admin.talleres.index', compact('talleres'));
     }
 
     public function create()
     {
         $admins = Administrador::all();
-        return view('admin.mantenedores.talleres.create', compact('admins'));
+        return view('admin.talleres.create', compact('admins'));
     }
 
     public function store(Request $request)
@@ -29,9 +29,11 @@ class TallerController extends Controller
             'id_admin' => 'nullable|exists:administrador,id_admin',
             'activo_taller' => 'boolean',
             'horarios' => 'required|array|min:1',
-            'horarios.*.dia' => 'nullable|string|in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo',
-            'horarios.*.hora_inicio' => 'nullable|date_format:H:i',
-            'horarios.*.hora_termino' => 'nullable|date_format:H:i|after:horarios.*.hora_inicio',
+            'horarios.*.dia' => 'required|string|in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo',
+            'horarios.*.hora_inicio' => 'required|date_format:H:i',
+            'horarios.*.hora_termino' => 'required|date_format:H:i|after:horarios.*.hora_inicio',
+        ], [
+            'horarios.*.hora_termino.after' => 'La hora término debe ser posterior a la hora inicio.',
         ]);
 
         $horariosValidos = collect($request->horarios)
@@ -72,7 +74,7 @@ class TallerController extends Controller
     {
         $taller->load('horarios');
         $admins = Administrador::all();
-        return view('admin.mantenedores.talleres.edit', compact('taller', 'admins'));
+        return view('admin.talleres.edit', compact('taller', 'admins'));
     }
 
     public function update(Request $request, Taller $taller)
@@ -84,8 +86,9 @@ class TallerController extends Controller
             'id_admin' => 'nullable|exists:administrador,id_admin',
             'activo_taller' => 'boolean',
             'horarios' => 'required|array|min:1',
+        ], [
+            'horarios.*.hora_termino.after' => 'La hora término debe ser posterior a la hora inicio.',
         ]);
-
         // Normalizar formatos de hora (en caso de que vengan con segundos u otro formato)
         $horariosEnviados = collect($request->horarios)->map(function ($h) {
             $h['hora_inicio'] = isset($h['hora_inicio']) ? date('H:i', strtotime($h['hora_inicio'])) : null;
