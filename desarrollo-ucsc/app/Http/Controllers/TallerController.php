@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Administrador;
 use App\Models\Taller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TallerController extends Controller
 {
@@ -83,13 +84,31 @@ class TallerController extends Controller
             'id_admin' => 'nullable|exists:administrador,id_admin',
             'activo_taller' => 'boolean',
             'horarios' => 'required|array|min:1',
-            'horarios.*.id' => 'nullable|integer|exists:horarios_talleres,id',
-            'horarios.*.dia' => 'nullable|string|in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo',
-            'horarios.*.hora_inicio' => 'nullable|date_format:H:i',
-            'horarios.*.hora_termino' => 'nullable|date_format:H:i|after:horarios.*.hora_inicio',
         ]);
 
-        // Actualizar datos del taller
+        // Normalizar formatos de hora (en caso de que vengan con segundos u otro formato)
+        $horariosEnviados = collect($request->horarios)->map(function ($h) {
+            $h['hora_inicio'] = isset($h['hora_inicio']) ? date('H:i', strtotime($h['hora_inicio'])) : null;
+            $h['hora_termino'] = isset($h['hora_termino']) ? date('H:i', strtotime($h['hora_termino'])) : null;
+            return $h;
+        });
+
+        // Validar cada horario manualmente
+        foreach ($horariosEnviados as $i => $h) {
+            if (!empty($h['dia']) || !empty($h['hora_inicio']) || !empty($h['hora_termino'])) {
+                Validator::make($h, [
+                    'dia' => 'required|string|in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo',
+                    'hora_inicio' => 'required|date_format:H:i',
+                    'hora_termino' => 'required|date_format:H:i|after:hora_inicio',
+                ], [], [
+                    "dia" => "día",
+                    "hora_inicio" => "hora inicio",
+                    "hora_termino" => "hora término"
+                ])->validate();
+            }
+        }
+
+        // Actualizar taller
         $taller->update([
             'nombre_taller' => $request->nombre_taller,
             'descripcion_taller' => $request->descripcion_taller,
@@ -98,24 +117,13 @@ class TallerController extends Controller
             'id_admin' => $request->id_admin,
         ]);
 
-        // Filtrar horarios válidos
-        $horariosEnviados = collect($request->horarios)
-            ->filter(fn($h) => !empty($h['dia']) && !empty($h['hora_inicio']) && !empty($h['hora_termino']))
-            ->values();
-
-        if ($horariosEnviados->count() === 0) {
-            return back()
-                ->withErrors(['horarios' => 'Debes ingresar al menos un horario con día y hora'])
-                ->withInput();
-        }
-
-        // Cargar horarios existentes del taller
+        // Cargar horarios actuales
         $taller->load('horarios');
 
-        $idsEnviados = $horariosEnviados->pluck('id')->filter()->all(); // IDs de los que se mantienen
-        $idsActuales = $taller->horarios->pluck('id')->all(); // IDs actuales
+        $idsEnviados = $horariosEnviados->pluck('id')->filter()->all();
+        $idsActuales = $taller->horarios->pluck('id')->all();
 
-        // Eliminar los que ya no están
+        // Eliminar horarios eliminados
         $idsParaEliminar = array_diff($idsActuales, $idsEnviados);
         if (count($idsParaEliminar)) {
             $taller->horarios()->whereIn('id', $idsParaEliminar)->delete();

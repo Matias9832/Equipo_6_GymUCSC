@@ -9,7 +9,26 @@
                 <div class="card-header pb-0">
                     <h6>Editar Taller</h6>
                 </div>
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <strong>Corrige los siguientes errores:</strong>
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="card-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form action="{{ route('talleres.update', $taller) }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -95,47 +114,49 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    let index = {{ $taller->horarios->count() }};
+    let index = {{ $taller->horarios->count() ?? 0 }};
+    const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
+    // Añadir nuevo horario
     document.getElementById('agregar-horario').addEventListener('click', function () {
         const container = document.getElementById('horarios-container');
-        const original = container.querySelector('.horario-item');
-        const clone = original.cloneNode(true);
 
-        // Limpiar valores
-        clone.querySelectorAll('input, select').forEach(input => {
-            if (input.type === 'hidden' || input.name.includes('[id]')) {
-                input.remove(); // eliminar input oculto de ID si lo tiene
-            } else {
-                input.value = '';
-            }
+        const row = document.createElement('div');
+        row.classList.add('row', 'mb-2', 'horario-item');
+
+        let selectDia = `<select name="horarios[${index}][dia]" class="form-select" required>
+                            <option value="">-- Día --</option>`;
+        dias.forEach(dia => {
+            selectDia += `<option value="${dia}">${dia}</option>`;
         });
+        selectDia += `</select>`;
 
-        // Reasignar nombres con el nuevo índice
-        clone.querySelectorAll('select, input').forEach(input => {
-            input.name = input.name.replace(/\[\d+\]/, `[${index}]`);
-        });
+        row.innerHTML = `
+            <div class="col-md-3">${selectDia}</div>
+            <div class="col-md-3">
+                <input type="time" name="horarios[${index}][hora_inicio]" class="form-control" required>
+            </div>
+            <div class="col-md-3">
+                <input type="time" name="horarios[${index}][hora_termino]" class="form-control" required>
+            </div>
+            <div class="col-md-3 d-flex align-items-center">
+                <button type="button" class="btn btn-danger btn-sm remove-horario">Eliminar</button>
+            </div>
+        `;
 
-        // Mostrar botón eliminar si estaba oculto
-        clone.querySelector('.remove-horario')?.classList.remove('d-none');
-
-        // Agregar evento eliminar
-        clone.querySelector('.remove-horario')?.addEventListener('click', function () {
-            clone.remove();
-        });
-
-        container.appendChild(clone);
+        container.appendChild(row);
         index++;
     });
 
-    // Delegación para botones ya existentes
-    document.querySelectorAll('.remove-horario').forEach(btn => {
-        btn.addEventListener('click', function () {
-            btn.closest('.horario-item').remove();
-        });
+    // Eliminar horario dinámicamente
+    document.addEventListener('click', function (e) {
+        if (e.target && e.target.classList.contains('remove-horario')) {
+            e.target.closest('.horario-item').remove();
+        }
     });
 });
 </script>
 @endpush
+
 
 @endsection
