@@ -146,6 +146,7 @@ class TallerController extends Controller
 
 
 
+
     public function destroy(Taller $taller)
     {
         $taller->delete();

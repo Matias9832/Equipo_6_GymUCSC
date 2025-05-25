@@ -80,7 +80,6 @@
 
                         <button type="button" class="btn btn-secondary btn-sm mt-2" id="agregar-horario">+ Añadir Horario</button>
 
-                        {{-- Botones finales --}}
                         <div class="mt-3">
                             <button type="submit" class="btn btn-primary">Actualizar</button>
                             <a href="{{ route('talleres.index') }}" class="btn btn-link">Cancelar</a>
@@ -95,40 +94,48 @@
 
 @push('scripts')
 <script>
+document.addEventListener('DOMContentLoaded', function () {
     let index = {{ $taller->horarios->count() }};
 
     document.getElementById('agregar-horario').addEventListener('click', function () {
         const container = document.getElementById('horarios-container');
-        const template = `
-            <div class="row mb-2 horario-item">
-                <div class="col-md-3">
-                    <select name="horarios[${index}][dia]" class="form-select" required>
-                        <option value="">-- Día --</option>
-                        @foreach($diasSemana as $dia)
-                            <option value="{{ $dia }}">{{ $dia }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <input type="time" name="horarios[${index}][hora_inicio]" class="form-control" required>
-                </div>
-                <div class="col-md-3">
-                    <input type="time" name="horarios[${index}][hora_termino]" class="form-control" required>
-                </div>
-                <div class="col-md-3 d-flex align-items-center">
-                    <button type="button" class="btn btn-danger btn-sm remove-horario">Eliminar</button>
-                </div>
-            </div>
-        `;
-        container.insertAdjacentHTML('beforeend', template);
+        const original = container.querySelector('.horario-item');
+        const clone = original.cloneNode(true);
+
+        // Limpiar valores
+        clone.querySelectorAll('input, select').forEach(input => {
+            if (input.type === 'hidden' || input.name.includes('[id]')) {
+                input.remove(); // eliminar input oculto de ID si lo tiene
+            } else {
+                input.value = '';
+            }
+        });
+
+        // Reasignar nombres con el nuevo índice
+        clone.querySelectorAll('select, input').forEach(input => {
+            input.name = input.name.replace(/\[\d+\]/, `[${index}]`);
+        });
+
+        // Mostrar botón eliminar si estaba oculto
+        clone.querySelector('.remove-horario')?.classList.remove('d-none');
+
+        // Agregar evento eliminar
+        clone.querySelector('.remove-horario')?.addEventListener('click', function () {
+            clone.remove();
+        });
+
+        container.appendChild(clone);
         index++;
     });
 
-    document.addEventListener('click', function (e) {
-        if (e.target && e.target.classList.contains('remove-horario')) {
-            e.target.closest('.horario-item').remove();
-        }
+    // Delegación para botones ya existentes
+    document.querySelectorAll('.remove-horario').forEach(btn => {
+        btn.addEventListener('click', function () {
+            btn.closest('.horario-item').remove();
+        });
     });
+});
 </script>
 @endpush
+
 @endsection
