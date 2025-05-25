@@ -1,6 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('content')
+     @include('layouts.navbars.guest.navbar')
 
     @if(session('mensaje'))
         <div class="alert alert-success mt-3">
@@ -58,5 +59,6 @@
             </div>
         </div>
     </div>
+    @include('layouts.footers.guest.footer')
 
 @endsection
