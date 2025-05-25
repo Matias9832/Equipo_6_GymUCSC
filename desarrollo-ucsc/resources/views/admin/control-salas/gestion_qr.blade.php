@@ -58,7 +58,7 @@
 
                             <div class="mb-3">
                                 <label for="rut" class="form-label">RUT</label>
-                                <input type="text" name="rut" id="rut" class="form-control" placeholder="12345678-9" required>
+                                <input type="text" name="rut" id="rut" class="form-control" placeholder="Sin puntos ni dígito verificador" required>
                             </div>
 
                             <div class="mb-3">
