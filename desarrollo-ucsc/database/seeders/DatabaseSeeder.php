@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
 
         //Seeder de los Administradores
         $this->call(AdministradorSeeder::class);
-        
+
         //Seeder marcas
         $this->call(MarcaSeeder::class);
 
@@ -40,5 +40,9 @@ class DatabaseSeeder extends Seeder
         //Seeder de las Sedes
         $this->call(SalaSeeder::class);
         $this->call(TipoSeeder::class);
+
+        $this->call([
+            TallerSeeder::class,
+        ]);
     }
 }

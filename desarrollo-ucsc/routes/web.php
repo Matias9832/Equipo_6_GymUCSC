@@ -30,6 +30,9 @@ use App\Http\Controllers\SaludController;
 use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\TorneoController;
 use App\Http\Controllers\ActividadController;
+use App\Http\Controllers\TallerController;
+use App\Http\Controllers\CarreraController;
+
 
 // Página principal
 Route::get('/', function () {
@@ -49,7 +52,8 @@ Route::get('/verificar', [RegisterController::class, 'verificarVista'])->name('v
 Route::post('/verificar', [RegisterController::class, 'verificarCodigo'])->name('verificar.codigo');
 
 // Rutas de autenticación (manteniendo las originales)
-Route::get('/dashboard', function () {return redirect('/dashboard');})->middleware('auth');
+Route::get('/dashboard', function () {
+    return redirect('/dashboard'); })->middleware('auth');
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
 Route::get('/login', [LoginController::class, 'create'])->middleware('guest')->name('login');
@@ -86,7 +90,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/mi-perfil', [LoginController::class, 'editProfile'])->name('mi-perfil.edit');
     Route::post('/mi-perfil', [LoginController::class, 'updateProfile'])->name('mi-perfil.update');
 
-	// Rutas originales
+    // Rutas originales
     Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
     Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile-static', [PageController::class, 'profile'])->name('profile-static');
@@ -147,6 +151,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::middleware(['permission:Acceso al Mantenedor de Torneos'])->group(function () {
         Route::resource('torneos', TorneoController::class);
     });
+    Route::resource('talleres', TallerController::class)->parameters([
+        'talleres' => 'taller'
+    ]);
 
     // Usuarios
     Route::middleware(['permission:Ver Usuarios'])->group(function () {
@@ -175,6 +182,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     // Importar alumnos
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
+
+    Route::resource('carreras', CarreraController::class)->only(['index']);
 
     // Gestión de QR
     Route::middleware(['permission:Acceso al Mantenedor de Gestión de QR'])->group(function () {
