@@ -51,6 +51,7 @@ class TallerController extends Controller
             'descripcion_taller' => $request->descripcion_taller,
             'cupos_taller' => $request->cupos_taller,
             'activo_taller' => $request->activo_taller,
+            'id_admin' => $request->id_admin,
         ]);
 
         // Crear horarios
@@ -88,13 +89,16 @@ class TallerController extends Controller
             'horarios.*.hora_termino' => 'nullable|date_format:H:i|after:horarios.*.hora_inicio',
         ]);
 
+        // Actualizar datos del taller
         $taller->update([
             'nombre_taller' => $request->nombre_taller,
             'descripcion_taller' => $request->descripcion_taller,
             'cupos_taller' => $request->cupos_taller,
             'activo_taller' => $request->activo_taller,
+            'id_admin' => $request->id_admin,
         ]);
 
+        // Filtrar horarios válidos
         $horariosEnviados = collect($request->horarios)
             ->filter(fn($h) => !empty($h['dia']) && !empty($h['hora_inicio']) && !empty($h['hora_termino']))
             ->values();
@@ -105,19 +109,22 @@ class TallerController extends Controller
                 ->withInput();
         }
 
-        // Actualizar, crear o eliminar horarios
-        $idsEnviados = $horariosEnviados->pluck('id')->filter()->all(); // ids existentes enviados
-        $idsActuales = $taller->horarios()->pluck('id')->all();
+        // Cargar horarios existentes del taller
+        $taller->load('horarios');
 
-        // Borrar horarios que no se enviaron
+        $idsEnviados = $horariosEnviados->pluck('id')->filter()->all(); // IDs de los que se mantienen
+        $idsActuales = $taller->horarios->pluck('id')->all(); // IDs actuales
+
+        // Eliminar los que ya no están
         $idsParaEliminar = array_diff($idsActuales, $idsEnviados);
         if (count($idsParaEliminar)) {
             $taller->horarios()->whereIn('id', $idsParaEliminar)->delete();
         }
 
+        // Crear o actualizar horarios
         foreach ($horariosEnviados as $h) {
             if (!empty($h['id'])) {
-                $horario = $taller->horarios()->find($h['id']);
+                $horario = $taller->horarios->firstWhere('id', $h['id']);
                 if ($horario) {
                     $horario->update([
                         'dia_taller' => $h['dia'],
@@ -136,6 +143,7 @@ class TallerController extends Controller
 
         return redirect()->route('talleres.index')->with('success', 'Taller actualizado correctamente');
     }
+
 
 
     public function destroy(Taller $taller)

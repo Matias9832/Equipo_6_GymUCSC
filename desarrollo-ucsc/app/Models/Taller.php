@@ -27,6 +27,7 @@ class Taller extends Model
     }
     public function administrador()
     {
-        return $this->belongsTo(Administrador::class, 'id_admin', 'id_admin');
+        return $this->belongsTo(Administrador::class, 'id_admin');
     }
+
 }
