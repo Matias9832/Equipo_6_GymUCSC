@@ -53,8 +53,18 @@
                                                     <span class="text-xs text-muted">Sin horarios</span>
                                                 @else
                                                     <ul class="mb-0 ps-3 text-xs">
-                                                        @foreach($taller->horarios as $horario)
-                                                            <li>{{ $horario->dia_taller }} - {{ $horario->hora_inicio }} a {{ $horario->hora_termino }}</li>
+                                                        <!-- Orden de horarios -->
+                                                        @php 
+                                                            $diasSemanaOrdenados = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                                                            $horariosOrdenados = $taller->horarios->sortBy(function($h) use ($diasSemanaOrdenados) {
+                                                                return array_search($h->dia_taller, $diasSemanaOrdenados);
+                                                            });
+                                                        @endphp
+
+                                                        @foreach ($horariosOrdenados as $horario)
+                                                            <div>
+                                                                {{ $horario->dia_taller }}: {{ $horario->hora_inicio }} - {{ $horario->hora_termino }}
+                                                            </div>
                                                         @endforeach
                                                     </ul>
                                                 @endif

@@ -20,15 +20,6 @@
                     </div>
                 @endif
                 <div class="card-body">
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul class="mb-0">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
                     <form action="{{ route('talleres.update', $taller) }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -70,10 +61,15 @@
                         <hr>
                         <h6>Horarios</h6>
 
-                        @php $diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']; @endphp
+                        @php
+                            $diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                            $horariosOrdenados = $taller->horarios->sortBy(function($h) use ($diasSemana) {
+                                return array_search($h->dia_taller, $diasSemana);
+                            })->values();
+                        @endphp
 
                         <div id="horarios-container">
-                            @foreach($taller->horarios as $i => $horario)
+                            @foreach($horariosOrdenados as $i => $horario)
                                 <div class="row mb-2 horario-item">
                                     <input type="hidden" name="horarios[{{ $i }}][id]" value="{{ $horario->id }}">
                                     <div class="col-md-3">
@@ -85,10 +81,10 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="time" name="horarios[{{ $i }}][hora_inicio]" class="form-control" value="{{ $horario->hora_inicio }}" required>
+                                        <input type="time" name="horarios[{{ $i }}][hora_inicio]" class="form-control" value="{{ \Carbon\Carbon::parse($horario->hora_inicio)->format('H:i') }}" required>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="time" name="horarios[{{ $i }}][hora_termino]" class="form-control" value="{{ $horario->hora_termino }}" required>
+                                        <input type="time" name="horarios[{{ $i }}][hora_termino]" class="form-control" value="{{ \Carbon\Carbon::parse($horario->hora_termino)->format('H:i') }}" required>
                                     </div>
                                     <div class="col-md-3 d-flex align-items-center">
                                         <button type="button" class="btn btn-danger btn-sm remove-horario">Eliminar</button>
@@ -117,7 +113,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let index = {{ $taller->horarios->count() ?? 0 }};
     const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-    // Añadir nuevo horario
     document.getElementById('agregar-horario').addEventListener('click', function () {
         const container = document.getElementById('horarios-container');
 
@@ -148,7 +143,6 @@ document.addEventListener('DOMContentLoaded', function () {
         index++;
     });
 
-    // Eliminar horario dinámicamente
     document.addEventListener('click', function (e) {
         if (e.target && e.target.classList.contains('remove-horario')) {
             e.target.closest('.horario-item').remove();
@@ -157,6 +151,5 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 @endpush
-
 
 @endsection
