@@ -87,9 +87,7 @@
     @endguest
 
     @auth
-        @if (in_array(request()->route()->getName(), ['login', 'register', 'mi-perfil.edit', 'recover-password']))
-            @yield('content')
-        @else
+        @if (!in_array(request()->route()->getName(), ['login', 'register', 'mi-perfil.edit', 'recover-password']))
             @if (!in_array(request()->route()->getName(), ['profile', 'profile-static']))
                 <div class="min-height-300 bg-primary position-absolute w-100"></div>
             @elseif (in_array(request()->route()->getName(), ['profile-static', 'profile']))
@@ -98,23 +96,20 @@
                     <span class="mask bg-primary opacity-6"></span>
                 </div>
             @endif
-            @include('layouts.navbars.auth.sidenav')
-            <main class="main-content border-radius-lg">
-                @yield('content')
-            </main>
+
+            <div class="g-sidenav-show g-sidenav-pinned">
+                @include('layouts.navbars.auth.sidenav')
+
+                <main class="main-content border-radius-lg">
+                    @yield('content')
+                </main>
+            </div>
+        @else
+            @yield('content')
         @endif
-
-        <div class="g-sidenav-show g-sidenav-pinned">
-            @include('layouts.navbars.auth.sidenav')
-
-            <main class="main-content border-radius-lg">
-                @yield('content')
-            </main>
-        </div>
-    @endif
 @endauth
 
-@push('js')
+    @push('js')
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>

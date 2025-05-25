@@ -404,14 +404,6 @@ class ControlSalasController extends Controller
         return redirect()->back()->with('success', 'Ingreso registrado correctamente.');
     }
 
-    public function aforo($id_sala)
-    {
-        $aforo = Ingreso::where('id_sala', $id_sala)
-            ->whereDate('fecha_ingreso', today())
-            ->whereNull('hora_salida')
-            ->count();
-
-        return response()->json(['aforo' => $aforo]);
-    }
+   
 
 }
