@@ -95,6 +95,10 @@ MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=gymucsc@gmail.com
 MAIL_FROM_NAME=UCSC
 
+# Colores de la universidad
+ #D12421 Rojo de la universidad
+ #646567 Negro de la universidad
+  
 # Cómo Cambiar el Fondo de una página
 ## Color específico
 ```
