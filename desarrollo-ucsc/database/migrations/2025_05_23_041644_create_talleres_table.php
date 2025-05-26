@@ -18,7 +18,9 @@ return new class extends Migration {
             $table->text('indicaciones_taller')->nullable();
             $table->boolean('activo_taller')->default(true);
             $table->unsignedBigInteger('id_admin')->nullable();
+            $table->unsignedBigInteger('id_espacio')->nullable(); 
             $table->foreign('id_admin')->references('id_admin')->on('administrador')->nullOnDelete();
+            $table->foreign('id_espacio')->references('id_espacio')->on('espacio')->nullOnDelete();
             $table->timestamps();
         });
     }

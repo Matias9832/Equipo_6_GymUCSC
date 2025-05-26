@@ -19,6 +19,7 @@ class Taller extends Model
         'indicaciones_taller',
         'activo_taller',
         'id_admin',
+        'id_espacio',
     ];
 
     public function horarios()
@@ -29,5 +30,8 @@ class Taller extends Model
     {
         return $this->belongsTo(Administrador::class, 'id_admin');
     }
-
+    public function espacio()
+    {
+        return $this->belongsTo(Espacio::class, 'id_espacio');
+    }
 }

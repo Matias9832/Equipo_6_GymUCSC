@@ -20,15 +20,13 @@ class AsistenciaTallerController extends Controller
             ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
             ->select(
                 'usuario.rut',
-                'usuario.correo_usuario',
                 DB::raw("CONCAT_WS(' ', alumno.nombre_alumno, alumno.apellido_paterno, alumno.apellido_materno) as nombre"),
                 'alumno.carrera',
                 'alumno.sexo_alumno',
-                'fecha_asistencia'
+                'taller_usuario.fecha_asistencia'
             )
             ->where('taller_usuario.id_taller', $taller->id_taller)
-            ->whereDate('fecha_asistencia', $fecha)
-            ->orderBy('fecha_asistencia', 'desc')
+            ->orderBy('taller_usuario.fecha_asistencia', 'desc')
             ->get();
 
         return view('admin.talleres.asistencia.ver', compact('taller', 'asistencias', 'fecha'));
