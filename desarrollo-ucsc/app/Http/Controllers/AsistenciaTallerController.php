@@ -19,7 +19,7 @@ class AsistenciaTallerController extends Controller
             ->join('usuario', 'usuario.id_usuario', '=', 'taller_usuario.id_usuario')
             ->where('id_taller', $taller->id_taller)
             ->whereDate('fecha_asistencia', $fecha)
-            ->select('usuario.rut', 'usuario.correo_usuario', 'fecha_asistencia')
+            ->select('usuario.rut', 'usuario.correo_usuario', 'usuario.nombre_usuario as nombre', 'fecha_asistencia') // Debo agregar carrera y genero
             ->get();
 
         return view('admin.talleres.asistencia.ver', compact('taller', 'asistencias', 'fecha'));
@@ -38,6 +38,9 @@ class AsistenciaTallerController extends Controller
         $request->validate([
             'id_usuario' => 'required|exists:usuario,id_usuario',
             'fecha_asistencia' => 'required|date',
+        ], [
+            'id_usuario.required' => 'Debes seleccionar un usuario.',
+            'fecha_asistencia.required' => 'La fecha de asistencia es obligatoria.',
         ]);
 
         // Validar que la fecha coincide con un día válido del taller

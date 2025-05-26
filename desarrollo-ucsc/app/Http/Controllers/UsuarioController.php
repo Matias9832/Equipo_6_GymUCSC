@@ -49,7 +49,7 @@ class UsuarioController extends Controller
             'tipo_usuario' => 'admin',
             'bloqueado_usuario' => 0,
             'activado_usuario' => 1,
-            'contrasenia_usuario' => '123456', // Shevi saca esto después y lo reemplaza por la función de generar contraseña aleatoria
+            'contrasenia_usuario' => '123456',
         ]);
         $usuario->assignRole($request->rol);
 
