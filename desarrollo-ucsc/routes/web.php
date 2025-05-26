@@ -31,6 +31,8 @@ use App\Http\Controllers\EquipoController;
 use App\Http\Controllers\TorneoController;
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\TallerController;
+use App\Http\Controllers\EjercicioController;
+use App\Http\Controllers\RutinaController;
 
 // Página principal
 Route::get('/', function () {
@@ -152,6 +154,19 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::resource('talleres', TallerController::class)->parameters([
         'talleres' => 'taller'
     ]);
+     // Rutas para Ejercicios
+     //Route::middleware(['permission:Acceso al Mantenedor de Ejercicios'])->group(function () {
+        Route::resource('ejercicios', EjercicioController::class)->parameters([
+            'ejercicios' => 'ejercicio',
+        ]);
+    //});
+
+    // Rutas para Rutinas
+    //Route::middleware(['permission:Acceso al Mantenedor de Rutinas'])->group(function () {
+        Route::resource('rutinas', RutinaController::class)->parameters([
+            'rutinas' => 'rutina',
+        ]);
+    //});
 
     // Usuarios
     Route::middleware(['permission:Ver Usuarios'])->group(function () {
@@ -194,5 +209,5 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     // Eliminar imagen de noticia
     Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
-});
 
+});
