@@ -64,7 +64,7 @@
                             <div class="mb-3">
                                 <label for="id_espacio" class="form-label">Espacio</label>
                                 <select name="id_espacio" id="id_espacio" class="form-select">
-                                    <option value="">-- Seleccionar Espacio --</option>
+                                    <option value="">-- Sin asignar --</option>
                                     @foreach($espacios as $espacio)
                                         <option value="{{ $espacio->id_espacio }}" {{ old('id_espacio') == $espacio->id_espacio ? 'selected' : '' }}>
                                             {{ $espacio->nombre_espacio }}

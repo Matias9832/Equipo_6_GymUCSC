@@ -79,7 +79,7 @@ class TallerController extends Controller
         $taller->load('horarios');
         $admins = Administrador::all();
         $espacios = Espacio::all();
-        return view('admin.talleres.edit', compact('taller', 'admins'));
+        return view('admin.talleres.edit', compact('taller', 'admins','espacios'));
     }
 
     public function update(Request $request, Taller $taller)
