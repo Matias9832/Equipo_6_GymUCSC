@@ -13,9 +13,10 @@
             <div class="col-lg-6">
                 <ul class="nav nav-footer justify-content-center justify-content-lg-end">
                     <li class="nav-item">
-                        <a href="https://www.creative-tim.com" class="nav-link text-primary" target="_blank">Deportes UCSC</a>
+                        <a href="" class="nav-link text-primary" target="_blank" disabled>Deportes UCSC</a>
+                        <!-- <a href="https://www.creative-tim.com" class="nav-link text-primary" target="_blank">Deportes UCSC</a> -->
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a href="https://www.creative-tim.com/presentation" class="nav-link text-muted" target="_blank">Sobre nosotros</a>
                     </li>
                     <li class="nav-item">
@@ -24,7 +25,7 @@
                     <li class="nav-item">
                         <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-muted"
                             target="_blank">Licencia</a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>

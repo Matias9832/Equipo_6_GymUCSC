@@ -26,15 +26,16 @@
     <!-- Se pretende cambiar la fuente a travez de una variable (Cambio por aplicar) -->
 </head>
 @stack('scripts')
-<body class="g-sidenav-show g-sidenav-pinned {{ $class ?? '' }}">
+
+<body class="{{ $class ?? '' }}">
 
 
-    <!-- Toastr de mensajes -->
+@if (!in_array(request()->route()->getName(), ['verificar.vista', 'reset-password', 'login']))
     @if(session('success') || session('update') || session('delete'))
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
             <div id="toastSuccess" class="toast align-items-center text-white 
-                        {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
-                        border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+                                {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
+                                border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body text-center w-100">
                         {{ session('success') ?? session('update') ?? session('delete') }}
@@ -78,13 +79,15 @@
             });
         </script>
     @endif
+@endif
+
 
     @guest
         @yield('content')
     @endguest
 
     @auth
-        @if (in_array(request()->route()->getName(), ['login', 'register', 'mi-perfil.edit', 'recover-password']))
+        @if (in_array(request()->route()->getName(), ['login', 'register', 'mi-perfil.edit', 'recover-password', 'salud.edit', 'salud.create']))
             @yield('content')
         @else
             @if (!in_array(request()->route()->getName(), ['profile', 'profile-static']))
