@@ -26,6 +26,9 @@
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Horarios</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Espacio</th>    
                                         <th 
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Profesor </th>
@@ -35,6 +38,7 @@
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Acciones</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -68,6 +72,9 @@
                                                         @endforeach
                                                     </ul>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                <span class="text-xs">{{ $taller->espacio->nombre_espacio ?? 'Sin asignar' }}</span>
                                             </td>
                                             <td>
                                                 @if($taller->administrador)
