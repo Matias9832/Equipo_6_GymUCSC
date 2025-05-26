@@ -28,7 +28,9 @@ class AsistenciaTallerController extends Controller
     // Mostrar formulario para registrar asistencia manual
     public function registrar(Request $request, Taller $taller)
     {
-        $usuarios = Usuario::all();
+        $usuarios = Usuario::where('tipo_usuario', '!=', 'admin') // Excluir administradores
+            ->with('alumno')
+            ->get();
         return view('admin.talleres.asistencia.registrar', compact('taller', 'usuarios'));
     }
 

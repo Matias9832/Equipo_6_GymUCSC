@@ -52,8 +52,12 @@
                         <select name="id_usuario" id="id_usuario" class="form-select">
                             <option value="">Selecciona un usuario</option>
                             @foreach($usuarios as $usuario)
+                                @php
+                                    $alumno = $usuario->alumno;
+                                    $nombreCompleto = $alumno ? "{$alumno->nombre_alumno} {$alumno->apellido_paterno} {$alumno->apellido_materno}" : 'Nombre no disponible';
+                                @endphp
                                 <option value="{{ $usuario->id_usuario }}" {{ old('id_usuario') == $usuario->id_usuario ? 'selected' : '' }}>
-                                    {{ $usuario->rut }} - {{ $usuario->nombre_usuario ?? '' }}
+                                    {{ $usuario->rut }} - {{ $nombreCompleto }}
                                 </option>
                             @endforeach
                         </select>
