@@ -75,7 +75,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'control-salas.seleccionar' ? 'active' : '' }}" href="{{ route('control-salas.seleccionar') }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-planet text-dark text-sm opacity-10"></i>
+                        <i class="fas fa-qrcode text-dark text-sm"></i>
                     </div>
                     <span class="nav-link-text ms-1">Gestión de QR</span>
                 </a>
@@ -83,7 +83,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'talleres.index' ? 'active' : '' }}" href="{{ route('talleres.index') }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-trophy text-warning text-sm opacity-10"></i>
+                        <i class="ni ni-briefcase-24 text-warning text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Talleres</span>
                 </a>
@@ -155,7 +155,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'deportes.index' ? 'active' : '' }}" href="{{ route('deportes.index') }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-trophy text-warning text-sm opacity-10"></i>
+                        <i class="fas fa-futbol text-dark text-sm"></i>
                     </div>
                     <span class="nav-link-text ms-1">Deportes</span>
                 </a>
@@ -171,7 +171,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'torneos.index' ? 'active' : '' }}" href="{{ route('torneos.index') }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-basket text-success text-sm opacity-10"></i>
+                        <i class="ni ni-trophy text-success text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Torneos</span>
                 </a>
