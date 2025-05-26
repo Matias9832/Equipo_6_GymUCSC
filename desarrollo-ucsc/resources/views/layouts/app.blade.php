@@ -26,7 +26,7 @@
     <!-- Se pretende cambiar la fuente a travez de una variable (Cambio por aplicar) -->
 </head>
 @stack('scripts')
-<body class="g-sidenav-show g-sidenav-pinned {{ $class ?? '' }}">
+<body class="{{ $class ?? '' }}">
 
 
     <!-- Toastr de mensajes -->
@@ -84,7 +84,7 @@
     @endguest
 
     @auth
-        @if (in_array(request()->route()->getName(), ['login', 'register', 'mi-perfil.edit', 'recover-password']))
+        @if (in_array(request()->route()->getName(), ['login', 'register', 'mi-perfil.edit', 'recover-password','salud.edit']))
             @yield('content')
         @else
             @if (!in_array(request()->route()->getName(), ['profile', 'profile-static']))
