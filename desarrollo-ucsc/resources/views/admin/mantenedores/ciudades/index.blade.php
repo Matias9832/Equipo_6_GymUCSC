@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Ciudades'])
@@ -15,10 +15,17 @@
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Región</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">País</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Acciones</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Nombre</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Región</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            País</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -34,13 +41,19 @@
                                                 <span class="text-xs">{{ $ciudad->region->pais->nombre_pais }}</span>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <a href="{{ route('ciudades.edit', $ciudad->id_ciudad) }}" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">
+                                                <a href="{{ route('ciudades.edit', $ciudad->id_ciudad) }}"
+                                                    class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip"
+                                                    title="Editar">
                                                     <i class="ni ni-ruler-pencil text-info"></i>
                                                 </a>
-                                                <form action="{{ route('ciudades.destroy', $ciudad->id_ciudad) }}" method="POST" class="d-inline">
+                                                <form action="{{ route('ciudades.destroy', $ciudad->id_ciudad) }}" method="POST"
+                                                    class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm('¿Estás seguro de que quieres eliminar esta ciudad?')" title="Eliminar">
+                                                    <button type="submit"
+                                                        class="btn btn-link text-danger p-0 m-0 align-baseline"
+                                                        onclick="return confirm('¿Estás seguro de que quieres eliminar esta ciudad?')"
+                                                        title="Eliminar">
                                                         <i class="ni ni-fat-remove"></i>
                                                     </button>
                                                 </form>
@@ -54,6 +67,9 @@
                                     No hay ciudades registradas.
                                 </div>
                             @endif
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $ciudades->links('pagination::bootstrap-4') }}
+                            </div>
                         </div>
                     </div>
                 </div>

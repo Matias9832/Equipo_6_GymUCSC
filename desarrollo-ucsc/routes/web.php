@@ -33,6 +33,9 @@ use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\TallerController;
 use App\Http\Controllers\EjercicioController;
 use App\Http\Controllers\RutinaController;
+use App\Http\Controllers\CarreraController;
+use App\Http\Controllers\AsistenciaTallerController;
+
 
 // Página principal
 Route::get('/', function () {
@@ -79,7 +82,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Actividades
     Route::get('/mi-actividad', [ActividadController::class, 'actividadUsuario'])->name('actividad.usuario');
-    Route::get('/actividades', [ActividadController::class, 'eventosCalendario']);
+    Route::get('/actividades', [ActividadController::class, 'eventosCalendario'])->name('actividad.eventos');
 
     // Control de salas
     Route::get('/ingreso/registro', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
@@ -117,9 +120,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::middleware(['permission:Acceso al Mantenedor de Tipos de Sanción'])->group(function () {
         Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
     });
-    Route::middleware(['permission:Acceso al Mantenedor de Marcas'])->group(function () {
-        Route::resource('marcas', MarcasController::class);
-    });
+    // Route::middleware(['permission:Acceso al Mantenedor de Marcas'])->group(function () {
+    //     Route::resource('marcas', MarcasController::class);
+    // });
     Route::middleware(['permission:Acceso al Mantenedor de Máquinas'])->group(function () {
         Route::resource('maquinas', MaquinaController::class);
     });
@@ -167,6 +170,18 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
             'rutinas' => 'rutina',
         ]);
     //});
+    // Mostrar formulario para registrar asistencia
+    Route::get('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'registrar'])
+        ->name('asistencia.registrar');
+
+    // Procesar el formulario de registro de asistencia
+    Route::post('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'guardarRegistro'])
+        ->name('asistencia.guardar');
+
+    // Ver asistencia por taller
+    Route::get('admin/talleres/{taller}/asistencia/ver', [AsistenciaTallerController::class, 'ver'])
+        ->name('asistencia.ver');
+
 
     // Usuarios
     Route::middleware(['permission:Ver Usuarios'])->group(function () {
@@ -196,15 +211,19 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Importar alumnos
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
 
+    Route::resource('carreras', CarreraController::class)->only(['index']);
+
     // Gestión de QR
     Route::middleware(['permission:Acceso al Mantenedor de Gestión de QR'])->group(function () {
         Route::get('/control-salas/seleccionar', [ControlSalasController::class, 'seleccionarSala'])->name('control-salas.seleccionar');
         Route::post('/control-salas/generar-qr', [ControlSalasController::class, 'generarQR'])->name('control-salas.generarQR');
         Route::get('control-salas/ver-qr', [ControlSalasController::class, 'verQR'])->name('control-salas.verQR');
-        Route::post('/control-salas/cambiar-aforo', [ControlSalasController::class, 'cambiarAforo'])->name('control_salas.cambiar_aforo');
-        Route::post('control-salas/cerrar-sala', [ControlSalasController::class, 'cerrarSala'])->name('admin.control_salas.cerrar_sala');
-        Route::post('/control-salas/sacar-usuario', [ControlSalasController::class, 'sacarUsuario'])->name('admin.control_salas.sacar_usuario');
-        Route::get('control-salas/ver-usuarios/{id_sala}', [ControlSalasController::class, 'verUsuarios'])->name('admin.control_salas.ver_usuarios');
+        Route::post('/control-salas/registro-manual', [ControlSalasController::class, 'registroManual'])->name('registro.manual');
+        Route::post('/salida-manual', [ControlSalasController::class, 'salidaManual'])->name('salida.manual');
+        Route::post('/control-salas/cambiar-aforo', [ControlSalasController::class, 'cambiarAforo'])->name('control-salas.cambiar_aforo');
+        Route::post('control-salas/cerrar-sala', [ControlSalasController::class, 'cerrarSala'])->name('admin.control-salas.cerrar_sala');
+        Route::post('/control-salas/sacar-usuario', [ControlSalasController::class, 'sacarUsuario'])->name('admin.control-salas.sacar_usuario');
+        Route::get('control-salas/ver-usuarios/{id_sala}', [ControlSalasController::class, 'verUsuarios'])->name('admin.control-salas.ver_usuarios');
     });
 
     // Eliminar imagen de noticia

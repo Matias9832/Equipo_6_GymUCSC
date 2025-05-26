@@ -9,14 +9,21 @@ use Illuminate\Http\Request;
 
 class UsuarioController extends Controller
 {
-   
-    public function index()
+    public function index(Request $request)
     {
-        $usuarios = Usuario::paginate(20);
-        $administradores = Administrador::all(); 
+        $query = Usuario::query();
+
+        if ($request->has('solo_admins') && $request->solo_admins === 'on') {
+            $query->where('tipo_usuario', '!=', 'admin');
+        }
+
+        $usuarios = $query->paginate(20);
+        $administradores = Administrador::all();
         $alumnos = Alumno::all();
+
         return view('admin.mantenedores.usuarios.index', compact('usuarios'));
     }
+
 
     public function create()
     {
@@ -42,16 +49,16 @@ class UsuarioController extends Controller
             'tipo_usuario' => 'admin',
             'bloqueado_usuario' => 0,
             'activado_usuario' => 1,
-            'contrasenia_usuario' => '123456', // Shevi saca esto después y lo reemplaza por la función de generar contraseña aleatoria
+            'contrasenia_usuario' => '123456',
         ]);
         $usuario->assignRole($request->rol);
 
-            // Crear el administrador
-            Administrador::create([
-                'rut_admin' => $request->rut,
-                'nombre_admin' => $request->nombre_admin,
-                'fecha_creacion' => now(),
-            ]);
+        // Crear el administrador
+        Administrador::create([
+            'rut_admin' => $request->rut,
+            'nombre_admin' => $request->nombre_admin,
+            'fecha_creacion' => now(),
+        ]);
         return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente.');
     }
 

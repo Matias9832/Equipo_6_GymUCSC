@@ -30,5 +30,9 @@ class Administrador extends Model
         return $this->belongsToMany(Sucursal::class, 'admin_sucursal', 'id_admin', 'id_suc')
                     ->withPivot('activa');
     }
+    public function talleres()
+    {
+        return $this->hasMany(Taller::class, 'id_admin', 'id_admin');
+    }
 
 }

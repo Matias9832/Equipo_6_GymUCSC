@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->integer('cupos_taller');
             $table->text('indicaciones_taller')->nullable();
             $table->boolean('activo_taller')->default(true);
-            $table->string('duracion_taller', 50);
             $table->unsignedBigInteger('id_admin')->nullable();
             $table->foreign('id_admin')->references('id_admin')->on('administrador')->nullOnDelete();
             $table->timestamps();

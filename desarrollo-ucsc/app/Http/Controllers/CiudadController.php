@@ -10,13 +10,13 @@ class CiudadController extends Controller
 {
     public function index()
     {
-        $ciudades = Ciudad::with('region')->get(); // Obtener ciudades con su región asociada
+        $ciudades = Ciudad::with('region.pais')->paginate(15);
         return view('admin.mantenedores.ciudades.index', compact('ciudades'));
     }
 
     public function create()
     {
-        $regiones = Region::all(); // Obtener todas las regiones
+        $regiones = Region::all();
         return view('admin.mantenedores.ciudades.create', compact('regiones'));
     }
 

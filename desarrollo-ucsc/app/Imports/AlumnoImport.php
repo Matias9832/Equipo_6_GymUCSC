@@ -18,13 +18,14 @@ class AlumnoImport implements OnEachRow, WithHeadingRow, WithEvents
         $actualHeaders = $sheet->rangeToArray('A1:F1')[0];
 
         $expectedHeaders = [
-            'rut_alumno',
-            'apellido_paterno',
-            'apellido_materno',
-            'nombre_alumno',
-            'carrera',
-            'estado_alumno'
+            'rut',
+            'carr_descripcion',
+            'paterno',
+            'materno',
+            'nombres',
+            'sexo'
         ];
+
 
         foreach ($expectedHeaders as $index => $expected) {
             if (!isset($actualHeaders[$index]) || strtolower(trim($actualHeaders[$index])) !== $expected) {
@@ -45,41 +46,39 @@ class AlumnoImport implements OnEachRow, WithHeadingRow, WithEvents
         $fila = $row->getIndex();
 
         // Validaciones
-        if (empty($data['rut_alumno'])) {
+        if (empty($data['rut'])) {
             session()->push('import_errors_missing_rut', "Fila {$fila}: Falta el RUT del alumno.");
             return;
         }
 
         if (
-            empty($data['apellido_paterno']) ||
-            empty($data['apellido_materno']) ||
-            empty($data['nombre_alumno']) ||
-            empty($data['carrera']) ||
-            empty($data['estado_alumno'])
+            empty($data['paterno']) ||
+            empty($data['materno']) ||
+            empty($data['nombres']) ||
+            empty($data['carr_descripcion']) ||
+            empty($data['sexo'])
         ) {
-            session()->push('import_errors_incomplete_data', "RUT '{$data['rut_alumno']}': Datos incompletos.");
+            session()->push('import_errors_incomplete_data', "RUT '{$data['rut']}': Datos incompletos.");
             return;
         }
 
-        $alumno = Alumno::find($data['rut_alumno']);
+        $alumno = Alumno::find($data['rut']);
+
+        $datos = [
+            'apellido_paterno' => $data['paterno'],
+            'apellido_materno' => $data['materno'],
+            'nombre_alumno' => $data['nombres'],
+            'carrera' => $data['carr_descripcion'],
+            'sexo_alumno' => strtoupper(trim($data['sexo'])),
+            'estado_alumno' => 'Activo',
+        ];
 
         if ($alumno) {
-            $alumno->update([
-                'apellido_paterno' => $data['apellido_paterno'],
-                'apellido_materno' => $data['apellido_materno'],
-                'nombre_alumno' => $data['nombre_alumno'],
-                'carrera' => $data['carrera'],
-                'estado_alumno' => $data['estado_alumno'],
-            ]);
+            $alumno->update($datos);
         } else {
-            Alumno::create([
-                'rut_alumno' => $data['rut_alumno'],
-                'apellido_paterno' => $data['apellido_paterno'],
-                'apellido_materno' => $data['apellido_materno'],
-                'nombre_alumno' => $data['nombre_alumno'],
-                'carrera' => $data['carrera'],
-                'estado_alumno' => $data['estado_alumno'],
-            ]);
+            $datos['rut_alumno'] = $data['rut'];
+            Alumno::create($datos);
         }
     }
+
 }

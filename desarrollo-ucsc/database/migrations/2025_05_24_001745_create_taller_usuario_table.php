@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->foreign('id_usuario')->references('id_usuario')->on('usuario')->onDelete('cascade');
             $table->foreign('id_taller')->references('id_taller')->on('talleres')->onDelete('cascade');
 
-            $table->date('fecha_asistencia'); // Solo día, sin hora
+            $table->date('fecha_asistencia'); //Solo día, sin hora
 
             $table->timestamps();
 

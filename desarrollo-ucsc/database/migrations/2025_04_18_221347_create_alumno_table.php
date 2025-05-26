@@ -15,11 +15,12 @@ return new class extends Migration
             $table->string('rut_alumno');
             $table->primary('rut_alumno');
 
-            $apellido_paterno = $table->string('apellido_paterno');
-            $apellido_materno = $table->string('apellido_materno');
+            $table->string('apellido_paterno');
+            $table->string('apellido_materno');
             $table->string('nombre_alumno');
             $table->string('carrera');
             $table->string('estado_alumno');
+            $table->string('sexo_alumno')->nullable();
             
             $table->timestamps();
         });

@@ -3,60 +3,86 @@
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Alumnos'])
     <div class="container-fluid py-4">
-        @if(session('warning'))
-            <div class="alert alert-warning">
-                <strong>{{ session('warning') }}</strong>
-                @if(session('import_errors_missing_rut'))
-                    <h5>Errores por RUT faltante:</h5>
-                    <ul>
-                        @foreach (session('import_errors_missing_rut') as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-                @if(session('import_errors_incomplete_data'))
-                    <h5>Errores por datos incompletos:</h5>
-                    <ul>
-                        @foreach (session('import_errors_incomplete_data') as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                @endif
-            </div>
-        @endif
 
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4">
-                    <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                        <h6>Lista de Alumnos</h6>
-                    </div>
-                    <div class="card-body px-0 pt-0 pb-2">
-                        <!-- Formulario para cargar el archivo Excel -->
-                        <form action="{{ route('alumnos.import') }}" method="POST" enctype="multipart/form-data" class="mb-4 px-4">
-                            @csrf
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="file" class="form-label">Seleccionar archivo Excel</label>
-                                    <input type="file" name="file" id="file" class="form-control @error('file') is-invalid @enderror">
-                                    @error('file')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6 d-flex align-items-end">
-                                    <button type="submit" class="btn btn-primary mt-4">Importar Alumnos</button>
-                                </div>
+                    <div class="card-header pb-0">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="mb-0">Lista de Alumnos</h6>
+                            </div>
+                            <div class="col-auto d-flex align-items-center">
+                                <form action="{{ route('alumnos.import') }}" method="POST" enctype="multipart/form-data"
+                                    class="d-flex align-items-center gap-2">
+                                    @csrf
+                                    <div>
+                                        <input type="file" name="file" id="file"
+                                            class="btn form-control form-control-sm @error('file') is-invalid @enderror">
+                                        @error('file')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <button type="submit" class="btn btn-sm btn-primary">Importar</button>
+                                </form>
+                            </div>
+                        </div>
+                        <form method="GET" action="{{ route('alumnos.index') }}" id="filtroForm" class="mb-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="ocultar_inactivos"
+                                    id="ocultarInactivos" {{ request('ocultar_inactivos') ? 'checked' : '' }}
+                                    onchange="document.getElementById('filtroForm').submit();">
+                                <label class="form-check-label" for="ocultarInactivos">
+                                    {{ request('ocultar_inactivos') ? 'Ocultar Inactivos' : 'Ocultar Inactivos' }}
+                                </label>
                             </div>
                         </form>
+                        @if(session('warning'))
+                            <div class="alert alert-warning">
+                                <strong>{{ session('warning') }}</strong>
+                                @if(session('import_errors_missing_rut'))
+                                    <h5>Errores por RUT faltante:</h5>
+                                    <ul>
+                                        @foreach (session('import_errors_missing_rut') as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                                @if(session('import_errors_incomplete_data'))
+                                    <h5>Errores por datos incompletos:</h5>
+                                    <ul>
+                                        @foreach (session('import_errors_incomplete_data') as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </div>
+                        @endif
+                    </div>
+                    <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">
                             <table class="table align-items-center mb-0">
+                                @php use Illuminate\Support\Str; @endphp
+
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUT</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Apellidos</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nombre</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Carrera</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Estado</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUT
+                                        </th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Apellidos</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Nombre</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Carrera</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Sexo</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Estado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -70,27 +96,40 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $alumno->apellido_paterno }} {{ $alumno->apellido_materno }}</p>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $alumno->apellido_paterno }}
+                                                    {{ $alumno->apellido_materno }}
+                                                </p>
                                             </td>
                                             <td>
                                                 <p class="text-xs font-weight-bold mb-0">{{ $alumno->nombre_alumno }}</p>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $alumno->carrera }}</p>
+                                                <p class="text-xs font-weight-bold mb-0" title="{{ $alumno->carrera }}">
+                                                    {{ Str::limit($alumno->carrera, 40, '...') }}
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    class="badge badge-sm border {{ $alumno->sexo_alumno === 'M' ? 'bg-gradient-blue' : 'bg-gradient-pink' }}"
+                                                    style="width: 35px;">
+                                                    {{ $alumno->sexo_alumno }}
+                                                </span>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <span class="badge badge-sm {{ $alumno->estado_alumno == 'Activo' ? 'bg-gradient-success' : 'bg-gradient-secondary' }}">
+                                                <span
+                                                    class="badge badge-sm {{ $alumno->estado_alumno == 'Activo' ? 'bg-gradient-success' : 'bg-gradient-secondary' }}">
                                                     {{ $alumno->estado_alumno }}
                                                 </span>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
-                                </table>
-                                {{-- Paginación --}}
-                                <div class="d-flex justify-content-center mt-3">
-                                    {{ $alumnos->links('pagination::bootstrap-4') }}
-                                </div>
+
+                            </table>
+                            {{-- Paginación --}}
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $alumnos->links('pagination::bootstrap-4') }}
+                            </div>
                             @if($alumnos->isEmpty())
                                 <div class="text-center text-muted py-4">
                                     No hay alumnos registrados.

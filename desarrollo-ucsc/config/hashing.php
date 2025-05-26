@@ -14,7 +14,7 @@ return [
     | Supported: "bcrypt", "argon", "argon2id"
     |
     */
-
+    'default' => 'argon2id',
     'driver' => 'bcrypt',
 
     /*

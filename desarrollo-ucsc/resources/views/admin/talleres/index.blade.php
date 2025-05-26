@@ -19,9 +19,6 @@
                                             Nombre</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Duración</th>
-                                        <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Cupos</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -29,6 +26,12 @@
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Horarios</th>
+                                        <th 
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Profesor </th>
+                                        <th 
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Asistencia</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Acciones</th>
@@ -39,7 +42,6 @@
                                         <tr>
                                             <td><span class="text-xs font-weight-bold ps-3">{{ $taller->nombre_taller }}</span>
                                             </td>
-                                            <td><span class="text-xs">{{ $taller->duracion_taller }}</span></td>
                                             <td><span class="text-xs">{{ $taller->cupos_taller }}</span></td>
                                             <td>
                                                 <span class="badge bg-{{ $taller->activo_taller ? 'success' : 'secondary' }}">
@@ -51,11 +53,39 @@
                                                     <span class="text-xs text-muted">Sin horarios</span>
                                                 @else
                                                     <ul class="mb-0 ps-3 text-xs">
-                                                        @foreach($taller->horarios as $horario)
-                                                            <li>{{ $horario->dia_taller }} - {{ $horario->hora_taller }}</li>
+                                                        <!-- Orden de horarios -->
+                                                        @php 
+                                                            $diasSemanaOrdenados = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                                                            $horariosOrdenados = $taller->horarios->sortBy(function($h) use ($diasSemanaOrdenados) {
+                                                                return array_search($h->dia_taller, $diasSemanaOrdenados);
+                                                            });
+                                                        @endphp
+
+                                                        @foreach ($horariosOrdenados as $horario)
+                                                            <div>
+                                                                {{ $horario->dia_taller }}: {{ $horario->hora_inicio }} - {{ $horario->hora_termino }}
+                                                            </div>
                                                         @endforeach
                                                     </ul>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                @if($taller->administrador)
+                                                    <span class="text-xs">{{ $taller->administrador->nombre_admin }}</span>
+                                                @else
+                                                    <span class="text-muted text-xs">Sin asignar</span>
+                                                @endif
+                                            </td>
+
+                                            <td>
+                                                <div class="d-flex gap-1">
+                                                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-sm btn-outline-secondary">
+                                                        <i class="fas fa-eye me-1"></i> Ver
+                                                    </a>
+                                                    <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-edit me-1"></i> Registrar
+                                                    </a>
+                                                </div>
                                             </td>
                                             <td class="align-middle text-center">
                                                 <a href="{{ route('talleres.edit', $taller->id_taller) }}"

@@ -19,12 +19,11 @@ class TallerSeeder extends Seeder
         'cupos_taller' => 20,
         'indicaciones_taller' => 'Traer esterilla.',
         'activo_taller' => true,
-        'duracion_taller' => '1h',
     ]);
 
     $taller->horarios()->createMany([
-        ['dia_taller' => 'Martes', 'hora_taller' => '11:00'],
-        ['dia_taller' => 'Jueves', 'hora_taller' => '12:00'],
+        ['dia_taller' => 'Martes', 'hora_inicio' => '11:00', 'hora_termino' => '12:00'],
+        ['dia_taller' => 'Jueves', 'hora_inicio' => '11:00', 'hora_termino' => '13:00'],
     ]);
 }
 

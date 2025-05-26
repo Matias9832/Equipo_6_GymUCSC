@@ -75,7 +75,8 @@
 
 body {
   margin: 0;
-  font-family: var(--bs-body-font-family);
+  /* font-family: var(--bs-body-font-family); */
+  font-family: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
   line-height: var(--bs-body-line-height);
@@ -4029,14 +4030,7 @@ textarea.form-control-lg {
   white-space: nowrap;
 }
 .dropdown-toggle::after {
-  display: inline-block;
-  margin-left: 0.255em;
-  vertical-align: 0.255em;
-  content: "";
-  border-top: 0.3em solid;
-  border-right: 0.3em solid transparent;
-  border-bottom: 0;
-  border-left: 0.3em solid transparent;
+  display: none !important;
 }
 .dropdown-toggle:empty::after {
   margin-left: 0;
@@ -19976,6 +19970,7 @@ textarea.form-control-lg {
 .dropdown .dropdown-menu.dropdown-menu-end:before {
   right: 28px;
   left: auto;
+  display: none !important;
 }
 .dropdown.dropdown-subitem:hover .dropdown-item + .dropdown-menu:before {
   left: -8px;
@@ -20228,7 +20223,7 @@ textarea.form-control-lg {
 .form-check:not(.form-switch) .form-check-input[type=checkbox]:after {
   transition: opacity 0.25s ease-in-out;
   font-family: "FontAwesome";
-  content: "\f00c";
+  content: "✓";
   width: 100%;
   height: 100%;
   color: #fff;
@@ -20374,6 +20369,14 @@ label,
 
 .bg-gradient-dark {
   background-image: linear-gradient(310deg, #212229 0%, #212529 100%);
+}
+
+.bg-gradient-blue {
+  background-image: linear-gradient(310deg, #007bff 0%, #0056b3 100%);
+}
+
+.bg-gradient-pink {
+  background-image: linear-gradient(310deg, #ff69b4 0%, #e83e8c 100%);
 }
 
 .bg-gradient-faded-primary {
@@ -21032,9 +21035,9 @@ hr.horizontal.gray-light {
 }
 
 @media (min-width: 992px) {
-  :not(.main-content) .navbar .dropdown .dropdown-menu {
+  /* :not(.main-content) .navbar .dropdown .dropdown-menu {
     top: 2.25rem !important;
-  }
+  } */
   :not(.main-content) .navbar .dropdown .dropdown-menu .dropdown .dropdown-menu {
     top: 0 !important;
   }
@@ -24791,7 +24794,7 @@ pre[class*=language-] {
 
 .ps--active-x > .ps__rail-x,
 .ps--active-y > .ps__rail-y {
-  display: block;
+  /* display: block; */
   background-color: transparent;
 }
 

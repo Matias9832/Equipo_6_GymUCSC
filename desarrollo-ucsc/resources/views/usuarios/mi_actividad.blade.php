@@ -1,10 +1,15 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('content')
-<div class="container">
-    <h2 class="mb-4">Mi Actividad</h2>
-    <div id="calendarioActividad"></div>
-</div>
+    @include('layouts.navbars.guest.navbar')
+    <main class="main-content mt-0">
+        <div class="container py-4 ">
+            <h2 class="mb-4">Mi Actividad</h2>
+            <div id="calendarioActividad" style="min-height: 600px;" class="card shadow-sm p-4"></div>
+        </div>
+    </main>    
+    @include('layouts.footers.guest.footer')
+
 @endsection
 
 @push('scripts')
