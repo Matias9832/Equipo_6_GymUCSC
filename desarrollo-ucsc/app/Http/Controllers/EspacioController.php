@@ -12,7 +12,9 @@ class EspacioController extends Controller
     {
         $sucursalActiva = session('sucursal_activa');
 
-        $espacios = Espacio::with(['tipo'])->where('id_suc', $sucursalActiva)->get();
+        $espacios = Espacio::with(['tipo'])
+            ->where('id_suc', $sucursalActiva)
+            ->paginate(20);
 
         return view('admin.sucursales.espacios.index', compact('espacios'));
     }

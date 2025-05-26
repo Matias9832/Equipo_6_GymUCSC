@@ -11,7 +11,7 @@ class SucursalController extends Controller
 {
     public function index()
     {
-        $sucursales = Sucursal::with(['ciudad', 'marca'])->get();
+        $sucursales = Sucursal::with(['ciudad', 'marca'])->paginate(20);
         return view('admin.sucursales.sucursal.index', compact('sucursales'));
     }
 

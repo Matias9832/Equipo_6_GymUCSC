@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('title', 'Crear Espacio')
 
@@ -24,7 +24,7 @@
                         <select name="tipo_espacio" id="tipo_espacio" class="form-select" required>
                             <option value="">Seleccione un tipo</option>
                             @foreach($tipos as $tipo)
-                                <option value="{{ $tipo->nombre_tipo }}">{{ $tipo->nombre_tipo }}</option>
+                                <option value="{{ $tipo->id }}">{{ $tipo->nombre_tipo }}</option>
                             @endforeach
                         </select>
                     </div>

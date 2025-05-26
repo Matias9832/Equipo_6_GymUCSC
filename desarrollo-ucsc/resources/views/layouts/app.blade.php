@@ -27,12 +27,15 @@
     <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css') }}" rel="stylesheet" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <!-- Se pretende cambiar la fuente a travez de una variable (Cambio por aplicar) -->
 
     <style>
         .nav-tabs .nav-link.active {
         border-bottom: none !important;
     }
     </style>
+
 </head>
 
 <body class="g-sidenav-show g-sidenav-pinned {{ $class ?? '' }}">

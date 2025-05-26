@@ -208,6 +208,11 @@
                     <span class="nav-link-text ms-1">Gestión de QR</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="#">
+                    <span class="nav-link-text ms-1"></span>
+                </a>
+            </li>
         </ul>
     </div>
 </aside>
