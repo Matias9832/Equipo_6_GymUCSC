@@ -18,6 +18,7 @@ class Espacio extends Model
         'nombre_espacio',
         'tipo_espacio',
         'id_suc',
+        'descripcion',
     ];
 
     public function tipo()

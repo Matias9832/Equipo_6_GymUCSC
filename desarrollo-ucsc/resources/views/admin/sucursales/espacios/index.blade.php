@@ -24,6 +24,9 @@
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">
                                             Tipo
                                         </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">
+                                            Descripción de la ubicación
+                                        </th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Acciones
                                         </th>
@@ -37,6 +40,9 @@
                                             </td>
                                             <td class="ps-3">
                                                 <span class="badge bg-gradient-success text-xs" style="min-width: 200px;">{{ ucfirst($espacio->tipo_espacio) }}</span>
+                                            </td>
+                                            <td class="ps-3">
+                                                <span class="text-xs">{{ $espacio->descripcion }}</span>
                                             </td>
                                             <td class="align-middle text-center">
                                                 <a href="{{ route('espacios.edit', $espacio->id_espacio) }}"

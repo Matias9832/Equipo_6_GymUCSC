@@ -31,6 +31,7 @@ class EspacioController extends Controller
         $request->validate([
             'nombre_espacio' => 'required|string|max:255',
             'tipo_espacio' => 'required|integer|exists:tipos_espacio,id',
+            'descripcion' => 'nullable|string|max:255',
         ]);
 
         $nombreTipo = TipoEspacio::find($request->tipo_espacio)->nombre_tipo;
@@ -58,6 +59,7 @@ class EspacioController extends Controller
         $request->validate([
             'nombre_espacio' => 'required|string|max:255',
             'tipo_espacio' => 'required|string|max:255',
+            'descripcion' => 'nullable|string|max:255',
         ]);
 
         $espacio->update($request->all());

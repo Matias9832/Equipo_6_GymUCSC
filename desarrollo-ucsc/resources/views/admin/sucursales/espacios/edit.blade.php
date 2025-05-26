@@ -31,6 +31,11 @@
                         </select>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción de la ubicación</label>
+                        <textarea name="descripcion" id="descripcion" class="form-control" rows="2" placeholder="Ej: Segundo piso, ala norte">{{ old('descripcion', $espacio->descripcion) }}</textarea>
+                    </div>
+                    
                     <input type="hidden" name="id_suc" value="{{ session('sucursal_activa') }}">
 
                     <div class="d-flex justify-content-end">

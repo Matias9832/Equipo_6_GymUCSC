@@ -19,6 +19,7 @@ return new class extends Migration
             
             $table->string('nombre_espacio');
             $table->string('tipo_espacio');
+            $table->string('descripcion');
         });
     }
 
