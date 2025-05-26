@@ -32,7 +32,7 @@ use App\Http\Controllers\TorneoController;
 use App\Http\Controllers\ActividadController;
 use App\Http\Controllers\TallerController;
 use App\Http\Controllers\CarreraController;
-
+use App\Http\Controllers\AsistenciaTallerController;
 
 // Página principal
 Route::get('/', function () {
@@ -154,8 +154,18 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::resource('talleres', TallerController::class)->parameters([
         'talleres' => 'taller'
     ]);
-    Route::get('admin/asistencia/{taller}/ver', [AsistenciaController::class, 'ver'])->name('asistencia.ver');
-    Route::get('admin/asistencia/{taller}/registrar', [AsistenciaController::class, 'registrar'])->name('asistencia.registrar');
+    // Mostrar formulario para registrar asistencia
+    Route::get('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'registrar'])
+        ->name('asistencia.registrar');
+
+    // Procesar el formulario de registro de asistencia
+    Route::post('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'guardarRegistro'])
+        ->name('asistencia.guardar');
+
+    // Ver asistencia por taller
+    Route::get('admin/talleres/{taller}/asistencia/ver', [AsistenciaTallerController::class, 'ver'])
+        ->name('asistencia.ver');
+
 
     // Usuarios
     Route::middleware(['permission:Ver Usuarios'])->group(function () {

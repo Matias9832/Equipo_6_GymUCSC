@@ -79,8 +79,12 @@
 
                                             <td>
                                                 <div class="d-flex gap-1">
-                                                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-outline-secondary btn-sm">Ver</a>
-                                                    <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-outline-primary btn-sm">Registrar</a>
+                                                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-sm btn-outline-secondary">
+                                                        <i class="fas fa-eye me-1"></i> Ver
+                                                    </a>
+                                                    <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-edit me-1"></i> Registrar
+                                                    </a>
                                                 </div>
                                             </td>
                                             <td class="align-middle text-center">
