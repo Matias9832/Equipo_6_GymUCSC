@@ -22,6 +22,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @php use Illuminate\Support\Str; @endphp
                                     @foreach($deportes as $deporte)
                                         <tr>
                                             <td>
@@ -31,7 +32,7 @@
                                                 <span class="text-xs">{{ $deporte->jugadores_por_equipo }}</span>
                                             </td>
                                             <td>
-                                                <span class="text-xs">{{ $deporte->descripcion }}</span>
+                                                <span class="text-xs">{{ Str::limit($deporte->descripcion, 70, '...') }}</span>
                                             </td>
                                             <td class="align-middle text-center">
                                                 <a href="{{ route('deportes.edit', $deporte->id_deporte) }}" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">

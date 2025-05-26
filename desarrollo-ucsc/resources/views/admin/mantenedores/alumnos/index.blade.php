@@ -33,7 +33,7 @@
                                     id="ocultarInactivos" {{ request('ocultar_inactivos') ? 'checked' : '' }}
                                     onchange="document.getElementById('filtroForm').submit();">
                                 <label class="form-check-label" for="ocultarInactivos">
-                                    {{ request('ocultar_inactivos') ? 'Ocultar alumnos inactivos' : 'Ocultar alumnos inactivos' }}
+                                    {{ request('ocultar_inactivos') ? 'Ocultar Inactivos' : 'Ocultar Inactivos' }}
                                 </label>
                             </div>
                         </form>

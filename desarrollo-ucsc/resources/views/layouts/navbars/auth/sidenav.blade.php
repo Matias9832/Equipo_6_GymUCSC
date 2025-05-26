@@ -1,3 +1,7 @@
+<button class="navbar-toggler ms-3 d-xl-none" type="button" id="iconSidenavToggle">
+    <span class="navbar-toggler-icon"></span>
+</button>
+
 <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 "
     id="sidenav-main">
     <div class="sidenav-header position-sticky top-0 bg-white" style="z-index: 2;">
@@ -202,6 +206,11 @@
                         <i class="ni ni-planet text-dark text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Gestión de QR</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="#">
+                    <span class="nav-link-text ms-1"></span>
                 </a>
             </li>
         </ul>

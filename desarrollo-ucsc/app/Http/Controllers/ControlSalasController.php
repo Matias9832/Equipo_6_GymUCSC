@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Ingreso;
+use App\Models\Usuario;
 use App\Models\Sala;
 use Carbon\Carbon;
 
@@ -38,7 +40,7 @@ class ControlSalasController extends Controller
             ->whereNull('hora_salida')
             ->count();
 
-        return view('admin.control_salas.gestion_qr', [
+        return view('admin.control-salas.gestion_qr', [
             'qrCode' => $qrCode,
             'desdeQR' => true,
             'aforoPermitido' => $request->aforo,
@@ -61,15 +63,37 @@ class ControlSalasController extends Controller
 
         $qrCode = QrCode::size(300)->generate($urlQR);
 
+        $ingresos = Ingreso::where('id_sala', $sala->id_sala)
+            ->whereNull('hora_salida')
+            ->with(['usuario.alumno', 'usuario.administrador'])
+            ->get();
+
         $usuariosActivos = Ingreso::where('id_sala', $sala->id_sala)
             ->whereNull('hora_salida')
             ->count();
 
-        return view('admin.control_salas.gestion_qr', [
+        
+        //contar los usuarios tipo estudiantes y tipo seleccionado.
+        $estudiantes = $ingresos->filter(function ($ingreso) {
+            return $ingreso->usuario->tipo_usuario === 'estudiante';
+        })->count();
+
+        $seleccionados = $ingresos->filter(function ($ingreso) {
+            return $ingreso->usuario->tipo_usuario === 'seleccionado';
+        })->count();
+        $personasConEnfermedad = $ingresos->filter(function ($ingreso) {
+            return $ingreso->usuario &&
+                $ingreso->usuario->salud &&
+                $ingreso->usuario->salud->enfermo_cronico == 1;
+        })->count();
+        return view('admin.control-salas.gestion_qr', [
             'qrCode' => $qrCode,
             'desdeQR' => true,
             'aforoPermitido' => $request->aforo_qr,
             'usuariosActivos' => $usuariosActivos,
+            'personasConEnfermedad' => $personasConEnfermedad ,
+            'estudiantes' => $estudiantes,
+            'seleccionados' => $seleccionados,
             'sala' => $sala,
         ]);
     }
@@ -252,7 +276,7 @@ class ControlSalasController extends Controller
             ->where('activo', true)
             ->get();
 
-        return view('admin.control_salas.seleccionar_sala', compact('salas', 'salasActivas'));
+        return view('admin.control-salas.seleccionar_sala', compact('salas', 'salasActivas'));
     }
 
     public function cambiarAforo(Request $request)
@@ -334,10 +358,93 @@ class ControlSalasController extends Controller
             ->whereDate('fecha_ingreso', today())
             ->with(['usuario.alumno', 'usuario.administrador'])
             ->get();
+    
 
-        return view('admin.control_salas.ver_usuarios', compact('sala'));
+        return view('admin.control-salas.ver_usuarios', compact('sala'));
+    }
+
+    public function registroManual(Request $request)
+    {
+        
+        $request->validate([
+            'rut' => 'required|string',
+            'password' => 'required|string',
+            'id_sala' => 'required|exists:sala,id_sala',
+        ]);
+        
+        // Buscar el usuario por RUT
+        $usuario = Usuario::where('rut', $request->rut)->first();
+        
+        if (!$usuario || !Hash::check($request->password, $usuario->contrasenia_usuario)) {
+            return response()->json(['success' => false, 'message' => 'Credenciales inválidas.']);
+        }
+        
+
+        // Verificar si ya tiene un ingreso activo
+        $yaIngresado = Ingreso::where('id_usuario', $usuario->id_usuario)
+            ->where('id_sala', $request->id_sala)
+            ->whereDate('fecha_ingreso', today())
+            ->whereNull('hora_salida')
+            ->exists();
+
+        if ($yaIngresado) {
+            return response()->json(['success' => false, 'message' => 'Ya hay un ingreso activo para este usuario.']);
+        }
+
+        // Registrar el ingreso
+        Ingreso::create([
+            'id_sala' => $request->id_sala,
+            'id_usuario' => $usuario->id_usuario,
+            'fecha_ingreso' => now()->format('Y-m-d'),
+            'hora_ingreso' => now()->format('H:i:s'),
+            'hora_salida' => null,
+            'tiempo_uso' => null,
+        ]);
+
+        return redirect()->back()->with('success', 'Ingreso registrado correctamente.');
+    }
+
+    public function salidaManual(Request $request)
+    {
+    // Validar entrada
+    $request->validate([
+        'rut' => 'required',
+        'password' => 'required',
+        'id_sala' => 'required',
+    ]);
+
+    // Buscar usuario por RUT
+    $usuario = Usuario::where('rut', $request->rut)->first();
+
+    // Verificar si existe y la contraseña coincide
+    if (!$usuario || !Hash::check($request->password, $usuario->contrasenia_usuario)) {
+        return back()->with('error', 'Credenciales inválidas.')->withInput();
     }
 
 
+
+    // Buscar el registro de ingreso aún activo
+    $registro = Ingreso::where('id_usuario', $usuario->id_usuario)
+        ->where('id_sala', $request->id_sala)
+        ->where('fecha_ingreso', today())
+        ->whereNull('hora_salida')
+        ->first();
+
+    if (!$registro) {
+        return back()->with('mensaje', 'No se encontró un ingreso activo para registrar la salida.')->withInput();
+    }
+
+    // Calcular la hora de salida y tiempo de uso
+    $horaSalida = now();
+    $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
+    $tiempoUsoSegundos = $horaIngreso->diffInSeconds($horaSalida);
+    $tiempoUso = gmdate("H:i:s", $tiempoUsoSegundos);
+
+    $registro->hora_salida = $horaSalida->format('H:i:s');
+    $registro->tiempo_uso = $tiempoUso;
+    $registro->save();
+
+    return back()->with('success', 'Salida registrada correctamente.');
+    }   
 
 }

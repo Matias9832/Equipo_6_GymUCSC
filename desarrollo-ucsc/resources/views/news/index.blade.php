@@ -2,7 +2,6 @@
 
 @section('content')
     @include('layouts.navbars.guest.navbar')
-    <div style="height: 75px;"></div>
     <div class="container my-5">
         <div class="row">
             <div class="col-lg-8">

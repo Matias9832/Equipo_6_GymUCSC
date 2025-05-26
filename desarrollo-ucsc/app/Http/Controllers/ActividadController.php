@@ -30,7 +30,7 @@ class ActividadController extends Controller
             ->orderByDesc('i.fecha_ingreso')
             ->orderByDesc('i.hora_ingreso')
             ->get();
-
+            
         return view('usuarios.mi_actividad', compact('actividades'));
     }
 

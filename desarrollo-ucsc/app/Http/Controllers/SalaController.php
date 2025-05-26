@@ -15,7 +15,7 @@ class SalaController extends Controller
     {
         $sucursalActiva = session('sucursal_activa');
 
-        $salas = Sala::where('id_suc', $sucursalActiva)->get();
+        $salas = Sala::where('id_suc', $sucursalActiva)->paginate(20);
 
         return view('admin.sucursales.sala.index', compact('salas'));
     }

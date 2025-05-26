@@ -7,8 +7,12 @@
                     <!-- Logos -->
                     <a class="navbar-brand d-flex align-items-center font-weight-bolder ms-lg-0 ms-3"
                         href="{{ route('welcome') }}">
-                        <img src="{{ asset('img/gym/deportes_logo.png') }}" alt="Logo GYM" style="height: 30px;"
+                        <!-- <img src="{{ asset('img/gym/deportes_logo.png') }}" alt="Logo GYM" style="height: 30px;"
+                            class="me-2"> -->
+                        <span style="font-family: 'Montserrat', sans-serif; font-weight: 1000; font-size: 1.4rem;"
                             class="me-2">
+                            DEPORTES
+                        </span>
                         <img src="{{ asset('img/gym/ucsc_logo.png') }}" alt="Logo UCSC" style="height: 30px;"
                             class="me-2">
                     </a>
@@ -34,8 +38,8 @@
                                     </li>
                                 @endif
                                 <li class="nav-item me-2 dropdown" style="width: 176px;">
-                                    <a class="btn btn-sm mb-0 btn-light dropdown-toggle d-flex align-items-center justify-content-center w-100" href="#"
-                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <a class="btn btn-sm mb-0 btn-light dropdown-toggle d-flex align-items-center justify-content-center w-100"
+                                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
                                         Mi Cuenta
                                     </a>
@@ -51,6 +55,12 @@
                                             </a>
                                         </li>
                                         <li>
+                                            <a class="dropdown-item" href="{{ route('actividad.usuario') }}">
+                                                <i class="fas fa-calendar me-1"></i> Mi Actividad
+                                            </a>
+                                            
+                                        </li>
+                                        <li>
                                             <form method="POST" action="{{ route('logout') }}">
                                                 @csrf
                                                 <button type="submit" class="dropdown-item text-danger">
@@ -61,16 +71,16 @@
                                     </ul>
                                 </li>
                             @else
-                                <li class="nav-item me-2">
+                                <li class="nav-item me-2" style="width: 176px;">
                                     <a href="{{ route('register') }}"
-                                        class="btn btn-sm mb-0 btn-outline-primary d-flex align-items-center">
+                                        class="btn btn-sm mb-0 btn-outline-primary d-flex align-items-center justify-content-center">
                                         <i class="fas fa-user-circle opacity-6 text-primary me-1"></i>
                                         Registrarse
                                     </a>
                                 </li>
-                                <li class="nav-item me-2">
+                                <li class="nav-item me-2" style="width: 176px;">
                                     <a href="{{ route('login') }}"
-                                        class="btn btn-sm mb-0 btn-primary d-flex align-items-center">
+                                        class="btn btn-sm mb-0 btn-primary d-flex align-items-center justify-content-center">
                                         <i class="fas fa-key opacity-6 text-white me-1"></i>
                                         Iniciar Sesión
                                     </a>
