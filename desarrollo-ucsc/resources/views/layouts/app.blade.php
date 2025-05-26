@@ -26,6 +26,7 @@
     <!-- Se pretende cambiar la fuente a travez de una variable (Cambio por aplicar) -->
 </head>
 @stack('scripts')
+
 <body class="{{ $class ?? '' }}">
 
 
@@ -33,8 +34,8 @@
     @if(session('success') || session('update') || session('delete'))
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
             <div id="toastSuccess" class="toast align-items-center text-white 
-                        {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
-                        border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+                                {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
+                                border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body text-center w-100">
                         {{ session('success') ?? session('update') ?? session('delete') }}
@@ -84,7 +85,7 @@
     @endguest
 
     @auth
-        @if (in_array(request()->route()->getName(), ['login', 'register', 'mi-perfil.edit', 'recover-password','salud.edit']))
+        @if (in_array(request()->route()->getName(), ['login', 'register', 'mi-perfil.edit', 'recover-password', 'salud.edit']))
             @yield('content')
         @else
             @if (!in_array(request()->route()->getName(), ['profile', 'profile-static']))
