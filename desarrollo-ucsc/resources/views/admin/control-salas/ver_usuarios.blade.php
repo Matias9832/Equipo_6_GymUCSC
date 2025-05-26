@@ -1,88 +1,89 @@
-@extends('layouts.app')
-
-@section('title', 'Usuario Sala')
+@extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
 @include('layouts.navbars.auth.topnav', ['title' => 'Usuario Sala'])
 
-<div class="container py-4 card shadow-sm p-4">
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
 
-    <div class="d-flex justify-content-start mb-3">
-        <a href="{{ route('control-salas.seleccionar') }}" class="btn btn-secondary">
-            ← Volver a Selección de Sala
-        </a>
+            <div class="card mb-4">
+                <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Usuarios Activos - {{ $sala->nombre_sala }}</h6>
+                    <a href="{{ route('control-salas.seleccionar') }}" class="btn btn-secondary btn-sm">
+                        ← Volver a Selección de Sala
+                    </a>
+                </div>
+
+                <div class="card-body px-0 pt-0 pb-2">
+                    @if ($sala->ingresos->isEmpty())
+                        <div class="text-center py-4 text-muted">
+                            No hay usuarios activos en esta sala.
+                        </div>
+                    @else
+                        <div class="table-responsive p-3">
+                            <table class="table align-items-center mb-0 table-bordered">
+                                <thead class="bg-light">
+                                    <tr class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        <th></th>
+                                        <th>Rut</th>
+                                        <th>Nombre</th>
+                                        <th>Hora Ingreso</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($sala->ingresos as $ingreso)
+                                        @php
+                                            $usuario = $ingreso->usuario;
+                                            $tieneEnfermedad = $usuario && $usuario->salud && $usuario->salud->enfermo_cronico == 1;
+                                            $icono = $usuario->tipo_usuario === 'seleccionado' ? 'fa-medal' : 'fa-user';
+                                        @endphp
+                                        <tr>
+                                            <td class="text-center">
+                                                <button type="button" class="btn p-0 border-0 bg-transparent"
+                                                    data-bs-toggle="modal" data-bs-target="#saludModal{{ $ingreso->id_ingreso }}">
+                                                    <i class="fas {{ $icono }} fs-5 {{ $tieneEnfermedad ? 'text-primary' : 'text-success' }}"></i>
+                                                </button>
+                                            </td>
+                                            <td class="text-sm text-center">{{ $usuario->rut }}</td>
+                                            <td class="text-sm">
+                                                @if ($usuario->alumno)
+                                                    {{ $usuario->alumno->nombre_alumno }} {{ $usuario->alumno->apellido_paterno }} {{ $usuario->alumno->apellido_materno }}
+                                                @else
+                                                    {{ $usuario->administrador->nombre_admin }}
+                                                @endif
+                                            </td>
+                                            <td class="text-sm text-center">{{ $ingreso->hora_ingreso }}</td>
+                                            <td class="text-center">
+                                                <form action="{{ route('admin.control-salas.sacar_usuario') }}" method="POST"
+                                                    onsubmit="return confirm('¿Seguro que deseas sacar a este usuario?')">
+                                                    @csrf
+                                                    <input type="hidden" name="id_ingreso" value="{{ $ingreso->id_ingreso }}">
+                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                        Sacar
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+                </div>
+
+            </div>
+
+        </div>
     </div>
 
-    <h3 class="mb-4 text-center text-md-start">Usuarios Activos - {{ $sala->nombre_sala }}</h3>
-
-    @if ($sala->ingresos->isEmpty())
-        <p class="text-muted text-center">No hay usuarios activos en esta sala.</p>
-    @else
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped align-middle">
-                <thead class="table-light">
-                    <tr class="text-center">
-                        <th></th>
-                        <th>Rut</th>
-                        <th>Nombre</th>
-                        <th>Hora Ingreso</th>
-                        <th>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($sala->ingresos as $ingreso)
-                        <tr>
-                            <td class="text-center">
-                                @php
-                                    $tieneEnfermedad = $ingreso->usuario &&
-                                                        $ingreso->usuario->salud &&
-                                                        $ingreso->usuario->salud->enfermo_cronico == 1;
-                                @endphp
-
-                                @if ($ingreso->usuario->tipo_usuario === 'estudiante')
-                                    <button type="button" class="btn p-0 border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#saludModal{{ $ingreso->id_ingreso }}">
-                                        <i class="fas fa-user fs-4 {{ $tieneEnfermedad ? 'text-primary' : 'text-success' }}"></i>
-                                    </button>
-                                @elseif ($ingreso->usuario->tipo_usuario === 'seleccionado')
-                                    <button type="button" class="btn p-0 border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#saludModal{{ $ingreso->id_ingreso }}">
-                                        <i class="fas fa-medal fs-4 {{ $tieneEnfermedad ? 'text-primary' : 'text-success' }}"></i>
-                                    </button>
-                                @endif
-                            </td>
-                            <td>{{ $ingreso->usuario->rut }}</td>
-                            <td>
-                                @if ($ingreso->usuario->alumno)
-                                    {{ $ingreso->usuario->alumno->nombre_alumno }}
-                                    {{ $ingreso->usuario->alumno->apellido_paterno }}
-                                    {{ $ingreso->usuario->alumno->apellido_materno }}
-                                @else
-                                    {{ $ingreso->usuario->administrador->nombre_admin }}
-                                @endif
-                            </td>
-                            <td>{{ $ingreso->hora_ingreso }}</td>
-                            <td class="text-center">
-                                <form action="{{ route('admin.control-salas.sacar_usuario') }}" method="POST"
-                                    onsubmit="return confirm('¿Seguro que deseas sacar a este usuario?')">
-                                    @csrf
-                                    <input type="hidden" name="id_ingreso" value="{{ $ingreso->id_ingreso }}">
-                                    <button type="submit" class="btn btn-danger btn-sm">Sacar</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    @endif
-
+    @include('layouts.footers.auth.footer')
 </div>
 
-{{-- 👇 Modales fuera del container/card --}}
+{{-- Modales de Salud --}}
 @foreach ($sala->ingresos as $ingreso)
-    @php
-        $salud = $ingreso->usuario->salud;
-    @endphp
-
+    @php $salud = $ingreso->usuario->salud; @endphp
     @if ($salud)
         <div class="modal fade" id="saludModal{{ $ingreso->id_ingreso }}" tabindex="-1" aria-labelledby="saludModalLabel{{ $ingreso->id_ingreso }}" aria-hidden="true">
             <div class="modal-dialog">
