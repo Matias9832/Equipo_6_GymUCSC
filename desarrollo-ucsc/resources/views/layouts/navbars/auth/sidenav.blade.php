@@ -65,6 +65,30 @@
                 </a>
             </li>
 
+            {{-- Gestión de trabajo --}}
+            <li class="nav-item mt-3 d-flex align-items-center">
+                <div class="ps-4">
+                    <i class="ni ni-laptop text-dark text-sm opacity-10"></i>
+                </div>
+                <h6 class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Gestión de trabajo</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'control-salas.seleccionar' ? 'active' : '' }}" href="{{ route('control-salas.seleccionar') }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-planet text-dark text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Gestión de QR</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'talleres.index' ? 'active' : '' }}" href="{{ route('talleres.index') }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-trophy text-warning text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Talleres</span>
+                </a>
+            </li>
+
             {{-- Espacios --}}
             <li class="nav-item mt-3 d-flex align-items-center">
                 <div class="ps-4">
@@ -137,14 +161,6 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'talleres.index' ? 'active' : '' }}" href="{{ route('talleres.index') }}">
-                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-trophy text-warning text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">talleres</span>
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'equipos.index' ? 'active' : '' }}" href="{{ route('equipos.index') }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-user-run text-info text-sm opacity-10"></i>
@@ -192,22 +208,7 @@
                     <span class="nav-link-text ms-1">Países</span>
                 </a>
             </li>
-
-            {{-- Otros --}}
-            <li class="nav-item mt-3 d-flex align-items-center">
-                <div class="ps-4">
-                    <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
-                </div>
-                <h6 class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Otros</h6>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'control-salas.seleccionar' ? 'active' : '' }}" href="{{ route('control-salas.seleccionar') }}">
-                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-planet text-dark text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Gestión de QR</span>
-                </a>
-            </li>
+            {{-- Configuración --}}
             <li class="nav-item">
                 <a class="#">
                     <span class="nav-link-text ms-1"></span>
