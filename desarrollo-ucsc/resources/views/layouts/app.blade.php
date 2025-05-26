@@ -30,7 +30,7 @@
 <body class="{{ $class ?? '' }}">
 
 
-    <!-- Toastr de mensajes -->
+@if (!in_array(request()->route()->getName(), ['verificar.vista', 'reset-password', 'login']))
     @if(session('success') || session('update') || session('delete'))
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
             <div id="toastSuccess" class="toast align-items-center text-white 
@@ -79,6 +79,8 @@
             });
         </script>
     @endif
+@endif
+
 
     @guest
         @yield('content')
