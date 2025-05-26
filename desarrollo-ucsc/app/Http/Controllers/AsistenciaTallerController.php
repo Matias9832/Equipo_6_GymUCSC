@@ -17,9 +17,18 @@ class AsistenciaTallerController extends Controller
 
         $asistencias = DB::table('taller_usuario')
             ->join('usuario', 'usuario.id_usuario', '=', 'taller_usuario.id_usuario')
-            ->where('id_taller', $taller->id_taller)
+            ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
+            ->select(
+                'usuario.rut',
+                'usuario.correo_usuario',
+                DB::raw("CONCAT_WS(' ', alumno.nombre_alumno, alumno.apellido_paterno, alumno.apellido_materno) as nombre"),
+                'alumno.carrera',
+                'alumno.sexo_alumno',
+                'fecha_asistencia'
+            )
+            ->where('taller_usuario.id_taller', $taller->id_taller)
             ->whereDate('fecha_asistencia', $fecha)
-            ->select('usuario.rut', 'usuario.correo_usuario', 'usuario.nombre_usuario as nombre', 'fecha_asistencia') // Debo agregar carrera y genero
+            ->orderBy('fecha_asistencia', 'desc')
             ->get();
 
         return view('admin.talleres.asistencia.ver', compact('taller', 'asistencias', 'fecha'));

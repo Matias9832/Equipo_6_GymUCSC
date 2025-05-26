@@ -16,7 +16,7 @@
                             <th>RUT</th>
                             <th>Nombre</th>
                             <th>Carrera</th>
-                            <th>Género</th>
+                            <th>Sexo</th>
                             <th>Fecha de Asistencia</th>
                         </tr>
                     </thead>
@@ -39,10 +39,10 @@
                             @endphp
                             <tr class="{{ $rowClass }}">
                                 <td>{{ $asistencia->rut }}</td>
-                                <td>{{ $asistencia->nombre ?? '-' }}</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>{{ $fechaActual }}</td>
+                                <td>{{ $asistencia->nombre ?? 'No disponible' }}</td>
+                                <td>{{ $asistencia->carrera ?? '-' }}</td>
+                                <td>{{ $asistencia->sexo_alumno ?? '-' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($asistencia->fecha_asistencia)->format('d-m-Y') }}</td>
                             </tr>
                         @empty
                             <tr>
