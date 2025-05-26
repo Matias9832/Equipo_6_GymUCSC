@@ -404,6 +404,47 @@ class ControlSalasController extends Controller
         return redirect()->back()->with('success', 'Ingreso registrado correctamente.');
     }
 
-   
+    public function salidaManual(Request $request)
+    {
+    // Validar entrada
+    $request->validate([
+        'rut' => 'required',
+        'password' => 'required',
+        'id_sala' => 'required',
+    ]);
+
+    // Buscar usuario por RUT
+    $usuario = Usuario::where('rut', $request->rut)->first();
+
+    // Verificar si existe y la contraseña coincide
+    if (!$usuario || !Hash::check($request->password, $usuario->contrasenia_usuario)) {
+        return back()->with('error', 'Credenciales inválidas.')->withInput();
+    }
+
+
+
+    // Buscar el registro de ingreso aún activo
+    $registro = Ingreso::where('id_usuario', $usuario->id_usuario)
+        ->where('id_sala', $request->id_sala)
+        ->where('fecha_ingreso', today())
+        ->whereNull('hora_salida')
+        ->first();
+
+    if (!$registro) {
+        return back()->with('mensaje', 'No se encontró un ingreso activo para registrar la salida.')->withInput();
+    }
+
+    // Calcular la hora de salida y tiempo de uso
+    $horaSalida = now();
+    $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
+    $tiempoUsoSegundos = $horaIngreso->diffInSeconds($horaSalida);
+    $tiempoUso = gmdate("H:i:s", $tiempoUsoSegundos);
+
+    $registro->hora_salida = $horaSalida->format('H:i:s');
+    $registro->tiempo_uso = $tiempoUso;
+    $registro->save();
+
+    return back()->with('success', 'Salida registrada correctamente.');
+    }   
 
 }

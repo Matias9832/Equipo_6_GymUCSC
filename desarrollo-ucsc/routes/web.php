@@ -34,6 +34,7 @@ use App\Http\Controllers\TallerController;
 use App\Http\Controllers\CarreraController;
 
 
+
 // Página principal
 Route::get('/', function () {
     return redirect()->route('news.index');
@@ -191,6 +192,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::post('/control-salas/generar-qr', [ControlSalasController::class, 'generarQR'])->name('control-salas.generarQR');
         Route::get('control-salas/ver-qr', [ControlSalasController::class, 'verQR'])->name('control-salas.verQR');
         Route::post('/control-salas/registro-manual', [ControlSalasController::class, 'registroManual'])->name('registro.manual');
+        Route::post('/salida-manual', [ControlSalasController::class, 'salidaManual'])->name('salida.manual');
         Route::post('/control-salas/cambiar-aforo', [ControlSalasController::class, 'cambiarAforo'])->name('control-salas.cambiar_aforo');
         Route::post('control-salas/cerrar-sala', [ControlSalasController::class, 'cerrarSala'])->name('admin.control-salas.cerrar_sala');
         Route::post('/control-salas/sacar-usuario', [ControlSalasController::class, 'sacarUsuario'])->name('admin.control-salas.sacar_usuario');
