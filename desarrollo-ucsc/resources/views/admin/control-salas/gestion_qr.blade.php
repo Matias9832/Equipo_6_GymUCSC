@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('title', 'Gestor de Qr')
 
@@ -6,13 +6,13 @@
     @include('layouts.navbars.auth.topnav', ['title' => 'Gestor de QR'])
 
     <div class="container py-4">
-        <h1 class="mb-4 text-center">Gestión de QR: {{ $sala->nombre_sala }}</h1>
 
         @if (isset($qrCode))
             <div class="row justify-content-center align-items-center mb-5">
                 {{-- QR Code --}}
                 <div class="col-md-6 mb-3">
                     <div class="card p-4 shadow-sm h-100 text-center">
+                        <h5 class="text-muted mb-2">{{ $sala->nombre_sala }}</h5>
                         <div style="overflow-x: auto;">
                             {!! $qrCode !!}
                         </div>
