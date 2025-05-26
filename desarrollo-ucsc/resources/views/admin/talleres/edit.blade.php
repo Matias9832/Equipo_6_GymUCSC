@@ -28,6 +28,12 @@
                             <label for="nombre_taller" class="form-label">Nombre Taller</label>
                             <input type="text" name="nombre_taller" class="form-control" value="{{ old('nombre_taller', $taller->nombre_taller) }}" required>
                         </div>
+                        
+                        <div class="mb-3 form-check">
+                            <input type="hidden" name="activo_taller" value="0">
+                            <input type="checkbox" name="activo_taller" class="form-check-input" value="1" {{ $taller->activo_taller ? 'checked' : '' }}>
+                            <label class="form-check-label">Activo</label>
+                        </div>
 
                         <div class="mb-3">
                             <label for="descripcion_taller" class="form-label">Descripción</label>
@@ -51,10 +57,17 @@
                             </select>
                         </div>
 
-                        <div class="mb-3 form-check">
-                            <input type="hidden" name="activo_taller" value="0">
-                            <input type="checkbox" name="activo_taller" class="form-check-input" value="1" {{ $taller->activo_taller ? 'checked' : '' }}>
-                            <label class="form-check-label">Activo</label>
+                        <div class="mb-3">
+                            <label for="id_espacio" class="form-label">Espacio</label>
+                            <select name="id_espacio" id="id_espacio" class="form-select">
+                                <option value="">-- Seleccionar Espacio --</option>
+                                @foreach($espacios as $espacio)
+                                    <option value="{{ $espacio->id_espacio }}" {{ $taller->id_espacio == $espacio->id_espacio ? 'selected' : '' }}>
+                                        {{ $espacio->nombre_espacio }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('id_espacio') <small class="text-danger">{{ $message }}</small> @enderror
                         </div>
 
                         <hr>

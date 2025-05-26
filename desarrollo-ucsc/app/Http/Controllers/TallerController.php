@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Administrador;
 use App\Models\Taller;
+use App\Models\Espacio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,7 +18,8 @@ class TallerController extends Controller
     public function create()
     {
         $admins = Administrador::all();
-        return view('admin.talleres.create', compact('admins'));
+        $espacios = Espacio::all();
+        return view('admin.talleres.create', compact('admins', 'espacios'));
     }
 
     public function store(Request $request)
@@ -27,6 +29,7 @@ class TallerController extends Controller
             'descripcion_taller' => 'required|string',
             'cupos_taller' => 'required|integer|min:1',
             'id_admin' => 'nullable|exists:administrador,id_admin',
+            'id_espacio' => 'nullable|exists:espacio,id_espacio',
             'activo_taller' => 'boolean',
             'horarios' => 'required|array|min:1',
             'horarios.*.dia' => 'required|string|in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo',
@@ -55,6 +58,7 @@ class TallerController extends Controller
             'cupos_taller' => $request->cupos_taller,
             'activo_taller' => $request->activo_taller,
             'id_admin' => $request->id_admin,
+            'id_espacio' => $request->id_espacio,
         ]);
 
         // Crear horarios
@@ -74,6 +78,7 @@ class TallerController extends Controller
     {
         $taller->load('horarios');
         $admins = Administrador::all();
+        $espacios = Espacio::all();
         return view('admin.talleres.edit', compact('taller', 'admins'));
     }
 
@@ -84,6 +89,7 @@ class TallerController extends Controller
             'descripcion_taller' => 'required|string',
             'cupos_taller' => 'required|integer|min:1',
             'id_admin' => 'nullable|exists:administrador,id_admin',
+            'id_espacio' => 'nullable|exists:espacio,id_espacio',
             'activo_taller' => 'boolean',
             'horarios' => 'required|array|min:1',
         ], [
@@ -118,6 +124,7 @@ class TallerController extends Controller
             'cupos_taller' => $request->cupos_taller,
             'activo_taller' => $request->activo_taller,
             'id_admin' => $request->id_admin,
+            'id_espacio' => $request->id_espacio,
         ]);
 
         // Cargar horarios actuales
