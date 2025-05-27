@@ -23,13 +23,15 @@ class ResetPassword extends Controller
     public function send(Request $request)
     {
         $email = $request->validate([
-            'email' => ['required']
+            'email' => ['required', 'email']
         ]);
         $user = Usuario::where('correo_usuario', $email['email'])->first();
 
         if ($user) {
             $this->notify(new ForgotPassword($user->id_usuario));
-            return back()->with('success', 'An email was sent to your email address');
+            return back()->with('success', 'Un correo ha sido enviado a tu dirección de email');
+        } else {
+            return back()->withErrors(['email' => 'Ingrese un correo válido'])->withInput();
         }
     }
 }
