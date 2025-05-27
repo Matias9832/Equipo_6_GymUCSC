@@ -212,6 +212,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
 
     Route::resource('carreras', CarreraController::class)->only(['index']);
+    Route::get('/carreras/data', [CarreraController::class, 'data'])->name('carreras.data');
 
     // Gestión de QR
     Route::middleware(['permission:Acceso al Mantenedor de Gestión de QR'])->group(function () {
