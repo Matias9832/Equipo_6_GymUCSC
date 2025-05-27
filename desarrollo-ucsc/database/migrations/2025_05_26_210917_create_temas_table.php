@@ -9,7 +9,7 @@ class CreateTemasTable extends Migration
     public function up(): void
     {
         Schema::create('temas', function (Blueprint $table) {
-            $table->id();
+            $table->id('id_tema');
             $table->string('nombre_tema', 100);
 
             // Colores como campos individuales

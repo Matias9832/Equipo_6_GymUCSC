@@ -47,6 +47,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(FontColorSeeder::class);
         $this->call(TemaSeeder::class);
+        $this->call(TenantSeeder::class);
 
     }
 }

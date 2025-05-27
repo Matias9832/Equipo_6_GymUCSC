@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('nombre_fuente', 100);
             $table->string('familia_css', 100);
             $table->string('url_fuente')->nullable();
-            $table->boolean('activo_color')->default(true);
+            $table->boolean('activo_fuente')->default(true);
             $table->timestamps();
         });
     }
