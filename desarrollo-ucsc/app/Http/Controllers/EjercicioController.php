@@ -23,7 +23,7 @@ class EjercicioController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'grupo_muscular' => 'required|in:pecho,espalda,hombros,bíceps,tríceps,abdominales,cuádriceps,isquiotibiales,glúteos,pantorrillas,antebrazos,trapecio',
-            'imagen' => 'nullable|image|mimes:gif|max:2048', // Validación para GIF
+            'imagen' => 'nullable|image|mimes:gif|max:2048',
         ]);
 
         $data = $request->all();
@@ -47,7 +47,7 @@ class EjercicioController extends Controller
         $request->validate([
             'nombre' => 'required|string|max:255',
             'grupo_muscular' => 'required|in:pecho,espalda,hombros,bíceps,tríceps,abdominales,cuádriceps,isquiotibiales,glúteos,pantorrillas,antebrazos,trapecio',
-            'imagen' => 'nullable|image|mimes:gif|max:2048', // Validación para GIF
+            'imagen' => 'nullable|image|mimes:gif|max:2048',
         ]);
 
         $data = $request->all();
@@ -73,5 +73,16 @@ class EjercicioController extends Controller
         $ejercicio->delete();
 
         return redirect()->route('ejercicios.index')->with('success', 'Ejercicio eliminado correctamente.');
+    }
+
+    // NUEVO: Para mostrar ejercicios por grupo o todos
+    public function porGrupo($grupo)
+    {
+        if ($grupo === 'todos') {
+            $ejercicios = Ejercicio::all(['id', 'nombre']);
+        } else {
+            $ejercicios = Ejercicio::where('grupo_muscular', $grupo)->get(['id', 'nombre']);
+        }
+        return response()->json($ejercicios);
     }
 }

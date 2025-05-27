@@ -1,10 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Rutina;
 use App\Models\Ejercicio;
 use App\Models\Usuario;
+use App\Models\Alumno;
 use Illuminate\Http\Request;
 
 class RutinaController extends Controller
@@ -33,6 +33,7 @@ class RutinaController extends Controller
             'ejercicios.*.id' => 'exists:ejercicios,id',
             'ejercicios.*.series' => 'required|integer|min:1',
             'ejercicios.*.repeticiones' => 'required|integer|min:1',
+            'ejercicios.*.descanso' => 'required|integer|min:0',
         ]);
 
         $rutina = Rutina::create(['user_id' => $request->user_id]);
@@ -41,18 +42,11 @@ class RutinaController extends Controller
             $rutina->ejercicios()->attach($ejercicio['id'], [
                 'series' => $ejercicio['series'],
                 'repeticiones' => $ejercicio['repeticiones'],
+                'descanso' => $ejercicio['descanso'] ?? 0,
             ]);
         }
 
         return redirect()->route('rutinas.index')->with('success', 'Rutina creada correctamente.');
-    }
-
-    public function edit(Rutina $rutina)
-    {
-        $usuarios = Usuario::where('tipo_usuario', 'alumno')->get();
-        $ejercicios = Ejercicio::all();
-        $rutina->load('ejercicios');
-        return view('admin.mantenedores.rutinas.edit', compact('rutina', 'usuarios', 'ejercicios'));
     }
 
     public function update(Request $request, Rutina $rutina)
@@ -63,6 +57,7 @@ class RutinaController extends Controller
             'ejercicios.*.id' => 'exists:ejercicios,id',
             'ejercicios.*.series' => 'required|integer|min:1',
             'ejercicios.*.repeticiones' => 'required|integer|min:1',
+            'ejercicios.*.descanso' => 'required|integer|min:0',
         ]);
 
         $rutina->update(['user_id' => $request->user_id]);
@@ -72,6 +67,7 @@ class RutinaController extends Controller
             $rutina->ejercicios()->attach($ejercicio['id'], [
                 'series' => $ejercicio['series'],
                 'repeticiones' => $ejercicio['repeticiones'],
+                'descanso' => $ejercicio['descanso'] ?? 0,
             ]);
         }
 
@@ -83,5 +79,34 @@ class RutinaController extends Controller
         $rutina->delete();
 
         return redirect()->route('rutinas.index')->with('success', 'Rutina eliminada correctamente.');
+    }
+
+    // Método para buscar alumno por RUT (para el formulario de rutinas)
+    public function buscarPorRut($rut)
+    {
+        $usuario = Usuario::where('rut', $rut)
+            ->where('tipo_usuario', 'alumno')
+            ->where('bloqueado_usuario', 0)
+            ->where('activado_usuario', 1)
+            ->first();
+
+        if (!$usuario) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No hay alumno registrado, activo y habilitado con ese RUT.'
+            ]);
+        }
+
+        // Buscar nombre en la tabla alumnos
+        $alumno = Alumno::where('rut_alumno', $rut)->first();
+        $nombre = $alumno ? $alumno->nombre_alumno : 'Sin nombre registrado';
+
+        return response()->json([
+            'success' => true,
+            'usuario' => [
+                'id_usuario' => $usuario->id_usuario,
+                'nombre' => $nombre,
+            ]
+        ]);
     }
 }

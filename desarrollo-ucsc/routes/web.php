@@ -9,7 +9,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
 
-// Controladores adicionales del otro proyecto
+// Controladores adicionales
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\UsuarioController;
@@ -35,7 +35,7 @@ use App\Http\Controllers\EjercicioController;
 use App\Http\Controllers\RutinaController;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\AsistenciaTallerController;
-
+use App\Http\Controllers\RutinaPersonalizadaController;
 
 // Página principal
 Route::get('/', function () {
@@ -54,7 +54,7 @@ Route::fallback(function () {
 Route::get('/verificar', [RegisterController::class, 'verificarVista'])->name('verificar.vista');
 Route::post('/verificar', [RegisterController::class, 'verificarCodigo'])->name('verificar.codigo');
 
-// Rutas de autenticación (manteniendo las originales)
+// Rutas de autenticación
 Route::get('/dashboard', function () {
     return redirect('/dashboard'); })->middleware('auth');
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
@@ -73,7 +73,6 @@ Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show
 
 // Grupo de rutas protegidas por auth
 Route::group(['middleware' => 'auth'], function () {
-    // Rutas adicionales del otro proyecto
     // Salud
     Route::get('/salud', [SaludController::class, 'create'])->name('salud.create');
     Route::post('/salud', [SaludController::class, 'store'])->name('salud.store');
@@ -93,6 +92,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/mi-perfil', [LoginController::class, 'editProfile'])->name('mi-perfil.edit');
     Route::post('/mi-perfil', [LoginController::class, 'updateProfile'])->name('mi-perfil.update');
 
+    Route::get('/mis-rutinas', [RutinaPersonalizadaController::class, 'index'])->name('rutinas.personalizadas.index');
+
+    // Buscar alumno por RUT (para el formulario de rutinas)
+    Route::get('/buscar-alumno-por-rut/{rut}', [App\Http\Controllers\RutinaController::class, 'buscarPorRut'])->name('buscar.alumno.rut');
+
+    // Ejercicios por grupo muscular (para el formulario de rutinas)
+    Route::get('/ejercicios-por-grupo/{grupo}', [EjercicioController::class, 'porGrupo'])->name('ejercicios.por.grupo');
+
     // Rutas originales
     Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
     Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
@@ -101,7 +108,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/sign-up-static', [PageController::class, 'signup'])->name('sign-up-static');
     Route::get('/{page}', [PageController::class, 'index'])->name('page');
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-
 });
 
 // Grupo de rutas administrativas bajo /admin
@@ -120,9 +126,6 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::middleware(['permission:Acceso al Mantenedor de Tipos de Sanción'])->group(function () {
         Route::resource('tipos_sancion', TipoSancionController::class)->parameters(['tipos_sancion' => 'tipoSancion']);
     });
-    // Route::middleware(['permission:Acceso al Mantenedor de Marcas'])->group(function () {
-    //     Route::resource('marcas', MarcasController::class);
-    // });
     Route::middleware(['permission:Acceso al Mantenedor de Máquinas'])->group(function () {
         Route::resource('maquinas', MaquinaController::class);
     });
@@ -157,31 +160,21 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::resource('talleres', TallerController::class)->parameters([
         'talleres' => 'taller'
     ]);
-     // Rutas para Ejercicios
-     //Route::middleware(['permission:Acceso al Mantenedor de Ejercicios'])->group(function () {
-        Route::resource('ejercicios', EjercicioController::class)->parameters([
-            'ejercicios' => 'ejercicio',
-        ]);
-    //});
-
-    // Rutas para Rutinas
-    //Route::middleware(['permission:Acceso al Mantenedor de Rutinas'])->group(function () {
-        Route::resource('rutinas', RutinaController::class)->parameters([
-            'rutinas' => 'rutina',
-        ]);
-    //});
-    // Mostrar formulario para registrar asistencia
+    // Ejercicios
+    Route::resource('ejercicios', EjercicioController::class)->parameters([
+        'ejercicios' => 'ejercicio',
+    ]);
+    // Rutinas (mantenedor y formulario personalizado)
+    Route::resource('rutinas', RutinaController::class)->parameters([
+        'rutinas' => 'rutina',
+    ]);
+    // Asistencia talleres
     Route::get('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'registrar'])
         ->name('asistencia.registrar');
-
-    // Procesar el formulario de registro de asistencia
     Route::post('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'guardarRegistro'])
         ->name('asistencia.guardar');
-
-    // Ver asistencia por taller
     Route::get('admin/talleres/{taller}/asistencia/ver', [AsistenciaTallerController::class, 'ver'])
         ->name('asistencia.ver');
-
 
     // Usuarios
     Route::middleware(['permission:Ver Usuarios'])->group(function () {
@@ -228,5 +221,4 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     // Eliminar imagen de noticia
     Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
-
 });

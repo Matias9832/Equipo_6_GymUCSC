@@ -13,6 +13,7 @@ class EjercicioRutina extends Model
         'ejercicio_id',
         'series',
         'repeticiones',
+        'descanso', // Nuevo campo
     ];
 
     public function rutina()

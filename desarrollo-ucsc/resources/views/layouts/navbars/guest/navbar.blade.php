@@ -55,6 +55,11 @@
                                             </a>
                                         </li>
                                         <li>
+                                            <a href="{{ route('rutinas.personalizadas.index') }}" class="dropdown-item">
+                                                <i class="fa fa-dumbbell me-2"></i> Rutinas
+                                            </a>
+                                        </li>
+                                        <li>
                                             <a class="dropdown-item" href="{{ route('actividad.usuario') }}">
                                                 <i class="fas fa-calendar me-1"></i> Mi Actividad
                                             </a>
