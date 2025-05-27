@@ -71,7 +71,7 @@
                     <!-- Fecha de asistencia -->
                     <div class="col-md-6 mb-3">
                         <label for="fecha_asistencia" class="form-label">Fecha de Asistencia</label>
-                        <input type="date" name="fecha_asistencia" id="fecha_asistencia" class="form-control" value="{{ old('fecha_asistencia') }}">
+                        <input type="text" name="fecha_asistencia" id="fecha_asistencia" class="form-control" placeholder="Selecciona una fecha" value="{{ old('fecha_asistencia') }}">
                         @error('fecha_asistencia')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -87,5 +87,39 @@
         </div>
     </div>
     @include('layouts.footers.auth.footer')
+    @push('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const diasPermitidos = @json($diasValidos); // ej: ['lunes', 'martes']
+            const diasNumericos = {
+                'domingo': 0,
+                'lunes': 1,
+                'martes': 2,
+                'miércoles': 3,
+                'jueves': 4,
+                'viernes': 5,
+                'sábado': 6,
+            };
+            const diasDeshabilitados = Object.entries(diasNumericos)
+                .filter(([dia, num]) => !diasPermitidos.includes(dia))
+                .map(([_, num]) => num);
+
+            flatpickr("#fecha_asistencia", {
+                dateFormat: "Y-m-d",
+                locale: "es",
+                disable: [
+                    function(date) {
+                        // Deshabilitar si el día no está en la lista de permitidos
+                        return diasDeshabilitados.includes(date.getDay());
+                    }
+                ],
+                minDate: new Date(new Date().getFullYear(), 0, 1),
+                maxDate: new Date(new Date().getFullYear(), 11, 31),
+                defaultDate: "{{ old('fecha_asistencia') }}"
+            });
+        });
+    </script>
+    @endpush
+    @stack('js')
 </div>
 @endsection
