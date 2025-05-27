@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -79,19 +78,18 @@
     </div>
 @endsection
 
-@push('scripts')
+@push('js')
 <!-- Incluye Select2 si no está en tu layout -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Inicializa Select2 para buscar usuario por RUT o nombre
     $('#id_usuario').select2({
         theme: 'bootstrap-5',
         placeholder: "Buscar por RUT o nombre...",
-        width: "100%",
+        width: '100%',
         ajax: {
-            url: "{{ route('usuarios.index') }}", // Cambia esto por tu ruta AJAX de búsqueda
+            url: '{{ route('usuarios.buscar') }}',
             dataType: 'json',
             delay: 250,
             data: function (params) {
@@ -103,6 +101,22 @@ document.addEventListener('DOMContentLoaded', function () {
             cache: true
         },
         minimumInputLength: 2,
+        language: {
+            inputTooShort: function () {
+                return "Escribe para buscar...";
+            },
+            noResults: function () {
+                return "No se encontraron resultados";
+            },
+            searching: function () {
+                return "Buscando...";
+            }
+        }
+    });
+    $('#id_usuario').on('select2:open', function () {
+        setTimeout(function() {
+            document.querySelector('.select2-search__field').focus();
+        }, 100);
     });
 
     // Habilita el botón solo si hay usuario seleccionado y ejercicios agregados

@@ -33,6 +33,7 @@ return array(
     'App\\Http\\Controllers\\RegisterController' => $baseDir . '/app/Http/Controllers/RegisterController.php',
     'App\\Http\\Controllers\\ResetPassword' => $baseDir . '/app/Http/Controllers/ResetPassword.php',
     'App\\Http\\Controllers\\RutinaController' => $baseDir . '/app/Http/Controllers/RutinaController.php',
+    'App\\Http\\Controllers\\RutinaPersonalizadaController' => $baseDir . '/app/Http/Controllers/RutinaPersonalizadaController.php',
     'App\\Http\\Controllers\\SalaController' => $baseDir . '/app/Http/Controllers/SalaController.php',
     'App\\Http\\Controllers\\SaludController' => $baseDir . '/app/Http/Controllers/SaludController.php',
     'App\\Http\\Controllers\\SucursalController' => $baseDir . '/app/Http/Controllers/SucursalController.php',
