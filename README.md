@@ -18,6 +18,7 @@ Repositorio Git para plataforma Web UCSC
     composer require spatie/laravel-permission
     composer require laravel/ui
     composer require laravel-frontend-presets/argon
+    composer require yajra/laravel-datatables-oracle  //Necesario para usar dataTables
     
 ### Hacer:
     php artisan config:clear

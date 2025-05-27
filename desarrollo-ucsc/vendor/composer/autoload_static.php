@@ -40,6 +40,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
         '320163ac6b93aebe3dc25b60a0533d56' => __DIR__ . '/..' . '/spatie/laravel-ignition/src/helpers.php',
         '377b22b161c09ed6e5152de788ca020a' => __DIR__ . '/..' . '/spatie/laravel-permission/src/helpers.php',
+        '0b47d6d4a00ca9112ba3953b49e7c9a4' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/helper.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -50,6 +51,10 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'Z' => 
         array (
             'ZipStream\\' => 10,
+        ),
+        'Y' => 
+        array (
+            'Yajra\\DataTables\\' => 17,
         ),
         'W' => 
         array (
@@ -208,6 +213,10 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         array (
             0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
         ),
+        'Yajra\\DataTables\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
+        ),
         'Whoops\\' => 
         array (
             0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
@@ -342,13 +351,13 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         ),
         'Spatie\\LaravelIgnition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
-            1 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
+            0 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
+            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
         ),
         'Spatie\\Ignition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
-            1 => __DIR__ . '/..' . '/spatie/ignition/src',
+            0 => __DIR__ . '/..' . '/spatie/ignition/src',
+            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
         ),
         'Spatie\\FlareClient\\' => 
         array (
@@ -626,11 +635,14 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Controllers\\ActividadController' => __DIR__ . '/../..' . '/app/Http/Controllers/ActividadController.php',
         'App\\Http\\Controllers\\AdministradorController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdministradorController.php',
         'App\\Http\\Controllers\\AlumnoController' => __DIR__ . '/../..' . '/app/Http/Controllers/AlumnoController.php',
+        'App\\Http\\Controllers\\AsistenciaTallerController' => __DIR__ . '/../..' . '/app/Http/Controllers/AsistenciaTallerController.php',
+        'App\\Http\\Controllers\\CarreraController' => __DIR__ . '/../..' . '/app/Http/Controllers/CarreraController.php',
         'App\\Http\\Controllers\\ChangePassword' => __DIR__ . '/../..' . '/app/Http/Controllers/ChangePassword.php',
         'App\\Http\\Controllers\\CiudadController' => __DIR__ . '/../..' . '/app/Http/Controllers/CiudadController.php',
         'App\\Http\\Controllers\\ControlSalasController' => __DIR__ . '/../..' . '/app/Http/Controllers/ControlSalasController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\DeporteController' => __DIR__ . '/../..' . '/app/Http/Controllers/DeporteController.php',
+        'App\\Http\\Controllers\\EjercicioController' => __DIR__ . '/../..' . '/app/Http/Controllers/EjercicioController.php',
         'App\\Http\\Controllers\\EquipoController' => __DIR__ . '/../..' . '/app/Http/Controllers/EquipoController.php',
         'App\\Http\\Controllers\\EspacioController' => __DIR__ . '/../..' . '/app/Http/Controllers/EspacioController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
@@ -644,6 +656,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Controllers\\RegionController' => __DIR__ . '/../..' . '/app/Http/Controllers/RegionController.php',
         'App\\Http\\Controllers\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/RegisterController.php',
         'App\\Http\\Controllers\\ResetPassword' => __DIR__ . '/../..' . '/app/Http/Controllers/ResetPassword.php',
+        'App\\Http\\Controllers\\RutinaController' => __DIR__ . '/../..' . '/app/Http/Controllers/RutinaController.php',
         'App\\Http\\Controllers\\SalaController' => __DIR__ . '/../..' . '/app/Http/Controllers/SalaController.php',
         'App\\Http\\Controllers\\SaludController' => __DIR__ . '/../..' . '/app/Http/Controllers/SaludController.php',
         'App\\Http\\Controllers\\SucursalController' => __DIR__ . '/../..' . '/app/Http/Controllers/SucursalController.php',
@@ -651,6 +664,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Controllers\\TipoEspacioController' => __DIR__ . '/../..' . '/app/Http/Controllers/TipoEspacioController.php',
         'App\\Http\\Controllers\\TipoSancionController' => __DIR__ . '/../..' . '/app/Http/Controllers/TipoSancionController.php',
         'App\\Http\\Controllers\\TorneoController' => __DIR__ . '/../..' . '/app/Http/Controllers/TorneoController.php',
+        'App\\Http\\Controllers\\UserProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserProfileController.php',
         'App\\Http\\Controllers\\UsuarioController' => __DIR__ . '/../..' . '/app/Http/Controllers/UsuarioController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\AdminMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminMiddleware.php',
@@ -670,8 +684,11 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Mail\\VerificacionUsuarioMail' => __DIR__ . '/../..' . '/app/Mail/VerificacionUsuarioMail.php',
         'App\\Models\\Administrador' => __DIR__ . '/../..' . '/app/Models/Administrador.php',
         'App\\Models\\Alumno' => __DIR__ . '/../..' . '/app/Models/Alumno.php',
+        'App\\Models\\Carrera' => __DIR__ . '/../..' . '/app/Models/Carrera.php',
         'App\\Models\\Ciudad' => __DIR__ . '/../..' . '/app/Models/Ciudad.php',
         'App\\Models\\Deporte' => __DIR__ . '/../..' . '/app/Models/Deporte.php',
+        'App\\Models\\Ejercicio' => __DIR__ . '/../..' . '/app/Models/Ejercicio.php',
+        'App\\Models\\EjercicioRutina' => __DIR__ . '/../..' . '/app/Models/EjercicioRutina.php',
         'App\\Models\\Equipo' => __DIR__ . '/../..' . '/app/Models/Equipo.php',
         'App\\Models\\Espacio' => __DIR__ . '/../..' . '/app/Models/Espacio.php',
         'App\\Models\\HorarioTaller' => __DIR__ . '/../..' . '/app/Models/HorarioTaller.php',
@@ -682,10 +699,13 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Models\\NewsImage' => __DIR__ . '/../..' . '/app/Models/NewsImage.php',
         'App\\Models\\Pais' => __DIR__ . '/../..' . '/app/Models/Pais.php',
         'App\\Models\\Region' => __DIR__ . '/../..' . '/app/Models/Region.php',
+        'App\\Models\\Rutina' => __DIR__ . '/../..' . '/app/Models/Rutina.php',
         'App\\Models\\Sala' => __DIR__ . '/../..' . '/app/Models/Sala.php',
         'App\\Models\\Salud' => __DIR__ . '/../..' . '/app/Models/Salud.php',
         'App\\Models\\Sucursal' => __DIR__ . '/../..' . '/app/Models/Sucursal.php',
         'App\\Models\\Taller' => __DIR__ . '/../..' . '/app/Models/Taller.php',
+        'App\\Models\\Tema' => __DIR__ . '/../..' . '/app/Models/Tema.php',
+        'App\\Models\\Tenant' => __DIR__ . '/../..' . '/app/Models/Tenant.php',
         'App\\Models\\TipoEspacio' => __DIR__ . '/../..' . '/app/Models/TipoEspacio.php',
         'App\\Models\\TipoSancion' => __DIR__ . '/../..' . '/app/Models/TipoSancion.php',
         'App\\Models\\Torneo' => __DIR__ . '/../..' . '/app/Models/Torneo.php',
@@ -917,6 +937,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'Database\\Seeders\\AlumnoSeeder' => __DIR__ . '/../..' . '/database/seeders/AlumnoSeeder.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'Database\\Seeders\\DeporteSeeder' => __DIR__ . '/../..' . '/database/seeders/DeporteSeeder.php',
+        'Database\\Seeders\\FontColorSeeder' => __DIR__ . '/../..' . '/database/seeders/FontColorSeeder.php',
         'Database\\Seeders\\GeographicSeeder' => __DIR__ . '/../..' . '/database/seeders/GeographicSeeder.php',
         'Database\\Seeders\\IngresoSeeder' => __DIR__ . '/../..' . '/database/seeders/IngresoSeeder.php',
         'Database\\Seeders\\MarcaSeeder' => __DIR__ . '/../..' . '/database/seeders/MarcaSeeder.php',
@@ -924,6 +945,8 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'Database\\Seeders\\SalaSeeder' => __DIR__ . '/../..' . '/database/seeders/SalaSeeder.php',
         'Database\\Seeders\\SucursalSeeder' => __DIR__ . '/../..' . '/database/seeders/SucursalSeeder.php',
         'Database\\Seeders\\TallerSeeder' => __DIR__ . '/../..' . '/database/seeders/TallerSeeder.php',
+        'Database\\Seeders\\TemaSeeder' => __DIR__ . '/../..' . '/database/seeders/TemaSeeder.php',
+        'Database\\Seeders\\TenantSeeder' => __DIR__ . '/../..' . '/database/seeders/TenantSeeder.php',
         'Database\\Seeders\\TipoSeeder' => __DIR__ . '/../..' . '/database/seeders/TipoSeeder.php',
         'Database\\Seeders\\UsuarioSeeder' => __DIR__ . '/../..' . '/database/seeders/UsuarioSeeder.php',
         'DateError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
@@ -7891,6 +7914,22 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'Whoops\\Util\\Misc' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/Misc.php',
         'Whoops\\Util\\SystemFacade' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/SystemFacade.php',
         'Whoops\\Util\\TemplateHelper' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/TemplateHelper.php',
+        'Yajra\\DataTables\\ApiResourceDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/ApiResourceDataTable.php',
+        'Yajra\\DataTables\\CollectionDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/CollectionDataTable.php',
+        'Yajra\\DataTables\\Contracts\\DataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Contracts/DataTable.php',
+        'Yajra\\DataTables\\Contracts\\Formatter' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Contracts/Formatter.php',
+        'Yajra\\DataTables\\DataTableAbstract' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTableAbstract.php',
+        'Yajra\\DataTables\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTables.php',
+        'Yajra\\DataTables\\DataTablesServiceProvider' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTablesServiceProvider.php',
+        'Yajra\\DataTables\\EloquentDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/EloquentDataTable.php',
+        'Yajra\\DataTables\\Exceptions\\Exception' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Exceptions/Exception.php',
+        'Yajra\\DataTables\\Facades\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Facades/DataTables.php',
+        'Yajra\\DataTables\\Processors\\DataProcessor' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Processors/DataProcessor.php',
+        'Yajra\\DataTables\\Processors\\RowProcessor' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Processors/RowProcessor.php',
+        'Yajra\\DataTables\\QueryDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/QueryDataTable.php',
+        'Yajra\\DataTables\\Utilities\\Config' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Utilities/Config.php',
+        'Yajra\\DataTables\\Utilities\\Helper' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Utilities/Helper.php',
+        'Yajra\\DataTables\\Utilities\\Request' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Utilities/Request.php',
         'ZipStream\\CentralDirectoryFileHeader' => __DIR__ . '/..' . '/maennchen/zipstream-php/src/CentralDirectoryFileHeader.php',
         'ZipStream\\CompressionMethod' => __DIR__ . '/..' . '/maennchen/zipstream-php/src/CompressionMethod.php',
         'ZipStream\\DataDescriptor' => __DIR__ . '/..' . '/maennchen/zipstream-php/src/DataDescriptor.php',

@@ -39,7 +39,8 @@
                                                 <span class="text-xs">{{ $usuario->correo_usuario ?? 'N/A' }}</span>
                                             </td>
                                             <td>
-                                                <span class="badge badge-sm bg-gradient-info">
+                                                <span class="badge badge-sm bg-gradient-info" style="width: 150px; !important;">
+                                                    {{-- Verifica si el usuario tiene un rol asignado --}}
                                                     {{ $usuario ? $usuario->getRoleNames()->implode(', ') : 'Sin rol' }}
                                                 </span>
                                             </td>
