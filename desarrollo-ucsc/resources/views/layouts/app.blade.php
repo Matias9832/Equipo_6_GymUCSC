@@ -25,7 +25,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <!-- Flatpickr CSS -->
     <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" >
-    <!-- Se pretende cambiar la fuente a travez de una variable (Cambio por aplicar) -->
+    <!-- CSS Personalizado -->
+     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
 </head>
 @stack('scripts')
 
