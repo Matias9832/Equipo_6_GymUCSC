@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Alumno;
 use App\Models\Carrera;
 
+use Yajra\DataTables\Facades\DataTables;
 class CarreraController extends Controller
 {
     public function index(Request $request)
@@ -16,6 +17,15 @@ class CarreraController extends Controller
             ->paginate(20);
 
         return view('admin.mantenedores.carreras.index', compact('carreras'));
+    }
+
+    public function data(Request $request)
+    {
+        $query = Carrera::query();
+
+        return DataTables::of($query)
+            ->editColumn('UA', fn($row) => $row->UA ?? '-')
+            ->make(true);
     }
 
     /**
