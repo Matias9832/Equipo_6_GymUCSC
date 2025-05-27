@@ -8,8 +8,13 @@ return new class extends Migration {
     {
         Schema::create('rutinas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('usuario', 'id_usuario')->onDelete('cascade');
+            $table->string('nombre');
+            $table->unsignedBigInteger('user_id'); // Usuario asignado
+            $table->string('creador_rut'); // Rut del creador
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id_usuario')->on('usuario')->onDelete('cascade');
+            $table->foreign('creador_rut')->references('rut')->on('usuario')->onDelete('restrict');
         });
     }
 

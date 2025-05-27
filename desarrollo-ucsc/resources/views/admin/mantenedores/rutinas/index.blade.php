@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('content')
@@ -16,7 +15,9 @@
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre Rutina</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUT Usuario</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUT Creador</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Ejercicios</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Acciones</th>
                                     </tr>
@@ -26,7 +27,17 @@
                                         <tr>
                                             <td>
                                                 <span class="text-xs font-weight-bold ps-3">
+                                                    {{ $rutina->nombre }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="text-xs font-weight-bold ps-3">
                                                     {{ $rutina->usuario->rut ?? 'Sin RUT' }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="text-xs font-weight-bold ps-3">
+                                                    {{ $rutina->creador_rut ?? 'Sin RUT' }}
                                                 </span>
                                             </td>
                                             <td>
@@ -50,7 +61,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center text-muted py-4">
+                                            <td colspan="5" class="text-center text-muted py-4">
                                                 No hay rutinas registradas.
                                             </td>
                                         </tr>

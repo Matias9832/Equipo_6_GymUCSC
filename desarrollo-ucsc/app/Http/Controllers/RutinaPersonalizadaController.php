@@ -8,8 +8,11 @@ class RutinaPersonalizadaController extends Controller
 {
     public function index()
     {
-        $rutinas = Rutina::with('ejercicios')
-            ->where('user_id', Auth::id())
+        $rutinas = Rutina::with([
+                'ejercicios',
+                'creador.alumno'
+            ])
+            ->where('user_id', Auth::user()->id_usuario)
             ->get();
 
         return view('usuarios.rutinas_personalizadas', compact('rutinas'));

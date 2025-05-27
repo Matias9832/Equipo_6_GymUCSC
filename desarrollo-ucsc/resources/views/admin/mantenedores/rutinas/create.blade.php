@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -9,8 +10,23 @@
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
+
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 <form action="{{ route('rutinas.store') }}" method="POST" id="rutina-form">
                     @csrf
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre de la Rutina</label>
+                        <input type="text" name="nombre" id="nombre" class="form-control" required value="{{ old('nombre') }}">
+                    </div>
                     <div class="mb-3">
                         <label for="id_usuario" class="form-label">Alumno</label>
                         <select name="user_id" id="id_usuario" class="form-select" required>
@@ -79,7 +95,6 @@
 @endsection
 
 @push('js')
-<!-- Incluye Select2 si no está en tu layout -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
@@ -119,7 +134,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 100);
     });
 
-    // Habilita el botón solo si hay usuario seleccionado y ejercicios agregados
     function checkCrearRutinaBtn() {
         const userId = $('#id_usuario').val();
         const ejercicios = document.querySelectorAll('.ejercicio-item');
@@ -127,7 +141,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     $('#id_usuario').on('change', checkCrearRutinaBtn);
 
-    // Añadir ejercicio (igual que antes)
     let ejercicioIndex = 0;
     document.getElementById('agregar-ejercicio').addEventListener('click', function() {
         const container = document.getElementById('ejercicios-container');

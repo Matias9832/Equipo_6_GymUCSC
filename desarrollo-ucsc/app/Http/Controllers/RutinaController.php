@@ -12,8 +12,8 @@ class RutinaController extends Controller
     public function index()
     {
         $rutinas = auth()->user()->tipo_usuario === 'admin'
-            ? Rutina::with('usuario')->get()
-            : Rutina::where('user_id', auth()->id())->with('ejercicios')->get();
+            ? Rutina::with(['usuario', 'creador', 'ejercicios'])->get()
+            : Rutina::where('user_id', auth()->user()->id_usuario)->with(['usuario', 'creador', 'ejercicios'])->get();
 
         return view('admin.mantenedores.rutinas.index', compact('rutinas'));
     }
@@ -28,15 +28,24 @@ class RutinaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'nombre' => 'required|string|max:255',
             'user_id' => 'required|exists:usuario,id_usuario',
-            'ejercicios' => 'required|array',
-            'ejercicios.*.id' => 'exists:ejercicios,id',
+            'ejercicios' => 'required|array|min:1',
+            'ejercicios.*.id' => 'required|exists:ejercicios,id',
             'ejercicios.*.series' => 'required|integer|min:1',
             'ejercicios.*.repeticiones' => 'required|integer|min:1',
             'ejercicios.*.descanso' => 'required|integer|min:0',
+        ], [
+            'required' => 'Por favor completa todos los campos obligatorios.',
+            'exists' => 'Uno de los valores seleccionados no es válido.',
+            'min' => 'Debes agregar al menos un ejercicio.'
         ]);
 
-        $rutina = Rutina::create(['user_id' => $request->user_id]);
+        $rutina = Rutina::create([
+            'nombre' => $request->nombre,
+            'user_id' => $request->user_id,
+            'creador_rut' => auth()->user()->rut,
+        ]);
 
         foreach ($request->ejercicios as $ejercicio) {
             $rutina->ejercicios()->attach($ejercicio['id'], [
@@ -49,18 +58,32 @@ class RutinaController extends Controller
         return redirect()->route('rutinas.index')->with('success', 'Rutina creada correctamente.');
     }
 
+    public function edit(Rutina $rutina)
+    {
+        $ejercicios = Ejercicio::all();
+        return view('admin.mantenedores.rutinas.edit', compact('rutina', 'ejercicios'));
+    }
+
     public function update(Request $request, Rutina $rutina)
     {
         $request->validate([
-            'user_id' => 'required|exists:usuario,id_usuario',
-            'ejercicios' => 'required|array',
-            'ejercicios.*.id' => 'exists:ejercicios,id',
+            'nombre' => 'required|string|max:255',
+            // 'user_id' => 'required|exists:usuario,id_usuario', // No se permite cambiar usuario en edición
+            'ejercicios' => 'required|array|min:1',
+            'ejercicios.*.id' => 'required|exists:ejercicios,id',
             'ejercicios.*.series' => 'required|integer|min:1',
             'ejercicios.*.repeticiones' => 'required|integer|min:1',
             'ejercicios.*.descanso' => 'required|integer|min:0',
+        ], [
+            'required' => 'Por favor completa todos los campos obligatorios.',
+            'exists' => 'Uno de los valores seleccionados no es válido.',
+            'min' => 'Debes agregar al menos un ejercicio.'
         ]);
 
-        $rutina->update(['user_id' => $request->user_id]);
+        $rutina->update([
+            'nombre' => $request->nombre,
+            // 'user_id' => $request->user_id, // No se actualiza el usuario asignado
+        ]);
 
         $rutina->ejercicios()->detach();
         foreach ($request->ejercicios as $ejercicio) {

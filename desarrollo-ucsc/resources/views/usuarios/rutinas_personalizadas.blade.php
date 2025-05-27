@@ -1,4 +1,3 @@
-
 @extends('layouts.guest')
 
 @section('content')
@@ -12,7 +11,17 @@
                 @else
                     @foreach($rutinas as $rutina)
                         <div class="mb-4">
-                            <h5 style="color:#D12421;">Rutina #{{ $rutina->id }}</h5>
+                            <h5 style="color:#D12421;">
+                                {{ $rutina->nombre }}
+                                <span class="text-muted" style="font-size:1rem;">
+                                    &mdash; 
+                                    @if($rutina->creador && $rutina->creador->alumno)
+                                        {{ $rutina->creador->alumno->nombre_alumno }} {{ $rutina->creador->alumno->apellido_paterno }}
+                                    @else
+                                        {{ $rutina->creador_rut }}
+                                    @endif
+                                </span>
+                            </h5>
                             <ul>
                                 @foreach($rutina->ejercicios as $ejercicio)
                                     <li>
@@ -72,6 +81,7 @@
     let serieActual = 1;
     let descansoEnCurso = false;
     let timerInterval = null;
+    let pausaEntreEjercicios = false;
 
     function mostrarEjercicio(idx, serie) {
         const ejercicio = ejerciciosActuales[idx];
@@ -98,6 +108,7 @@
         document.getElementById('btn-continuar-ejercicio').innerText = 'Continuar';
         document.getElementById('btn-saltar-descanso').style.display = 'none';
         descansoEnCurso = false;
+        pausaEntreEjercicios = false;
     }
 
     function mostrarDescanso(segundos) {
@@ -128,6 +139,7 @@
         idxEjercicio = 0;
         serieActual = 1;
         descansoEnCurso = false;
+        pausaEntreEjercicios = false;
         if (timerInterval) clearInterval(timerInterval);
         document.getElementById('btn-saltar-descanso').style.display = 'none';
     }
@@ -153,13 +165,11 @@
             const descanso = ejercicio.pivot.descanso || 0;
 
             if (descansoEnCurso) {
-                // Después del descanso, avanzar a la siguiente serie o ejercicio
-                serieActual++;
-                if (serieActual <= totalSeries) {
-                    mostrarEjercicio(idxEjercicio, serieActual);
-                } else {
+                if (pausaEntreEjercicios) {
+                    // Después del descanso entre ejercicios, mostrar el siguiente ejercicio
                     idxEjercicio++;
                     serieActual = 1;
+                    pausaEntreEjercicios = false;
                     if (idxEjercicio < ejerciciosActuales.length) {
                         mostrarEjercicio(idxEjercicio, serieActual);
                     } else {
@@ -173,16 +183,44 @@
                             color: '#646567'
                         });
                     }
+                } else {
+                    // Después del descanso entre series
+                    serieActual++;
+                    if (serieActual <= totalSeries) {
+                        mostrarEjercicio(idxEjercicio, serieActual);
+                    } else {
+                        // Terminó el ejercicio, ahora toca descanso antes del siguiente ejercicio
+                        if (descanso > 0) {
+                            pausaEntreEjercicios = true;
+                            mostrarDescanso(descanso);
+                        } else {
+                            idxEjercicio++;
+                            serieActual = 1;
+                            if (idxEjercicio < ejerciciosActuales.length) {
+                                mostrarEjercicio(idxEjercicio, serieActual);
+                            } else {
+                                cerrarModalRutina();
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡Rutina completada!',
+                                    showConfirmButton: false,
+                                    timer: 1800,
+                                    background: '#fff',
+                                    color: '#646567'
+                                });
+                            }
+                        }
+                    }
                 }
             } else {
                 // Al terminar una serie, si corresponde, mostrar descanso
                 if (serieActual < totalSeries && descanso > 0) {
                     mostrarDescanso(descanso);
-                } else {
-                    // Si no hay descanso o es la última serie, avanzar
-                    serieActual++;
-                    if (serieActual <= totalSeries) {
-                        mostrarEjercicio(idxEjercicio, serieActual);
+                } else if (serieActual === totalSeries) {
+                    // Última serie del ejercicio, mostrar descanso antes de cambiar de ejercicio
+                    if (descanso > 0) {
+                        pausaEntreEjercicios = true;
+                        mostrarDescanso(descanso);
                     } else {
                         idxEjercicio++;
                         serieActual = 1;
@@ -200,6 +238,10 @@
                             });
                         }
                     }
+                } else {
+                    // Avanzar a la siguiente serie
+                    serieActual++;
+                    mostrarEjercicio(idxEjercicio, serieActual);
                 }
             }
         });
@@ -216,6 +258,5 @@
         $('#visorRutinaModal').on('hidden.bs.modal', cerrarModalRutina);
     });
 </script>
-<!-- SweetAlert2 para feedback -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endpush
