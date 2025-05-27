@@ -20,7 +20,7 @@
             data-scroll="false">
             <div class="container-fluid py-2 px-3">
                 <nav aria-label="breadcrumb">
-                    <h4 class="font-weight-bolder text-white mb-0">Gestor de QR</h4>
+                    <h4 class="font-weight-bolder text-white mb-0">INGRESA ESCANEANDO EL CÓDIGO QR</h4>
                 </nav>
             </div>
         </nav>
@@ -67,91 +67,88 @@
                     </div>
                 </div>
 
-                <div class="custom-tab-container mt-4">
-                    {{-- TABS DE INGRESO Y SALIDA --}}
-                    <div class="custom-tab-container mt-4">
-                        <ul class="nav nav-tabs custom-tabs mb-4 w-100" id="registroTabs" role="tablist">
-                            <li class="nav-item flex-fill text-center" role="presentation">
-                                <button class="nav-link active border-primary text-primary bg-white w-100" id="ingreso-tab"
-                                    aria-controls="ingreso-tab-pane" aria-selected="true" data-bs-toggle="tab"
-                                    data-bs-target="#ingreso" type="button" role="tab">
+                <div class="position-relative my-3 text-center">
+                    <hr>
+                    <span class="position-absolute top-50 start-50 translate-middle bg-gray-100 px-3 text-muted" style="z-index: 1;">Ó</span>
+                </div>
+                
+                <div class="container">
+                    <div class="card shadow-sm p-4 text-center">
+                        <div class="custom-tab-container mt-4">                                 
+                            
+                            <h5 class="font-weight-bolder mb-0">INGRESA CON TUS CREDENCIALES</h5>
+                            {{-- Botones para activar modales --}}
+                            <div class="d-flex gap-3 justify-content-center mt-4">
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalIngresoManual">
                                     Registrar Ingreso
                                 </button>
-                            </li>
-                            <li class="nav-item flex-fill text-center" role="presentation">
-                                <button class="nav-link  border-primary text-primary bg-white w-100" id="salida-tab"
-                                    aria-controls="salida-tab-pane" aria-selected="false" data-bs-toggle="tab"
-                                    data-bs-target="#salida" type="button" role="tab">
+                                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalSalidaManual">
                                     Registrar Salida
                                 </button>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="registroTabsContent">
-                            {{-- Formulario de ingreso manual con RUT y contraseña --}}
-                            <div class="tab-pane fade show active" id="ingreso" role="tabpanel" aria-labelledby="ingreso-tab"
-                                tabindex="0">
-
-                                <h5 class="mb-3 text-center">Registrar ingreso manual</h5>
-                                <form id="form-registro-manual" action="{{ route('registro.manual') }}" method="POST">
-
-                                    @csrf
-                                    <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
-
-                                    <div class="mb-3">
-                                        <label for="rut" class="form-label">RUT</label>
-                                        <input type="text" name="rut" id="rut" class="form-control"
-                                            placeholder="Sin puntos ni dígito verificador" required>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="password" class="form-label">Contraseña</label>
-                                        <input type="password" name="password" id="password" class="form-control"
-                                            placeholder="********" required>
-                                    </div>
-
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary">Registrar ingreso</button>
-                                    </div>
-                                </form>
-
-                                <div id="respuestaIngreso" class="mt-3"></div>
-
-                            </div>
-
-                            {{-- Formulario de salida manual con RUT --}}
-                            <div class="tab-pane fade" id="salida" role="tabpanel" aria-labelledby="salida-tab" tabindex="0">
-
-                                <h5 class="mb-3 text-center">Registrar salida manual</h5>
-                                <form id="form-registro-manual" action="{{ route('salida.manual') }}" method="POST">
-
-                                    @csrf
-                                    <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
-
-                                    <div class="mb-3">
-                                        <label for="rut" class="form-label">RUT</label>
-                                        <input type="text" name="rut" id="rut" class="form-control"
-                                            placeholder="Sin puntos ni dígito verificador" required>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="password" class="form-label">Contraseña</label>
-                                        <input type="password" name="password" id="password" class="form-control"
-                                            placeholder="********" required>
-                                    </div>
-
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-primary">Registrar salida</button>
-                                    </div>
-                                </form>
-
-                                <div id="respuestaSalida" class="mt-3"></div>
-
                             </div>
                         </div>
-                    </div>
-
+                    </div>            
                 </div>
         @endif
+
+        
+        {{-- Modal Ingreso Manual --}}
+        <div class="modal fade" id="modalIngresoManual" tabindex="-1" aria-labelledby="modalIngresoManualLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" style="margin-top: 300px;">
+                <div class="modal-content">
+                    <form action="{{ route('registro.manual') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalIngresoManualLabel">Registrar Ingreso Manual</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="rutIngreso" class="form-label">RUT</label>
+                                <input type="text" name="rut" id="rutIngreso" class="form-control" placeholder="Sin puntos ni dígito verificador" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="passIngreso" class="form-label">Contraseña</label>
+                                <input type="password" name="password" id="passIngreso" class="form-control" placeholder="********" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Registrar Ingreso</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Salida Manual --}}
+        <div class="modal fade" id="modalSalidaManual" tabindex="-1" aria-labelledby="modalSalidaManualLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" style="margin-top: 300px;">
+                <div class="modal-content">
+                    <form action="{{ route('salida.manual') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalSalidaManualLabel">Registrar Salida Manual</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="rutSalida" class="form-label">RUT</label>
+                                <input type="text" name="rut" id="rutSalida" class="form-control" placeholder="Sin puntos ni dígito verificador" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="passSalida" class="form-label">Contraseña</label>
+                                <input type="password" name="password" id="passSalida" class="form-control" placeholder="********" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-outline-primary">Registrar Salida</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         </div>
 @endsection
 

@@ -376,7 +376,7 @@ class ControlSalasController extends Controller
         $usuario = Usuario::where('rut', $request->rut)->first();
         
         if (!$usuario || !Hash::check($request->password, $usuario->contrasenia_usuario)) {
-            return response()->json(['success' => false, 'message' => 'Credenciales inválidas.']);
+            return back()->with('error', 'El rut o la contraseña son incorrectos.') ->withInput();
         }
         
 
@@ -388,7 +388,7 @@ class ControlSalasController extends Controller
             ->exists();
 
         if ($yaIngresado) {
-            return response()->json(['success' => false, 'message' => 'Ya hay un ingreso activo para este usuario.']);
+            return back()->with('error', 'Ya hay un ingreso activo para este usuario.')->withInput();
         }
 
         // Registrar el ingreso
@@ -418,7 +418,7 @@ class ControlSalasController extends Controller
 
     // Verificar si existe y la contraseña coincide
     if (!$usuario || !Hash::check($request->password, $usuario->contrasenia_usuario)) {
-        return back()->with('error', 'Credenciales inválidas.')->withInput();
+        return back()->with('error', 'El rut o contraseña ingresados son incorrectos')->withInput();
     }
 
 
