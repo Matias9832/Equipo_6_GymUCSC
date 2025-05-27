@@ -105,7 +105,9 @@
                 .map(([_, num]) => num);
 
             flatpickr("#fecha_asistencia", {
-                dateFormat: "Y-m-d",
+                dateFormat: "Y-m-d", //Formato de fecha para backend
+                altInput: true, // Mostrar un campo visible con formato distinto
+                altFormat: "d-m-Y", // Mostrar la fecha como día-mes-año
                 locale: "es",
                 disable: [
                     function(date) {

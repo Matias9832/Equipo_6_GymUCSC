@@ -26,7 +26,7 @@ class AsistenciaTallerController extends Controller
                 'taller_usuario.fecha_asistencia'
             )
             ->where('taller_usuario.id_taller', $taller->id_taller)
-            ->orderBy('taller_usuario.fecha_asistencia', 'desc')
+            ->orderBy('taller_usuario.fecha_asistencia', 'asc')
             ->get();
 
         return view('admin.talleres.asistencia.ver', compact('taller', 'asistencias', 'fecha'));
