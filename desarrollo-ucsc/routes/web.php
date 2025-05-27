@@ -8,8 +8,6 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
-
-// Controladores adicionales del otro proyecto
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\UsuarioController;
@@ -199,6 +197,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::middleware(['permission:Eliminar Usuarios'])->group(function () {
         Route::delete('usuarios/{usuario}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
     });
+
+    // Busqueda de usuarios para Select2  
+    Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('usuarios.buscar');
+
 
     // CRUD para administradores
     Route::middleware(['permission:Acceso al Mantenedor de Administradores'])->group(function () {

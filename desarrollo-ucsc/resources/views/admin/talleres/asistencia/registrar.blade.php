@@ -119,6 +119,28 @@
                 maxDate: new Date(new Date().getFullYear(), 11, 31),
                 defaultDate: "{{ old('fecha_asistencia') }}"
             });
+            $('#id_usuario').select2({
+                placeholder: "Buscar por RUT o nombre...",
+                width: '100%',
+                ajax: {
+                    url: '{{ route('usuarios.buscar') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term // lo que el usuario escribe
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data // debe devolver un array con 'id' y 'text'
+                        };
+                    },
+                    cache: true
+                },
+                language: "es",
+                minimumInputLength: 2 // comienza a buscar desde 2 caracteres
+            });
         });
     </script>
     @endpush
