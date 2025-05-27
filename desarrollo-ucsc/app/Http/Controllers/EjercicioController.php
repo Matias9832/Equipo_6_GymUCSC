@@ -26,7 +26,7 @@ class EjercicioController extends Controller
             'imagen' => 'nullable|image|mimes:gif|max:2048',
         ]);
 
-        $data = $request->all();
+        $data = $request->only(['nombre', 'grupo_muscular']);
 
         if ($request->hasFile('imagen')) {
             $data['imagen'] = $request->file('imagen')->store('ejercicios', 'public');
@@ -50,7 +50,7 @@ class EjercicioController extends Controller
             'imagen' => 'nullable|image|mimes:gif|max:2048',
         ]);
 
-        $data = $request->all();
+        $data = $request->only(['nombre', 'grupo_muscular']);
 
         if ($request->hasFile('imagen')) {
             if ($ejercicio->imagen) {
