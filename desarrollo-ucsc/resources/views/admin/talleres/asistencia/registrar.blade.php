@@ -120,6 +120,7 @@
                 defaultDate: "{{ old('fecha_asistencia') }}"
             });
             $('#id_usuario').select2({
+                theme: 'bootstrap-5',
                 placeholder: "Buscar por RUT o nombre...",
                 width: '100%',
                 ajax: {
@@ -127,19 +128,25 @@
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
-                        return {
-                            q: params.term // lo que el usuario escribe
-                        };
+                        return { q: params.term };
                     },
                     processResults: function (data) {
-                        return {
-                            results: data // debe devolver un array con 'id' y 'text'
-                        };
+                        return { results: data };
                     },
                     cache: true
                 },
-                language: "es",
-                minimumInputLength: 2 // comienza a buscar desde 2 caracteres
+                minimumInputLength: 2,
+                language: {
+                    inputTooShort: function () {
+                        return "Escribe para buscar...";
+                    },
+                    noResults: function () {
+                        return "No se encontraron resultados";
+                    },
+                    searching: function () {
+                        return "Buscando...";
+                    }
+                }
             });
         });
     </script>
