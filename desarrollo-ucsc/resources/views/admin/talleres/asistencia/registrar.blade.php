@@ -148,6 +148,11 @@
                     }
                 }
             });
+            $('#id_usuario').on('select2:open', function () {
+                setTimeout(function() {
+                    document.querySelector('.select2-search__field').focus();
+                }, 100);
+            });
         });
     </script>
     @endpush
