@@ -260,7 +260,7 @@
                 </a>
             </li>
             {{-- Otros --}}
-            <li class="nav-item mt-3 d-flex align-items-center">
+            <!-- <li class="nav-item mt-3 d-flex align-items-center">
                 <div class="ps-4">
                     <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
                 </div>
@@ -272,6 +272,16 @@
                         <i class="ni ni-planet text-dark text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Personalización</span>
+                </a>
+            </li> -->
+            <li class="nav-item">
+                <a class="#">
+                    <span class="nav-link-text ms-1"></span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="#">
+                    <span class="nav-link-text ms-1"></span>
                 </a>
             </li>
             <li class="nav-item">
