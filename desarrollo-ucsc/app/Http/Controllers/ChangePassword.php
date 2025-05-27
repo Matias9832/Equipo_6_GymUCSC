@@ -31,7 +31,7 @@ class ChangePassword extends Controller
         {
             Auth::logout(); // Ahora está aquí
             $id = intval($request->id);
-            $user = User::find($id);
+            $user = Usuario::find($id);
 
             if (!$user) {
                 return abort(404, 'Usuario no encontrado');
@@ -56,7 +56,7 @@ class ChangePassword extends Controller
             ]);
             return redirect('login');
         } else {
-            return back()->with('error', 'Your email does not match the email who requested the password change');
+            return back()->with('error', 'Tu correo no coinice con el que se solicitó el cambio de contraseña');
         }
     }
 }

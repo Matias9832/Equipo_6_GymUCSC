@@ -236,7 +236,44 @@
                     <span class="nav-link-text ms-1">Países</span>
                 </a>
             </li>
-            {{-- Configuración --}}
+            {{-- Rutinas --}}
+            <li class="nav-item mt-3 d-flex align-items-center">
+                <div class="ps-4">
+                    <i class="ni ni-calendar-grid-58 text-success text-sm opacity-10"></i>
+                </div>
+                <h6 class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Rutinas</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'rutinas.index' ? 'active' : '' }}" href="{{ route('rutinas.index') }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-calendar-grid-58 text-success text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Gestión de Rutinas</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'ejercicios.index' ? 'active' : '' }}" href="{{ route('ejercicios.index') }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-dumbbell text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Gestión de Ejercicios</span>
+                </a>
+            </li>
+            {{-- Otros --}}
+            <li class="nav-item mt-3 d-flex align-items-center">
+                <div class="ps-4">
+                    <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
+                </div>
+                <h6 class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Otros</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'control-salas.seleccionar' ? 'active' : '' }}" href="{{ route('control-salas.seleccionar') }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-planet text-dark text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Gestión de QR</span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="#">
                     <span class="nav-link-text ms-1"></span>
