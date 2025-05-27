@@ -26,7 +26,7 @@ class AsistenciaTallerController extends Controller
                 'taller_usuario.fecha_asistencia'
             )
             ->where('taller_usuario.id_taller', $taller->id_taller)
-            ->orderBy('taller_usuario.fecha_asistencia', 'desc')
+            ->orderBy('taller_usuario.fecha_asistencia', 'asc')
             ->get();
 
         return view('admin.talleres.asistencia.ver', compact('taller', 'asistencias', 'fecha'));
@@ -38,7 +38,16 @@ class AsistenciaTallerController extends Controller
         $usuarios = Usuario::where('tipo_usuario', '!=', 'admin') // Excluir administradores
             ->with('alumno')
             ->get();
-        return view('admin.talleres.asistencia.registrar', compact('taller', 'usuarios'));
+
+        // Obtener días válidos desde los módulos del taller
+        $diasValidos = $taller->horarios
+            ->pluck('dia_taller')
+            ->map(fn($dia) => strtolower($dia))
+            ->unique()
+            ->values()
+            ->toArray();
+
+        return view('admin.talleres.asistencia.registrar', compact('taller', 'usuarios', 'diasValidos'));
     }
 
     // Procesar registro de asistencia

@@ -193,6 +193,10 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::delete('usuarios/{usuario}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
     });
 
+    // Busqueda de usuarios para Select2  
+    Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('usuarios.buscar');
+
+
     // CRUD para administradores
     Route::middleware(['permission:Acceso al Mantenedor de Administradores'])->group(function () {
         Route::resource('news', NewsController::class)->except(['index', 'show']);
@@ -205,6 +209,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
 
     Route::resource('carreras', CarreraController::class)->only(['index']);
+    Route::get('/carreras/data', [CarreraController::class, 'data'])->name('carreras.data');
 
     // Gestión de QR
     Route::middleware(['permission:Acceso al Mantenedor de Gestión de QR'])->group(function () {

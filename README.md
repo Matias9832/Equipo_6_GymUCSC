@@ -18,6 +18,7 @@ Repositorio Git para plataforma Web UCSC
     composer require spatie/laravel-permission
     composer require laravel/ui
     composer require laravel-frontend-presets/argon
+    composer require yajra/laravel-datatables-oracle  //Necesario para usar dataTables
     
 ### Hacer:
     php artisan config:clear
@@ -114,3 +115,66 @@ MAIL_FROM_NAME=UCSC
     </div>
 @endsection
 ```
+
+# Cómo añadir buscador Select2 Para buscar usuario por RUT o nombre
+## Código para el blade
+```
+<select name="id_usuario" id="id_usuario" class="form-select">
+                            <option value="">Selecciona un usuario</option>
+                            @foreach($usuarios as $usuario)
+                                @php
+                                    $alumno = $usuario->alumno;
+                                    $nombreCompleto = $alumno ? "{$alumno->nombre_alumno} {$alumno->apellido_paterno} {$alumno->apellido_materno}" : 'Nombre no disponible';
+                                @endphp
+                                <option value="{{ $usuario->id_usuario }}" {{ old('id_usuario') == $usuario->id_usuario ? 'selected' : '' }}>
+                                    {{ $usuario->rut }} - {{ $nombreCompleto }}
+                                </option>
+                            @endforeach
+                        </select>
+```
+## Código para poner antes del @endsection
+```
+@push('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            $('#id_usuario').select2({
+                theme: 'bootstrap-5',
+                placeholder: "Buscar por RUT o nombre...",
+                width: '100%',
+                ajax: {
+                    url: '{{ route('usuarios.buscar') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return { q: params.term };
+                    },
+                    processResults: function (data) {
+                        return { results: data };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 2,
+                language: {
+                    inputTooShort: function () {
+                        return "Escribe para buscar...";
+                    },
+                    noResults: function () {
+                        return "No se encontraron resultados";
+                    },
+                    searching: function () {
+                        return "Buscando...";
+                    }
+                }
+            });
+            $('#id_usuario').on('select2:open', function () {
+                setTimeout(function() {
+                    document.querySelector('.select2-search__field').focus();
+                }, 100);
+            });
+        });
+    </script>
+@endpush
+@stack('js')        
+```
+* Si ya tienes un Script u otra función con Javascript, lo importante es que esté dentro del ```<script>``` y de ```document.addEventListener('DOMContentLoaded', function () {```
+* Puedes ver un ejemplo en admin/talleres/asistencia/registrar.blade.php

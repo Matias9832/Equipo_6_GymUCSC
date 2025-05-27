@@ -1,0 +1,30 @@
+.select2-container--bootstrap-5 .select2-selection--single {
+    height: calc(2.5rem + 1px) !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 1rem !important;
+    border-radius: 0.5rem !important;
+    border-color: #d2d6da !important;
+    box-shadow: 0 1rem 1rem rgba(255, 0, 0, 0.05) !important;
+    display: flex !important;
+    align-items: center !important;
+    background: #fff !important;
+}
+.select2-container--bootstrap-5 .select2-selection__rendered {
+    line-height: normal !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+}
+.select2-container--bootstrap-5 .select2-dropdown {
+    border-radius: 0 0 0.5rem 0.5rem !important;
+    border-color: #d2d6da !important;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.05);
+    overflow: hidden;
+}
+.select2-container--open .select2-selection--single {
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+.select2-container--bootstrap-5 .select2-results__option {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 1rem;
+}

@@ -71,7 +71,7 @@
                     <!-- Fecha de asistencia -->
                     <div class="col-md-6 mb-3">
                         <label for="fecha_asistencia" class="form-label">Fecha de Asistencia</label>
-                        <input type="date" name="fecha_asistencia" id="fecha_asistencia" class="form-control" value="{{ old('fecha_asistencia') }}">
+                        <input type="text" name="fecha_asistencia" id="fecha_asistencia" class="form-control" placeholder="Selecciona una fecha" value="{{ old('fecha_asistencia') }}">
                         @error('fecha_asistencia')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -87,5 +87,75 @@
         </div>
     </div>
     @include('layouts.footers.auth.footer')
+    @push('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const diasPermitidos = @json($diasValidos); // ej: ['lunes', 'martes']
+            const diasNumericos = {
+                'domingo': 0,
+                'lunes': 1,
+                'martes': 2,
+                'miércoles': 3,
+                'jueves': 4,
+                'viernes': 5,
+                'sábado': 6,
+            };
+            const diasDeshabilitados = Object.entries(diasNumericos)
+                .filter(([dia, num]) => !diasPermitidos.includes(dia))
+                .map(([_, num]) => num);
+
+            flatpickr("#fecha_asistencia", {
+                dateFormat: "Y-m-d", //Formato de fecha para backend
+                altInput: true, // Mostrar un campo visible con formato distinto
+                altFormat: "d-m-Y", // Mostrar la fecha como día-mes-año
+                locale: "es",
+                disable: [
+                    function(date) {
+                        // Deshabilitar si el día no está en la lista de permitidos
+                        return diasDeshabilitados.includes(date.getDay());
+                    }
+                ],
+                minDate: new Date(new Date().getFullYear(), 0, 1),
+                maxDate: new Date(new Date().getFullYear(), 11, 31),
+                defaultDate: "{{ old('fecha_asistencia') }}"
+            });
+            $('#id_usuario').select2({
+                theme: 'bootstrap-5',
+                placeholder: "Buscar por RUT o nombre...",
+                width: '100%',
+                ajax: {
+                    url: '{{ route('usuarios.buscar') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return { q: params.term };
+                    },
+                    processResults: function (data) {
+                        return { results: data };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 2,
+                language: {
+                    inputTooShort: function () {
+                        return "Escribe para buscar...";
+                    },
+                    noResults: function () {
+                        return "No se encontraron resultados";
+                    },
+                    searching: function () {
+                        return "Buscando...";
+                    }
+                }
+            });
+            $('#id_usuario').on('select2:open', function () {
+                setTimeout(function() {
+                    document.querySelector('.select2-search__field').focus();
+                }, 100);
+            });
+        });
+    </script>
+    @endpush
+    @stack('js')
 </div>
 @endsection

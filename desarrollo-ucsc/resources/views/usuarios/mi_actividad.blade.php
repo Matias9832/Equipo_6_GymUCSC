@@ -1,16 +1,102 @@
-@extends('layouts.guest')
+<style>
+             /* Encabezados de días con colores */
+        .fc-col-header-cell{
+             background-color: #D12421; color: white; 
+        }
 
-@section('content')
-    @include('layouts.navbars.guest.navbar')
-    <main class="main-content mt-0">
-        <div class="container py-4 ">
-            <h2 class="mb-4">Mi Actividad</h2>
-            <div id="calendarioActividad" style="min-height: 600px;" class="card shadow-sm p-4"></div>
-        </div>
-    </main>    
-    @include('layouts.footers.guest.footer')
+        .fc-daygrid-day {
+            border: 1px solid #eee;
+            height: 100px;
+            position: relative;
+        }
 
-@endsection
+        .fc-day-today {
+            background-color: #fef3c7 !important;
+            border: 2px solid #facc15;
+        }
+
+        
+        
+
+        .fc-toolbar-title {
+            color: #1f2937;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .fc-button {
+            background-color: #6b7280;
+            border: none;
+            color: white;
+        }
+
+        .fc-button:hover {
+            background-color: #4b5563;
+        }
+
+        /* Números de los días */
+        .fc-daygrid-day-number {
+            color: #000 !important;       /* Negro */
+            text-decoration: none !important; /* Sin subrayado */
+            font-weight: 500;
+        }
+
+        /* Nombre de los días */
+        .fc-col-header-cell-cushion {
+            color: #fff !important;       /* Ya están con color blanco por fondo */
+            text-decoration: none !important;
+            font-weight: bold;
+        }
+          /* Estilo para el texto de los eventos */
+        .fc-event-title {
+            color: #000 !important;      /* Negro */
+            font-weight: 500;
+        }
+
+        .fc-event {
+            background-color: #6cdb2b !important; /* fondo suave amarillo */
+            border: none;
+            padding: 2px 4px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+      
+        /* Evita subrayado en enlaces del calendario */
+        .fc a {
+            text-decoration: none !important;
+            color: inherit; /* hereda el color correcto */
+        }
+
+        /* Botones y título */
+        .fc-toolbar-title {
+            color: #1f2937;
+            font-weight: bold;
+        }
+       
+
+        .fc-button {
+            color: white;
+            background-color: #6b7280;
+            border: none;
+        }
+
+    </style>
+    
+    @extends('layouts.guest')
+
+    @section('content')
+        @include('layouts.navbars.guest.navbar')
+        <main class="main-content mt-0">
+            <div class="container py-4 ">
+                <h2 class="mb-4">Mi Actividad</h2>
+                <div id="calendarioActividad" style="min-height: 600px;" class="card shadow-sm p-4"></div>
+            </div>
+        </main>    
+        @include('layouts.footers.guest.footer')
+
+    @endsection
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
@@ -23,6 +109,13 @@
                 locale: 'es',
                 events: '/actividades',
                 eventDisplay: 'block',
+                buttonText: {
+                today: 'Hoy',
+                month: 'Mes',
+                week: 'Semana',
+                day: 'Día',
+                list: 'Lista'
+            },
                 eventContent: function(arg) {
                     let horaIngreso = arg.event.extendedProps.hora_ingreso;
                     let tiempoUso = parseInt(arg.event.extendedProps.tiempo_uso);

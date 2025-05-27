@@ -104,6 +104,32 @@ class UsuarioController extends Controller
         return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente.');
     }
 
+    public function buscar(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        $usuarios = Usuario::with('alumno')
+            ->where('rut', 'like', "%$query%")
+            ->orWhereHas('alumno', function ($queryBuilder) use ($query) {
+                $queryBuilder->where('nombre_alumno', 'like', "%$query%")
+                    ->orWhere('apellido_paterno', 'like', "%$query%")
+                    ->orWhere('apellido_materno', 'like', "%$query%");
+            })
+            ->limit(10)
+            ->get();
+
+        return response()->json($usuarios->map(function ($usuario) {
+            $nombreCompleto = $usuario->alumno
+                ? "{$usuario->alumno->nombre_alumno} {$usuario->alumno->apellido_paterno} {$usuario->alumno->apellido_materno}"
+                : 'Nombre no disponible';
+
+            return [
+                'id' => $usuario->id_usuario,
+                'text' => "{$usuario->rut} - {$nombreCompleto}",
+            ];
+        }));
+    }
+
     public function destroy(Usuario $usuario)
     {
         Administrador::where('rut_admin', $usuario->rut)->delete(); // Eliminar el administrador asociado
