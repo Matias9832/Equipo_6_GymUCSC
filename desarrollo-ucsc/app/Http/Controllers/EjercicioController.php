@@ -29,7 +29,10 @@ class EjercicioController extends Controller
         $data = $request->only(['nombre', 'grupo_muscular']);
 
         if ($request->hasFile('imagen')) {
-            $data['imagen'] = $request->file('imagen')->store('ejercicios', 'public');
+            $file = $request->file('imagen');
+            $filename = uniqid('ejercicio_') . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('img/ejercicios'), $filename);
+            $data['imagen'] = 'ejercicios/' . $filename;
         }
 
         Ejercicio::create($data);
@@ -53,10 +56,14 @@ class EjercicioController extends Controller
         $data = $request->only(['nombre', 'grupo_muscular']);
 
         if ($request->hasFile('imagen')) {
-            if ($ejercicio->imagen) {
-                \Storage::disk('public')->delete($ejercicio->imagen);
+            // Elimina la imagen anterior si existe
+            if ($ejercicio->imagen && file_exists(public_path('img/' . $ejercicio->imagen))) {
+                unlink(public_path('img/' . $ejercicio->imagen));
             }
-            $data['imagen'] = $request->file('imagen')->store('ejercicios', 'public');
+            $file = $request->file('imagen');
+            $filename = uniqid('ejercicio_') . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('img/ejercicios'), $filename);
+            $data['imagen'] = 'ejercicios/' . $filename;
         }
 
         $ejercicio->update($data);
@@ -66,8 +73,8 @@ class EjercicioController extends Controller
 
     public function destroy(Ejercicio $ejercicio)
     {
-        if ($ejercicio->imagen) {
-            \Storage::disk('public')->delete($ejercicio->imagen);
+        if ($ejercicio->imagen && file_exists(public_path('img/' . $ejercicio->imagen))) {
+            unlink(public_path('img/' . $ejercicio->imagen));
         }
 
         $ejercicio->delete();

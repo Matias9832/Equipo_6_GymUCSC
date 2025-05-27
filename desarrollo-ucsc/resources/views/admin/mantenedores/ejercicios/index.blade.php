@@ -32,11 +32,11 @@
                                                 <span class="text-xs">{{ ucfirst($ejercicio->grupo_muscular) }}</span>
                                             </td>
                                             <td>
-                                                @if($ejercicio->imagen)
-                                                    <img src="{{ asset('storage/' . $ejercicio->imagen) }}" alt="Imagen del ejercicio" class="img-fluid" style="max-height: 50px;">
-                                                @else
-                                                    <span class="text-muted">Sin imagen</span>
-                                                @endif
+                                                    @if($ejercicio->imagen)
+                                                        <img src="{{ asset('img/' . $ejercicio->imagen) }}" alt="Imagen del ejercicio" class="img-fluid" style="max-height: 50px; max-width: 80px;">
+                                                    @else
+                                                        <span class="text-muted">Sin imagen</span>
+                                                    @endif
                                             </td>
                                             <td class="align-middle text-center">
                                                 <a href="{{ route('ejercicios.edit', $ejercicio->id) }}" class="btn btn-sm btn-info">Editar</a>

@@ -90,7 +90,7 @@
         // Imagen/gif si existe
         let imgHtml = '';
         if (ejercicio.imagen) {
-            imgHtml = `<img src="/storage/${ejercicio.imagen}" alt="Ejercicio" class="img-fluid mb-3" style="max-height:220px; border-radius:10px; border:2px solid #D12421;">`;
+            imgHtml = `<img src="/img/${ejercicio.imagen}" alt="Ejercicio" class="img-fluid mb-3" style="max-height:220px; border-radius:10px; border:2px solid #D12421;">`;
         } else {
             imgHtml = `<div class="mb-3 text-muted" style="font-size:1.2rem;">Sin imagen</div>`;
         }
