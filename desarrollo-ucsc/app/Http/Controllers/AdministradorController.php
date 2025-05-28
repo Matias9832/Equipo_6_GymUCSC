@@ -11,18 +11,61 @@ use App\Models\Sucursal;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log; // Importar la clase Log
 
+use Yajra\DataTables\Facades\DataTables;
+
 class AdministradorController extends Controller
 {
     public function index()
     {
         // Paginar administradores (20 por página), manteniendo relación con sucursales activas
-        $administradores = Administrador::with(['sucursales' => function ($query) {
-            $query->wherePivot('activa', true);
-        }])->paginate(20); 
+        $administradores = Administrador::with([
+            'sucursales' => function ($query) {
+                $query->wherePivot('activa', true);
+            }
+        ])->paginate(20);
 
         $usuarios = Usuario::with('roles')->get();
 
         return view('admin.mantenedores.administradores.index', compact('administradores', 'usuarios'));
+    }
+
+    public function data(Request $request)
+    {
+        $query = Administrador::with([
+            'sucursales' => function ($query) {
+                $query->wherePivot('activa', true);
+            }
+        ])->with('usuario');
+
+        return DataTables::of($query)
+            ->addColumn('rut_admin', fn($admin) => $admin->rut_admin)
+            ->addColumn('nombre_admin', fn($admin) => $admin->nombre_admin)
+            ->addColumn('correo_usuario', fn($admin) => optional($admin->usuario)->correo_usuario ?? '-')
+            ->addColumn('rol', function ($admin) {
+                return optional($admin->usuario)->getRoleNames()->implode(', ') ?? 'Sin rol';
+            })
+            ->addColumn('sucursal', function ($admin) {
+                return $admin->sucursales->first()->nombre_suc ?? 'Sin sucursal';
+            })
+            ->addColumn('acciones', function ($admin) {
+                $editUrl = route('administradores.edit', $admin->id_admin);
+                $deleteUrl = route('administradores.destroy', $admin->id_admin);
+
+                return '
+                <a href="' . $editUrl . '" class="text-secondary font-weight-bold text-xs me-2" title="Editar">
+                    <i class="ni ni-ruler-pencil text-info"></i>
+                </a>
+                <form action="' . $deleteUrl . '" method="POST" style="display:inline;">
+                    ' . csrf_field() . '
+                    ' . method_field('DELETE') . '
+                    <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm(\'¿Estás seguro de que quieres eliminar este administrador?\')" title="Eliminar">
+                        <i class="ni ni-fat-remove"></i>
+                    </button>
+                </form>
+            ';
+            })
+            ->rawColumns(['acciones'])
+            ->toJson();
     }
 
     public function create()
@@ -40,11 +83,11 @@ class AdministradorController extends Controller
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
             'rol' => 'required|in:Director,Docente,Coordinador',
         ]);
-    
+
         try {
             // Generar una contraseña aleatoria de 6 caracteres
             $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6);
-    
+
             // Crear el usuario
             $usuario = Usuario::create([
                 'rut' => $request->rut_admin,
@@ -54,27 +97,27 @@ class AdministradorController extends Controller
                 'activado_usuario' => 1,
                 'contrasenia_usuario' => Hash::make($password),
             ]);
-    
+
             // Asignar el rol
             $usuario->assignRole($request->rol);
-    
+
             // Crear el administrador
             $administrador = Administrador::create([
                 'rut_admin' => $request->rut_admin,
                 'nombre_admin' => $request->nombre_admin,
                 'fecha_creacion' => now(),
             ]);
-    
+
             // Asignar la sucursal al administrador
             DB::table('admin_sucursal')->insert([
                 'id_admin' => $administrador->id_admin,
                 'id_suc' => $request->sucursal_id,
                 'activa' => true,
             ]);
-    
+
             // Enviar el correo con la contraseña
             Mail::to($usuario->correo_usuario)->send(new \App\Mail\AdministradorPasswordMail($request->nombre_admin, $password));
-    
+
             return redirect()->route('administradores.index')->with('success', 'Administrador creado correctamente y se ha enviado la contraseña por correo.');
         } catch (\Exception $e) {
             // Manejar errores
@@ -109,7 +152,7 @@ class AdministradorController extends Controller
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $administrador->rut_admin . ',rut',
             'rol' => 'required|in:Director,Docente,Coordinador',
         ]);
-        
+
         // Actualizar el administrador
         $administrador = Administrador::findOrFail($id);
         $administrador->update([
@@ -136,7 +179,7 @@ class AdministradorController extends Controller
         return redirect()->route('administradores.index')->with('success', 'Administrador actualizado correctamente.');
     }
 
-    
+
     public function destroy(Administrador $administrador)
     {
         // Eliminar el administrador

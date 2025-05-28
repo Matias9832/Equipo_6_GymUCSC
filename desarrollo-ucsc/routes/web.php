@@ -56,7 +56,8 @@ Route::post('/verificar', [RegisterController::class, 'verificarCodigo'])->name(
 
 // Rutas de autenticación
 Route::get('/dashboard', function () {
-    return redirect('/dashboard'); })->middleware('auth');
+    return redirect('/dashboard');
+})->middleware('auth');
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
 Route::get('/login', [LoginController::class, 'create'])->middleware('guest')->name('login');
@@ -199,10 +200,13 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     // CRUD para administradores
     Route::middleware(['permission:Acceso al Mantenedor de Administradores'])->group(function () {
-        Route::resource('news', NewsController::class)->except(['index', 'show']);
+        Route::get('/administradores/data', [AdministradorController::class, 'data'])->name('administradores.data');
+
         Route::resource('administradores', AdministradorController::class)->parameters([
             'administradores' => 'administrador',
         ]);
+
+        Route::resource('news', NewsController::class)->except(['index', 'show']);
     });
 
     // Importar alumnos
