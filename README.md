@@ -38,7 +38,7 @@ Se debe iniciar la instancia del login y register con:
     1. composer require laravel/breeze --dev
     2. php artisan breeze:install
 
-Se debe montar la concección a travez de:
+Se debe montar la concección a través de:
 
     1. npm install
     2. npm run dev
