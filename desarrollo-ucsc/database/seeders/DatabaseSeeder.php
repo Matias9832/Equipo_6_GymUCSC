@@ -45,6 +45,9 @@ class DatabaseSeeder extends Seeder
             TallerSeeder::class,
         ]);
 
+        //Seeder de los Ejercicios
+        $this->call(EjercicioSeeder::class);
+
         $this->call(FontColorSeeder::class);
         $this->call(TemaSeeder::class);
         $this->call(TenantSeeder::class);
