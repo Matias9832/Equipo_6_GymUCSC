@@ -80,11 +80,13 @@
 
                 <!-- Botones -->
                 <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">Registrar Asistencia</button>
-                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-success">
+                    <button type="submit" class="btn btn-success">Registrar Asistencia</button>
+                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-primary">
                         <i class="fas fa-eye me-1"></i> Ver asistencias
                     </a>
-                    <a href="{{ route('talleres.index') }}" class="btn btn-secondary">Volver</a>
+                    <a href="{{ route('talleres.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Volver a talleres
+                    </a>
                 </div>
             </form>
         </div>
