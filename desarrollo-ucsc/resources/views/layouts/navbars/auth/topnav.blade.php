@@ -7,7 +7,7 @@
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                @if (in_array(request()->route()->getName(), ['carreras.index', 'administradores.index', 'usuarios.index']))
+                @if (in_array(request()->route()->getName(), ['carreras.index', 'administradores.index', 'usuarios.index', 'alumnos.index']))
                     <div class="input-group">
                         <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
                         <input id="buscador-general" type="text" class="form-control" placeholder="Búsqueda">

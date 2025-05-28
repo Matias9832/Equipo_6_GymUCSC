@@ -14,19 +14,40 @@ use App\Http\Controllers\CarreraController;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\AlumnoImport;
 
+use Illuminate\Support\Str;
+use Yajra\DataTables\DataTables;
+
 class AlumnoController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Alumno::query();
+        if ($request->ajax()) {
+            $query = Alumno::query();
 
-        if ($request->has('ocultar_inactivos') && $request->ocultar_inactivos == 'on') {
-            $query->where('estado_alumno', 'Activo');
+            if ($request->has('ocultar_inactivos') && $request->ocultar_inactivos == 'on') {
+                $query->where('estado_alumno', 'Activo');
+            }
+
+            return DataTables::of($query)
+                ->addColumn('apellidos', function ($row) {
+                    return $row->apellido_paterno . ' ' . $row->apellido_materno;
+                })
+                ->addColumn('carrera_html', function ($row) {
+                    return '<p class="text-xs font-weight-bold mb-0" title="' . e($row->carrera) . '">' . e(Str::limit($row->carrera, 40, '...')) . '</p>';
+                })
+                ->addColumn('estado_html', function ($row) {
+                    $clase = $row->estado_alumno === 'Activo' ? 'bg-gradient-success' : 'bg-gradient-secondary';
+                    return '<span class="badge badge-sm ' . $clase . '">' . $row->estado_alumno . '</span>';
+                })
+                ->addColumn('sexo_html', function ($row) {
+                    $color = $row->sexo_alumno === 'M' ? 'bg-gradient-blue' : 'bg-gradient-pink';
+                    return '<span class="badge badge-sm border ' . $color . '" style="width: 35px;">' . $row->sexo_alumno . '</span>';
+                })
+                ->rawColumns(['estado_html', 'sexo_html', 'carrera_html'])
+                ->make(true);
         }
 
-        $alumnos = $query->orderBy('apellido_paterno')->paginate(20);
-
-        return view('admin.mantenedores.alumnos.index', compact('alumnos'));
+        return view('admin.mantenedores.alumnos.index');
     }
 
 
