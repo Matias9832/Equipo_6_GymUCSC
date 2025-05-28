@@ -11,42 +11,40 @@ use Yajra\DataTables\Facades\DataTables;
 
 class AsistenciaTallerController extends Controller
 {
-    public function asistenciasData(Request $request, Taller $taller)
-    {
-        $asistencias = DB::table('taller_usuario')
-            ->join('usuario', 'usuario.id_usuario', '=', 'taller_usuario.id_usuario')
-            ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
-            ->select(
-                'usuario.rut',
-                DB::raw("CONCAT_WS(' ', alumno.nombre_alumno, alumno.apellido_paterno, alumno.apellido_materno) as nombre"),
-                'alumno.carrera',
-                'alumno.sexo_alumno',
-                'taller_usuario.fecha_asistencia'
-            )
-            ->where('taller_usuario.id_taller', $taller->id_taller);
-
-        return DataTables::of($asistencias)->make(true);
-    }
-    // Ver lista de asistencias para un taller en una fecha específica
     public function ver(Request $request, Taller $taller)
     {
-        $fecha = $request->input('fecha', now()->toDateString());
+        if ($request->ajax()) {
+            $asistencias = DB::table('taller_usuario')
+                ->join('usuario', 'usuario.id_usuario', '=', 'taller_usuario.id_usuario')
+                ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
+                ->select(
+                    'usuario.rut',
+                    DB::raw("CONCAT_WS(' ', alumno.nombre_alumno, alumno.apellido_paterno, alumno.apellido_materno) as nombre"),
+                    'alumno.carrera',
+                    'alumno.sexo_alumno',
+                    'taller_usuario.fecha_asistencia'
+                )
+                ->where('taller_usuario.id_taller', $taller->id_taller);
 
-        $asistencias = DB::table('taller_usuario')
-            ->join('usuario', 'usuario.id_usuario', '=', 'taller_usuario.id_usuario')
-            ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
-            ->select(
-                'usuario.rut',
-                DB::raw("CONCAT_WS(' ', alumno.nombre_alumno, alumno.apellido_paterno, alumno.apellido_materno) as nombre"),
-                'alumno.carrera',
-                'alumno.sexo_alumno',
-                'taller_usuario.fecha_asistencia'
-            )
-            ->where('taller_usuario.id_taller', $taller->id_taller)
-            ->orderBy('taller_usuario.fecha_asistencia', 'asc')
-            ->get();
+            return DataTables::of($asistencias)
+                ->filterColumn('nombre', function ($query, $keyword) {
+                    $query->whereRaw("LOWER(CONCAT_WS(' ', alumno.nombre_alumno, alumno.apellido_paterno, alumno.apellido_materno)) LIKE ?", ["%".strtolower($keyword)."%"]);
+                })
+                ->addColumn('nombre_html', function ($row) {
+                    return '<p class="text-xs font-weight-bold mb-0">' . e($row->nombre) . '</p>';
+                })
+                ->addColumn('sexo_html', function ($row) {
+                    $color = $row->sexo_alumno === 'M' ? 'bg-gradient-blue' : 'bg-gradient-pink';
+                    return '<span class="badge badge-sm border ' . $color . '" style="width: 35px;">' . $row->sexo_alumno . '</span>';
+                })
+                ->addColumn('fecha_html', function ($row) {
+                    return '<span class="text-sm">' . e(Carbon::parse($row->fecha_asistencia)->format('d-m-Y')) . '</span>';
+                })
+                ->rawColumns(['nombre_html', 'sexo_html', 'fecha_html'])
+                ->make(true);
+        }
 
-        return view('admin.talleres.asistencia.ver', compact('taller', 'asistencias', 'fecha'));
+        return view('admin.talleres.asistencia.ver', compact('taller'));
     }
 
     // Mostrar formulario para registrar asistencia manual

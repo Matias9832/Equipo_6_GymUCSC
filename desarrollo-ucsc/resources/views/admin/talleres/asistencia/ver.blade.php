@@ -25,18 +25,15 @@
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-3">
                         <table id="tablaAsistencias" class="table align-items-center mb-0">
-                            <thead class="bg-light">
+                            <thead>
                                 <tr>
-                                    <th>RUT</th>
-                                    <th>Nombre</th>
-                                    <th>Carrera</th>
-                                    <th>Sexo</th>
-                                    <th>Fecha de Asistencia</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUT</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nombre</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Carrera</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sexo</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Fecha</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <!-- Los datos se cargarán mediante DataTables -->
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -45,34 +42,45 @@
     </div>
   
     <script>
-        $(document).ready(function () {
-            $('#tablaAsistencias').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route("asistencias.data", $taller->id_taller) }}',
-                columns: [
-                    { data: 'rut', name: 'usuario.rut' },
-                    { data: 'nombre', name: 'nombre' },
-                    { data: 'carrera', name: 'alumno.carrera' },
-                    { data: 'sexo_alumno', name: 'alumno.sexo_alumno' },
-                    { data: 'fecha_asistencia', name: 'taller_usuario.fecha_asistencia' }
-                ],
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
-                    zeroRecords: 'No se encontraron resultados',
-                    search: 'Buscar:',
-                    paginate: {
-                        next: '&raquo;',
-                        previous: '&laquo;'
-                    }
-                },
-                dom:
-                    `<"row px-4 mt-3"<"col-md-6"f>>` +
-                    `<"table-responsive"tr>` +
-                    `<"row px-4 mt-3 mb-4"<"col-12 d-flex justify-content-center"p>>`
-            });
+    $(document).ready(function () {
+        const table = $('#tablaAsistencias').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: '{{ route("asistencia.ver", $taller->id_taller) }}',
+            columns: [
+                { data: 'rut', name: 'usuario.rut', className: 'mb-0 text-sm fw-bold ps-3' },
+                { data: 'nombre_html', name: 'nombre', className: 'text-xs font-weight-bold mb-0' },
+                { data: 'carrera', name: 'alumno.carrera', className: 'text-xs font-weight-bold mb-0' },
+                { data: 'sexo_html', name: 'alumno.sexo_alumno', className: '' },
+                { data: 'fecha_html', name: 'taller_usuario.fecha_asistencia', className: '' }
+            ],
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                info: '',
+                infoEmpty: '',
+                infoFiltered: '',
+                zeroRecords: 'No se encontraron resultados',
+                search: 'Buscar:',
+                paginate: {
+                    next: '&raquo;',
+                    previous: '&laquo;'
+                }
+            },
+            dom:
+                `<"row px-4 mt-3"<"col-md-6"f>>` +
+                `<"table-responsive"tr>` +
+                `<"row px-4 mt-3 mb-4"<"col-12 d-flex justify-content-center"p>>`,
         });
-    </script>
+
+        // Oculta el buscador interno de DataTables
+        $('.dataTables_filter').hide();
+
+        // Vincula el buscador general del topnav
+        $('#buscador-general').on('keyup', function () {
+            table.search(this.value).draw();
+        });
+    });
+</script>
 
     <style>
         /* Asegura que la tabla siempre se ajuste al contenedor */

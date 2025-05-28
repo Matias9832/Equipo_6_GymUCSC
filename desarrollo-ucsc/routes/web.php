@@ -169,7 +169,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::resource('rutinas', RutinaController::class)->parameters([
         'rutinas' => 'rutina',
     ]);
-    
+
     // Asistencia talleres
     Route::get('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'registrar'])
         ->name('asistencia.registrar');
@@ -177,8 +177,6 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         ->name('asistencia.guardar');
     Route::get('admin/talleres/{taller}/asistencia/ver', [AsistenciaTallerController::class, 'ver'])
         ->name('asistencia.ver');
-    Route::get('/talleres/{taller}/asistencias/data', [AsistenciaTallerController::class, 'asistenciasData'])
-        ->name('asistencias.data');
 
     // Usuarios
     Route::middleware(['permission:Ver Usuarios'])->group(function () {
