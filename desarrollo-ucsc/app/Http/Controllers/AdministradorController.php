@@ -31,40 +31,53 @@ class AdministradorController extends Controller
 
     public function data(Request $request)
     {
-        $query = Administrador::with([
-            'sucursales' => function ($query) {
-                $query->wherePivot('activa', true);
-            }
-        ])->with('usuario');
+        $query = DB::table('administrador')
+            ->join('usuario', 'administrador.rut_admin', '=', 'usuario.rut')
+            ->leftJoin('model_has_roles', function ($join) {
+                $join->on('usuario.id_usuario', '=', 'model_has_roles.model_id')
+                    ->where('model_has_roles.model_type', Usuario::class);
+            })
+            ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->leftJoin('admin_sucursal', function ($join) {
+                $join->on('administrador.id_admin', '=', 'admin_sucursal.id_admin')
+                    ->where('admin_sucursal.activa', 1);
+            })
+            ->leftJoin('sucursal', 'admin_sucursal.id_suc', '=', 'sucursal.id_suc')
+            ->select(
+                'administrador.id_admin',
+                'administrador.rut_admin',
+                'administrador.nombre_admin',
+                'usuario.correo_usuario as correo_usuario',
+                'roles.name as rol_name',
+                'sucursal.nombre_suc as nombre_suc'
+            );
 
         return DataTables::of($query)
-            ->addColumn('rut_admin', fn($admin) => $admin->rut_admin)
-            ->addColumn('nombre_admin', fn($admin) => $admin->nombre_admin)
-            ->addColumn('correo_usuario', fn($admin) => optional($admin->usuario)->correo_usuario ?? '-')
-            ->addColumn('rol', function ($admin) {
-                return optional($admin->usuario)->getRoleNames()->implode(', ') ?? 'Sin rol';
+            ->editColumn('correo_usuario', fn($admin) => $admin->correo_usuario ?? '-')
+            ->editColumn('rol_name', function ($admin) {
+                $rolText = $admin->rol_name ?? 'Sin rol';
+                return '<span class="badge badge-sm bg-gradient-info" style="width: 150px !important;">' . e($rolText) . '</span>';
             })
-            ->addColumn('sucursal', function ($admin) {
-                return $admin->sucursales->first()->nombre_suc ?? 'Sin sucursal';
-            })
+            ->editColumn('nombre_suc', fn($admin) => $admin->nombre_suc ?? 'Sin sucursal')
             ->addColumn('acciones', function ($admin) {
                 $editUrl = route('administradores.edit', $admin->id_admin);
                 $deleteUrl = route('administradores.destroy', $admin->id_admin);
 
                 return '
-                <a href="' . $editUrl . '" class="text-secondary font-weight-bold text-xs me-2" title="Editar">
-                    <i class="ni ni-ruler-pencil text-info"></i>
-                </a>
-                <form action="' . $deleteUrl . '" method="POST" style="display:inline;">
-                    ' . csrf_field() . '
-                    ' . method_field('DELETE') . '
-                    <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm(\'¿Estás seguro de que quieres eliminar este administrador?\')" title="Eliminar">
-                        <i class="ni ni-fat-remove"></i>
-                    </button>
-                </form>
-            ';
+        <td class="align-middle text-center">
+            <a href="' . $editUrl . '" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">
+                <i class="ni ni-ruler-pencil text-info"></i>
+            </a>
+            <form action="' . $deleteUrl . '" method="POST" class="d-inline" onsubmit="return confirm(\'¿Estás seguro de que quieres eliminar este administrador?\')">
+                ' . csrf_field() . '
+                ' . method_field('DELETE') . '
+                <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" title="Eliminar">
+                    <i class="ni ni-fat-remove"></i>
+                </button>
+            </form>
+        </td>';
             })
-            ->rawColumns(['acciones'])
+            ->rawColumns(['rol_name', 'acciones'])
             ->toJson();
     }
 
