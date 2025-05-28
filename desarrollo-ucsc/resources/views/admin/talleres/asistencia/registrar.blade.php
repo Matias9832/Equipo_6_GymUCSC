@@ -71,7 +71,7 @@
                     <!-- Fecha de asistencia -->
                     <div class="col-md-6 mb-3">
                         <label for="fecha_asistencia" class="form-label">Fecha de Asistencia</label>
-                        <input type="text" name="fecha_asistencia" id="fecha_asistencia" class="form-control" placeholder="Selecciona una fecha" value="{{ old('fecha_asistencia') }}">
+                        <input type="text" name="fecha_asistencia" id="fecha_asistencia" class="form-control" placeholder="Selecciona una fecha" value="{{ $fechaSeleccionada }}">
                         @error('fecha_asistencia')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -80,7 +80,10 @@
 
                 <!-- Botones -->
                 <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-success">Registrar Asistencia</button>
+                    <button type="submit" class="btn btn-primary">Registrar Asistencia</button>
+                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-success">
+                        <i class="fas fa-eye me-1"></i> Ver asistencias
+                    </a>
                     <a href="{{ route('talleres.index') }}" class="btn btn-secondary">Volver</a>
                 </div>
             </form>

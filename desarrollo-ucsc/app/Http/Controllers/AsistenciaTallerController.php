@@ -35,11 +35,10 @@ class AsistenciaTallerController extends Controller
     // Mostrar formulario para registrar asistencia manual
     public function registrar(Request $request, Taller $taller)
     {
-        $usuarios = Usuario::where('tipo_usuario', '!=', 'admin') // Excluir administradores
+        $usuarios = Usuario::where('tipo_usuario', '!=', 'admin')
             ->with('alumno')
             ->get();
 
-        // Obtener días válidos desde los módulos del taller
         $diasValidos = $taller->horarios
             ->pluck('dia_taller')
             ->map(fn($dia) => strtolower($dia))
@@ -47,7 +46,10 @@ class AsistenciaTallerController extends Controller
             ->values()
             ->toArray();
 
-        return view('admin.talleres.asistencia.registrar', compact('taller', 'usuarios', 'diasValidos'));
+        // Toma la fecha del request si existe, si no usa old(), si no null
+        $fechaSeleccionada = $request->input('fecha', old('fecha_asistencia'));
+
+        return view('admin.talleres.asistencia.registrar', compact('taller', 'usuarios', 'diasValidos', 'fechaSeleccionada'));
     }
 
     // Procesar registro de asistencia
@@ -79,6 +81,11 @@ class AsistenciaTallerController extends Controller
             'fecha_asistencia' => $request->fecha_asistencia,
         ]);
 
-        return redirect()->route('talleres.index', $taller)->with('success', 'Asistencia registrada correctamente.');
+        return redirect()
+            ->route('asistencia.registrar', [
+                'taller' => $taller->id_taller,
+                'fecha' => $request->fecha_asistencia // <-- pasa la fecha como parámetro
+            ])
+            ->with('success', 'Asistencia registrada correctamente.');
     }
 }
