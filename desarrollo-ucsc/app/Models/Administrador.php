@@ -20,15 +20,21 @@ class Administrador extends Model
         'fecha_creacion',
         'correo_usuario',
     ];
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'rut_admin', 'rut');
+    }
+
     public function news()
     {
         return $this->hasMany(News::class, 'id_admin');
     }
-    
+
     public function sucursales()
     {
         return $this->belongsToMany(Sucursal::class, 'admin_sucursal', 'id_admin', 'id_suc')
-                    ->withPivot('activa');
+            ->withPivot('activa');
     }
     public function talleres()
     {

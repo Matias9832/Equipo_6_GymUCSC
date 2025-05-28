@@ -130,8 +130,8 @@
     </script>
     <!-- CSS de Select2 -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <!-- jQuery (debe ir antes de Select2 JS) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery (debe ir antes de Select2 JS)
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
     <!-- JS de Select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Select2 base + Bootstrap 5 theme -->
@@ -145,7 +145,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!-- Idioma español -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
-    @stack('js');
+    @stack('js')
     @stack('scripts')
 </body>
 
