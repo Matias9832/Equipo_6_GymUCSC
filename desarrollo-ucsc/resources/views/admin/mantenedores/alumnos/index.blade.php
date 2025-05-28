@@ -61,9 +61,7 @@
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">
-                            <table class="table align-items-center mb-0">
-                                @php use Illuminate\Support\Str; @endphp
-
+                            <table id="tablaAlumnos" class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUT
@@ -85,56 +83,7 @@
                                             Estado</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach($alumnos as $alumno)
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">{{ $alumno->rut_alumno }}</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $alumno->apellido_paterno }}
-                                                    {{ $alumno->apellido_materno }}
-                                                </p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $alumno->nombre_alumno }}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0" title="{{ $alumno->carrera }}">
-                                                    {{ Str::limit($alumno->carrera, 40, '...') }}
-                                                </p>
-                                            </td>
-                                            <td>
-                                                <span
-                                                    class="badge badge-sm border {{ $alumno->sexo_alumno === 'M' ? 'bg-gradient-blue' : 'bg-gradient-pink' }}"
-                                                    style="width: 35px;">
-                                                    {{ $alumno->sexo_alumno }}
-                                                </span>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <span
-                                                    class="badge badge-sm {{ $alumno->estado_alumno == 'Activo' ? 'bg-gradient-success' : 'bg-gradient-secondary' }}">
-                                                    {{ $alumno->estado_alumno }}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-
                             </table>
-                            {{-- Paginación --}}
-                            <div class="d-flex justify-content-center mt-3">
-                                {{ $alumnos->links('pagination::bootstrap-4') }}
-                            </div>
-                            @if($alumnos->isEmpty())
-                                <div class="text-center text-muted py-4">
-                                    No hay alumnos registrados.
-                                </div>
-                            @endif
                         </div>
                     </div>
                 </div>
@@ -142,4 +91,75 @@
         </div>
         @include('layouts.footers.auth.footer')
     </div>
+
+    <script>
+        $(document).ready(function () {
+            const table = $('#tablaAlumnos').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('alumnos.index', ['ocultar_inactivos' => request('ocultar_inactivos')]) }}',
+                columns: [
+                    { data: 'rut_alumno', name: 'rut_alumno', className: 'mb-0 text-sm fw-bold ps-3' },
+                    { data: 'apellidos', name: 'apellido_paterno', className: 'text-xs font-weight-bold mb-0' },
+                    { data: 'nombre_alumno', name: 'nombre_alumno', className: 'text-xs font-weight-bold mb-0' },
+                    { data: 'carrera_html', name: 'carrera', className: 'text-xs font-weight-bold mb-0' },
+                    { data: 'sexo_html', name: 'sexo_alumno', className: '' },
+                    { data: 'estado_html', name: 'estado_alumno', orderable: false, className: 'align-middle text-center text-sm' },
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                    info: '',
+                    infoEmpty: '',
+                    infoFiltered: '',
+                    zeroRecords: 'No se encontraron resultados',
+                    search: 'Buscar:',
+                    paginate: {
+                        next: '&raquo;',
+                        previous: '&laquo;'
+                    }
+                },
+                dom:
+                    `<"row px-4 mt-3"<"col-md-6"f>>` +
+                    `<"table-responsive"tr>` +
+                    `<"row px-4 mt-3 mb-4"<"col-12 d-flex justify-content-center"p>>`,
+            });
+
+            $('.dataTables_filter').hide();
+
+            $('#buscador-general').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+    </script>
+
+    <style>
+        /* Asegura que la tabla siempre se ajuste al contenedor */
+        table.dataTable {
+            width: 100% !important;
+        }
+
+        /* Opcional: Si quieres que las columnas no se encojan */
+        table.dataTable td,
+        table.dataTable th {
+            white-space: nowrap;
+        }
+
+        /* Estilos de búsqueda */
+        .dataTables_filter input {
+            border-radius: 0.5rem;
+            border: 1px solid #d2d6da;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            color: #344767;
+        }
+
+        /* Ocultar info */
+        .dataTables_info {
+            display: none !important;
+        }
+
+        .dataTables_filter {
+            display: none !important;
+        }
+    </style>
 @endsection

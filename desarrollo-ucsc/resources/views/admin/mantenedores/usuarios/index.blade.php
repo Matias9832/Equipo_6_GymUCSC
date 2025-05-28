@@ -27,7 +27,7 @@
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">
-                            <table class="table align-items-center mb-0">
+                            <table class="table align-items-center mb-0" id="tablaUsuarios">
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUT
@@ -41,86 +41,12 @@
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Rol / Tipo de usuario</th>
-                                        @role('Super Admin|Director|Coordinador')
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Acciones</th>
-                                        @endrole
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach($usuarios as $usuario)
-                                        @php
-                                            $nombre = 'Sin nombre';
-                                            $rolOTipo = '';
-                                            $badgeClass = '';
-
-                                            if ($usuario->tipo_usuario === 'admin') {
-                                                $admin = \App\Models\Administrador::where('rut_admin', $usuario->rut)->first();
-                                                $nombre = $admin ? $admin->nombre_admin : 'Sin nombre';
-                                                $rolOTipo = $usuario->getRoleNames()->implode(', ') ?: 'Sin rol';
-                                                $badgeClass = 'bg-gradient-info';
-                                            } else {
-                                                $alumno = \App\Models\Alumno::where('rut_alumno', $usuario->rut)->first();
-                                                $nombre = $alumno
-                                                    ? $alumno->nombre_alumno . ' ' . $alumno->apellido_paterno . ' ' . $alumno->apellido_materno
-                                                    : 'Sin nombre';
-                                                $rolOTipo = $usuario->tipo_usuario === 'estudiante' ? 'Estudiante' : 'Seleccionado';
-                                                $badgeClass = $usuario->tipo_usuario === 'estudiante' ? 'bg-gradient-success' : 'bg-gradient-warning';
-                                            }
-                                        @endphp
-                                        <tr>
-                                            <td>
-                                                <span class="text-xs font-weight-bold ps-3">{{ $usuario->rut }}</span>
-                                            </td>
-                                            <td>
-                                                <span class="text-xs">{{ $nombre }}</span>
-                                            </td>
-                                            <td>
-                                                <span class="text-xs">{{ $usuario->correo_usuario }}</span>
-                                            </td>
-                                            <td>
-                                                <span class="badge badge-sm {{ $badgeClass }}" style="width:150px;">
-                                                    {{ $rolOTipo }}
-                                                </span>
-                                            </td>
-                                            @role('Super Admin|Director|Coordinador')
-                                            <td class="align-middle text-center">
-                                                @can('Editar Usuarios')
-                                                    <a href="{{ route('usuarios.edit', $usuario->id_usuario) }}"
-                                                        class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip"
-                                                        title="Editar">
-                                                        <i class="ni ni-ruler-pencil text-info"></i>
-                                                    </a>
-                                                @endcan
-                                                @can('Eliminar Usuarios')
-                                                    <form action="{{ route('usuarios.destroy', $usuario->id_usuario) }}"
-                                                        method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit"
-                                                            class="btn btn-link text-danger p-0 m-0 align-baseline"
-                                                            onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?')"
-                                                            title="Eliminar">
-                                                            <i class="ni ni-fat-remove"></i>
-                                                        </button>
-                                                    </form>
-                                                @endcan
-                                            </td>
-                                            @endrole
-                                        </tr>
-                                    @endforeach
-                                </tbody>
                             </table>
-                            {{-- Paginación --}}
-                            <div class="d-flex justify-content-center mt-3">
-                                {{ $usuarios->links('pagination::bootstrap-4') }}
-                            </div>
-                            @if($usuarios->isEmpty())
-                                <div class="text-center text-muted py-4">
-                                    No hay usuarios registrados.
-                                </div>
-                            @endif
                         </div>
                     </div>
                 </div>
@@ -128,4 +54,74 @@
         </div>
         @include('layouts.footers.auth.footer')
     </div>
+
+    <script>
+        $(document).ready(function () {
+            const table = $('#tablaUsuarios').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('usuarios.index', ['solo_admins' => request('solo_admins')]) }}',
+                columns: [
+                    { data: 'rut', name: 'usuario.rut', className: 'text-xs font-weight-bold ps-3' },
+                    { data: 'nombre_usuario', name: 'nombre_usuario', className: 'text-xs' },
+                    { data: 'correo_usuario', name: 'usuario.correo_usuario', className: 'text-xs' },
+                    { data: 'rol_visible', name: 'rol_visible', className: '' },
+                    { data: 'acciones', name: 'acciones', orderable: false, searchable: false, className: 'align-middle text-center' },
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                    info: '',
+                    infoEmpty: '',
+                    infoFiltered: '',
+                    zeroRecords: 'No se encontraron resultados',
+                    search: 'Buscar:',
+                    paginate: {
+                        next: '&raquo;',
+                        previous: '&laquo;'
+                    }
+                },
+                dom:
+                    `<"row px-4 mt-3"<"col-md-6"f>>` +
+                    `<"table-responsive"tr>` +
+                    `<"row px-4 mt-3 mb-4"<"col-12 d-flex justify-content-center"p>>`,
+            });
+
+            $('.dataTables_filter').hide();
+
+            $('#buscador-general').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+    </script>
+
+    <style>
+        /* Asegura que la tabla siempre se ajuste al contenedor */
+        table.dataTable {
+            width: 100% !important;
+        }
+
+        /* Opcional: Si quieres que las columnas no se encojan */
+        table.dataTable td,
+        table.dataTable th {
+            white-space: nowrap;
+        }
+
+        /* Estilos de búsqueda */
+        .dataTables_filter input {
+            border-radius: 0.5rem;
+            border: 1px solid #d2d6da;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            color: #344767;
+        }
+
+        /* Ocultar info */
+        .dataTables_info {
+            display: none !important;
+        }
+
+        .dataTables_filter {
+            display: none !important;
+        }
+    </style>
 @endsection

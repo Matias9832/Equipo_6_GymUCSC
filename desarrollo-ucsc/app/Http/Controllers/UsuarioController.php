@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use \App\Models\Administrador;
 use App\Models\Usuario;
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\Alumno;
 use Illuminate\Http\Request;
 
@@ -11,17 +12,79 @@ class UsuarioController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Usuario::query();
+        if ($request->ajax()) {
+            $query = Usuario::query();
 
-        if ($request->has('solo_admins') && $request->solo_admins === 'on') {
-            $query->where('tipo_usuario', '!=', 'admin');
+            if ($request->has('solo_admins') && $request->solo_admins === 'on') {
+                $query->where('tipo_usuario', '!=', 'admin');
+            }
+
+            $query->leftJoin('model_has_roles', function ($join) {
+                $join->on('usuario.id_usuario', '=', 'model_has_roles.model_id')
+                    ->where('model_has_roles.model_type', '=', Usuario::class);
+            })
+                ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                ->leftJoin('administrador', 'usuario.rut', '=', 'administrador.rut_admin')
+                ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
+                ->select([
+                    'usuario.id_usuario',
+                    'usuario.rut',
+                    'usuario.tipo_usuario',
+                    'usuario.correo_usuario',
+                    'roles.name as rol_name',
+                    \DB::raw("CASE 
+                        WHEN usuario.tipo_usuario = 'admin' THEN administrador.nombre_admin
+                        ELSE CONCAT(alumno.nombre_alumno, ' ', alumno.apellido_paterno, ' ', alumno.apellido_materno)
+                    END as nombre_usuario"),
+                    \DB::raw("CASE 
+                        WHEN usuario.tipo_usuario = 'admin' THEN COALESCE(roles.name, 'Sin rol')
+                        WHEN usuario.tipo_usuario = 'estudiante' THEN 'Estudiante'
+                        ELSE 'Seleccionado'
+                    END as rol_visible")
+                ]);
+
+            return DataTables::of($query)
+                ->editColumn('rol_visible', function ($usuario) {
+                    if ($usuario->tipo_usuario === 'admin') {
+                        return '<span class="badge badge-sm bg-gradient-info" style="width:150px;">' . ($usuario->rol_visible ?? 'Sin rol') . '</span>';
+                    }
+
+                    $label = $usuario->rol_visible;
+                    $class = $usuario->tipo_usuario === 'estudiante' ? 'bg-gradient-success' : 'bg-gradient-warning';
+                    return '<span class="badge badge-sm ' . $class . '" style="width:150px;">' . $label . '</span>';
+                })
+                ->addColumn('acciones', function ($usuario) {
+                    $editar = auth()->user()->can('Editar Usuarios')
+                        ? '<a href="' . route('usuarios.edit', $usuario->id_usuario) . '" class="text-secondary font-weight-bold text-xs me-2" title="Editar"><i class="ni ni-ruler-pencil text-info"></i></a>'
+                        : '';
+
+                    $eliminar = auth()->user()->can('Eliminar Usuarios')
+                        ? '<form action="' . route('usuarios.destroy', $usuario->id_usuario) . '" method="POST" class="d-inline">'
+                        . csrf_field() . method_field('DELETE') .
+                        '<button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm(\'¿Estás seguro de que quieres eliminar este usuario?\')" title="Eliminar">'
+                        . '<i class="ni ni-fat-remove"></i></button></form>'
+                        : '';
+
+                    return $editar . $eliminar;
+                })
+                ->rawColumns(['rol_visible', 'acciones'])
+                ->filter(function ($query) use ($request) {
+                    if ($request->has('search') && $search = $request->search['value']) {
+                        $query->where(function ($q) use ($search) {
+                            $q->where('usuario.rut', 'like', "%{$search}%")
+                                ->orWhere('usuario.correo_usuario', 'like', "%{$search}%")
+                                ->orWhere('roles.name', 'like', "%{$search}%")
+                                ->orWhere(\DB::raw("CASE 
+                                WHEN usuario.tipo_usuario = 'admin' THEN administrador.nombre_admin
+                                ELSE CONCAT(alumno.nombre_alumno, ' ', alumno.apellido_paterno, ' ', alumno.apellido_materno)
+                            END"), 'like', "%{$search}%");
+                        });
+                    }
+                })
+                ->make(true);
         }
 
-        $usuarios = $query->paginate(20);
-        $administradores = Administrador::all();
-        $alumnos = Alumno::all();
-
-        return view('admin.mantenedores.usuarios.index', compact('usuarios'));
+        return view('admin.mantenedores.usuarios.index');
     }
 
 
