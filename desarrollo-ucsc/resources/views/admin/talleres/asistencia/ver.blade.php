@@ -24,63 +24,18 @@
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-3">
-                        <table class="table align-items-center mb-0">
+                        <table id="tablaAsistencias" class="table align-items-center mb-0">
                             <thead class="bg-light">
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUT</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nombre</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Carrera</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sexo</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Fecha de Asistencia</th>
+                                    <th>RUT</th>
+                                    <th>Nombre</th>
+                                    <th>Carrera</th>
+                                    <th>Sexo</th>
+                                    <th>Fecha de Asistencia</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $fechaAnterior = null;
-                                    $colorA = 'bg-gray-100';
-                                    $colorB = 'bg-white';
-                                    $toggle = false;
-                                @endphp
-
-                                @forelse ($asistencias->sortByDesc('fecha_asistencia') as $asistencia)
-                                    @php
-                                        $fechaActual = \Carbon\Carbon::parse($asistencia->fecha_asistencia)->format('d-m-Y');
-                                        if ($fechaActual !== $fechaAnterior) {
-                                            $toggle = !$toggle;
-                                            $fechaAnterior = $fechaActual;
-                                        }
-                                        $rowClass = $toggle ? $colorA : $colorB;
-                                    @endphp
-                                    <tr class="{{ $rowClass }}">
-                                        <td>
-                                            <div class="d-flex px-2 py-1">
-                                                <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">{{ $asistencia->rut }}</h6>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $asistencia->nombre ?? 'No disponible' }}</p>
-                                        </td>
-                                        <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ $asistencia->carrera ?? '-' }}</p>
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-sm border {{ $asistencia->sexo_alumno === 'M' ? 'bg-gradient-blue' : 'bg-gradient-pink' }}" style="width: 35px;">
-                                                {{ $asistencia->sexo_alumno ?? '-' }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <p class="text-xs font-weight-bold mb-0">{{ \Carbon\Carbon::parse($asistencia->fecha_asistencia)->format('d-m-Y') }}</p>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center text-muted py-4">
-                                            No hay registros de asistencia.
-                                        </td>
-                                    </tr>
-                                @endforelse
+                                <!-- Los datos se cargarán mediante DataTables -->
                             </tbody>
                         </table>
                     </div>
@@ -88,6 +43,68 @@
             </div>
         </div>
     </div>
+  
+    <script>
+        $(document).ready(function () {
+            $('#tablaAsistencias').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route("asistencias.data", $taller->id_taller) }}',
+                columns: [
+                    { data: 'rut', name: 'usuario.rut' },
+                    { data: 'nombre', name: 'nombre' },
+                    { data: 'carrera', name: 'alumno.carrera' },
+                    { data: 'sexo_alumno', name: 'alumno.sexo_alumno' },
+                    { data: 'fecha_asistencia', name: 'taller_usuario.fecha_asistencia' }
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
+                    zeroRecords: 'No se encontraron resultados',
+                    search: 'Buscar:',
+                    paginate: {
+                        next: '&raquo;',
+                        previous: '&laquo;'
+                    }
+                },
+                dom:
+                    `<"row px-4 mt-3"<"col-md-6"f>>` +
+                    `<"table-responsive"tr>` +
+                    `<"row px-4 mt-3 mb-4"<"col-12 d-flex justify-content-center"p>>`
+            });
+        });
+    </script>
+
+    <style>
+        /* Asegura que la tabla siempre se ajuste al contenedor */
+        table.dataTable {
+            width: 100% !important;
+        }
+
+        /* Opcional: Si quieres que las columnas no se encojan */
+        table.dataTable td,
+        table.dataTable th {
+            white-space: nowrap;
+        }
+
+        /* Estilos de búsqueda */
+        .dataTables_filter input {
+            border-radius: 0.5rem;
+            border: 1px solid #d2d6da;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            color: #344767;
+        }
+
+        /* Ocultar info */
+        .dataTables_info {
+            display: none !important;
+        }
+
+        .dataTables_filter {
+            display: none !important;
+        }
+    </style>
+
     @include('layouts.footers.auth.footer')
 </div>
 @endsection

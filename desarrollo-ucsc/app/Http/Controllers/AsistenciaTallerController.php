@@ -7,9 +7,26 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Taller;
 use App\Models\Usuario;
 use Carbon\Carbon;
+use Yajra\DataTables\Facades\DataTables;
 
 class AsistenciaTallerController extends Controller
 {
+    public function asistenciasData(Request $request, Taller $taller)
+    {
+        $asistencias = DB::table('taller_usuario')
+            ->join('usuario', 'usuario.id_usuario', '=', 'taller_usuario.id_usuario')
+            ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
+            ->select(
+                'usuario.rut',
+                DB::raw("CONCAT_WS(' ', alumno.nombre_alumno, alumno.apellido_paterno, alumno.apellido_materno) as nombre"),
+                'alumno.carrera',
+                'alumno.sexo_alumno',
+                'taller_usuario.fecha_asistencia'
+            )
+            ->where('taller_usuario.id_taller', $taller->id_taller);
+
+        return DataTables::of($asistencias)->make(true);
+    }
     // Ver lista de asistencias para un taller en una fecha específica
     public function ver(Request $request, Taller $taller)
     {

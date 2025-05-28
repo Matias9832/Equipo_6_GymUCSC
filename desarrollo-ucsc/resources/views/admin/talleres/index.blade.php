@@ -48,7 +48,7 @@
                                             </td>
                                             <td><span class="text-xs">{{ $taller->cupos_taller }}</span></td>
                                             <td>
-                                                <span class="badge bg-{{ $taller->activo_taller ? 'success' : 'secondary' }}">
+                                                <span class="badge bg-gradient-{{ $taller->activo_taller ? 'success' : 'secondary' }}">
                                                     {{ $taller->activo_taller ? 'Activo' : 'Inactivo' }}
                                                 </span>
                                             </td>
