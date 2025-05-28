@@ -175,7 +175,7 @@ class ControlSalasController extends Controller
             'id_sala' => $idSala,
             'id_usuario' => $usuario->id_usuario,
             'fecha_ingreso' => now()->format('Y-m-d'),
-            'hora_ingreso' => now()->format('H:i:s'),
+            'hora_ingreso' => now()->format('H:i'),
             'hora_salida' => null,
             'tiempo_uso' => null,
         ]);
@@ -396,7 +396,7 @@ class ControlSalasController extends Controller
             'id_sala' => $request->id_sala,
             'id_usuario' => $usuario->id_usuario,
             'fecha_ingreso' => now()->format('Y-m-d'),
-            'hora_ingreso' => now()->format('H:i:s'),
+            'hora_ingreso' => now()->format('H:i'),
             'hora_salida' => null,
             'tiempo_uso' => null,
         ]);
