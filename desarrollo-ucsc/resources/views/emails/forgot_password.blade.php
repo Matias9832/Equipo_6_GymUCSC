@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Credenciales de Administrador</title>
+    <title>Restablecer Contraseña</title>
     <style>
         body {
             background: #fafbfc;
@@ -25,16 +25,17 @@
             font-weight: bold;
             margin-bottom: 24px;
         }
-        .password-box {
-            background: #D12421;
-            color: #fff;
-            padding: 12px 0;
+        .btn-primary {
+            display: inline-block;
+            background: #D12421 !important; /* <-- Color UCSC */
+            color: #fff !important;
+            padding: 12px 32px;
             border-radius: 6px;
-            text-align: center;
-            font-size: 1.2rem;
+            text-decoration: none;
             font-weight: 600;
-            margin: 18px 0 24px 0;
-            letter-spacing: 2px;
+            margin: 18px 0;
+            font-size: 1rem;
+            border: none;
         }
         .footer {
             margin-top: 32px;
@@ -46,15 +47,12 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">Credenciales de Administrador</div>
-        <p>¡Hola {{ $nombre_admin }}!</p>
-        <p>Se ha creado tu cuenta de administrador en el sistema. Estas son tus credenciales:</p>
-        <div class="password-box">
-            Contraseña: {{ $password }}
-        </div>
-        <p><strong>Por favor, cambia tu contraseña después de iniciar sesión.</strong></p>
-        <p>Si no solicitaste esta cuenta, puedes ignorar este correo.</p>
-        <p>Saludos,<br>Equipo GYMUCSC</p>
+        <div class="header">Restablecer Contraseña</div>
+        <p>¡Hola!</p>
+        <p>Recibiste este correo porque se solicitó restablecer la contraseña de tu cuenta.</p>
+        <a href="{{ $url }}" class="btn-primary">Restablecer Contraseña</a>
+        <p>Si no solicitaste este cambio, puedes ignorar este correo.</p>
+        <p>¡Gracias!</p>
         <div class="footer">
             © {{ date('Y') }} UCSC. Todos los derechos reservados.
         </div>

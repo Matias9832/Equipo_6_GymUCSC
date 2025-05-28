@@ -22,6 +22,8 @@ Repositorio Git para plataforma Web UCSC
     composer require laravel/ui
     composer require laravel-frontend-presets/argon
     composer require yajra/laravel-datatables-oracle  //Necesario para usar dataTables
+    composer require symfony/mailgun-mailer mailgun/mailgun-php //mailgun
+    composer require symfony/http-client //mailgun
 
 ### Hacer:
 
