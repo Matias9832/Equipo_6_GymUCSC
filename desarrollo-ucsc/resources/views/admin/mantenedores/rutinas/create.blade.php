@@ -7,6 +7,9 @@
         <div class="container py-4">
             <h2 class="mb-4">Rutinas Personalizadas</h2>
             <div class="card shadow rounded-4 p-4">
+                <div class="col">
+                    <h4 class="mb-4">Crear rutina</h4>
+                </div>
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
@@ -39,6 +42,7 @@
                     <div id="ejercicios-container"></div>
                     <button type="button" class="btn btn-secondary mb-3" id="agregar-ejercicio">+ Añadir Ejercicio</button>
                     <div class="d-flex justify-content-end">
+                        <a href="{{ route('rutinas.index') }}" class="btn btn-outline-secondary me-2">Cancelar</a>
                         <button type="submit" class="btn btn-primary" id="crear-rutina-btn" disabled>Crear Rutina</button>
                     </div>
                 </form>

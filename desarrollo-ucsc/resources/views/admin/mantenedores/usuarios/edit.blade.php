@@ -40,6 +40,7 @@
                                     </option>
                                     <option value="Coordinador" {{ $usuario->hasRole('Coordinador') ? 'selected' : '' }}>
                                         Coordinador</option>
+                                    <option value="Visor QR" {{ $usuario->hasRole('Visor QR') ? 'selected' : '' }}>Visor QR</option>
                                 </select>
                             </div>
                         @else

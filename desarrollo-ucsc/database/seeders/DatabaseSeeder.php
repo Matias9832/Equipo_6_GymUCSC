@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
         //Seeder de las Sedes
         $this->call(SalaSeeder::class);
         $this->call(TipoSeeder::class);
+        $this->call(EspacioSeeder::class);
 
         $this->call([
             TallerSeeder::class,

@@ -97,9 +97,12 @@ class RolesAndPermissionsSeeder extends Seeder
         $docente->givePermissionTo([
             'Acceso al Mantenedor de Alumnos',
             'Acceso a Gestión de QR',
-            'Acceso a Salas Abiertas',
             'Acceso al Mantenedor de Talleres',
             'Acceso a Gestión de Asistencia Talleres',
+            'Acceso al Mantenedor de Rutinas',
+            'Acceso al Mantenedor de Equipos',
+            'Acceso al Mantenedor de Torneos',
+            'Acceso al Mantenedor de Deportes',
             'Ver Usuarios',
             'Crear Noticias',
         ]);

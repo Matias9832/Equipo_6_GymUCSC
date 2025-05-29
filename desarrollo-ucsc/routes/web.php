@@ -185,6 +185,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
             ->name('asistencia.guardar');
         Route::get('admin/talleres/{taller}/asistencia/ver', [AsistenciaTallerController::class, 'ver'])
             ->name('asistencia.ver');
+        Route::delete('/asistencia/{taller}/eliminar/{usuario}/{fecha}', [AsistenciaTallerController::class, 'destroy'])
+            ->name('asistencia.destroy');
     });
 
     // Usuarios

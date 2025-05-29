@@ -18,7 +18,7 @@ class AdministradorSeeder extends Seeder
         // Crear el usuario super admin
         $usuario = Usuario::create([
             'rut' => '1234',
-            'correo_usuario' => 'admin@example.com',
+            'correo_usuario' => 'ugym@gmail.com',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
@@ -27,7 +27,7 @@ class AdministradorSeeder extends Seeder
         // Crear el administrador asociado
         Administrador::create([
             'rut_admin' => '1234',
-            'nombre_admin' => 'Administrador Principal',
+            'nombre_admin' => 'Hector Sanhueza',
             'fecha_creacion' => now(),
         ]);
         // Asignar el rol de Super Admin al usuario con todos los permisos
@@ -43,22 +43,98 @@ class AdministradorSeeder extends Seeder
         ]);
         Administrador::create([
             'rut_admin' => '12345',
-            'nombre_admin' => 'Director Principal',
+            'nombre_admin' => 'Javier Pérez',
             'fecha_creacion' => now(),
         ]);
         $usuario->assignRole('Director');
 
-        // DOCENTE ------------------------------------
+        // DOCENTES (6) ------------------------------------
+        // Docente 1
         $usuario = Usuario::create([
             'rut' => '123456',
-            'correo_usuario' => 'admin@example.com',
+            'correo_usuario' => 'docente1@example.com',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
         ]);
         Administrador::create([
             'rut_admin' => '123456',
-            'nombre_admin' => 'Primer Docente',
+            'nombre_admin' => 'Eric Maldonado',
+            'fecha_creacion' => now(),
+        ]);
+        $usuario->assignRole('Docente');
+
+        // Docente 2
+        $usuario = Usuario::create([
+            'rut' => '16059402',
+            'correo_usuario' => 'docente2@example.com',
+            'tipo_usuario' => 'admin',
+            'contrasenia_usuario' => Hash::make('123456'),
+            'activado_usuario' => 1,
+        ]);
+        Administrador::create([
+            'rut_admin' => '16059402',
+            'nombre_admin' => 'Laura Fernández',
+            'fecha_creacion' => now(),
+        ]);
+        $usuario->assignRole('Docente');
+
+        // Docente 3
+        $usuario = Usuario::create([
+            'rut' => '18239123',
+            'correo_usuario' => 'docente3@example.com',
+            'tipo_usuario' => 'admin',
+            'contrasenia_usuario' => Hash::make('123456'),
+            'activado_usuario' => 1,
+        ]);
+        Administrador::create([
+            'rut_admin' => '18239123',
+            'nombre_admin' => 'Pedro López',
+            'fecha_creacion' => now(),
+        ]);
+        $usuario->assignRole('Docente');
+
+        // Docente 4
+        $usuario = Usuario::create([
+            'rut' => '17043569',
+            'correo_usuario' => 'docente4@example.com',
+            'tipo_usuario' => 'admin',
+            'contrasenia_usuario' => Hash::make('123456'),
+            'activado_usuario' => 1,
+        ]);
+        Administrador::create([
+            'rut_admin' => '17043569',
+            'nombre_admin' => 'Ana Torres',
+            'fecha_creacion' => now(),
+        ]);
+        $usuario->assignRole('Docente');
+
+        // Docente 5
+        $usuario = Usuario::create([
+            'rut' => '15274053',
+            'correo_usuario' => 'docente5@example.com',
+            'tipo_usuario' => 'admin',
+            'contrasenia_usuario' => Hash::make('123456'),
+            'activado_usuario' => 1,
+        ]);
+        Administrador::create([
+            'rut_admin' => '15274053',
+            'nombre_admin' => 'Javier Soto',
+            'fecha_creacion' => now(),
+        ]);
+        $usuario->assignRole('Docente');
+
+        // Docente 6
+        $usuario = Usuario::create([
+            'rut' => '12064277',
+            'correo_usuario' => 'docente6@example.com',
+            'tipo_usuario' => 'admin',
+            'contrasenia_usuario' => Hash::make('123456'),
+            'activado_usuario' => 1,
+        ]);
+        Administrador::create([
+            'rut_admin' => '12064277',
+            'nombre_admin' => 'Sofía Herrera',
             'fecha_creacion' => now(),
         ]);
         $usuario->assignRole('Docente');
@@ -66,19 +142,34 @@ class AdministradorSeeder extends Seeder
         // ADMINISTRADOR SUCURSAL 2
         $usuario = Usuario::create([
             'rut' => '22222',
-            'correo_usuario' => 'admin2@example.com',
+            'correo_usuario' => 'superadmin2@example.com',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
         ]);
         Administrador::create([
             'rut_admin' => '22222',
-            'nombre_admin' => 'Administrador IT Chillán',
+            'nombre_admin' => 'María González',
             'fecha_creacion' => now(),
         ]);
         $usuario->assignRole('Super Admin');
 
-        // ADMINISTRADOR SUCURSAL 2
+        // COORDINADOR ------------------------------------
+        $usuario = Usuario::create([
+            'rut' => '18032940',
+            'correo_usuario' => 'superadmin2@example.com',
+            'tipo_usuario' => 'admin',
+            'contrasenia_usuario' => Hash::make('123456'),
+            'activado_usuario' => 1,
+        ]);
+        Administrador::create([
+            'rut_admin' => '18032940',
+            'nombre_admin' => 'Valentina Gómez',
+            'fecha_creacion' => now(),
+        ]);
+        $usuario->assignRole('Coordinador');
+        
+        // Visor QR ------------------------------------
         $usuario = Usuario::create([
             'rut' => '1234567',
             'correo_usuario' => 'admin3@example.com',

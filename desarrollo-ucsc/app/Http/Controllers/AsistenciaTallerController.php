@@ -18,6 +18,7 @@ class AsistenciaTallerController extends Controller
                 ->join('usuario', 'usuario.id_usuario', '=', 'taller_usuario.id_usuario')
                 ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
                 ->select(
+                    'taller_usuario.id_usuario',
                     'usuario.rut',
                     DB::raw("CONCAT_WS(' ', alumno.nombre_alumno, alumno.apellido_paterno, alumno.apellido_materno) as nombre"),
                     'alumno.carrera',
@@ -40,7 +41,24 @@ class AsistenciaTallerController extends Controller
                 ->addColumn('fecha_html', function ($row) {
                     return '<span class="text-sm">' . e(Carbon::parse($row->fecha_asistencia)->format('d-m-Y')) . '</span>';
                 })
-                ->rawColumns(['nombre_html', 'sexo_html', 'fecha_html'])
+                ->addColumn('acciones', function ($row) use ($taller) {
+                    $fecha = Carbon::parse($row->fecha_asistencia)->format('Y-m-d');
+                    $url = route('asistencia.destroy', [
+                        'taller' => $taller->id_taller,
+                        'usuario' => $row->id_usuario,
+                        'fecha' => $fecha,
+                    ]);
+
+                    return '
+                        <form action="' . $url . '" method="POST" class="d-inline-block eliminar-asistencia-form" data-id="' . $row->id_usuario . '" data-fecha="' . $fecha . '">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" title="Eliminar asistencia" onclick="return confirm(\'¿Eliminar asistencia?\')">
+                                <i class="ni ni-fat-remove"></i>
+                            </button>
+                        </form>
+                    ';
+                })
+                ->rawColumns(['nombre_html', 'sexo_html', 'fecha_html','acciones'])
                 ->make(true);
         }
 
@@ -102,5 +120,19 @@ class AsistenciaTallerController extends Controller
                 'fecha' => $request->fecha_asistencia // <-- pasa la fecha como parámetro
             ])
             ->with('success', 'Asistencia registrada correctamente.');
+    }
+
+    // Eliminar asistencia
+    public function destroy(Taller $taller, $id_usuario, $fecha)
+    {
+        DB::table('taller_usuario')
+            ->where('id_taller', $taller->id_taller)
+            ->where('id_usuario', $id_usuario)
+            ->where('fecha_asistencia', $fecha)
+            ->delete();
+
+        return redirect()
+            ->route('asistencia.ver', ['taller' => $taller->id_taller])
+            ->with('success', 'Asistencia eliminada correctamente.');
     }
 }

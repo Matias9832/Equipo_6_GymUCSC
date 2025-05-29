@@ -4,6 +4,9 @@
     @include('layouts.navbars.auth.topnav', ['title' => 'Editar Rutina'])
     <div class="container-fluid py-4">
         <div class="card shadow rounded-4 p-4">
+            <div class="col">
+                    <h4 class="mb-4">Editar rutina</h4>
+                </div>
             @if($errors->any())
                 <div class="alert alert-danger">
                     <ul class="mb-0">

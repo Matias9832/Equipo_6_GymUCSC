@@ -38,6 +38,7 @@
                                 <option value="">Selecciona un rol</option>
                                 <option value="Docente">Docente</option>
                                 <option value="Coordinador">Coordinador</option>
+                                <option value="Visor QR">Visor QR</option>
                             </select>
                         </div>
 

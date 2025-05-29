@@ -1,6 +1,7 @@
-@extends('layouts.app', ['class' => 'bg-gray-100'])
+@extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
+@include('layouts.navbars.auth.topnav', ['title' => 'Panel de Control'])
     <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-lg-7 col-md-9">
@@ -10,14 +11,7 @@
                         <h1 class="mb-3">¡Bienvenido al Sistema de Gestión Deportiva UCSC!</h1>
                         <p class="mb-4 text-muted">
                             Accede a talleres, torneos y al gimnasio desde un solo lugar.<br>
-                            Inicia sesión o regístrate para comenzar.
                         </p>
-                        <a href="{{ route('login') }}" class="btn btn-primary btn-lg me-2">
-                            <i class="fas fa-sign-in-alt me-1"></i> Iniciar Sesión
-                        </a>
-                        <a href="{{ route('register') }}" class="btn btn-outline-primary btn-lg">
-                            <i class="fas fa-user-plus me-1"></i> Registrarse
-                        </a>
                     </div>
                 </div>
             </div>
