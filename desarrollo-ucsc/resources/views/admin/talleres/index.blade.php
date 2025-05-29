@@ -32,9 +32,11 @@
                                         <th 
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Profesor </th>
+                                        @can(['Acceso a Gestión de Asistencia Talleres'])  
                                         <th 
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Asistencia</th>
+                                        @endcan
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Acciones</th>
@@ -83,17 +85,18 @@
                                                     <span class="text-muted text-xs">Sin asignar</span>
                                                 @endif
                                             </td>
-
+                                            @can(['Acceso a Gestión de Asistencia Talleres'])               
                                             <td>
                                                 <div class="d-flex gap-1">
-                                                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-sm btn-outline-secondary">
+                                                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-sm btn-outline-secondary" style="margin-bottom: 0rem !important;">
                                                         <i class="fas fa-eye me-1"></i> Ver
                                                     </a>
-                                                    <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-sm btn-outline-primary">
+                                                    <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-sm btn-outline-primary" style="margin-bottom: 0rem !important;">
                                                         <i class="fas fa-edit me-1"></i> Registrar
                                                     </a>
                                                 </div>
                                             </td>
+                                            @endcan
                                             <td class="align-middle text-center">
                                                 <a href="{{ route('talleres.edit', $taller->id_taller) }}"
                                                     class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip"

@@ -177,7 +177,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         ]);
     });
 
-    Route::middleware(['permission:Acceso al Mantenedor de Talleres, Acceso a Gestión de Asistencia Talleres'])->group(function () {
+    Route::middleware(['permission:Acceso al Mantenedor de Talleres'])->group(function () {
         Route::get('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'registrar'])
             ->name('asistencia.registrar');
         Route::post('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'guardarRegistro'])
