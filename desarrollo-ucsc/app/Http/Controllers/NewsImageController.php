@@ -12,12 +12,15 @@ class NewsImageController extends Controller{
     {
         $image = NewsImage::findOrFail($id);
 
-        // Elimina el archivo del almacenamiento si existe
-        Storage::disk('public')->delete($image->image_path);
-        
+        // Ruta absoluta al archivo en /public
+        $filePath = public_path($image->image_path);
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
         $image->delete();
-        
+
         return back()->with('success', 'Imagen eliminada correctamente');
     }
-
 }

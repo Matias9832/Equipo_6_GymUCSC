@@ -371,6 +371,8 @@ class ControlSalasController extends Controller
             'password' => 'required|string',
             'id_sala' => 'required|exists:sala,id_sala',
         ]);
+
+        
         
         // Buscar el usuario por RUT
         $usuario = Usuario::where('rut', $request->rut)->first();
@@ -379,6 +381,21 @@ class ControlSalasController extends Controller
             return back()->with('error', 'El rut o la contraseña son incorrectos.') ->withInput();
         }
         
+        // Verificar si la sala está activa
+        $sala = Sala::findOrFail($request->id_sala);
+
+        if (!$sala->activo) {
+            return back()->with('error', 'La sala no está activa actualmente.')->withInput();
+        }
+
+        // Verificar si la sala está dentro del horario permitido
+        $horaActual = now();
+        $horaApertura = Carbon::createFromTimeString($sala->horario_apertura);
+        $horaCierre = Carbon::createFromTimeString($sala->horario_cierre);
+
+        if ($horaActual->lt($horaApertura) || $horaActual->gt($horaCierre)) {
+            return back()->with('error', 'La sala no está disponible en este horario.')->withInput();
+        }
 
         // Verificar si ya tiene un ingreso activo
         $yaIngresado = Ingreso::where('id_usuario', $usuario->id_usuario)
@@ -406,45 +423,58 @@ class ControlSalasController extends Controller
 
     public function salidaManual(Request $request)
     {
-    // Validar entrada
-    $request->validate([
-        'rut' => 'required',
-        'password' => 'required',
-        'id_sala' => 'required',
-    ]);
+        // Validar entrada
+        $request->validate([
+            'rut' => 'required',
+            'password' => 'required',
+            'id_sala' => 'required',
+        ]);
 
-    // Buscar usuario por RUT
-    $usuario = Usuario::where('rut', $request->rut)->first();
+        // Buscar usuario por RUT
+        $usuario = Usuario::where('rut', $request->rut)->first();
 
-    // Verificar si existe y la contraseña coincide
-    if (!$usuario || !Hash::check($request->password, $usuario->contrasenia_usuario)) {
-        return back()->with('error', 'El rut o contraseña ingresados son incorrectos')->withInput();
-    }
+        // Verificar si existe y la contraseña coincide
+        if (!$usuario || !Hash::check($request->password, $usuario->contrasenia_usuario)) {
+            return back()->with('error', 'El rut o contraseña ingresados son incorrectos')->withInput();
+        }
 
 
 
-    // Buscar el registro de ingreso aún activo
-    $registro = Ingreso::where('id_usuario', $usuario->id_usuario)
-        ->where('id_sala', $request->id_sala)
-        ->where('fecha_ingreso', today())
-        ->whereNull('hora_salida')
-        ->first();
+        // Buscar el registro de ingreso aún activo
+        $registro = Ingreso::where('id_usuario', $usuario->id_usuario)
+            ->where('id_sala', $request->id_sala)
+            ->where('fecha_ingreso', today())
+            ->whereNull('hora_salida')
+            ->first();
 
-    if (!$registro) {
-        return back()->with('mensaje', 'No se encontró un ingreso activo para registrar la salida.')->withInput();
-    }
+        if (!$registro) {
+            return back()->with('mensaje', 'No se encontró un ingreso activo para registrar la salida.')->withInput();
+        }
 
-    // Calcular la hora de salida y tiempo de uso
-    $horaSalida = now();
-    $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
-    $tiempoUsoSegundos = $horaIngreso->diffInSeconds($horaSalida);
-    $tiempoUso = gmdate("H:i:s", $tiempoUsoSegundos);
+        // Calcular la hora de salida y tiempo de uso
+        $horaSalida = now();
+        $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
+        $tiempoUsoSegundos = $horaIngreso->diffInSeconds($horaSalida);
+        $tiempoUso = gmdate("H:i:s", $tiempoUsoSegundos);
 
-    $registro->hora_salida = $horaSalida->format('H:i:s');
-    $registro->tiempo_uso = $tiempoUso;
-    $registro->save();
+        $registro->hora_salida = $horaSalida->format('H:i:s');
+        $registro->tiempo_uso = $tiempoUso;
+        $registro->save();
 
-    return back()->with('success', 'Salida registrada correctamente.');
+        return back()->with('success', 'Salida registrada correctamente.');
     }   
+
+    public function estadoUsuario()
+    {
+        $ingreso = Ingreso::where('id_usuario', auth()->id())->whereNull('hora_salida')->first();
+
+        return response()->json([
+            'enSala' => $ingreso ? true : false,
+            'nombreSala' => $ingreso?->sala->nombre,
+            'horaIngreso' => $ingreso?->hora_ingreso,
+            'horarioCierre' => $ingreso?->sala->horario_cierre,
+        ]);
+    }
+
 
 }

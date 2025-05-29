@@ -1,6 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('content')
+    @include('layouts.navbars.guest.navbar')
+    
     <div class="container-fluid d-flex flex-column align-items-center justify-content-center"
         style="max-width: 500px; margin: 0 auto; height: 50vh;">
 
