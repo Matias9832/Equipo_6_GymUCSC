@@ -1,5 +1,6 @@
 <?php
 
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
@@ -59,6 +60,7 @@ Route::get('/reenviar-codigo', [RegisterController::class, 'reenviarCodigo'])->n
 Route::get('/dashboard', function () {
     return redirect('/dashboard');
 })->middleware('auth');
+
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
 Route::get('/login', [LoginController::class, 'create'])->middleware('guest')->name('login');
@@ -67,7 +69,7 @@ Route::get('/reset-password', [ResetPassword::class, 'show'])->middleware('guest
 Route::post('/reset-password', [ResetPassword::class, 'send'])->middleware('guest')->name('reset.perform');
 Route::get('/change-password', [ChangePassword::class, 'show'])->middleware('guest')->name('change-password');
 Route::post('/change-password', [ChangePassword::class, 'update'])->middleware('guest')->name('change.perform');
-Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middleware(['auth', 'admin']);
 
 // Noticias públicas
 Route::get('/noticias', [NewsController::class, 'index'])->name('news.index');
@@ -159,25 +161,30 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::middleware(['permission:Acceso al Mantenedor de Torneos'])->group(function () {
         Route::resource('torneos', TorneoController::class);
     });
-    Route::resource('talleres', TallerController::class)->parameters([
-        'talleres' => 'taller'
-    ]);
-    // Ejercicios
-    Route::resource('ejercicios', EjercicioController::class)->parameters([
-        'ejercicios' => 'ejercicio',
-    ]);
-    // Rutinas (mantenedor y formulario personalizado)
-    Route::resource('rutinas', RutinaController::class)->parameters([
-        'rutinas' => 'rutina',
-    ]);
+    Route::middleware(['permission:Acceso al Mantenedor de Talleres'])->group(function () {
+        Route::resource('talleres', TallerController::class)->parameters([
+            'talleres' => 'taller'
+        ]);
+    });
+    Route::middleware(['permission:Acceso al Mantenedor de Ejercicios'])->group(function () {
+        Route::resource('ejercicios', EjercicioController::class)->parameters([
+            'ejercicios' => 'ejercicio',
+        ]);
+    });
+    Route::middleware(['permission:Acceso al Mantenedor de Rutinas'])->group(function () {
+        Route::resource('rutinas', RutinaController::class)->parameters([
+            'rutinas' => 'rutina',
+        ]);
+    });
 
-    // Asistencia talleres
-    Route::get('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'registrar'])
-        ->name('asistencia.registrar');
-    Route::post('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'guardarRegistro'])
-        ->name('asistencia.guardar');
-    Route::get('admin/talleres/{taller}/asistencia/ver', [AsistenciaTallerController::class, 'ver'])
-        ->name('asistencia.ver');
+    Route::middleware(['permission:Acceso al Mantenedor de Talleres, Acceso a Gestión de Asistencia Talleres'])->group(function () {
+        Route::get('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'registrar'])
+            ->name('asistencia.registrar');
+        Route::post('admin/talleres/{taller}/asistencia/registrar', [AsistenciaTallerController::class, 'guardarRegistro'])
+            ->name('asistencia.guardar');
+        Route::get('admin/talleres/{taller}/asistencia/ver', [AsistenciaTallerController::class, 'ver'])
+            ->name('asistencia.ver');
+    });
 
     // Usuarios
     Route::middleware(['permission:Ver Usuarios'])->group(function () {
@@ -214,11 +221,12 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Importar alumnos
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
 
-    Route::resource('carreras', CarreraController::class)->only(['index']);
-    Route::get('/carreras/data', [CarreraController::class, 'data'])->name('carreras.data');
-
+    Route::middleware(['permission:Acceso al Mantenedor de Carreras'])->group(function () {
+        Route::resource('carreras', CarreraController::class)->only(['index']);
+        Route::get('/carreras/data', [CarreraController::class, 'data'])->name('carreras.data');
+    });
     // Gestión de QR
-    Route::middleware(['permission:Acceso al Mantenedor de Gestión de QR'])->group(function () {
+    Route::middleware(['permission:Acceso a Gestión de QR'])->group(function () {
         Route::get('/control-salas/seleccionar', [ControlSalasController::class, 'seleccionarSala'])->name('control-salas.seleccionar');
         Route::post('/control-salas/generar-qr', [ControlSalasController::class, 'generarQR'])->name('control-salas.generarQR');
         Route::get('control-salas/ver-qr', [ControlSalasController::class, 'verQR'])->name('control-salas.verQR');
