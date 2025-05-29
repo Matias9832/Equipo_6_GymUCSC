@@ -86,6 +86,29 @@
             });
         </script>
     @endif
+    @if(session('info'))
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+            <div id="toastInfo" class="toast align-items-center text-white bg-info border-0 show" role="alert"
+                aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body text-center w-100">
+                        {{ session('info') }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                        aria-label="Cerrar"></button>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const toastLiveExample = document.getElementById('toastInfo');
+                if (toastLiveExample) {
+                    const toast = new bootstrap.Toast(toastLiveExample, { delay: 3000 });
+                    toast.show();
+                }
+            });
+        </script>
+    @endif
 @endif
 
 

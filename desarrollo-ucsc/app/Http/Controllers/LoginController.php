@@ -131,7 +131,7 @@ class LoginController extends Controller
     {
         $usuario = Auth::user();
 
-        $validated = $request->validate([
+        $request->validate([
             'contrasenia_usuario' => 'nullable|min:6|confirmed',
             'correo_usuario' => 'nullable|email|max:255',
         ]);
@@ -142,20 +142,32 @@ class LoginController extends Controller
             $profile = Alumno::where('rut_alumno', $usuario->rut)->first();
         }
 
-        // Solo actualiza contraseña si se envía
-        if ($request->filled('contrasenia_usuario')) {
-            $usuario->contrasenia_usuario = Hash::make($request->contrasenia_usuario);
-        }
+        $cambios = false;
 
-        // Actualiza correo si se envía
-        if ($request->filled('correo_usuario')) {
+        // Verificar si el correo cambió
+        if ($request->filled('correo_usuario') && $request->correo_usuario !== $usuario->correo_usuario) {
             $usuario->correo_usuario = $request->correo_usuario;
+            $cambios = true;
         }
 
-        $usuario->save(); // Guarda cambios del usuario
+        // Verificar si la contraseña es nueva y diferente (comparando con la actual)
+        if ($request->filled('contrasenia_usuario')) {
+            // Solo marcar como cambio si la nueva contraseña NO coincide con la actual
+            if (!Hash::check($request->contrasenia_usuario, $usuario->contrasenia_usuario)) {
+                $usuario->contrasenia_usuario = Hash::make($request->contrasenia_usuario);
+                $cambios = true;
+            }
+        }
 
-        return redirect()->route('news.index')->with('success', 'Perfil actualizado correctamente');
+        if (!$cambios) {
+            return back()->with('info', 'No se realizaron cambios.');
+        }
+
+        $usuario->save();
+
+        return back()->with('success', 'Perfil actualizado correctamente.');
     }
+
 
     public function index()
     {

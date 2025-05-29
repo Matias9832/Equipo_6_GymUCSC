@@ -84,6 +84,9 @@ class SaludController extends Controller
     
         $tieneEnfermedad = $request->input('tiene_enfermedad') === 'si';
 
+        
+        $nuevosDatos = [];
+
         if ($tieneEnfermedad) {
             if (
                 !(($request->has('cronicas') && count($request->cronicas) > 0) ||
@@ -95,27 +98,54 @@ class SaludController extends Controller
                 ]);
             }
 
-            $salud->update([
-                'enfermo_cronico' => $request->has('cronicas') && count($request->input('cronicas')) > 0,
-                'alergias' => !empty($request->input('detalle_alergias')),
-                'indicaciones_medicas' => !empty($request->input('detalle_indicaciones')),
-                'informacion_salud' => $request->input('informacion_salud'),
-                'detalle_alergias' => $request->input('detalle_alergias'),
-                'detalle_indicaciones' => $request->input('detalle_indicaciones'),
-                'cronicas' => $request->input('cronicas') ?? [],
-            ]);
-        } else {
-            $salud->update([
-                'enfermo_cronico' => false,
-                'alergias' => false,
-                'indicaciones_medicas' => false,
-                'informacion_salud' => null,
-                'detalle_alergias' => null,
-                'detalle_indicaciones' => null,
-                'cronicas' => [],
-            ]);
+            $nuevosDatos = [
+            'enfermo_cronico' => $request->has('cronicas') && count($request->input('cronicas')) > 0,
+            'alergias' => !empty($request->input('detalle_alergias')),
+            'indicaciones_medicas' => !empty($request->input('detalle_indicaciones')),
+            'informacion_salud' => $request->input('informacion_salud'),
+            'detalle_alergias' => $request->input('detalle_alergias'),
+            'detalle_indicaciones' => $request->input('detalle_indicaciones'),
+            'cronicas' => $request->input('cronicas') ?? [],
+        ];
+    } else {
+        $nuevosDatos = [
+            'enfermo_cronico' => false,
+            'alergias' => false,
+            'indicaciones_medicas' => false,
+            'informacion_salud' => null,
+            'detalle_alergias' => null,
+            'detalle_indicaciones' => null,
+            'cronicas' => [],
+        ];
+    }
+
+    // Verificamos si hay cambios comparando los datos actuales con los nuevos
+    $sinCambios = true;
+        foreach ($nuevosDatos as $campo => $valorNuevo) {
+            $valorActual = $salud->{$campo};
+
+            // Comparación especial para arrays (cronicas)
+            if (is_array($valorNuevo)) {
+                if ($valorActual !== null && json_encode($valorActual) !== json_encode($valorNuevo)) {
+                    $sinCambios = false;
+                    break;
+                } elseif ($valorActual === null && !empty($valorNuevo)) {
+                    $sinCambios = false;
+                    break;
+                }
+            } elseif ($valorActual != $valorNuevo) {
+                $sinCambios = false;
+                break;
+            }
         }
-    
+
+        if ($sinCambios) {
+            return redirect()->route('mi-perfil.edit')->with('info', 'No se han realizado cambios.');
+        }
+
+        // Guardar solo si hay cambios
+        $salud->update($nuevosDatos);
+
         return redirect()->route('mi-perfil.edit')->with('success', 'Información de salud actualizada.');
     }
     
