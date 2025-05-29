@@ -1,7 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.guest', ['class' => 'bg-gray-100'])
 
 @section('content')
-<div class="container my-1 mx-1">
+@include('layouts.navbars.guest.navbar')
+<div class="container my-5">
     <div class="bg-white rounded shadow-sm p-1">
 
         <!-- Imagen principal -->
