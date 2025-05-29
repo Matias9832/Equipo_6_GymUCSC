@@ -37,6 +37,7 @@ use App\Http\Controllers\RutinaController;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\AsistenciaTallerController;
 use App\Http\Controllers\RutinaPersonalizadaController;
+use Spatie\Permission\Models\Permission;
 
 // Página principal
 Route::get('/', function () {
@@ -215,9 +216,11 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
             'administradores' => 'administrador',
         ]);
 
+    });
+    Route::middleware(['permission:Crear Noticias'])->group(function () {
         Route::resource('news', NewsController::class)->except(['index', 'show']);
     });
-
+    
     // Importar alumnos
     Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
 
