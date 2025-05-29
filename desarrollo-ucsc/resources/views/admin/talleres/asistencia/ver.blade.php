@@ -32,6 +32,7 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Carrera</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Sexo</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Fecha</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Acciones</th>
                                 </tr>
                             </thead>
                         </table>
@@ -52,7 +53,8 @@
                 { data: 'nombre_html', name: 'nombre', className: 'text-xs font-weight-bold mb-0' },
                 { data: 'carrera', name: 'alumno.carrera', className: 'text-xs font-weight-bold mb-0' },
                 { data: 'sexo_html', name: 'alumno.sexo_alumno', className: '' },
-                { data: 'fecha_html', name: 'taller_usuario.fecha_asistencia', className: '' }
+                { data: 'fecha_html', name: 'taller_usuario.fecha_asistencia', className: '' },
+                { data: 'acciones', name: 'acciones', orderable: false, searchable: false, className: 'text-center text-xs' }
             ],
             language: {
                 url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json',
