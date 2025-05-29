@@ -9,12 +9,13 @@
                 @if($news->isEmpty())
                     <div class="card shadow-sm text-center p-5 position-relative">
                         @if(Auth::check() && Auth::user()->is_admin)
+                            @can('Crear Noticias')
                             <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-
                                 <a href="{{ route('news.create') }}" class="btn btn-primary position-absolute" style="top: 15px; right: 15px; z-index: 1;">
                                     <i class="ni ni-fat-add me-2"></i> Crear nueva noticia
                                 </a>
-                            </div>   
+                            </div> 
+                            @endcan
                         @endif
                         <div class="card-body">
                             <i class="ni ni-notification-70 display-4 text-secondary mb-3"></i>
