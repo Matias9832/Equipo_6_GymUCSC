@@ -22,7 +22,7 @@
 
                     <div>
                         <label for="descripcion_noticia" class="form-label">Contenido:</label>
-                        <textarea name="descripcion_noticia" class="form-control" required></textarea>
+                        <textarea name="descripcion_noticia" class="form-control" rows="3" required></textarea>
                     </div>
 
                     <div class="mb-3">
