@@ -37,7 +37,7 @@
         {{-- Datos principales --}}
         <div class="bg-primary text-white p-4 rounded mb-4">
             <span class="badge bg-white text-primary mb-2">{{ strtoupper($news->tipo_deporte) }}</span>
-            <h1 class="fw-bold">{{ $news->nombre_noticia }}</h1>
+            <h1 class="text-white fw-bold">{{ $news->nombre_noticia }}</h1>
             <small>
                 {{ \Carbon\Carbon::parse($news->fecha_noticia)->locale('es')->translatedFormat('d F Y') }}, 
                 por {{ $news->administrador->nombre_admin }}
