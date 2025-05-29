@@ -351,13 +351,13 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         ),
         'Spatie\\LaravelIgnition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
-            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
+            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
+            1 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
         ),
         'Spatie\\Ignition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/ignition/src',
-            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
+            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
+            1 => __DIR__ . '/..' . '/spatie/ignition/src',
         ),
         'Spatie\\FlareClient\\' => 
         array (
@@ -665,7 +665,6 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Controllers\\TipoEspacioController' => __DIR__ . '/../..' . '/app/Http/Controllers/TipoEspacioController.php',
         'App\\Http\\Controllers\\TipoSancionController' => __DIR__ . '/../..' . '/app/Http/Controllers/TipoSancionController.php',
         'App\\Http\\Controllers\\TorneoController' => __DIR__ . '/../..' . '/app/Http/Controllers/TorneoController.php',
-        'App\\Http\\Controllers\\UserProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserProfileController.php',
         'App\\Http\\Controllers\\UsuarioController' => __DIR__ . '/../..' . '/app/Http/Controllers/UsuarioController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\AdminMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminMiddleware.php',
@@ -938,6 +937,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'Database\\Seeders\\AlumnoSeeder' => __DIR__ . '/../..' . '/database/seeders/AlumnoSeeder.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'Database\\Seeders\\DeporteSeeder' => __DIR__ . '/../..' . '/database/seeders/DeporteSeeder.php',
+        'Database\\Seeders\\EjercicioSeeder' => __DIR__ . '/../..' . '/database/seeders/EjercicioSeeder.php',
         'Database\\Seeders\\FontColorSeeder' => __DIR__ . '/../..' . '/database/seeders/FontColorSeeder.php',
         'Database\\Seeders\\GeographicSeeder' => __DIR__ . '/../..' . '/database/seeders/GeographicSeeder.php',
         'Database\\Seeders\\IngresoSeeder' => __DIR__ . '/../..' . '/database/seeders/IngresoSeeder.php',
