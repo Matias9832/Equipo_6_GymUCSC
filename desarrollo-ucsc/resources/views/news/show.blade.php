@@ -3,18 +3,18 @@
 @section('content')
 @include('layouts.navbars.guest.navbar')
 <div class="container my-4">
-    <div class="bg-white rounded shadow-sm p-4">
+    <div class="bg-white border-radius-lg shadow-sm p-4" style="position: relative; z-index: 1000;">
 
         {{-- Si hay imágenes, muestro un carousel simple --}}
         @if($news->images->count())
-            <div id="carouselNews{{ $news->id }}" class="carousel slide mb-4" data-bs-ride="carousel" style="max-height: 400px; overflow: hidden;">
-                <div class="carousel-inner">
+            <div id="carouselNews{{ $news->id }}" class="carousel slide mb-4" data-bs-ride="carousel"
+                style="height: 500px; overflow: hidden; position: relative; p-1">
+                <div class="carousel-inner h-100">
                     @foreach($news->images as $index => $image)
-                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-                            <img src="{{ asset($news->images->first()->image_path) }}" 
-                                alt="Imagen de la noticia" 
-                                class="img-fluid" 
-                                style="max-height: 300px; max-width: 100%; object-fit: contain;">
+                        <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }}">
+                            <img src="{{ asset($image->image_path) }}" 
+                                class="d-block mx-auto img-fluid"
+                                style="height: 100%; width: auto; object-fit: contain;">
                         </div>
                     @endforeach
                 </div>
@@ -55,4 +55,13 @@
 
     </div>
 </div>
+
+<style>
+@media (max-width: 768px) {
+    #carouselNews{{ $news->id }} {
+        height: 20vh !important; /* o usa 40vh si prefieres */
+    }
+}
+</style>
+
 @endsection
