@@ -11,9 +11,9 @@
                 <div class="carousel-inner h-100">
                     @foreach($news->images as $index => $image)
                         <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }}">
-                            <img src="{{ asset('storage/' . $image->image_path) }}" 
-                                    class="d-block mx-auto"
-                                    style="height: 80%; width: auto; object-fit: contain;">
+                            <img src="{{ asset($image->image_path) }}" 
+                                class="d-block mx-auto"
+                                style="height: 80%; width: auto; object-fit: contain;">
                         </div>
                     @endforeach
                 </div>
@@ -34,9 +34,9 @@
 
 
         <!-- Encabezado tipo UCSC -->
-        <div class="bg-danger text-white py-5 px-4">
+        <div class="bg-primary text-white py-5 px-4">
             <div class="mb-3 d-flex flex-wrap">
-                <span class="badge bg-white text-danger me-2">{{ strtoupper($news->tipo_deporte) }}</span>
+                <span class="badge bg-white text-primary me-2">{{ strtoupper($news->tipo_deporte) }}</span>
                 
             </div>
             <h1 class="fw-bold">{{ $news->nombre_noticia }}</h1>

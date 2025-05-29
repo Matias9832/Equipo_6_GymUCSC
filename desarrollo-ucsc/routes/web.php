@@ -228,6 +228,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::post('control-salas/cerrar-sala', [ControlSalasController::class, 'cerrarSala'])->name('admin.control-salas.cerrar_sala');
         Route::post('/control-salas/sacar-usuario', [ControlSalasController::class, 'sacarUsuario'])->name('admin.control-salas.sacar_usuario');
         Route::get('control-salas/ver-usuarios/{id_sala}', [ControlSalasController::class, 'verUsuarios'])->name('admin.control-salas.ver_usuarios');
+        Route::get('/estado-usuario', [SalaController::class, 'estadoUsuario'])->middleware('auth');
+
     });
 
     // Eliminar imagen de noticia

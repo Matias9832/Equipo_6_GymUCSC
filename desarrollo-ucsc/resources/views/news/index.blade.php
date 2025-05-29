@@ -3,10 +3,19 @@
 @section('content')
     @include('layouts.navbars.guest.navbar')
     <div class="container my-5">
+         
         <div class="row">
             <div class="col-lg-8">
                 @if($news->isEmpty())
-                    <div class="card shadow-sm text-center p-5">
+                    <div class="card shadow-sm text-center p-5 position-relative">
+                        @if(Auth::check() && Auth::user()->is_admin)
+                            <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+
+                                <a href="{{ route('news.create') }}" class="btn btn-primary position-absolute" style="top: 15px; right: 15px; z-index: 1;">
+                                    <i class="ni ni-fat-add me-2"></i> Crear nueva noticia
+                                </a>
+                            </div>   
+                        @endif
                         <div class="card-body">
                             <i class="ni ni-notification-70 display-4 text-secondary mb-3"></i>
                             <h5 class="card-title">No hay noticias disponibles</h5>
@@ -14,40 +23,65 @@
                         </div>
                     </div>
                 @else
-                    @foreach ($news as $noticias)
-                        <div class="card mb-4 shadow-sm">
-                            <div class="row g-0 flex-column flex-md-row">
-                                <div class="col-md-4 d-flex align-items-center justify-content-center bg-light" style="padding: 5px;">
-                                    @if ($noticias->images->count())
-                                        <img src="{{ asset('storage/' . $noticias->images->first()->image_path) }}"  
-                                            class="img-fluid rounded-start p-2" 
-                                            alt="Imagen de la noticia" 
-                                            style="max-height: 200px; object-fit: contain; width: 100%;">
-                                    @else
-                                        <div class="d-flex flex-column align-items-center justify-content-center text-muted" style="height: 180px; width: 100%;">
-                                            <i class="ni ni-image" style="font-size: 3rem;"></i>
-                                            <small>Imagen no disponible</small>
-                                        </div>
-                                    @endif
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <a href="{{ route('news.show', $noticias->id_noticia) }}" class="text-decoration-none text-dark">
-                                            <h5 class="card-title">{{ $noticias->nombre_noticia }}</h5>
-                                            <p class="card-text">{{ Str::limit($noticias->descripcion_noticia, 100, '...') }}</p>
-                                        </a>
+                    <div class="card shadow-sm text-center p-5 position-relative">
+                        @if(Auth::check() && Auth::user()->is_admin)
+                            <div class="card-header pb-0 d-flex justify-content-between align-items-center mb-4">
+
+                                <a href="{{ route('news.create') }}" class="btn btn-primary position-absolute" style="top: 15px; right: 15px; z-index: 1;">
+                                    <i class="ni ni-fat-add me-2"></i> Crear nueva noticia
+                                </a>
+                            </div>   
+                        @endif
+                        
+                        @foreach ($news as $noticias)
+                            <div class="card mb-4 shadow-sm text-start" style="background-color: #f9f9f9;">
+                                <div class="row g-0 flex-column flex-md-row">
+                                    <div class="col-md-4 d-flex align-items-center justify-content-center bg-light" style="padding: 5px;">
+                                        @if ($noticias->images->count())
+                                            <img src="{{ asset($noticias->images->first()->image_path) }}"  
+                                                class="img-fluid rounded-start p-2" 
+                                                alt="Imagen de la noticia" 
+                                                style="max-height: 200px; object-fit: contain; width: 100%;">
+                                        @else
+                                            <div class="d-flex flex-column align-items-center justify-content-center text-muted" style="height: 180px; width: 100%;">
+                                                <i class="ni ni-image" style="font-size: 3rem;"></i>
+                                                <small>Imagen no disponible</small>
+                                            </div>
+                                        @endif
                                     </div>
-                                    <div class="card-footer bg-transparent border-0">
-                                        <small class="text-muted">
-                                            {{ \Carbon\Carbon::parse($noticias->fecha_noticia)->format('d M Y') }} -
-                                            {{ $noticias->administrador->nombre_admin }} -
-                                            {{ $noticias->tipo_deporte }}
-                                        </small>   
+                                    <div class="col-md-8">
+                                        @if(Auth::check() && Auth::user()->is_admin)
+                                            <div class="d-flex justify-content-end mt-2">
+                                                <a href="{{ route('news.edit', $noticias->id_noticia) }}" class="btn btn-sm btn-info me-2">
+                                                    <i class="ni ni-ruler-pencil"></i>
+                                                </a>
+                                                <form action="{{ route('news.destroy', $noticias->id_noticia) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar esta noticia?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="ni ni-fat-remove"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endif
+                                        <div class="card-body">
+                                            <a href="{{ route('news.show', $noticias->id_noticia) }}" class="text-decoration-none text-dark">
+                                                <h5 class="card-title">{{ $noticias->nombre_noticia }}</h5>
+                                                <p class="card-text">{{ Str::limit($noticias->descripcion_noticia, 100, '...') }}</p>
+                                            </a>
+                                        </div>
+                                        <div class="card-footer bg-transparent border-0">
+                                            <small class="text-muted">
+                                                {{ \Carbon\Carbon::parse($noticias->fecha_noticia)->format('d M Y') }} -
+                                                {{ $noticias->administrador->nombre_admin }} -
+                                                {{ $noticias->tipo_deporte }}
+                                            </small>   
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>    
                 @endif
 
                 <div class="d-flex justify-content-center">
