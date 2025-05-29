@@ -145,14 +145,16 @@ class UsuarioController extends Controller
     }
 
     public function edit(Usuario $usuario)
-    {
-        return view('admin.mantenedores.usuarios.edit', compact('usuario'));
+    { 
+        $administrador = Administrador::where('rut_admin', $usuario->rut)->firstorfail();
+        return view('admin.mantenedores.usuarios.edit', compact('usuario', 'administrador'));
     }
 
     public function update(Request $request, Usuario $usuario)
     {
         $rules = [
             'rut' => 'required|string|unique:usuario,rut,' . $usuario->id_usuario . ',id_usuario',
+            'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $usuario->id_usuario . ',id_usuario',
         ];
         // Si el usuario NO es admin, entonces validamos tipo_usuario
@@ -164,21 +166,40 @@ class UsuarioController extends Controller
 
         $request->validate($rules);
 
-        // Datos base para actualizar
-        $data = [
-            'rut' => $request->rut,
+        
+
+        if ($request->correo_usuario !== $request->correo_antiguo) {
+            // Si el correo ha cambiado, se envía un nuevo correo con la contraseña
+            $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6);
+            $data = [
+            'nombre_admin' => $request->nombre_admin,
             'correo_usuario' => $request->correo_usuario,
+            'contrasenia_usuario' => Hash::make($password),
         ];
+
+        Mail::to($usuario->correo_usuario)->send(new \App\Mail\AdministradorPasswordMail($request->nombre_admin, $password));
+
+        } else {
+            // Si el correo no ha cambiado, no se actualiza el campo correo_usuario
+            $data = [
+                'nombre_admin' => $request->nombre_admin,
+            ];
+        }
 
         // Solo actualiza tipo_usuario si no es admin
         if ($usuario->tipo_usuario !== 'admin') {
             $data['tipo_usuario'] = $request->tipo_usuario;
             $usuario->syncRoles([]); // Asegúrate de quitar cualquier rol si ya no es admin
         }
-
+    
         $usuario->update($data);
 
-        // Si es admin, sincroniza el rol
+        $administrador = Administrador::where('rut_admin', $request->rut)->firstorfail();
+        $administrador->update([
+            'nombre_admin' => $request->nombre_admin,
+        ]);
+
+          // Si es admin, sincroniza el rol
         if ($usuario->tipo_usuario === 'admin' && $request->has('rol')) {
             $usuario->syncRoles([$request->rol]);
         }
