@@ -61,15 +61,19 @@ class UsuarioController extends Controller
                         $editar = auth()->user()->can('Editar Usuarios')
                             ? '<a href="' . route('usuarios.edit', $usuario->id_usuario) . '" class="text-secondary font-weight-bold text-xs me-2" title="Editar"><i class="ni ni-ruler-pencil text-info"></i></a>'
                             : '';
-    
-                        $eliminar = auth()->user()->can('Eliminar Usuarios')
-                            ? '<form action="' . route('usuarios.destroy', $usuario->id_usuario) . '" method="POST" class="d-inline">'
-                            . csrf_field() . method_field('DELETE') .
-                            '<button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm(\'¿Estás seguro de que quieres eliminar este usuario?\')" title="Eliminar">'
-                            . '<i class="ni ni-fat-remove"></i></button></form>'
-                            : '';
-    
+                    }
+
+                    $eliminar = auth()->user()->can('Eliminar Usuarios')
+                        ? '<form action="' . route('usuarios.destroy', $usuario->id_usuario) . '" method="POST" class="d-inline">'
+                        . csrf_field() . method_field('DELETE') .
+                        '<button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm(\'¿Estás seguro de que quieres eliminar este usuario?\')" title="Eliminar">'
+                        . '<i class="ni ni-fat-remove"></i></button></form>'
+                        : '';
+
+                    if ($usuario->tipo_usuario === 'admin') {
                         return $editar . $eliminar;
+                    } else {
+                        return $eliminar;
                     }
                 })
                 ->rawColumns(['rol_visible', 'acciones'])
@@ -106,39 +110,39 @@ class UsuarioController extends Controller
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
             'rol' => 'required|in:Docente,Coordinador,Visor QR', //Restricción para que solo pueda crear Docente y coordinador
         ]);
-        try{
-        //Crear contraseña aleatoria
-        $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6);
-        //Reemplazar con la función de generar contraseña aleatoria
+        try {
+            //Crear contraseña aleatoria
+            $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6);
+            //Reemplazar con la función de generar contraseña aleatoria
 
-        // Crear el usuario 
-        $usuario = Usuario::create([
-            'rut' => $request->rut,
-            'correo_usuario' => $request->correo_usuario,
-            'tipo_usuario' => 'admin',
-            'bloqueado_usuario' => 0,
-            'activado_usuario' => 1,
-            'contrasenia_usuario' => Hash::make($password),
-        ]);
-        $usuario->assignRole($request->rol);
+            // Crear el usuario 
+            $usuario = Usuario::create([
+                'rut' => $request->rut,
+                'correo_usuario' => $request->correo_usuario,
+                'tipo_usuario' => 'admin',
+                'bloqueado_usuario' => 0,
+                'activado_usuario' => 1,
+                'contrasenia_usuario' => Hash::make($password),
+            ]);
+            $usuario->assignRole($request->rol);
 
-        // Crear el administrador
-        $administrador = Administrador::create([
-            'rut_admin' => $request->rut,
-            'nombre_admin' => $request->nombre_admin,
-            'fecha_creacion' => now(),
-        ]);
+            // Crear el administrador
+            $administrador = Administrador::create([
+                'rut_admin' => $request->rut,
+                'nombre_admin' => $request->nombre_admin,
+                'fecha_creacion' => now(),
+            ]);
 
-        // Asignar la sucursal al administrador
+            // Asignar la sucursal al administrador
             DB::table('admin_sucursal')->insert([
                 'id_admin' => $administrador->id_admin,
                 'id_suc' => session('sucursal_activa'),
                 'activa' => true,
             ]);
 
-        Mail::to($usuario->correo_usuario)->send(new \App\Mail\AdministradorPasswordMail($request->nombre_admin, $password));
+            Mail::to($usuario->correo_usuario)->send(new \App\Mail\AdministradorPasswordMail($request->nombre_admin, $password));
 
-        return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente.');
+            return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente.');
         } catch (\Exception $e) {
             // Manejar errores
             Log::error('Error al crear administrador: ' . $e->getMessage());
@@ -147,7 +151,7 @@ class UsuarioController extends Controller
     }
 
     public function edit(Usuario $usuario)
-    { 
+    {
         $administrador = Administrador::where('rut_admin', $usuario->rut)->firstorfail();
         return view('admin.mantenedores.usuarios.edit', compact('usuario', 'administrador'));
     }
@@ -168,18 +172,18 @@ class UsuarioController extends Controller
 
         $request->validate($rules);
 
-        
+
 
         if ($request->correo_usuario !== $request->correo_antiguo) {
             // Si el correo ha cambiado, se envía un nuevo correo con la contraseña
             $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6);
             $data = [
-            'nombre_admin' => $request->nombre_admin,
-            'correo_usuario' => $request->correo_usuario,
-            'contrasenia_usuario' => Hash::make($password),
-        ];
+                'nombre_admin' => $request->nombre_admin,
+                'correo_usuario' => $request->correo_usuario,
+                'contrasenia_usuario' => Hash::make($password),
+            ];
 
-        Mail::to($usuario->correo_usuario)->send(new \App\Mail\AdministradorPasswordMail($request->nombre_admin, $password));
+            Mail::to($usuario->correo_usuario)->send(new \App\Mail\AdministradorPasswordMail($request->nombre_admin, $password));
 
         } else {
             // Si el correo no ha cambiado, no se actualiza el campo correo_usuario
@@ -193,7 +197,7 @@ class UsuarioController extends Controller
             $data['tipo_usuario'] = $request->tipo_usuario;
             $usuario->syncRoles([]); // Asegúrate de quitar cualquier rol si ya no es admin
         }
-    
+
         $usuario->update($data);
 
         $administrador = Administrador::where('rut_admin', $request->rut)->firstorfail();
@@ -201,7 +205,7 @@ class UsuarioController extends Controller
             'nombre_admin' => $request->nombre_admin,
         ]);
 
-          // Si es admin, sincroniza el rol
+        // Si es admin, sincroniza el rol
         if ($usuario->tipo_usuario === 'admin' && $request->has('rol')) {
             $usuario->syncRoles([$request->rol]);
         }
