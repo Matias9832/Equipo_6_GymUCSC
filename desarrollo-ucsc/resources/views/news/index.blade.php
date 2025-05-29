@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-lg-8">
                 @if($news->isEmpty())
-                    <div class="card shadow-sm text-center p-5 position-relative">
+                    <div class="card shadow-sm text-center p-5 position-relative mb-2">
                         @if(Auth::check() && Auth::user()->is_admin)
                             @can('Crear Noticias')
                             <div class="card-header pb-0 d-flex justify-content-between align-items-center">
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                 @else
-                    <div class="card shadow-sm text-center p-5 position-relative">
+                    <div class="card shadow-sm text-center p-5 position-relative mb-2">
                         @if(Auth::check() && Auth::user()->is_admin)
                             <div class="card-header pb-0 d-flex justify-content-between align-items-center mb-4">
 

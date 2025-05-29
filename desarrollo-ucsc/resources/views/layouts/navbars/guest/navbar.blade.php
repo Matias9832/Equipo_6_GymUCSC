@@ -6,13 +6,13 @@
                 <div class="container-fluid">
                     <!-- Logos -->
                     <a class="navbar-brand d-flex align-items-center font-weight-bolder ms-lg-0 ms-3"
-                        href="{{ route('welcome') }}">
+                        href=" {{ route('welcome') }}">
                         <!-- <img src="{{ asset('img/gym/deportes_logo.png') }}" alt="Logo GYM" style="height: 30px;"
                             class="me-2"> -->
-                        <span style="font-family: 'Montserrat', sans-serif; font-weight: 1000; font-size: 1.4rem;"
+                        <!-- <span style="font-family: 'Montserrat', sans-serif; font-weight: 1000; font-size: 1.4rem;"
                             class="me-2">
                             DEPORTES
-                        </span>
+                        </span> -->
                         <img src="{{ asset('img/gym/ucsc_logo.png') }}" alt="Logo UCSC" style="height: 30px;"
                             class="me-2">
                     </a>
@@ -29,7 +29,7 @@
                         <ul class="navbar-nav ms-auto align-items-center">
                             @auth
                                 @if(auth()->user()->tipo_usuario === 'admin')
-                                    <li class="nav-item me-2" style="width: 176px;">
+                                    <li class="nav-item me-2 mb-1" style="width: 176px;">
                                         <a href="{{ route('home') }}"
                                             class="btn btn-sm mb-0 btn-primary d-flex align-items-center">
                                             <i class="fa fa-chart-pie opacity-6 text-white me-1"></i>
@@ -37,7 +37,7 @@
                                         </a>
                                     </li>
                                 @endif
-                                <li class="nav-item me-2 dropdown" style="width: 176px;">
+                                <li class="nav-item me-2 dropdown mb-1" style="width: 176px;">
                                     <a class="btn btn-sm mb-0 btn-light dropdown-toggle d-flex align-items-center justify-content-center w-100"
                                         href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
@@ -63,7 +63,7 @@
                                             <a class="dropdown-item" href="{{ route('actividad.usuario') }}">
                                                 <i class="fas fa-calendar me-1"></i> Mi Actividad
                                             </a>
-                                            
+
                                         </li>
                                         <li>
                                             <form method="POST" action="{{ route('logout') }}">
@@ -76,14 +76,14 @@
                                     </ul>
                                 </li>
                             @else
-                                <li class="nav-item me-2" style="width: 176px;">
-                                        <a href="{{ route('login') }}"
-                                            class="btn btn-sm mb-0 btn-primary d-flex align-items-center justify-content-center">
-                                            <i class="fas fa-key opacity-6 text-white me-1"></i>
-                                            Iniciar Sesión
-                                        </a>
+                                <li class="nav-item me-2 mb-1" style="width: 176px;">
+                                    <a href="{{ route('login') }}"
+                                        class="btn btn-sm mb-0 btn-primary d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-key opacity-6 text-white me-1"></i>
+                                        Iniciar Sesión
+                                    </a>
                                 </li>
-                                <li class="nav-item me-2" style="width: 176px;">
+                                <li class="nav-item me-2 mb-1" style="width: 176px;">
                                     <a href="{{ route('register') }}"
                                         class="btn btn-sm mb-0 btn-outline-primary d-flex align-items-center justify-content-center">
                                         <i class="fas fa-user-circle opacity-6 text-primary me-1"></i>
