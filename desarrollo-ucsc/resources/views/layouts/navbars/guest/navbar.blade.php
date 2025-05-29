@@ -77,17 +77,17 @@
                                 </li>
                             @else
                                 <li class="nav-item me-2" style="width: 176px;">
+                                        <a href="{{ route('login') }}"
+                                            class="btn btn-sm mb-0 btn-primary d-flex align-items-center justify-content-center">
+                                            <i class="fas fa-key opacity-6 text-white me-1"></i>
+                                            Iniciar Sesión
+                                        </a>
+                                </li>
+                                <li class="nav-item me-2" style="width: 176px;">
                                     <a href="{{ route('register') }}"
                                         class="btn btn-sm mb-0 btn-outline-primary d-flex align-items-center justify-content-center">
                                         <i class="fas fa-user-circle opacity-6 text-primary me-1"></i>
                                         Registrarse
-                                    </a>
-                                </li>
-                                <li class="nav-item me-2" style="width: 176px;">
-                                    <a href="{{ route('login') }}"
-                                        class="btn btn-sm mb-0 btn-primary d-flex align-items-center justify-content-center">
-                                        <i class="fas fa-key opacity-6 text-white me-1"></i>
-                                        Iniciar Sesión
                                     </a>
                                 </li>
                             @endauth
