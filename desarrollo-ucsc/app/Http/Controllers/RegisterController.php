@@ -170,4 +170,45 @@ class RegisterController extends Controller
 
         return redirect()->route('login')->with('success', 'Cuenta verificada correctamente.');
     }
+
+    /**
+     * Reenvía el código de verificación al correo del usuario.
+     */
+    public function reenviarCodigo(Request $request)
+    {
+        // Buscar usuario por sesión o por RUT en sesión
+        $idUsuario = session('verificacion_id_usuario');
+        $rut = session('rut_verificacion');
+
+        if (!$idUsuario && !$rut) {
+            return redirect()->route('login')->with('error', 'No se encontró usuario para reenviar el código.');
+        }
+
+        if ($idUsuario) {
+            $usuario = Usuario::find($idUsuario);
+        } else {
+            $usuario = Usuario::where('rut', $rut)->first();
+        }
+
+        if (!$usuario) {
+            return redirect()->route('login')->with('error', 'No se encontró usuario para reenviar el código.');
+        }
+
+        $verificacion = VerificacionUsuario::where('id_usuario', $usuario->id_usuario)->first();
+
+        if (!$verificacion) {
+            return redirect()->route('login')->with('error', 'No se encontró código de verificación para reenviar.');
+        }
+
+        // Generar nuevo código y reiniciar intentos
+        $nuevoCodigo = rand(100000, 999999);
+        $verificacion->codigo_verificacion = $nuevoCodigo;
+        $verificacion->intentos = 0;
+        $verificacion->save();
+
+        // Reenviar correo
+        Mail::to($usuario->correo_usuario)->send(new \App\Mail\VerificacionUsuarioMail($usuario->rut, $nuevoCodigo));
+
+        return back()->with('success', 'Se ha reenviado el código de verificación a tu correo.');
+    }
 }

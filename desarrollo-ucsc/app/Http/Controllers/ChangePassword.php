@@ -45,8 +45,19 @@ class ChangePassword extends Controller
     {
         $attributes = $request->validate([
             'email' => ['required'],
-            'password' => ['required', 'min:5'],
-            'confirm-password' => ['same:password']
+            'password' => [
+                'required',
+                'min:8',
+                'confirmed',
+                'regex:/[A-Z]/', // Al menos una letra mayúscula
+                'regex:/[0-9]/', // Al menos un número
+            ],
+            'password_confirmation' => ['required'],
+        ], [
+            'password.required' => 'El campo contraseña es obligatorio.',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+            'password.regex' => 'La contraseña debe incluir al menos una mayúscula y un número.',
         ]);
 
         $existingUser = Usuario::where('correo_usuario', $attributes['email'])->first();
@@ -54,7 +65,7 @@ class ChangePassword extends Controller
             $existingUser->update([
                 'contrasenia_usuario' => Hash::make($attributes['password'])
             ]);
-            return redirect('login');
+            return redirect('login')->with('success', 'Contraseña cambiada correctamente. Ahora puedes iniciar sesión.');
         } else {
             return back()->with('error', 'Tu correo no coinice con el que se solicitó el cambio de contraseña');
         }

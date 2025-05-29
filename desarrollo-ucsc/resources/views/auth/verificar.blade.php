@@ -68,9 +68,9 @@
                                             </div>
                                             <button type="submit" class="btn btn-primary w-100">Verificar</button>
                                         </form>
-                                    </div>
-                                    <div id="alert">
-                                        @include('components.alert')
+                                        <div class="text-center mt-3">
+                                            <span>¿No recibiste ningún correo? Presiona <a href="{{ route('reenviar.codigo') }}">aquí para reenviarlo</a></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -78,3 +78,7 @@ php artisan config:cache
     3. git pull : Hacer pull
     4. git checkout dev : cambiar a la rama dev
 
+
+Mail::raw('Esto es un correo de prueba.', function ($message) {
+    $message->to('shevi.1720@gmail.com')->subject('Prueba Mailgun');
+});

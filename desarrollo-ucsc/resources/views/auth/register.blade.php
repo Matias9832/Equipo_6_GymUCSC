@@ -45,15 +45,12 @@
                                 @csrf
                                 <div class="flex flex-col mb-3">
                                     <input type="text" name="rut" class="form-control" placeholder="RUT sin puntos ni dígito verificador" value="{{ old('rut') }}" required>
-                                    @error('rut') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
                                 </div>
                                 <div class="flex flex-col mb-3">
                                     <input type="email" name="correo" class="form-control" placeholder="Correo electrónico" value="{{ old('correo') }}" required>
-                                    @error('correo') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
                                 </div>
                                 <div class="flex flex-col mb-3">
                                     <input type="password" name="contraseña" class="form-control" placeholder="Contraseña" required>
-                                    @error('contraseña') <p class='text-danger text-xs pt-1'> {{ $message }} </p> @enderror
                                 </div>
                                 <div class="flex flex-col mb-3">
                                     <input type="password" name="contraseña_confirmation" class="form-control" placeholder="Confirmar contraseña" required>
