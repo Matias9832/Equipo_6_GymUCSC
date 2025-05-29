@@ -154,6 +154,21 @@ class AdministradorSeeder extends Seeder
         ]);
         $usuario->assignRole('Super Admin');
 
+        // COORDINADOR ------------------------------------
+        $usuario = Usuario::create([
+            'rut' => '18032940',
+            'correo_usuario' => 'superadmin2@example.com',
+            'tipo_usuario' => 'admin',
+            'contrasenia_usuario' => Hash::make('123456'),
+            'activado_usuario' => 1,
+        ]);
+        Administrador::create([
+            'rut_admin' => '18032940',
+            'nombre_admin' => 'Valentina Gómez',
+            'fecha_creacion' => now(),
+        ]);
+        $usuario->assignRole('Coordinador');
+        
         // Visor QR ------------------------------------
         $usuario = Usuario::create([
             'rut' => '1234567',
