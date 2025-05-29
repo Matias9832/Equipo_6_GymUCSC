@@ -94,7 +94,7 @@ class AdministradorController extends Controller
             'rut_admin' => 'required|string|unique:administrador,rut_admin|unique:usuario,rut',
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
-            'rol' => 'required|in:Director,Docente,Coordinador',
+            'rol' => 'required|in:Director,Docente,Coordinador,Visor QR',
         ]);
 
         try {
@@ -163,7 +163,7 @@ class AdministradorController extends Controller
         $request->validate([
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $administrador->rut_admin . ',rut',
-            'rol' => 'required|in:Director,Docente,Coordinador',
+            'rol' => 'required|in:Director,Docente,Coordinador,Visor QR',
         ]);
 
         // Actualizar el administrador

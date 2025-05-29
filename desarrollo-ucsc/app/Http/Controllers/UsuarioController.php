@@ -102,7 +102,7 @@ class UsuarioController extends Controller
             'rut' => 'required|string|unique:usuario,rut',
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
-            'rol' => 'required|in:Docente,Coordinador', //Restricción para que solo pueda crear Docente y coordinador
+            'rol' => 'required|in:Docente,Coordinador,Visor QR', //Restricción para que solo pueda crear Docente y coordinador
         ]);
         try{
         //Crear contraseña aleatoria
@@ -161,7 +161,7 @@ class UsuarioController extends Controller
         if ($usuario->tipo_usuario !== 'admin') {
             $rules['tipo_usuario'] = 'required|in:estudiante,seleccionado';
         } else {
-            $rules['rol'] = 'required|in:Docente,Coordinador'; // Si es admin, validamos el rol
+            $rules['rol'] = 'required|in:Docente,Coordinador,Visor QR'; // Si es admin, validamos el rol
         }
 
         $request->validate($rules);
