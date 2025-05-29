@@ -29,15 +29,9 @@
                                         @method('post')
                                         <div class="flex flex-col mb-3">
                                             <input type="text" name="rut" class="form-control form-control-lg" placeholder="Rut sin puntos, ni dígito verificador" value="{{ old('rut') }}" required>
-                                            @error('rut') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                         </div>
                                         <div class="flex flex-col mb-3">
                                             <input type="password" name="password" class="form-control form-control-lg" placeholder="Ingrese su contraseña" required>
-                                            @error('password') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" name="remember" type="checkbox" id="rememberMe">
-                                            <label class="form-check-label" for="rememberMe">Recordarme</label>
                                         </div>
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Entrar</button>

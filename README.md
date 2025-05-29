@@ -22,6 +22,7 @@ Repositorio Git para plataforma Web UCSC
     composer require laravel/ui
     composer require laravel-frontend-presets/argon
     composer require yajra/laravel-datatables-oracle  //Necesario para usar dataTables
+    //solo digital ocean
     composer require symfony/mailgun-mailer mailgun/mailgun-php //mailgun
     composer require symfony/http-client //mailgun
 
@@ -47,7 +48,7 @@ Se debe iniciar la instancia del login y register con:
     1. composer require laravel/breeze --dev
     2. php artisan breeze:install
 
-Se debe montar la concección a través de:
+Se debe montar la concección a travez de:
 
     1. npm install
     2. npm run dev

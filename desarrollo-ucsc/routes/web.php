@@ -53,6 +53,7 @@ Route::fallback(function () {
 // Rutas para verificación de usuario
 Route::get('/verificar', [RegisterController::class, 'verificarVista'])->name('verificar.vista');
 Route::post('/verificar', [RegisterController::class, 'verificarCodigo'])->name('verificar.codigo');
+Route::get('/reenviar-codigo', [RegisterController::class, 'reenviarCodigo'])->name('reenviar.codigo');
 
 // Rutas de autenticación
 Route::get('/dashboard', function () {

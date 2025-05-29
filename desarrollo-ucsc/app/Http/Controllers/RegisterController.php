@@ -114,60 +114,41 @@ class RegisterController extends Controller
     /**
      * Verifica el código ingresado por el usuario.
      */
-    public function verificarCodigo(Request $request)
+    public function reenviarCodigo(Request $request)
     {
-        $request->validate([
-            'codigo' => 'required|numeric',
-            'rut' => session('verificacion_id_usuario') ? 'nullable' : 'required'
-        ]);
+        // Buscar usuario por sesión o por RUT en sesión
+        $idUsuario = session('verificacion_id_usuario');
+        $rut = session('rut_verificacion');
 
-        // Buscar usuario por sesión o por RUT
-        if (session('verificacion_id_usuario')) {
-            $idUsuario = session('verificacion_id_usuario');
+        if (!$idUsuario && !$rut) {
+            return redirect()->route('login')->with('error', 'No se encontró usuario para reenviar el código.');
+        }
+
+        if ($idUsuario) {
+            $usuario = Usuario::find($idUsuario);
         } else {
-            $usuario = Usuario::where('rut', $request->rut)->first();
-            if (!$usuario) {
-                return back()->with('info', 'No se encontró el usuario para verificar.');
-            }
-            $idUsuario = $usuario->id_usuario;
+            $usuario = Usuario::where('rut', $rut)->first();
         }
 
-        $verificacion = VerificacionUsuario::where('id_usuario', $idUsuario)->first();
-        $usuario = Usuario::find($idUsuario);
-
-        if (!$verificacion || !$usuario) {
-            return back()->with('info', 'El código es inválido.');
+        if (!$usuario) {
+            return redirect()->route('login')->with('error', 'No se encontró usuario para reenviar el código.');
         }
 
-        if ($verificacion->codigo_verificacion != $request->codigo) {
-            $verificacion->intentos += 1;
+        $verificacion = \App\Models\VerificacionUsuario::where('id_usuario', $usuario->id_usuario)->first();
 
-            if ($verificacion->intentos >= 5) {
-                // Generar nuevo código y reiniciar intentos
-                $nuevoCodigo = rand(100000, 999999);
-                $verificacion->codigo_verificacion = $nuevoCodigo;
-                $verificacion->intentos = 0; // Reiniciar a 0
-                $verificacion->save();
-
-                // Reenviar correo
-                Mail::to($usuario->correo_usuario)->send(new \App\Mail\VerificacionUsuarioMail($usuario->rut, $nuevoCodigo));
-
-                return back()->with('info', 'Se ha enviado un nuevo código de verificación a tu correo.');
-            } else {
-                $intentosRestantes = 5 - $verificacion->intentos;
-                $verificacion->save();
-                return back()->with('info', "Código incorrecto. Te quedan {$intentosRestantes} intentos.");
-            }
+        if (!$verificacion) {
+            return redirect()->route('login')->with('error', 'No se encontró código de verificación para reenviar.');
         }
 
-        // Código correcto
-        $usuario->update([
-            'activado_usuario' => 1,
-        ]);
-        $verificacion->delete();
-        session()->forget('verificacion_id_usuario');
-        session()->forget('rut_verificacion'); // <-- Limpiar el rut de la sesión
+        // Generar nuevo código y reiniciar intentos
+        $nuevoCodigo = rand(100000, 999999);
+        $verificacion->codigo_verificacion = $nuevoCodigo;
+        $verificacion->intentos = 0;
+        $verificacion->save();
 
-        return redirect()->route('login')->with('success', 'Cuenta verificada correctamente.');
+        // Reenviar correo
+        \Mail::to($usuario->correo_usuario)->send(new \App\Mail\VerificacionUsuarioMail($usuario->rut, $nuevoCodigo));
+
+        return back()->with('success', 'Se ha reenviado el código de verificación a tu correo.');
     }
 }

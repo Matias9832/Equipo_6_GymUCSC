@@ -16,22 +16,36 @@
                                     <p class="mb-0">Ingresa tu email y espera unos segundos</p>
                                 </div>
                                 <div class="card-body">
+                                    {{-- Mensaje de éxito --}}
+                                    @if (session('success'))
+                                        <div class="alert alert-success">
+                                            {{ session('success') }}
+                                        </div>
+                                    @endif
+
+                                    {{-- Errores generales --}}
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul class="mb-0">
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+
                                     <form role="form" method="POST" action="{{ route('reset.perform') }}">
                                         @csrf
                                         @method('post')
                                         <div class="flex flex-col mb-3">
                                             <input type="email" name="email" class="form-control form-control-lg"
                                                 placeholder="Email" value="{{ old('email') }}" aria-label="Email">
-                                            @error('email') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                         </div>
                                         <div class="text-center">
                                             <button type="submit"
                                                 class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Enviar correo</button>
                                         </div>
                                     </form>
-                                </div>
-                                <div id="alert">
-                                    @include('components.alert')
                                 </div>
                             </div>
                         </div>
