@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\News;
@@ -8,7 +7,7 @@ use App\Models\Administrador;
 use App\Models\Deporte;
 use App\Models\Sucursal;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
@@ -21,36 +20,31 @@ class NewsController extends Controller
     public function index()
     {
         $news = News::with('administrador')->orderByDesc('fecha_noticia')->paginate(3);
-    
+
         $sucursalesConSalas = Sucursal::with('salas')
             ->where('id_marca', 1)
             ->whereHas('salas')
             ->get();
-    
+
         return view('news.index', compact('news', 'sucursalesConSalas'));
     }
 
     public function create()
     {
-        $deportes = Deporte::all(); // O puedes seleccionar campos específicos si prefieres
+        $deportes = Deporte::all();
         return view('news.create', compact('deportes'));
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'nombre_noticia' => 'required|string|max:255',
             'descripcion_noticia' => 'required',
             'tipo_deporte' => 'required|string',
         ]);
 
-        $rutUsuario = auth()->user()->rut;
-        $admin = Administrador::where('rut_admin', $rutUsuario)->first();
-
-
-
+        $admin = Administrador::where('rut_admin', auth()->user()->rut)->firstOrFail();
 
         $news = News::create([
             'nombre_noticia' => $data['nombre_noticia'],
@@ -61,16 +55,8 @@ class NewsController extends Controller
             'id_admin' => $admin->id_admin,
         ]);
 
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('news_images', 'public');
+        $this->guardarImagenes($request, $news);
 
-                NewsImage::create([
-                    'id_noticia' => $news->id_noticia,
-                    'image_path' => $path,
-                ]);
-            }
-        }
         return redirect('/')->with('success', 'Noticia creada con éxito.');
     }
 
@@ -106,37 +92,59 @@ class NewsController extends Controller
         ]);
 
         // Eliminar imágenes seleccionadas
-        if ($request->has('delete_images') && is_array($request->delete_images)) {
+        if ($request->has('delete_images')) {
             foreach ($request->delete_images as $imageId) {
-                $image = NewsImage::findOrFail($imageId);
-                Storage::disk('public')->delete($image->image_path);
-                $image->delete();
+                $image = NewsImage::find($imageId);
+                if ($image) {
+                    $filePath = public_path($image->image_path);
+                    if (file_exists($filePath)) {
+                        unlink($filePath);
+                    }
+                    $image->delete();
+                }
             }
         }
 
-        // Subir nuevas imágenes
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('news_images', 'public');
-                $news->images()->create(['image_path' => $path]);
-            }
-        }
+        $this->guardarImagenes($request, $news);
 
         return redirect('/')->with('update', 'Noticia actualizada.');
     }
 
     public function destroy($id)
     {
-        $news = News::findOrFail($id);
+        $news = News::with('images')->findOrFail($id);
 
-        // Elimina todas las imágenes asociadas
         foreach ($news->images as $image) {
-            Storage::disk('public')->delete($image->image_path);
-
+            $filePath = public_path($image->image_path);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
             $image->delete();
         }
 
         $news->delete();
         return redirect('/')->with('delete', 'Noticia eliminada.');
+    }
+
+    /**
+     * Función auxiliar para guardar imágenes en public/img/news_images
+     */
+    private function guardarImagenes(Request $request, News $news)
+    {
+        if ($request->hasFile('images')) {
+            $destinationPath = public_path('img/news_images');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            foreach ($request->file('images') as $image) {
+                $filename = Str::random(20) . '_' . $image->getClientOriginalName();
+                $image->move($destinationPath, $filename);
+
+                $news->images()->create([
+                    'image_path' => 'img/news_images/' . $filename
+                ]);
+            }
+        }
     }
 }
