@@ -93,11 +93,7 @@
                                         <div id="error_indicaciones" class="text-danger small mt-1"></div>
                                     </div>
                                     
-                                    <div class="form-group mb-3">
-                                        <label for="informacion_salud">Información Adicional (Que creas relevante)</label>
-                                        <textarea name="informacion_salud" class="form-control" id="informacion_salud" rows="3"></textarea>
-                                    </div>
-
+                                    
                                 </div>
                                 
                                 

@@ -86,11 +86,7 @@
                                     <div id="error_indicaciones" class="text-danger small mt-1"></div>
                                 </div>
 
-                                {{-- Información adicional --}}
-                                <div class="form-group mb-3">
-                                    <label for="informacion_salud">Información Adicional (Que creas relevante)</label>
-                                    <textarea name="informacion_salud" class="form-control" id="informacion_salud" rows="3">{{ $salud->informacion_salud }}</textarea>
-                                </div>
+                                
                             </div>
 
                             <div id="declaracion_veracidad" class="mb-3" style="display: none;">
