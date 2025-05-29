@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use \App\Models\Administrador;
 use App\Models\Usuario;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use App\Models\Alumno;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UsuarioController extends Controller
 {
@@ -101,8 +104,9 @@ class UsuarioController extends Controller
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
             'rol' => 'required|in:Docente,Coordinador', //Restricción para que solo pueda crear Docente y coordinador
         ]);
-
+        try{
         //Crear contraseña aleatoria
+        $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6);
         //Reemplazar con la función de generar contraseña aleatoria
 
         // Crear el usuario 
@@ -112,17 +116,32 @@ class UsuarioController extends Controller
             'tipo_usuario' => 'admin',
             'bloqueado_usuario' => 0,
             'activado_usuario' => 1,
-            'contrasenia_usuario' => '123456',
+            'contrasenia_usuario' => Hash::make($password),
         ]);
         $usuario->assignRole($request->rol);
 
         // Crear el administrador
-        Administrador::create([
+        $administrador = Administrador::create([
             'rut_admin' => $request->rut,
             'nombre_admin' => $request->nombre_admin,
             'fecha_creacion' => now(),
         ]);
+
+        // Asignar la sucursal al administrador
+            DB::table('admin_sucursal')->insert([
+                'id_admin' => $administrador->id_admin,
+                'id_suc' => session('sucursal_activa'),
+                'activa' => true,
+            ]);
+
+        Mail::to($usuario->correo_usuario)->send(new \App\Mail\AdministradorPasswordMail($request->nombre_admin, $password));
+
         return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente.');
+        } catch (\Exception $e) {
+            // Manejar errores
+            Log::error('Error al crear administrador: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Ocurrió un error al crear el administrador. Inténtalo nuevamente.']);
+        }
     }
 
     public function edit(Usuario $usuario)
