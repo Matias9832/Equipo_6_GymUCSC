@@ -35,7 +35,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="correo_usuario" class="form-label">Correo Administrador</label>
-                                        <input type="email" name="correo_usuario" id="correo_usuario" class="form-control" value="{{ $usuario->correo_usuario }}" required>
+                                        <input type="email" name="correo_usuario" id="correo_usuario" class="form-control" value="{{ $usuario->correo_usuario }}" required disabled>
                                     </div>
                                 @else
                                     <!-- Campos solo para alumnos -->
@@ -57,7 +57,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="correo_usuario" class="form-label">Correo Alumno</label>
-                                        <input type="email" name="correo_usuario" id="correo_usuario" class="form-control" value="{{ $usuario->correo_usuario }}" required>
+                                        <input type="email" name="correo_usuario" id="correo_usuario" class="form-control" value="{{ $usuario->correo_usuario }}" required disabled>
                                     </div>
                                 @endif
 
