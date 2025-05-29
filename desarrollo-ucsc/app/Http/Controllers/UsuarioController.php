@@ -57,18 +57,20 @@ class UsuarioController extends Controller
                     return '<span class="badge badge-sm ' . $class . '" style="width:150px;">' . $label . '</span>';
                 })
                 ->addColumn('acciones', function ($usuario) {
-                    $editar = auth()->user()->can('Editar Usuarios')
-                        ? '<a href="' . route('usuarios.edit', $usuario->id_usuario) . '" class="text-secondary font-weight-bold text-xs me-2" title="Editar"><i class="ni ni-ruler-pencil text-info"></i></a>'
-                        : '';
-
-                    $eliminar = auth()->user()->can('Eliminar Usuarios')
-                        ? '<form action="' . route('usuarios.destroy', $usuario->id_usuario) . '" method="POST" class="d-inline">'
-                        . csrf_field() . method_field('DELETE') .
-                        '<button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm(\'¿Estás seguro de que quieres eliminar este usuario?\')" title="Eliminar">'
-                        . '<i class="ni ni-fat-remove"></i></button></form>'
-                        : '';
-
-                    return $editar . $eliminar;
+                    if ($usuario->tipo_usuario === 'admin') {
+                        $editar = auth()->user()->can('Editar Usuarios')
+                            ? '<a href="' . route('usuarios.edit', $usuario->id_usuario) . '" class="text-secondary font-weight-bold text-xs me-2" title="Editar"><i class="ni ni-ruler-pencil text-info"></i></a>'
+                            : '';
+    
+                        $eliminar = auth()->user()->can('Eliminar Usuarios')
+                            ? '<form action="' . route('usuarios.destroy', $usuario->id_usuario) . '" method="POST" class="d-inline">'
+                            . csrf_field() . method_field('DELETE') .
+                            '<button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm(\'¿Estás seguro de que quieres eliminar este usuario?\')" title="Eliminar">'
+                            . '<i class="ni ni-fat-remove"></i></button></form>'
+                            : '';
+    
+                        return $editar . $eliminar;
+                    }
                 })
                 ->rawColumns(['rol_visible', 'acciones'])
                 ->filter(function ($query) use ($request) {
