@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
 @include('layouts.navbars.auth.topnav', ['title' => 'Editar Noticia'])
@@ -55,7 +55,7 @@
 
                         <div>
                             <label for="descripcion_noticia" class="form-label">Contenido:</label>
-                            <textarea name="descripcion_noticia" class="form-control" required>{{ $news->descripcion_noticia }}</textarea>
+                            <textarea name="descripcion_noticia" class="form-control" rows="4" required>{{ $news->descripcion_noticia }}</textarea>
                         </div>
 
                         <div>

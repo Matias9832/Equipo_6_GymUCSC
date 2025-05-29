@@ -51,11 +51,15 @@
                                                 </ul>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <a href="{{ route('rutinas.edit', $rutina->id) }}" class="btn btn-sm btn-info">Editar</a>
+                                                <a href="{{ route('rutinas.edit', $rutina->id) }}" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip"
+                                                    title="Editar">
+                                                    <i class="ni ni-ruler-pencil text-info"></i></a>
                                                 <form action="{{ route('rutinas.destroy', $rutina->id) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro?')">Eliminar</button>
+                                                    <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm('¿Estás seguro?')" title="Eliminar">
+                                                        <i class="ni ni-fat-remove"></i>
+                                                    </button>
                                                 </form>
                                             </td>
                                         </tr>

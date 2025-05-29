@@ -15,17 +15,21 @@
                     <form action="{{ route('usuarios.update', $usuario->id_usuario) }}" method="POST">
                         @csrf
                         @method('PUT')
-
+                        <div class="mb-3">
+                            <label for="nombre_admin" class="form-label">Nombre</label>
+                            <input type="text" name="nombre_admin" id="nombre_admin" class="form-control" value="{{ $administrador->nombre_admin }}" required>
+                        </div>
                         <div class="mb-3">
                             <label for="rut" class="form-label">RUT</label>
                             <input type="text" name="rut" id="rut" class="form-control" value="{{ $usuario->rut }}"
-                                required>
+                                readonly>
                         </div>
-
                         <div class="mb-3">
                             <label for="correo_usuario" class="form-label">Correo</label>
                             <input type="email" name="correo_usuario" id="correo_usuario" class="form-control"
                                 value="{{ $usuario->correo_usuario }}" required>
+                            <input type="hidden" name="correo_antiguo" id="correo_antiguo" class="form-control"
+                                value="{{ $usuario->correo_usuario }}">
                         </div>
 
                         @if($usuario->tipo_usuario === 'admin')

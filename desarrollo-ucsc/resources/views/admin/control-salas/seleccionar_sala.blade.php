@@ -15,6 +15,7 @@
                     </div>
 
                     <div class="card-body">
+                        @cannot(['Acceso a Salas Abiertas'])
                         <form action="{{ route('control-salas.generarQR') }}" method="POST"
                             class="d-flex flex-wrap gap-2 align-items-end">
                             @csrf
@@ -44,6 +45,7 @@
                                     QR</button>
                             </div>
                         </form>
+                        @endcannot
 
                         @if ($salasActivas->count())
                             <div class="mt-5">
@@ -86,7 +88,7 @@
                                                                                     class="btn btn-info btn-sm ms-1">
                                                                                     Ver Ingresos
                                                                                 </a>
-
+                                                                                @cannot(['Acceso a Salas Abiertas'])
                                                                                 <form action="{{ route('admin.control-salas.cerrar_sala') }}" method="POST"
                                                                                     class="d-inline ms-1">
                                                                                     @csrf
@@ -96,6 +98,7 @@
                                                                                         Cerrar Sala
                                                                                     </button>
                                                                                 </form>
+                                                                                @endcannot
                                                                             </td>
                                                                         </tr>
                                             @endforeach

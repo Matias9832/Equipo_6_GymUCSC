@@ -21,7 +21,7 @@
             <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
                 <div class="card z-index-0">
                     <div class="card-body">
-                        <form method="POST" action="{{ route('salud.update') }}">
+                        <form id="formularioSalud" method="POST" action="{{ route('salud.update') }}">
                             @csrf
                             @method('PUT')
 
@@ -57,6 +57,7 @@
                                         <option value="{{ $opcion }}" {{ in_array($opcion, $salud->cronicas ?? []) ? 'selected' : '' }}>{{ $opcion }}</option>
                                         @endforeach
                                     </select>
+                                    <div id="error_cronicas" class="text-danger small mt-1"></div> 
                                 </div>
 
                                 {{-- Alergias --}}
@@ -66,8 +67,11 @@
                                     <label for="alergias" class="form-check-label">¿Tiene alergias?</label>
                                 </div>
                                 <div class="form-group mb-3" id="detalle_alergias" style="display: none;">
-                                    <label for="detalle_alergias_input">Alergias (si corresponde):</label>
+                                    <label for="detalle_alergias_input">Alergias (si corresponde):
+                                        <span>(ya sea estacional, alimentaria o a medicamentos)</span>
+                                    </label>
                                     <input type="text" name="detalle_alergias" id="detalle_alergias_input" class="form-control" value="{{ $salud->detalle_alergias }}">
+                                    <div id="error_alergias" class="text-danger small mt-1"></div>
                                 </div>
 
                                 {{-- Indicaciones médicas --}}
@@ -79,6 +83,7 @@
                                 <div class="form-group mb-3" id="detalle_indicaciones" style="display: none;">
                                     <label for="detalle_indicaciones_input">Indicaciones Médicas (si corresponde):</label>
                                     <input type="text" name="detalle_indicaciones" id="detalle_indicaciones_input" class="form-control" value="{{ $salud->detalle_indicaciones }}">
+                                    <div id="error_indicaciones" class="text-danger small mt-1"></div>
                                 </div>
 
                                 {{-- Información adicional --}}
@@ -111,6 +116,7 @@
 
 </main>
 
+
 <script>
     function toggleFormularioSalud() {
         const si = document.getElementById('enfermedad_si').checked;
@@ -138,5 +144,48 @@
         toggleFormularioSalud();
     }
 </script>
+
+<script>
+            document.getElementById('formularioSalud').addEventListener('submit', function (e) {
+                const tieneEnfermedad = document.getElementById('enfermedad_si').checked;
+
+                // Elementos
+                const esCronico = document.getElementById('enfermo_cronico').checked;
+                const selectCronicas = document.getElementById('cronicas');
+                const seleccionadasCronicas = Array.from(selectCronicas.selectedOptions);
+
+                const tieneAlergias = document.getElementById('alergias').checked;
+                const detalleAlergias = document.querySelector('input[name="detalle_alergias"]').value.trim();
+
+                const tieneIndicaciones = document.getElementById('indicaciones_medicas').checked;
+                const detalleIndicaciones = document.querySelector('input[name="detalle_indicaciones"]').value.trim();
+
+                // Limpia errores anteriores
+                document.getElementById('error_cronicas').innerText = '';
+                document.getElementById('error_alergias').innerText = '';
+                document.getElementById('error_indicaciones').innerText = '';
+
+                let errores = false;
+
+                if (tieneEnfermedad && esCronico && seleccionadasCronicas.length === 0) {
+                    document.getElementById('error_cronicas').innerText = 'Debe seleccionar al menos una enfermedad crónica.';
+                    errores = true;
+                }
+
+                if (tieneEnfermedad && tieneAlergias && detalleAlergias === '') {
+                    document.getElementById('error_alergias').innerText = 'Debe especificar sus alergias.';
+                    errores = true;
+                }
+
+                if (tieneEnfermedad && tieneIndicaciones && detalleIndicaciones === '') {
+                    document.getElementById('error_indicaciones').innerText = 'Debe especificar las indicaciones médicas.';
+                    errores = true;
+                }
+
+                if (errores) {
+                    e.preventDefault();
+                }
+            });
+        </script>
 
 @endsection
