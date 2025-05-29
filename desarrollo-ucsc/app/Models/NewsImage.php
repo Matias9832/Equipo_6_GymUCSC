@@ -13,8 +13,15 @@ class NewsImage extends Model
     protected $primaryKey = 'id_imagen';
     public $incrementing = true;
     protected $keyType = 'int';
-    protected $fillable = ['id_noticia', 'image_path'];
 
+    protected $fillable = [
+        'id_noticia',
+        'image_path',
+    ];
+
+    /**
+     * Relación inversa: esta imagen pertenece a una noticia.
+     */
     public function news()
     {
         return $this->belongsTo(News::class, 'id_noticia', 'id_noticia');

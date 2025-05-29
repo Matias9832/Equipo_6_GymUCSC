@@ -7,16 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
 {
-    protected $table = 'news'; 
+    use HasFactory;
 
-    protected $primaryKey = 'id_noticia';
-    public $incrementing = true; 
-    protected $keyType = 'int' ;
+    protected $table = 'news'; // Nombre explícito de la tabla
 
-    public $timestamps = false; 
+    protected $primaryKey = 'id_noticia'; // Clave primaria personalizada
+    public $incrementing = true;
+    protected $keyType = 'int';
+
+    public $timestamps = false; // Se desactiva created_at y updated_at
 
     protected $fillable = [
-        
         'nombre_noticia',
         'encargado_noticia',
         'descripcion_noticia',
@@ -25,14 +26,19 @@ class News extends Model
         'id_admin',
     ];
 
+    /**
+     * Relación con el administrador que creó la noticia
+     */
     public function administrador()
     {
         return $this->belongsTo(Administrador::class, 'id_admin');
     }
 
+    /**
+     * Relación con las imágenes asociadas a la noticia
+     */
     public function images()
-{
-    return $this->hasMany(NewsImage::class, 'id_noticia', 'id_noticia');
-}
-
+    {
+        return $this->hasMany(NewsImage::class, 'id_noticia', 'id_noticia');
+    }
 }

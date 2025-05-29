@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\File;
 
 use App\Models\News;
 use App\Models\NewsImage;
@@ -86,9 +87,9 @@ class NewsController extends Controller
         ]);
 
         $news->update([
-            'nombre_noticia' => $request->nombre_noticia,
-            'descripcion_noticia' => $request->descripcion_noticia,
-            'tipo_deporte' => $request->tipo_deporte,
+            'nombre_noticia' => $data['nombre_noticia'],
+            'descripcion_noticia' => $data['descripcion_noticia'],
+            'tipo_deporte' => $data['tipo_deporte'],
         ]);
 
         // Eliminar imágenes seleccionadas
@@ -96,10 +97,7 @@ class NewsController extends Controller
             foreach ($request->delete_images as $imageId) {
                 $image = NewsImage::find($imageId);
                 if ($image) {
-                    $filePath = public_path($image->image_path);
-                    if (file_exists($filePath)) {
-                        unlink($filePath);
-                    }
+                    $this->eliminarImagenFisica($image->image_path);
                     $image->delete();
                 }
             }
@@ -115,36 +113,43 @@ class NewsController extends Controller
         $news = News::with('images')->findOrFail($id);
 
         foreach ($news->images as $image) {
-            $filePath = public_path($image->image_path);
-            if (file_exists($filePath)) {
-                unlink($filePath);
-            }
+            $this->eliminarImagenFisica($image->image_path);
             $image->delete();
         }
 
         $news->delete();
+
         return redirect('/')->with('delete', 'Noticia eliminada.');
     }
 
     /**
      * Función auxiliar para guardar imágenes en public/img/news_images
      */
-    private function guardarImagenes(Request $request, News $news)
+     private function guardarImagenes(Request $request, News $news)
     {
         if ($request->hasFile('images')) {
-            $destinationPath = public_path('img/news_images');
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
+            $destinationPath = public_path('img/noticias');
+            if (!File::exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 0755, true);
             }
 
             foreach ($request->file('images') as $image) {
-                $filename = Str::random(20) . '_' . $image->getClientOriginalName();
+                $filename = uniqid('noticia_') . '.' . $image->getClientOriginalExtension();
                 $image->move($destinationPath, $filename);
 
                 $news->images()->create([
-                    'image_path' => 'img/news_images/' . $filename
+                    'image_path' => 'img/noticias/' . $filename
                 ]);
             }
         }
     }
+
+     private function eliminarImagenFisica($rutaRelativa)
+    {
+        $path = public_path($rutaRelativa);
+        if (File::exists($path)) {
+            File::delete($path);
+        }
+    }
+
 }
