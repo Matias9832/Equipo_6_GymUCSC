@@ -340,16 +340,3 @@
         </ul>
     </div>
 </aside>
-
-<script>
-    const submenus = document.querySelectorAll('.collapse');
-    submenus.forEach(menu => {
-        menu.addEventListener('show.bs.collapse', function () {
-            submenus.forEach(m => {
-                if (m !== menu) {
-                    new bootstrap.Collapse(m, { toggle: false }).hide();
-                }
-            });
-        });
-    });
-</script>

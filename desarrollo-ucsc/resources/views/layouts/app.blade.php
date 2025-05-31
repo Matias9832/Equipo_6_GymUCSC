@@ -23,9 +23,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <!-- Flatpickr CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" >
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
     <!-- CSS Personalizado -->
-     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -37,79 +37,79 @@
 <body class="{{ $class ?? '' }}">
 
 
-@if (!in_array(request()->route()->getName(), ['verificar.vista', 'reset-password', 'login']))
-    @if(session('success') || session('update') || session('delete'))
-        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
-            <div id="toastSuccess" class="toast align-items-center text-white 
-                                {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
-                                border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body text-center w-100">
-                        {{ session('success') ?? session('update') ?? session('delete') }}
+    @if (!in_array(request()->route()->getName(), ['verificar.vista', 'reset-password', 'login']))
+        @if(session('success') || session('update') || session('delete'))
+            <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+                <div id="toastSuccess" class="toast align-items-center text-white 
+                                        {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
+                                        border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body text-center w-100">
+                            {{ session('success') ?? session('update') ?? session('delete') }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Cerrar"></button>
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                        aria-label="Cerrar"></button>
                 </div>
             </div>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const toastLiveExample = document.getElementById('toastSuccess');
-                if (toastLiveExample) {
-                    const toast = new bootstrap.Toast(toastLiveExample, { delay: 3000 });
-                    toast.show();
-                }
-            });
-        </script>
-    @endif
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const toastLiveExample = document.getElementById('toastSuccess');
+                    if (toastLiveExample) {
+                        const toast = new bootstrap.Toast(toastLiveExample, { delay: 3000 });
+                        toast.show();
+                    }
+                });
+            </script>
+        @endif
 
-    @if(session('error'))
-        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
-            <div id="toastError" class="toast align-items-center text-white bg-danger border-0 show" role="alert"
-                aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body text-center w-100">
-                        {{ session('error') }}
+        @if(session('error'))
+            <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+                <div id="toastError" class="toast align-items-center text-white bg-danger border-0 show" role="alert"
+                    aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body text-center w-100">
+                            {{ session('error') }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Cerrar"></button>
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                        aria-label="Cerrar"></button>
                 </div>
             </div>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const toastLiveExample = document.getElementById('toastError');
-                if (toastLiveExample) {
-                    const toast = new bootstrap.Toast(toastLiveExample, { delay: 3000 });
-                    toast.show();
-                }
-            });
-        </script>
-    @endif
-    @if(session('info'))
-        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
-            <div id="toastInfo" class="toast align-items-center text-white bg-info border-0 show" role="alert"
-                aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body text-center w-100">
-                        {{ session('info') }}
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const toastLiveExample = document.getElementById('toastError');
+                    if (toastLiveExample) {
+                        const toast = new bootstrap.Toast(toastLiveExample, { delay: 3000 });
+                        toast.show();
+                    }
+                });
+            </script>
+        @endif
+        @if(session('info'))
+            <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+                <div id="toastInfo" class="toast align-items-center text-white bg-info border-0 show" role="alert"
+                    aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body text-center w-100">
+                            {{ session('info') }}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                            aria-label="Cerrar"></button>
                     </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                        aria-label="Cerrar"></button>
                 </div>
             </div>
-        </div>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const toastLiveExample = document.getElementById('toastInfo');
-                if (toastLiveExample) {
-                    const toast = new bootstrap.Toast(toastLiveExample, { delay: 3000 });
-                    toast.show();
-                }
-            });
-        </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const toastLiveExample = document.getElementById('toastInfo');
+                    if (toastLiveExample) {
+                        const toast = new bootstrap.Toast(toastLiveExample, { delay: 3000 });
+                        toast.show();
+                    }
+                });
+            </script>
+        @endif
     @endif
-@endif
 
 
     @guest
@@ -134,7 +134,7 @@
             </main>
         @endif
     @endauth
-    
+
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>
@@ -155,7 +155,8 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Select2 base + Bootstrap 5 theme -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
+        rel="stylesheet" />
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
@@ -164,6 +165,21 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <!-- Idioma español -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+    <!-- Script Menú Collapsed -->
+    <script>
+        const submenus = document.querySelectorAll('.collapse');
+        submenus.forEach(menu => {
+            menu.addEventListener('show.bs.collapse', function () {
+                submenus.forEach(m => {
+                    if (m !== menu) {
+                        new bootstrap.Collapse(m, { toggle: false }).hide();
+                    }
+                });
+            });
+        });
+    </script>
+
     @stack('js')
     @stack('scripts')
 </body>
