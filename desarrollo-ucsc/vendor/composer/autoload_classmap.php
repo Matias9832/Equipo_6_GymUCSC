@@ -314,6 +314,7 @@ return array(
     'Database\\Seeders\\DatabaseSeeder' => $baseDir . '/database/seeders/DatabaseSeeder.php',
     'Database\\Seeders\\DeporteSeeder' => $baseDir . '/database/seeders/DeporteSeeder.php',
     'Database\\Seeders\\EjercicioSeeder' => $baseDir . '/database/seeders/EjercicioSeeder.php',
+    'Database\\Seeders\\EspacioSeeder' => $baseDir . '/database/seeders/EspacioSeeder.php',
     'Database\\Seeders\\FontColorSeeder' => $baseDir . '/database/seeders/FontColorSeeder.php',
     'Database\\Seeders\\GeographicSeeder' => $baseDir . '/database/seeders/GeographicSeeder.php',
     'Database\\Seeders\\IngresoSeeder' => $baseDir . '/database/seeders/IngresoSeeder.php',
