@@ -4,11 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTenantTable extends Migration
+class CreatePersonalziarTable extends Migration
 {
     public function up(): void
     {
-        Schema::create('tenant', function (Blueprint $table) {
+        Schema::create('personalizar', function (Blueprint $table) {
             $table->id('id_tenant');
             $table->string('nombre_tenant', 100);
 
