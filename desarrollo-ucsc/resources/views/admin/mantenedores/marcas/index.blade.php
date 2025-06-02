@@ -28,7 +28,7 @@
                     <tr>
                         <td class="text-sm">{{ $marca->nombre_marca }}</td>
                         <td>
-                            <img src="{{ asset('storage/' . $marca->logo_marca) }}" alt="Logo" width="60" class="rounded">
+                            <img src="{{ url('storage/' . $marca->logo_marca) }}" alt="Logo" width="60" class="rounded">
                         </td>
                         <td class="text-sm">{{ Str::limit($marca->mision_marca, 50) }}</td>
                         <td class="text-sm">{{ Str::limit($marca->vision_marca, 50) }}</td>

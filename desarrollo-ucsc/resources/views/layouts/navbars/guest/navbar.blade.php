@@ -7,13 +7,13 @@
                     <!-- Logos -->
                     <a class="navbar-brand d-flex align-items-center font-weight-bolder ms-lg-0 ms-3"
                         href=" {{ route('welcome') }}">
-                        <!-- <img src="{{ asset('img/gym/deportes_logo.png') }}" alt="Logo GYM" style="height: 30px;"
+                        <!-- <img src="{{ url('img/gym/deportes_logo.png') }}" alt="Logo GYM" style="height: 30px;"
                             class="me-2"> -->
                         <!-- <span style="font-family: 'Montserrat', sans-serif; font-weight: 1000; font-size: 1.4rem;"
                             class="me-2">
                             DEPORTES
                         </span> -->
-                        <img src="{{ asset('img/gym/ucsc_logo.png') }}" alt="Logo UCSC" style="height: 30px;"
+                        <img src="{{ url('img/gym/ucsc_logo.png') }}" alt="Logo UCSC" style="height: 30px;"
                             class="me-2">
                     </a>
                     <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
