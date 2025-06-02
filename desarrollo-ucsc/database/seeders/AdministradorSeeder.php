@@ -17,7 +17,7 @@ class AdministradorSeeder extends Seeder
 
         // Crear el usuario super admin
         $usuario = Usuario::create([
-            'rut' => '1234',
+            'rut' => '6960920',
             'correo_usuario' => 'ugym@gmail.com',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
@@ -26,8 +26,8 @@ class AdministradorSeeder extends Seeder
 
         // Crear el administrador asociado
         Administrador::create([
-            'rut_admin' => '1234',
-            'nombre_admin' => 'Hector Sanhueza',
+            'rut_admin' => '6960920',
+            'nombre_admin' => 'Jaime Muñoz Guzmán',
             'fecha_creacion' => now(),
         ]);
         // Asignar el rol de Super Admin al usuario con todos los permisos
