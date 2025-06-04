@@ -16,18 +16,19 @@ class ChangePassword extends Controller
     {
         Auth::logout();
 
-        $id = intval(request()->id);
-        $this->user = Usuario::find($id);
+        if (tenancy()->tenant) {
+            $id = intval(request()->id);
+            $this->user = Usuario::find($id);
+        }
     }
-
     public function show(Request $request)
     {
         // Verifica si el usuario está autenticado
-            if (Auth::check()) {
-                return redirect('home');
-            }
+        if (Auth::check()) {
+            return redirect('home');
+        }
 
-            // Si no está autenticado, continúa con el flujo normal
+        // Si no está autenticado, continúa con el flujo normal
         {
             Auth::logout(); // Ahora está aquí
             $id = intval($request->id);
