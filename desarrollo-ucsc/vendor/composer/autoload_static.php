@@ -368,13 +368,13 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         ),
         'Spatie\\LaravelIgnition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
-            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
+            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
+            1 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
         ),
         'Spatie\\Ignition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/ignition/src',
-            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
+            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
+            1 => __DIR__ . '/..' . '/spatie/ignition/src',
         ),
         'Spatie\\FlareClient\\' => 
         array (
@@ -667,6 +667,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Controllers\\EquipoController' => __DIR__ . '/../..' . '/app/Http/Controllers/EquipoController.php',
         'App\\Http\\Controllers\\EspacioController' => __DIR__ . '/../..' . '/app/Http/Controllers/EspacioController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'App\\Http\\Controllers\\Landlord\\TenantController' => __DIR__ . '/../..' . '/app/Http/Controllers/Landlord/TenantController.php',
         'App\\Http\\Controllers\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/LoginController.php',
         'App\\Http\\Controllers\\MaquinaController' => __DIR__ . '/../..' . '/app/Http/Controllers/MaquinaController.php',
         'App\\Http\\Controllers\\MarcasController' => __DIR__ . '/../..' . '/app/Http/Controllers/MarcasController.php',
@@ -701,6 +702,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Middleware\\VerificarSalud' => __DIR__ . '/../..' . '/app/Http/Middleware/VerificarSalud.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Imports\\AlumnoImport' => __DIR__ . '/../..' . '/app/Imports/AlumnoImport.php',
+        'App\\Jobs\\SeedDatabase' => __DIR__ . '/../..' . '/app/Jobs/SeedDatabase.php',
         'App\\Mail\\AdministradorPasswordMail' => __DIR__ . '/../..' . '/app/Mail/AdministradorPasswordMail.php',
         'App\\Mail\\VerificacionUsuarioMail' => __DIR__ . '/../..' . '/app/Mail/VerificacionUsuarioMail.php',
         'App\\Models\\Administrador' => __DIR__ . '/../..' . '/app/Models/Administrador.php',
@@ -719,6 +721,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Models\\News' => __DIR__ . '/../..' . '/app/Models/News.php',
         'App\\Models\\NewsImage' => __DIR__ . '/../..' . '/app/Models/NewsImage.php',
         'App\\Models\\Pais' => __DIR__ . '/../..' . '/app/Models/Pais.php',
+        'App\\Models\\Personalizar' => __DIR__ . '/../..' . '/app/Models/Personalizar.php',
         'App\\Models\\Region' => __DIR__ . '/../..' . '/app/Models/Region.php',
         'App\\Models\\Rutina' => __DIR__ . '/../..' . '/app/Models/Rutina.php',
         'App\\Models\\Sala' => __DIR__ . '/../..' . '/app/Models/Sala.php',
@@ -738,6 +741,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
+        'App\\Providers\\TenancyServiceProvider' => __DIR__ . '/../..' . '/app/Providers/TenancyServiceProvider.php',
         'App\\View\\Components\\Alert' => __DIR__ . '/../..' . '/app/View/Components/Alert.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'BaconQrCode\\Common\\BitArray' => __DIR__ . '/..' . '/bacon/bacon-qr-code/src/Common/BitArray.php',
@@ -969,6 +973,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'Database\\Seeders\\SucursalSeeder' => __DIR__ . '/../..' . '/database/seeders/SucursalSeeder.php',
         'Database\\Seeders\\TallerSeeder' => __DIR__ . '/../..' . '/database/seeders/TallerSeeder.php',
         'Database\\Seeders\\TemaSeeder' => __DIR__ . '/../..' . '/database/seeders/TemaSeeder.php',
+        'Database\\Seeders\\TenantDatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/TenantDatabaseSeeder.php',
         'Database\\Seeders\\TenantSeeder' => __DIR__ . '/../..' . '/database/seeders/TenantSeeder.php',
         'Database\\Seeders\\TipoSeeder' => __DIR__ . '/../..' . '/database/seeders/TipoSeeder.php',
         'Database\\Seeders\\UsuarioSeeder' => __DIR__ . '/../..' . '/database/seeders/UsuarioSeeder.php',
