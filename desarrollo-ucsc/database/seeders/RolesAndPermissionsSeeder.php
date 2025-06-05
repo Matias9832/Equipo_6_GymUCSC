@@ -117,6 +117,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'Acceso a Salas Abiertas',
             'Acceso al Mantenedor de Equipos',
             'Acceso al Mantenedor de Torneos',
+            'Acceso al Mantenedor de Talleres',
+            'Acceso a Gestión de Asistencia Talleres',
             'Ver Usuarios',
             'Editar Usuarios',
             'Crear Noticias',

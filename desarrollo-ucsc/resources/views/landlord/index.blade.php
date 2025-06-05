@@ -9,7 +9,7 @@
                 <div class="card shadow border-0">
                     <div
                         class="card-header bg-gradient-primary text-white d-flex justify-content-between align-items-center">
-                        <h4 class="mb-0">Subdominios Activos</h4>
+                        <h4 class="text-white mb-0">Subdominios Activos</h4>
                         <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal"
                             data-bs-target="#crearTenantModal">+ Crear nuevo Tenant</a>
                     </div>
