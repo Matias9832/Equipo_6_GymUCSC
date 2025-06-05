@@ -179,6 +179,35 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleBtn = document.getElementById("sidenav-toggle");
+            const sidenav = document.getElementById("sidenav-main-collapsed");
+
+            toggleBtn.addEventListener("click", function () {
+                sidenav.classList.toggle("collapsed");
+            });
+
+            // Asegurar que se muestre correctamente al redimensionar
+            window.addEventListener("resize", function () {
+                if (window.innerWidth >= 1200) {
+                    sidenav.classList.remove("collapsed");
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidenav = document.getElementById('sidenav-main-collapsed');
+            const closeIcon = document.getElementById('iconSidenav');
+
+            closeIcon?.addEventListener('click', function () {
+                const bsCollapse = bootstrap.Collapse.getInstance(sidenav) || new bootstrap.Collapse(sidenav);
+                bsCollapse.hide();
+            });
+        });
+    </script>
+
 
     @stack('js')
     @stack('scripts')
