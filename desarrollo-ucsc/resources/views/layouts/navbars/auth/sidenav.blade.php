@@ -11,9 +11,10 @@
     <div class="offcanvas-body position-sticky top-0 bg-white" style="z-index: 2;">
         
         <a class="navbar-brand m-0" href="{{ route('welcome') }}">
-            <img src="{{ asset('img/gym/ucsc_logo.png') }}" class="navbar-brand-img h-100" alt="main_logo">
+            <img src="{{ url('img/gym/ucsc_logo.png') }}" class="navbar-brand-img h-100" alt="main_logo">
             <span class="ms-1 font-weight-bold">Panel de Control</span>
         </a>
+    </div>    
        
         <hr class="horizontal dark mt-0 mb-2">
         <ul class="navbar-nav">
