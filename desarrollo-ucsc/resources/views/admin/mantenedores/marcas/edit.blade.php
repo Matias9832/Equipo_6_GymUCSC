@@ -17,7 +17,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Logo actual</label><br>
-                    <img src="{{ asset('storage/' . $marca->logo_marca) }}" alt="Logo" width="80" class="mb-2 rounded">
+                    <img src="{{ url('storage/' . $marca->logo_marca) }}" alt="Logo" width="80" class="mb-2 rounded">
                     <input type="file" name="logo_marca" id="logo_marca" class="form-control">
                 </div>
                 <div class="mb-3">

@@ -33,7 +33,7 @@
                                             </td>
                                             <td>
                                                     @if($ejercicio->imagen)
-                                                        <img src="{{ asset('img/' . $ejercicio->imagen) }}" alt="Imagen del ejercicio" class="img-fluid" style="max-height: 50px; max-width: 80px;">
+                                                        <img src="{{ url('img/' . $ejercicio->imagen) }}" alt="Imagen del ejercicio" class="img-fluid" style="max-height: 50px; max-width: 80px;">
                                                     @else
                                                         <span class="text-muted">Sin imagen</span>
                                                     @endif
