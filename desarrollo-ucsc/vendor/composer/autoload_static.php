@@ -938,6 +938,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'Database\\Seeders\\DeporteSeeder' => __DIR__ . '/../..' . '/database/seeders/DeporteSeeder.php',
         'Database\\Seeders\\EjercicioSeeder' => __DIR__ . '/../..' . '/database/seeders/EjercicioSeeder.php',
+        'Database\\Seeders\\EspacioSeeder' => __DIR__ . '/../..' . '/database/seeders/EspacioSeeder.php',
         'Database\\Seeders\\FontColorSeeder' => __DIR__ . '/../..' . '/database/seeders/FontColorSeeder.php',
         'Database\\Seeders\\GeographicSeeder' => __DIR__ . '/../..' . '/database/seeders/GeographicSeeder.php',
         'Database\\Seeders\\IngresoSeeder' => __DIR__ . '/../..' . '/database/seeders/IngresoSeeder.php',
