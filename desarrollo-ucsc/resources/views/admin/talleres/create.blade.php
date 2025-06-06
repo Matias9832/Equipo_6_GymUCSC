@@ -91,10 +91,10 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="time" name="horarios[0][hora_inicio]" class="form-control" required>
+                                        <input type="text" name="horarios[0][hora_inicio]" class="form-control time-picker" placeholder="Hora inicio" required>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="time" name="horarios[0][hora_termino]" class="form-control" required>
+                                        <input type="text" name="horarios[0][hora_termino]" class="form-control time-picker" placeholder="Hora término" required>
                                     </div>
                                     <div class="col-md-3 d-flex align-items-center">
                                         <button type="button" class="btn btn-danger btn-sm remove-horario d-none">Eliminar</button>
@@ -117,40 +117,58 @@
     </div>
     @push('scripts')
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        let index = 1;
+        document.addEventListener('DOMContentLoaded', function () {
+        const container = document.getElementById('horarios-container');
+
+        function initTimePickers() {
+            flatpickr(".time-picker", {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true,
+                minuteIncrement: 5
+            });
+        }
+
+        initTimePickers();
 
         document.getElementById('agregar-horario').addEventListener('click', function () {
-            const container = document.getElementById('horarios-container');
-            const original = container.querySelector('.horario-item');
+            const items = container.querySelectorAll('.horario-item');
+            const original = items[0];
             const clone = original.cloneNode(true);
+            const index = items.length;
 
+            // Actualizar nombres de inputs y limpiar valores
             clone.querySelectorAll('select, input').forEach(input => {
                 input.name = input.name.replace(/\[\d+\]/, `[${index}]`);
                 input.value = '';
+                if (input.classList.contains('time-picker')) {
+                    input._flatpickr?.destroy(); // Destruir instancia previa si existe
+                }
             });
 
+            // Mostrar botón eliminar
             clone.querySelector('.remove-horario').classList.remove('d-none');
             clone.querySelector('.remove-horario').addEventListener('click', function () {
                 clone.remove();
             });
 
             container.appendChild(clone);
-            index++;
+            initTimePickers();
         });
-    });
 
-    document.addEventListener('input', function (e) {
-        if (e.target && e.target.matches('input[name$="[hora_termino]"]')) {
-            const termino = e.target;
-            // Busca el input de hora_inicio en el mismo horario-item
-            const row = termino.closest('.horario-item');
-            const inicio = row.querySelector('input[name$="[hora_inicio]"]');
-            termino.setCustomValidity('');
-            if (termino.value && inicio.value && termino.value <= inicio.value) {
-                termino.setCustomValidity('La hora término debe ser posterior a la hora inicio.');
+        // Validación de hora término > hora inicio
+        document.addEventListener('input', function (e) {
+            if (e.target && e.target.matches('input[name$="[hora_termino]"]')) {
+                const termino = e.target;
+                const row = termino.closest('.horario-item');
+                const inicio = row.querySelector('input[name$="[hora_inicio]"]');
+                termino.setCustomValidity('');
+                if (termino.value && inicio.value && termino.value <= inicio.value) {
+                    termino.setCustomValidity('La hora término debe ser posterior a la hora inicio.');
+                }
             }
-        }
+        });
     });
     </script>
     @endpush
