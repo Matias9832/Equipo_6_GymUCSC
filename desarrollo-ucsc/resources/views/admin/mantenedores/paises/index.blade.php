@@ -31,14 +31,14 @@
                                             <img src="{{ $pais->bandera_pais }}" alt="Bandera de {{ $pais->nombre_pais }}" style="width: 50px; height: auto;" class="rounded">
                                         </td>
                                         <td class="align-middle text-center">
-                                            <a href="{{ route('paises.edit', $pais->id_pais) }}" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">
-                                                <i class="ni ni-ruler-pencil text-info"></i>
+                                            <a href="{{ route('paises.edit', $pais->id_pais) }}" class="text-info font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">
+                                                <i class="fas fa-pen-to-square  text-info"></i>
                                             </a>
                                             <form action="{{ route('paises.destroy', $pais->id_pais) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm('¿Estás seguro de que quieres eliminar este país?')" title="Eliminar">
-                                                    <i class="ni ni-fat-remove"></i>
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
                                         </td>

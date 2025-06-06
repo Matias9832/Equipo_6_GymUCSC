@@ -101,7 +101,7 @@
                                                 <a href="{{ route('talleres.edit', $taller->id_taller) }}"
                                                     class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip"
                                                     title="Editar">
-                                                    <i class="ni ni-ruler-pencil text-info"></i>
+                                                    <i class="fas fa-pen-to-square text-info"></i>
                                                 </a>
                                                 <form action="{{ route('talleres.destroy', $taller->id_taller) }}" method="POST"
                                                     class="d-inline">
@@ -111,7 +111,7 @@
                                                         class="btn btn-link text-danger p-0 m-0 align-baseline"
                                                         onclick="return confirm('¿Estás seguro de que quieres eliminar este taller?')"
                                                         title="Eliminar">
-                                                        <i class="ni ni-fat-remove"></i>
+                                                        <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </form>
                                             </td>

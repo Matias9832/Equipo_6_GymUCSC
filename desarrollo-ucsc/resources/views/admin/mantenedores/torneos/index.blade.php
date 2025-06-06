@@ -42,13 +42,13 @@
                                         </td>
                                         <td class="text-center">
                                             <a href="{{ route('torneos.edit', $torneo->id) }}" class="text-warning me-2" title="Editar">
-                                                <i class="ni ni-ruler-pencil"></i>
+                                                <i class="fas fa-pen-to-square text-info"></i>
                                             </a>
                                             <form action="{{ route('torneos.destroy', $torneo->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-link text-danger p-0" onclick="return confirm('¿Estás seguro de que quieres eliminar este torneo?')" title="Eliminar">
-                                                    <i class="ni ni-fat-remove"></i>
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
                                         </td>

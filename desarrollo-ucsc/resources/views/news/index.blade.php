@@ -54,13 +54,13 @@
                                         @if(Auth::check() && Auth::user()->is_admin)
                                             <div class="d-flex justify-content-end mt-2">
                                                 <a href="{{ route('news.edit', $noticias->id_noticia) }}" class="btn btn-sm btn-info me-2">
-                                                    <i class="ni ni-ruler-pencil"></i>
+                                                    <i class="fas fa-pen-to-square"></i>
                                                 </a>
                                                 <form action="{{ route('news.destroy', $noticias->id_noticia) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar esta noticia?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="ni ni-fat-remove"></i>
+                                                        <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </form>
                                             </div>
