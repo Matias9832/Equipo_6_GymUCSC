@@ -121,6 +121,10 @@ MAIL_FROM_NAME=UCSC
 #D12421 Rojo de la universidad
 #646567 Negro de la universidad
 
+# Iconos 
+"fas fa-trash-alt" Eliminar
+"fas fa-pen-to-square" Editar
+
 # Cómo Cambiar el Fondo de una página
 
 ## Color específico

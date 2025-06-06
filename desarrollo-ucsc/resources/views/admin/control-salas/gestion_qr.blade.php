@@ -13,6 +13,8 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('title', 'Gestor de Qr')
+@section('ocultarHamburguesa', true)
+
 
 @section('content')
     <div class="container py-4">
@@ -94,8 +96,8 @@
         
         {{-- Modal Ingreso Manual --}}
         <div class="modal fade" id="modalIngresoManual" tabindex="-1" aria-labelledby="modalIngresoManualLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" style="margin-top: 300px;">
-                <div class="modal-content">
+            <div class="modal-dialog" style="margin: 0 auto; margin-top: 530px;">
+                <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
                     <form action="{{ route('registro.manual') }}" method="POST">
                         @csrf
                         <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
@@ -122,8 +124,8 @@
         </div>
 
         {{-- Modal Salida Manual --}}
-        <div class="modal fade" id="modalSalidaManual" tabindex="-1" aria-labelledby="modalSalidaManualLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" style="margin-top: 300px;">
+        <div class="modal fade align-bottom" id="modalSalidaManual" tabindex="-1" aria-labelledby="modalSalidaManualLabel" aria-hidden="true">
+            <div class="modal-dialog" style="margin: 0 auto; margin-top: 530px;">
                 <div class="modal-content">
                     <form action="{{ route('salida.manual') }}" method="POST">
                         @csrf

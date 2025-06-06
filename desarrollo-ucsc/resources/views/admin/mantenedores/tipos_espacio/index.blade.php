@@ -28,13 +28,13 @@
                                         <td class="text-sm ps-4">{{ $tipo->nombre_tipo }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('tipos_espacio.edit', $tipo->id) }}" class="text-secondary font-weight-bold text-xs me-2" title="Editar">
-                                                <i class="ni ni-ruler-pencil text-info"></i>
+                                                <i class="fas fa-pen-to-square text-info"></i>
                                             </a>
                                             <form action="{{ route('tipos_espacio.destroy', $tipo->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm('¿Estás seguro de que quieres eliminar este tipo de espacio?')" title="Eliminar">
-                                                    <i class="ni ni-fat-remove"></i>
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
                                         </td>

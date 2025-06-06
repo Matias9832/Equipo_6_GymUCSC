@@ -33,11 +33,11 @@
                         <td class="text-sm">{{ Str::limit($marca->mision_marca, 50) }}</td>
                         <td class="text-sm">{{ Str::limit($marca->vision_marca, 50) }}</td>
                         <td class="text-center">
-                            <a href="{{ route('marcas.edit', $marca->id_marca) }}" class="btn btn-sm btn-warning me-1">Editar</a>
+                            <a href="{{ route('marcas.edit', $marca->id_marca) }}" class="fas fa-pen-to-square  me-1">Editar</a>
                             <form action="{{ route('marcas.destroy', $marca->id_marca) }}" method="POST" class="d-inline-block" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta marca?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger p-1">Eliminar</button>
+                                <button type="submit" class="fas fa-trash-alt p-1">Eliminar</button>
                             </form>
                         </td>
                     </tr>

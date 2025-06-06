@@ -43,13 +43,13 @@
                                             </td>
                                             <td class="align-middle text-center">
                                                 <a href="{{ route('equipos.edit', $equipo->id) }}" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">
-                                                    <i class="ni ni-ruler-pencil text-warning"></i>
+                                                    <i class="fas fa-pen-to-square  text-warning"></i>
                                                 </a>
                                                 <form action="{{ route('equipos.destroy', $equipo->id) }}" method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm('¿Estás seguro de que quieres eliminar este equipo?')" title="Eliminar">
-                                                        <i class="ni ni-fat-remove"></i>
+                                                        <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </form>
                                             </td>
