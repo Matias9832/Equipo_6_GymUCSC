@@ -9,7 +9,8 @@
                 <div class="card-header pb-0">
                     <h6>Editar Taller</h6>
                 </div>
-                @if($errors->any())
+                {{-- Elimina el div alert-danger general si vas a mostrar los errores en línea --}}
+                {{-- @if($errors->any())
                     <div class="alert alert-danger mx-4">
                         <ul class="mb-0">
                             @foreach($errors->all() as $error)
@@ -17,7 +18,7 @@
                             @endforeach
                         </ul>
                     </div>
-                @endif
+                @endif --}}
                 <div class="card-body bg-white">
                     <form action="{{ route('talleres.update', $taller) }}" method="POST">
                         @csrf
@@ -26,57 +27,58 @@
                         {{-- Datos del taller --}}
                         <div class="mb-3">
                             <label for="nombre_taller" class="form-label">Nombre Taller</label>
-                            <input type="text" name="nombre_taller" class="form-control" value="{{ old('nombre_taller', $taller->nombre_taller) }}" required>
+                            <input type="text" name="nombre_taller" class="form-control {{ $errors->has('nombre_taller') ? 'is-invalid' : '' }}" value="{{ old('nombre_taller', $taller->nombre_taller) }}" required>
+                            @error('nombre_taller') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                         
                         <div class="mb-3 form-check">
                             <input type="hidden" name="activo_taller" value="0">
-                            {{-- MEJORA: Se usa la directiva @checked para manejar el estado 'checked' y los datos 'old' de forma limpia --}}
                             <input type="checkbox" name="activo_taller" class="form-check-input" value="1" @checked(old('activo_taller', $taller->activo_taller))>
                             <label class="form-check-label">Activo</label>
                         </div>
 
                         <div class="mb-3">
                             <label for="descripcion_taller" class="form-label">Descripción</label>
-                            <textarea name="descripcion_taller" class="form-control" required>{{ old('descripcion_taller', $taller->descripcion_taller) }}</textarea>
+                            <textarea name="descripcion_taller" class="form-control {{ $errors->has('descripcion_taller') ? 'is-invalid' : '' }}" required>{{ old('descripcion_taller', $taller->descripcion_taller) }}</textarea>
+                            @error('descripcion_taller') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="mb-3">
                             <label for="cupos_taller" class="form-label">Cupos</label>
-                            <input type="number" name="cupos_taller" class="form-control" value="{{ old('cupos_taller', $taller->cupos_taller) }}" required>
+                            <input type="number" name="cupos_taller" class="form-control {{ $errors->has('cupos_taller') ? 'is-invalid' : '' }}" value="{{ old('cupos_taller', $taller->cupos_taller) }}" required>
+                            @error('cupos_taller') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="mb-3">
                             <label for="id_admin" class="form-label">Profesor asignado</label>
-                            <select name="id_admin" class="form-select">
+                            <select name="id_admin" class="form-select {{ $errors->has('id_admin') ? 'is-invalid' : '' }}">
                                 <option value="">-- Sin asignar --</option>
                                 @foreach($admins as $admin)
-                                    {{-- MEJORA: Se usa @selected para manejar la selección y los datos 'old' --}}
                                     <option value="{{ $admin->id_admin }}" @selected(old('id_admin', $taller->id_admin) == $admin->id_admin)>
                                         {{ $admin->nombre_admin }}
                                     </option>
                                 @endforeach
                             </select>
+                            @error('id_admin') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         <div class="mb-3">
                             <label for="id_espacio" class="form-label">Espacio</label>
-                            <select name="id_espacio" class="form-select">
+                            <select name="id_espacio" class="form-select {{ $errors->has('id_espacio') ? 'is-invalid' : '' }}">
                                 <option value="">-- Sin Asignar --</option>
                                 @foreach($espacios as $espacio)
-                                    {{-- MEJORA: Se usa @selected para manejar la selección y los datos 'old' --}}
                                     <option value="{{ $espacio->id_espacio }}" @selected(old('id_espacio', $taller->id_espacio) == $espacio->id_espacio)>
                                         {{ $espacio->nombre_espacio }}
                                     </option>
                                 @endforeach
                             </select>
+                            @error('id_espacio') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
 
                         <hr>
                         <h6>Horarios</h6>
 
                         @php
-                            // MEJORA: Se combinan los horarios guardados con los enviados en 'old' si falla la validación
                             $diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
                             $horarios_mostrados = old('horarios', $taller->horarios->map(function ($h) {
                                 return [
@@ -88,28 +90,35 @@
                             })->all());
                         @endphp
 
-                        {{-- MEJORA: Se añaden atributos data-* para pasar datos a JavaScript de forma segura --}}
                         <div id="horarios-container" 
                              data-dias-semana="{{ json_encode($diasSemana) }}"
                              data-index-inicial="{{ count($horarios_mostrados) }}">
                             
                             @foreach($horarios_mostrados as $i => $horario)
                                 <div class="row mb-2 horario-item">
-                                    {{-- El ID solo existe si el horario ya estaba guardado --}}
                                     <input type="hidden" name="horarios[{{ $i }}][id]" value="{{ $horario['id'] ?? '' }}">
                                     <div class="col-md-3">
-                                        <select name="horarios[{{ $i }}][dia]" class="form-select" required>
+                                        <select name="horarios[{{ $i }}][dia]" class="form-select {{ $errors->has('horarios.' . $i . '.dia') ? 'is-invalid' : '' }}">
                                             <option value="">-- Día --</option>
                                             @foreach($diasSemana as $dia)
                                                 <option value="{{ $dia }}" @selected(isset($horario['dia']) && $horario['dia'] === $dia)>{{ $dia }}</option>
                                             @endforeach
                                         </select>
+                                        @error('horarios.' . $i . '.dia')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="text" name="horarios[{{ $i }}][hora_inicio]" class="form-control time-picker" value="{{ $horario['hora_inicio'] ?? '' }}" required>
+                                        <input type="text" name="horarios[{{ $i }}][hora_inicio]" class="form-control time-picker {{ $errors->has('horarios.' . $i . '.hora_inicio') ? 'is-invalid' : '' }}" value="{{ $horario['hora_inicio'] ?? '' }}" placeholder="Hora inicio">
+                                        @error('horarios.' . $i . '.hora_inicio')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="text" name="horarios[{{ $i }}][hora_termino]" class="form-control time-picker" value="{{ $horario['hora_termino'] ?? '' }}" required>
+                                        <input type="text" name="horarios[{{ $i }}][hora_termino]" class="form-control time-picker {{ $errors->has('horarios.' . $i . '.hora_termino') ? 'is-invalid' : '' }}" value="{{ $horario['hora_termino'] ?? '' }}" placeholder="Hora término">
+                                        @error('horarios.' . $i . '.hora_termino')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="col-md-3 d-flex align-items-center">
                                         <button type="button" class="btn btn-danger btn-sm remove-horario">Eliminar</button>
@@ -133,13 +142,10 @@
 </div>
 
 @push('scripts')
-{{-- MEJORA: JavaScript más limpio y robusto --}}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const container = document.getElementById('horarios-container');
-        
-        // Se leen los datos desde los atributos data-*
-        const dias = JSON.parse(container.dataset.diasSemana);
+        const diasSemana = JSON.parse(container.dataset.diasSemana);
         let index = parseInt(container.dataset.indexInicial, 10);
 
         function initTimePickers(element = document) {
@@ -152,59 +158,62 @@
             });
         }
         
-        // Inicializa los time-pickers que ya existen en la página
-        initTimePickers();
+        initTimePickers(); // Inicializa los time-pickers que ya existen
 
         document.getElementById('agregar-horario').addEventListener('click', function () {
-            const row = document.createElement('div');
-            row.classList.add('row', 'mb-2', 'horario-item');
+            const newRow = document.createElement('div');
+            newRow.classList.add('row', 'mb-2', 'horario-item');
 
-            let selectDia = `<select name="horarios[${index}][dia]" class="form-select" required>
-                                <option value="">-- Día --</option>`;
-            dias.forEach(dia => {
-                selectDia += `<option value="${dia}">${dia}</option>`;
+            let selectDiaOptions = `<option value="">-- Día --</option>`;
+            diasSemana.forEach(dia => {
+                selectDiaOptions += `<option value="${dia}">${dia}</option>`;
             });
-            selectDia += `</select>`;
             
-            // El ID para los nuevos horarios es vacío
-            row.innerHTML = `
+            newRow.innerHTML = `
                 <input type="hidden" name="horarios[${index}][id]" value="">
-                <div class="col-md-3">${selectDia}</div>
                 <div class="col-md-3">
-                    <input type="text" name="horarios[${index}][hora_inicio]" class="form-control time-picker" placeholder="Hora inicio" required>
+                    <select name="horarios[${index}][dia]" class="form-select">${selectDiaOptions}</select>
                 </div>
                 <div class="col-md-3">
-                    <input type="text" name="horarios[${index}][hora_termino]" class="form-control time-picker" placeholder="Hora término" required>
+                    <input type="text" name="horarios[${index}][hora_inicio]" class="form-control time-picker" placeholder="Hora inicio">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="horarios[${index}][hora_termino]" class="form-control time-picker" placeholder="Hora término">
                 </div>
                 <div class="col-md-3 d-flex align-items-center">
                     <button type="button" class="btn btn-danger btn-sm remove-horario">Eliminar</button>
                 </div>
             `;
             
-            container.appendChild(row);
-            // Inicializa el time-picker solo para la nueva fila
-            initTimePickers(row); 
+            container.appendChild(newRow);
+            initTimePickers(newRow); // Inicializa flatpickr solo para la nueva fila
             index++;
         });
         
-        // Usamos delegación de eventos para manejar validación y eliminación
+        // Delegación de eventos para el botón eliminar
+        container.addEventListener('click', function (e) {
+            if (e.target && e.target.classList.contains('remove-horario')) {
+                e.target.closest('.horario-item').remove();
+            }
+        });
+
+        // Delegación de eventos para la validación en tiempo real (hora_termino > hora_inicio)
         container.addEventListener('input', function (e) {
             if (e.target && e.target.matches('input[name$="[hora_termino]"]')) {
                 const terminoInput = e.target;
                 const row = terminoInput.closest('.horario-item');
                 const inicioInput = row.querySelector('input[name$="[hora_inicio]"]');
                 
-                terminoInput.setCustomValidity('');
-                if (terminoInput.value && inicioInput.value && terminoInput.value <= inicioInput.value) {
-                    terminoInput.setCustomValidity('La hora de término debe ser posterior a la hora de inicio.');
-                    terminoInput.reportValidity(); // Muestra el mensaje de error inmediatamente
-                }
-            }
-        });
+                terminoInput.setCustomValidity(''); // Limpia cualquier mensaje anterior
+                if (terminoInput.value && inicioInput.value) {
+                    const inicioTime = new Date(`2000/01/01 ${inicioInput.value}`);
+                    const terminoTime = new Date(`2000/01/01 ${terminoInput.value}`);
 
-        container.addEventListener('click', function (e) {
-            if (e.target && e.target.classList.contains('remove-horario')) {
-                e.target.closest('.horario-item').remove();
+                    if (terminoTime <= inicioTime) {
+                        terminoInput.setCustomValidity('La hora de término debe ser posterior a la hora de inicio.');
+                        terminoInput.reportValidity(); // Muestra el globo de error
+                    }
+                }
             }
         });
     });
