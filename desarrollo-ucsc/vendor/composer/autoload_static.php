@@ -687,6 +687,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Controllers\\TipoEspacioController' => __DIR__ . '/../..' . '/app/Http/Controllers/TipoEspacioController.php',
         'App\\Http\\Controllers\\TipoSancionController' => __DIR__ . '/../..' . '/app/Http/Controllers/TipoSancionController.php',
         'App\\Http\\Controllers\\TorneoController' => __DIR__ . '/../..' . '/app/Http/Controllers/TorneoController.php',
+        'App\\Http\\Controllers\\TorneoUsuarioController' => __DIR__ . '/../..' . '/app/Http/Controllers/TorneoUsuarioController.php',
         'App\\Http\\Controllers\\UsuarioController' => __DIR__ . '/../..' . '/app/Http/Controllers/UsuarioController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\AdminMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminMiddleware.php',

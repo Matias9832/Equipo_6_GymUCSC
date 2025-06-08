@@ -42,6 +42,7 @@ return array(
     'App\\Http\\Controllers\\TipoEspacioController' => $baseDir . '/app/Http/Controllers/TipoEspacioController.php',
     'App\\Http\\Controllers\\TipoSancionController' => $baseDir . '/app/Http/Controllers/TipoSancionController.php',
     'App\\Http\\Controllers\\TorneoController' => $baseDir . '/app/Http/Controllers/TorneoController.php',
+    'App\\Http\\Controllers\\TorneoUsuarioController' => $baseDir . '/app/Http/Controllers/TorneoUsuarioController.php',
     'App\\Http\\Controllers\\UsuarioController' => $baseDir . '/app/Http/Controllers/UsuarioController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\AdminMiddleware' => $baseDir . '/app/Http/Middleware/AdminMiddleware.php',

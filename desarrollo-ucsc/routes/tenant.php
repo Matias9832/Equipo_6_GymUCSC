@@ -41,6 +41,7 @@ use App\Http\Controllers\RutinaController;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\AsistenciaTallerController;
 use App\Http\Controllers\RutinaPersonalizadaController;
+use App\Http\Controllers\TorneoUsuarioController;
 use Spatie\Permission\Models\Permission;
 
 /*
@@ -120,6 +121,11 @@ Route::middleware([
 
         Route::get('/mis-rutinas', [RutinaPersonalizadaController::class, 'index'])->name('rutinas.personalizadas.index');
 
+        Route::get('/mis-torneos', [TorneoUsuarioController::class, 'index'])->name('torneos.usuario.index');
+        Route::get('/torneos/{torneo}/agregar-miembros', [TorneoUsuarioController::class, 'agregarMiembros'])->name('torneos.agregar.miembros');
+        Route::post('/torneos/{torneo}/guardar-miembros', [TorneoUsuarioController::class, 'guardarMiembros'])->name('torneos.guardar.miembros');
+        Route::get('/buscar-usuario', [TorneoUsuarioController::class, 'buscarUsuario'])->name('torneos.buscar.usuario');
+        
         // Buscar alumno por RUT (para el formulario de rutinas)
         Route::get('/buscar-alumno-por-rut/{rut}', [App\Http\Controllers\RutinaController::class, 'buscarPorRut'])->name('buscar.alumno.rut');
 
