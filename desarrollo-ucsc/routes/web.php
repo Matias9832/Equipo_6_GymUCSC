@@ -16,10 +16,11 @@ Route::get('/start', function () {
 Route::resource('tenants', TenantController::class)->only(['index', 'store']);
 Route::resource('empresas', TenantController::class)->only(['index', 'store']);
 
+
 Route::prefix('personalizacion')->name('personalizacion.')->group(function () {
-    Route::get('temas', [TemaController::class, 'index'])->name('temas.index');
-    Route::get('colores', [ColorController::class, 'index'])->name('colores.index');
-    Route::get('fuentes', [FuenteController::class, 'index'])->name('fuentes.index');
+    Route::resource('temas', TemaController::class);
+    Route::resource('colores', ColorController::class);
+    Route::resource('fuentes', FuenteController::class);
 });
 
 Route::prefix('plan')->name('plan.')->group(function () {

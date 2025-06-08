@@ -33,6 +33,9 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 
 <body class="{{ $class ?? '' }}">
@@ -41,8 +44,9 @@
     @if(session('success') || session('update') || session('delete'))
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
             <div id="toastSuccess" class="toast align-items-center text-white 
-                                                    {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
-                                                    border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+                                                        {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
+                                                        border-0 show" role="alert" aria-live="assertive"
+                aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body text-center w-100">
                         {{ session('success') ?? session('update') ?? session('delete') }}

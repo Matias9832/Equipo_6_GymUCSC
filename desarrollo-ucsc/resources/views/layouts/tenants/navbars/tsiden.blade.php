@@ -61,21 +61,21 @@
         <ul class="nav flex-column ms-3">
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'planes.index' ? 'active' : '' }}"
-                    href="{{ route('planes.index') }}">
+                    href="{{ route('plan.planes.index') }}">
                     <i class="ni ni-collection text-dark text-sm opacity-10"></i>
                     <span class="nav-link-text ms-1">Planes</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'planes.cuentas.index' ? 'active' : '' }}"
-                    href="{{ route('planes.cuentas.index') }}">
+                    href="{{ route('plan.cuentas.index') }}">
                     <i class="ni ni-single-copy-04 text-dark text-sm opacity-10"></i>
                     <span class="nav-link-text ms-1">Cuentas</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'planes.permisos.index' ? 'active' : '' }}"
-                    href="{{ route('planes.permisos.index') }}">
+                    href="{{ route('plan.permisos.index') }}">
                     <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
                     <span class="nav-link-text ms-1">Permisos</span>
                 </a>
