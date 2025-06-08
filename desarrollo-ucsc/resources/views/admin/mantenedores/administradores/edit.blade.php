@@ -3,10 +3,13 @@
 @section('title', 'Editar Administrador')
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Editar Administrador'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Administradores'])
 
 <div class="container-fluid py-4">
     <div class="card">
+        <div class="card-header pb-0">
+            <h5>Editar información del administrador</h>
+        </div>
         <div class="card-body">
             <form action="{{ route('administradores.update', $administrador->id_admin) }}" method="POST">
                 @csrf

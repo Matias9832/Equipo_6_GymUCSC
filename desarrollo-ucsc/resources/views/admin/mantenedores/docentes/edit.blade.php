@@ -1,14 +1,14 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Docente'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Docentes'])
 
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-lg-8 mx-auto">
             <div class="card">
                 <div class="card-header pb-0">
-                    <h6>Editar información del docente</h6>
+                    <h5>Editar información del docente</h5>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('docentes.update', $administrador->id_admin) }}" method="POST">

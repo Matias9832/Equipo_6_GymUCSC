@@ -3,10 +3,13 @@
 @section('title', 'Crear Administrador')
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Crear Administrador'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Administradores'])
 
 <div class="container-fluid py-4">
     <div class="card">
+        <div class="card-header pb-0">
+            <h5>Registrar nuevo administrador</h5>
+        </div>
         <div class="card-body">
             <form action="{{ route('administradores.store') }}" method="POST">
                 @csrf

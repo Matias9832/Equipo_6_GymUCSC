@@ -7,7 +7,7 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                        <h6>Lista de Administradores</h6>
+                        <h5>Lista de Administradores</h5>
                         <a href="{{ route('administradores.create') }}" class="btn btn-primary btn-sm">Crear
                             Administrador</a>
                     </div>
