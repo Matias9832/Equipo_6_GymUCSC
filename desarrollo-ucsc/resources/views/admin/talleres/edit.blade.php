@@ -9,22 +9,10 @@
                 <div class="card-header pb-0">
                     <h6>Editar Taller</h6>
                 </div>
-                {{-- Elimina el div alert-danger general si vas a mostrar los errores en línea --}}
-                {{-- @if($errors->any())
-                    <div class="alert alert-danger mx-4">
-                        <ul class="mb-0">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif --}}
                 <div class="card-body bg-white">
                     <form action="{{ route('talleres.update', $taller) }}" method="POST">
                         @csrf
                         @method('PUT')
-
-                        {{-- Datos del taller --}}
                         <div class="mb-3">
                             <label for="nombre_taller" class="form-label">Nombre Taller</label>
                             <input type="text" name="nombre_taller" class="form-control {{ $errors->has('nombre_taller') ? 'is-invalid' : '' }}" value="{{ old('nombre_taller', $taller->nombre_taller) }}" required>
@@ -129,9 +117,9 @@
 
                         <button type="button" class="btn btn-secondary btn-sm mt-2" id="agregar-horario">+ Añadir Horario</button>
 
-                        <div class="mt-3">
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
-                            <a href="{{ route('talleres.index') }}" class="btn btn-link">Cancelar</a>
+                        <<div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary ">Actualizar</button>
+                            <a href="{{ route('talleres.index') }}" class="btn btn-outline-secondary ">Cancelar</a>
                         </div>
                     </form>
                 </div>

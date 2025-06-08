@@ -9,16 +9,6 @@
                     <div class="card-header pb-0">
                         <h6>Crear Taller</h6>
                     </div>
-                    {{-- Elimina el div alert-danger general si vas a mostrar los errores en línea --}}
-                    {{-- @if($errors->any())
-                        <div class="alert alert-danger">
-                            <ul class="mb-0">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif --}}
                     <div class="card-body">
                         <form action="{{ route('talleres.store') }}" method="POST">
                             @csrf
@@ -116,17 +106,13 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                @else
-                                    {{-- Si no hay horarios previos, el contenedor estará vacío al principio --}}
-                                    {{-- El script JS añade el primer horario al hacer clic en "Añadir Horario" --}}
-                                @endif
+                                @endif    
                             </div>
-
                             <button type="button" class="btn btn-secondary btn-sm mt-2" id="agregar-horario">+ Añadir Horario</button>
 
-                            <div class="mt-3">
+                            <div class="d-flex justify-content-end gap-2 mt-4">
                                 <button type="submit" class="btn btn-primary ">Crear</button>
-                                <a href="{{ route('talleres.index') }}" class="btn btn-link ">Cancelar</a>
+                                <a href="{{ route('talleres.index') }}" class="btn btn-outline-secondary ">Cancelar</a>
                             </div>
                         </form>
                     </div>
