@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Administrador;
-use App\Models\Usuario;
-use App\Models\Sucursal;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use App\Models\Administrador;
+use App\Models\Usuario;
 use Yajra\DataTables\Facades\DataTables;
 
 class DocenteController extends Controller
@@ -24,13 +23,12 @@ class DocenteController extends Controller
                 $query->wherePivot('activa', true);
             }
         ])->paginate(20);
-
         return view('admin.mantenedores.docentes.index');
     }
 
     public function data(Request $request)
     {
-        $sucursalId = session('sucursal_activa'); // ID de la sede activa
+        $sucursalId = session('sucursal_activa');
 
         $query = DB::table('administrador')
             ->join('usuario', 'administrador.rut_admin', '=', 'usuario.rut')
@@ -39,42 +37,47 @@ class DocenteController extends Controller
                     ->where('model_has_roles.model_type', Usuario::class);
             })
             ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-            ->join('admin_sucursal', function ($join) use ($sucursalId) {
+            ->leftJoin('admin_sucursal', function ($join) {
                 $join->on('administrador.id_admin', '=', 'admin_sucursal.id_admin')
-                    ->where('admin_sucursal.activa', 1)
-                    ->where('admin_sucursal.id_suc', '=', $sucursalId);
+                    ->where('admin_sucursal.activa', true);
             })
-            ->leftJoin('sucursal', 'admin_sucursal.id_suc', '=', 'sucursal.id_suc')
+            ->where('roles.name', '!=', 'Super Admin')
+            ->where('admin_sucursal.id_suc', $sucursalId)
             ->select(
                 'administrador.id_admin',
                 'administrador.rut_admin',
                 'administrador.nombre_admin',
                 'usuario.correo_usuario as correo_usuario',
-                'roles.name as rol_name',
+                'roles.name as rol_name'
             );
 
         return DataTables::of($query)
             ->editColumn('correo_usuario', fn($admin) => $admin->correo_usuario ?? '-')
             ->editColumn('rol_name', function ($admin) {
-                return '<span class="badge badge-sm bg-gradient-info" style="width: 150px !important;">' . e($admin->rol_name ?? 'Sin rol') . '</span>';
+                $rolText = $admin->rol_name ?? 'Sin rol';
+                return '<span class="badge badge-sm bg-gradient-info" style="width: 150px !important;">' . e($rolText) . '</span>';
             })
-            ->editColumn('nombre_suc', fn($admin) => $admin->nombre_suc ?? 'Sin sucursal')
             ->addColumn('acciones', function ($admin) {
+                if (!auth()->user()->hasRole(['Director', 'Super Admin'])) {
+                    return ''; // No muestra acciones
+                }
+
                 $editUrl = route('docentes.edit', $admin->id_admin);
                 $deleteUrl = route('docentes.destroy', $admin->id_admin);
+
                 return '
-                <td class="align-middle text-center">
-                    <a href="' . $editUrl . '" class="text-secondary font-weight-bold text-xs me-2" title="Editar">
-                        <i class="fas fa-pen-to-square text-info"></i>
-                    </a>
-                    <form action="' . $deleteUrl . '" method="POST" class="d-inline" onsubmit="return confirm(\'¿Estás seguro de que quieres eliminar este docente?\')">
-                        ' . csrf_field() . '
-                        ' . method_field('DELETE') . '
-                        <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" title="Eliminar">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </form>
-                </td>';
+                    <td class="align-middle text-center">
+                        <a href="' . $editUrl . '" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">
+                            <i class="fas fa-pen-to-square text-info"></i>
+                        </a>
+                        <form action="' . $deleteUrl . '" method="POST" class="d-inline" onsubmit="return confirm(\'¿Estás seguro de que quieres eliminar este docente?\')">
+                            ' . csrf_field() . '
+                            ' . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" title="Eliminar">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </td>';
             })
             ->rawColumns(['rol_name', 'acciones'])
             ->toJson();
@@ -82,8 +85,7 @@ class DocenteController extends Controller
 
     public function create()
     {
-        $sucursales = Sucursal::all();
-        return view('admin.mantenedores.docentes.create', compact('sucursales'));
+        return view('admin.mantenedores.docentes.create');
     }
 
     public function store(Request $request)
@@ -92,11 +94,11 @@ class DocenteController extends Controller
             'rut' => 'required|string|unique:usuario,rut',
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
-            'rol' => 'required|in:Docente',
+            'rol' => 'required|in:Docente,Coordinador,Visor QR',
         ]);
 
         try {
-            $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6);
+            $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
 
             $usuario = Usuario::create([
                 'rut' => $request->rut,
@@ -125,7 +127,7 @@ class DocenteController extends Controller
             return redirect()->route('docentes.index')->with('success', 'Docente creado correctamente.');
         } catch (\Exception $e) {
             Log::error('Error al crear docente: ' . $e->getMessage());
-            return back()->withErrors(['error' => 'Ocurrió un error al crear el Docente. Inténtalo nuevamente.']);
+            return back()->withErrors(['error' => 'Ocurrió un error al crear el docente.'])->withInput();
         }
     }
 
@@ -133,13 +135,8 @@ class DocenteController extends Controller
     {
         $administrador = Administrador::findOrFail($id);
         $usuario = Usuario::where('rut', $administrador->rut_admin)->firstOrFail();
-        $sucursales = Sucursal::all();
-        $sucursalSeleccionada = DB::table('admin_sucursal')
-            ->where('id_admin', $id)
-            ->where('activa', true)
-            ->first();
 
-        return view('admin.mantenedores.docentes.edit', compact('administrador', 'usuario', 'sucursales', 'sucursalSeleccionada'));
+        return view('admin.mantenedores.docentes.edit', compact('administrador', 'usuario'));
     }
 
     public function update(Request $request, $id)
@@ -149,7 +146,7 @@ class DocenteController extends Controller
         $request->validate([
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $administrador->rut_admin . ',rut',
-            'rol' => 'required|in:Docente',
+            'rol' => 'required|in:Docente,Coordinador,Visor QR',
         ]);
 
         $administrador->update([
@@ -162,10 +159,13 @@ class DocenteController extends Controller
         ]);
         $usuario->syncRoles([$request->rol]);
 
-        DB::table('admin_sucursal')->where('id_admin', $administrador->id_admin)->delete();
+        DB::table('admin_sucursal')
+            ->where('id_admin', $administrador->id_admin)
+            ->delete();
+
         DB::table('admin_sucursal')->insert([
             'id_admin' => $administrador->id_admin,
-            'id_suc' => session('sucursal_activa'), // ✅ Siempre asigna a la sede activa del admin
+            'id_suc' => session('sucursal_activa'),
             'activa' => true,
         ]);
 

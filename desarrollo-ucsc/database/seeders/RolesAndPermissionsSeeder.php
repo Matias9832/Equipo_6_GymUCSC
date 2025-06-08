@@ -45,6 +45,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'Editar Usuarios',
             'Eliminar Usuarios',
 
+            //Acceso al mantenedor de Docentes
+            'Ver Docentes',
+            'Crear Docentes',
+            'Editar Docentes',
+            'Eliminar Docentes',
+
             //Acceso a las noticias
             'Crear Noticias',
 
@@ -88,6 +94,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'Editar Usuarios',
             'Eliminar Usuarios',
             'Crear Noticias',
+            //Acceso al mantenedor de Docentes
+            'Ver Docentes',
+            'Crear Docentes',
+            'Editar Docentes',
+            'Eliminar Docentes',
         ]);
 
         // Asignar permisos específicos al Docente
@@ -101,6 +112,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'Acceso al Mantenedor de Torneos',
             'Acceso al Mantenedor de Deportes',
             'Ver Usuarios',
+            'Ver Docentes',
             'Crear Noticias',
         ]);
 
@@ -120,7 +132,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'Acceso al Mantenedor de Talleres',
             'Acceso a Gestión de Asistencia Talleres',
             'Ver Usuarios',
-            'Editar Usuarios',
+            'Ver Docentes',
             'Crear Noticias',
         ]);
         // Asignar permisos específicos al Visor QR

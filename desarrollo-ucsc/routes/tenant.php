@@ -229,13 +229,21 @@ Route::middleware([
         });
 
         // Rutas para el mantenedor de Docentes
+        Route::middleware(['permission:Ver Docentes'])->group(function () {
             Route::get('docentes', [DocenteController::class, 'index'])->name('docentes.index');
+        });    
+        Route::middleware(['permission:Crear Docentes'])->group(function () {
             Route::get('docentes/create', [DocenteController::class, 'create'])->name('docentes.create');
             Route::post('docentes', [DocenteController::class, 'store'])->name('docentes.store');
+        });
+        Route::middleware(['permission:Editar Docentes'])->group(function () {
             Route::get('docentes/{docente}/edit', [DocenteController::class, 'edit'])->name('docentes.edit');
             Route::put('docentes/{docente}', [DocenteController::class, 'update'])->name('docentes.update');
+        });
+        Route::middleware(['permission:Eliminar Docentes'])->group(function () {    
             Route::delete('docentes/{docente}', [DocenteController::class, 'destroy'])->name('docentes.destroy');
-            Route::get('/docentes/data', [DocenteController::class, 'data'])->name('docentes.data');
+        });    
+        Route::get('/docentes/data', [DocenteController::class, 'data'])->name('docentes.data');
         // Busqueda de usuarios para Select2  
         Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('usuarios.buscar');
 
