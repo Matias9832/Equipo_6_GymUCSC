@@ -29,6 +29,10 @@
                     <input type="email" name="correo_usuario" id="correo_usuario" class="form-control" value="{{ $usuario->correo_usuario ?? '' }}" required>
                 </div>
                 <div class="mb-3">
+                    <label for="descripcion_cargo" class="form-label">Descripción del Cargo</label>
+                    <input type="text" name="descripcion_cargo" id="descripcion_cargo" class="form-control" value="{{ $administrador->descripcion_cargo }}" required>
+                </div>
+                <div class="mb-3">
                     <label for="sucursal_id" class="form-label">Sucursal</label>
                     <select name="sucursal_id" id="sucursal_id" class="form-control" required>
                         <option value="">Selecciona una sucursal</option>

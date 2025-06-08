@@ -33,6 +33,7 @@ class AdministradorSeeder extends Seeder
             'sobre_mi' => 'Soy el super administrador del sistema, encargado de gestionar todas las operaciones y supervisar el funcionamiento de la plataforma.',
             'descripcion_ubicacion' => 'Sucursal Central, Edificio B.',
             'foto_perfil' => 'default.png',
+            'descripcion_cargo' => 'Super Administrador del Sistema',
         ]);
         // Asignar el rol de Super Admin al usuario con todos los permisos
         $usuario->assignRole('Super Admin');
@@ -50,6 +51,7 @@ class AdministradorSeeder extends Seeder
             'nombre_admin' => 'Javier Pérez',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
+            'descripcion_cargo' => 'Director de la Institución',
         ]);
         $usuario->assignRole('Director');
 
@@ -67,6 +69,7 @@ class AdministradorSeeder extends Seeder
             'nombre_admin' => 'Eric Maldonado',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
+            'descripcion_cargo' => 'Docente de Preescripción del ejercicio físico',
         ]);
         $usuario->assignRole('Docente');
 
@@ -83,6 +86,7 @@ class AdministradorSeeder extends Seeder
             'nombre_admin' => 'Laura Fernández',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
+            'descripcion_cargo' => 'Docente de Entrenamiento Deportivo',
         ]);
         $usuario->assignRole('Docente');
 
@@ -99,6 +103,7 @@ class AdministradorSeeder extends Seeder
             'nombre_admin' => 'Pedro López',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
+            'descripcion_cargo' => 'Docente de Actividad Física y Salud',
         ]);
         $usuario->assignRole('Docente');
 
@@ -115,6 +120,7 @@ class AdministradorSeeder extends Seeder
             'nombre_admin' => 'Ana Torres',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
+            'descripcion_cargo' => 'Docente de Kinesiología Deportiva',
         ]);
         $usuario->assignRole('Docente');
 
@@ -131,6 +137,7 @@ class AdministradorSeeder extends Seeder
             'nombre_admin' => 'Javier Soto',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
+            'descripcion_cargo' => 'Docente de Gestión Deportiva',
         ]);
         $usuario->assignRole('Docente');
 
@@ -147,6 +154,7 @@ class AdministradorSeeder extends Seeder
             'nombre_admin' => 'Sofía Herrera',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
+            'descripcion_cargo' => 'Docente de Educación Física',
         ]);
         $usuario->assignRole('Docente');
 
@@ -163,6 +171,7 @@ class AdministradorSeeder extends Seeder
             'nombre_admin' => 'María González',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
+            'descripcion_cargo' => 'Super Administradora',
         ]);
         $usuario->assignRole('Super Admin');
 
@@ -179,6 +188,7 @@ class AdministradorSeeder extends Seeder
             'nombre_admin' => 'Valentina Gómez',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
+            'descripcion_cargo' => 'Coordinadora de Actividades',
         ]);
         $usuario->assignRole('Coordinador');
         
@@ -195,6 +205,7 @@ class AdministradorSeeder extends Seeder
             'nombre_admin' => 'VisorQR SanAndrés',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
+            'descripcion_cargo' => 'Visor QR de Sucursal San Andrés',
         ]);
         $usuario->assignRole('Visor QR');
     }

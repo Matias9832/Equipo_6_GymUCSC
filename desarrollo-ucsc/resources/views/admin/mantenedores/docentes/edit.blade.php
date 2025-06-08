@@ -26,9 +26,13 @@
                             <input type="email" class="form-control" id="correo_usuario" name="correo_usuario"
                                    value="{{ old('correo_usuario', $usuario->correo_usuario) }}" required>
                         </div>
-
                         <div class="mb-3">
-                            <label for="rol" class="form-label">Rol</label>
+                            <label for="descripcion_cargo" class="form-label">Descripción del Cargo</label>
+                            <input type="text" name="descripcion_cargo" id="descripcion_cargo" class="form-control"
+                                   value="{{ old('descripcion_cargo', $administrador->descripcion_cargo) }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rol" class="form-label">Rol (Relacionado a los permisos) </label>
                             <select name="rol" class="form-control" required>
                                 <option value="Docente" {{ $usuario->hasRole('Docente') ? 'selected' : '' }}>Docente</option>
                                 <option value="Coordinador" {{ $usuario->hasRole('Coordinador') ? 'selected' : '' }}>Coordinador</option>

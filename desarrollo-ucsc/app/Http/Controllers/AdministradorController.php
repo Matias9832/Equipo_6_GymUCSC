@@ -94,6 +94,7 @@ class AdministradorController extends Controller
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
             'rol' => 'required|in:Director,Docente,Coordinador,Visor QR',
+            'descripcion_cargo' => 'nullable|string|max:255',
         ]);
 
         try {
@@ -127,6 +128,7 @@ class AdministradorController extends Controller
                 'nombre_admin' => $request->nombre_admin,
                 'fecha_creacion' => now(),
                 'foto_perfil' => 'default.png',
+                'descripcion_cargo' => $request->descripcion_cargo,
             ]);
 
             // Asignar la sucursal al administrador
@@ -172,12 +174,14 @@ class AdministradorController extends Controller
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $administrador->rut_admin . ',rut',
             'rol' => 'required|in:Director,Docente,Coordinador,Visor QR',
+            'descripcion_cargo' => 'nullable|string|max:255',
         ]);
 
         // Actualizar el administrador
         $administrador = Administrador::findOrFail($id);
         $administrador->update([
             'nombre_admin' => $request->nombre_admin,
+            'descripcion_cargo' => $request->descripcion_cargo,
         ]);
 
         // Actualizar el usuario

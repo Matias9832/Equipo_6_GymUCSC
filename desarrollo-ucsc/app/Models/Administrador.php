@@ -23,6 +23,7 @@ class Administrador extends Model
         'sobre_mi',
         'descripcion_ubicacion',
         'foto_perfil',
+        'descripcion_cargo',
     ];
 
     public function usuario()

@@ -120,6 +120,7 @@ class DocenteController extends Controller
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
             'rol' => 'required|in:Docente,Coordinador,Visor QR',
+            'descripcion_cargo' => 'nullable|string|max:255',
         ]);
 
         try {
@@ -139,6 +140,7 @@ class DocenteController extends Controller
                 'rut_admin' => $request->rut,
                 'nombre_admin' => $request->nombre_admin,
                 'fecha_creacion' => now(),
+                'descripcion_cargo' => $request->descripcion_cargo,
             ]);
 
             DB::table('admin_sucursal')->insert([
@@ -172,12 +174,16 @@ class DocenteController extends Controller
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $administrador->rut_admin . ',rut',
             'rol' => 'required|in:Docente,Coordinador,Visor QR',
+            'descripcion_cargo' => 'nullable|string|max:255',
         ]);
 
+        // Actualizar el administrador
         $administrador->update([
             'nombre_admin' => $request->nombre_admin,
+            'descripcion_cargo' => $request->descripcion_cargo,
         ]);
 
+        // Actualizar el usuario asociado
         $usuario = Usuario::where('rut', $administrador->rut_admin)->first();
         $usuario->update([
             'correo_usuario' => $request->correo_usuario,

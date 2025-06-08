@@ -28,9 +28,12 @@
                             <label for="correo_usuario" class="form-label">Correo</label>
                             <input type="email" class="form-control" id="correo_usuario" name="correo_usuario" value="{{ old('correo_usuario') }}" required>
                         </div>
-
                         <div class="mb-3">
-                            <label for="rol" class="form-label">Rol</label>
+                            <label for="descripcion_cargo" class="form-label">Descripción del Cargo</label>
+                            <input type="text" name="descripcion_cargo" id="descripcion_cargo" class="form-control" placeholder="Ej: Coordinador de talleres " required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rol" class="form-label">Rol (Relacionado a los permisos)</label>
                             <select name="rol" class="form-control" required>
                                 <option value="Docente">Docente</option>
                                 <option value="Coordinador">Coordinador</option>
