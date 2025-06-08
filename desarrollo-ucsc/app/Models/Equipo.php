@@ -9,7 +9,7 @@ class Equipo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nombre_equipo', 'id_deporte'];
+    protected $fillable = ['nombre_equipo', 'id_deporte', 'capitan_id'];
 
     public function usuarios()
     {
@@ -25,8 +25,9 @@ class Equipo extends Model
     {
         return $this->belongsToMany(Torneo::class, 'torneo_equipo', 'equipo_id', 'torneo_id');
     }
-    public function talleres()
+
+    public function capitan()
     {
-        return $this->hasMany(Taller::class, 'id_espacio');
+        return $this->belongsTo(Usuario::class, 'capitan_id', 'id_usuario');
     }
 }

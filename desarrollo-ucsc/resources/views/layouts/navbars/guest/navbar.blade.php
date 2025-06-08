@@ -71,7 +71,11 @@
                                             <a class="dropdown-item" href="{{ route('actividad.usuario') }}">
                                                 <i class="fas fa-calendar me-1"></i> Mi Actividad
                                             </a>
-
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('torneos.usuario.index') }}">
+                                                <i class="fas fa-trophy me-1"></i> Torneos
+                                            </a>
                                         </li>
                                         <li>
                                             <form method="POST" action="{{ route('logout') }}">

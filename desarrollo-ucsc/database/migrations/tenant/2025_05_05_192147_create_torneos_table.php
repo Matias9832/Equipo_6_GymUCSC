@@ -9,17 +9,15 @@ class CreateTorneosTable extends Migration
     public function up()
     {
         Schema::create('torneos', function (Blueprint $table) {
-            $table->id(); // Clave primaria
+            $table->id();
             $table->string('nombre_torneo');
-            $table->unsignedBigInteger('id_sucursal'); // Clave foránea hacia la tabla sucursal
-            $table->unsignedBigInteger('id_deporte'); // Clave foránea hacia la tabla deportes
+            $table->unsignedBigInteger('id_sucursal');
+            $table->unsignedBigInteger('id_deporte');
+            $table->enum('tipo_competencia', ['liga', 'copa', 'encuentro']);
             $table->integer('max_equipos');
             $table->timestamps();
 
-            // Clave foránea hacia la tabla sucursal
             $table->foreign('id_sucursal')->references('id_suc')->on('sucursal')->onDelete('cascade');
-
-            // Clave foránea hacia la tabla deportes
             $table->foreign('id_deporte')->references('id_deporte')->on('deportes')->onDelete('cascade');
         });
     }

@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Equipo;
 use App\Models\Deporte;
 use App\Models\Usuario;
+use App\Models\Torneo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class EquipoController extends Controller
 {
     public function index()
     {
         // Cargar equipos con sus deportes e integrantes
-        $equipos = Equipo::with(['deporte', 'usuarios'])->get();
+        $equipos = Equipo::with(['deporte', 'usuarios', 'capitan'])->get();
 
         return view('admin.mantenedores.equipos.index', compact('equipos'));
     }
@@ -28,11 +30,27 @@ class EquipoController extends Controller
         $request->validate([
             'nombre_equipo' => 'required|string|max:255',
             'id_deporte' => 'required|exists:deportes,id_deporte',
+            'capitan_id' => 'required|exists:usuario,id_usuario',
+            'torneos' => 'nullable|array',
+            'torneos.*' => 'exists:torneos,id',
         ]);
 
-        Equipo::create($request->only(['nombre_equipo', 'id_deporte']));
+        try {
+            $equipo = Equipo::create($request->only(['nombre_equipo', 'id_deporte', 'capitan_id']));
 
-        return redirect()->route('equipos.index')->with('success', 'Equipo creado correctamente.');
+            // Asignar torneos al equipo
+            if ($request->has('torneos')) {
+                $equipo->torneos()->attach($request->torneos);
+            }
+
+            // Registrar al capitán en la tabla equipo_usuario
+            $equipo->usuarios()->attach($request->capitan_id);
+
+            return redirect()->route('equipos.index')->with('success', 'Equipo creado correctamente.');
+        } catch (\Exception $e) {
+            Log::error('Error al crear equipo: ' . $e->getMessage());
+            return redirect()->back()->withInput()->withErrors(['error' => 'Ocurrió un error al crear el equipo.']);
+        }
     }
 
     public function edit(Equipo $equipo)
@@ -76,5 +94,28 @@ class EquipoController extends Controller
         $equipo->delete();
 
         return redirect()->route('equipos.index')->with('success', 'Equipo eliminado correctamente.');
+    }
+
+    public function buscar(Request $request)
+    {
+        $usuarios = Usuario::where('tipo_usuario', 'estudiante')
+                           ->where(function ($query) use ($request) {
+                               $query->where('rut', 'like', '%' . $request->q . '%')
+                                     ->orWhere('nombre', 'like', '%' . $request->q . '%');
+                           })
+                           ->get()
+                           ->map(function ($usuario) {
+                               return ['id' => $usuario->id_usuario, 'text' => $usuario->rut . ' - ' . $usuario->nombre];
+                           });
+
+        return response()->json($usuarios);
+    }
+
+    public function torneosPorDeporte(Request $request)
+    {
+        $idDeporte = $request->input('id_deporte');
+        $torneos = Torneo::where('id_deporte', $idDeporte)->get();
+
+        return response()->json($torneos);
     }
 }
