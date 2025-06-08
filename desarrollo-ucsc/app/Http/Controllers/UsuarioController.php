@@ -59,7 +59,7 @@ class UsuarioController extends Controller
                 ->addColumn('acciones', function ($usuario) {
                     if ($usuario->tipo_usuario === 'admin') {
                         $editar = auth()->user()->can('Editar Usuarios')
-                            ? '<a href="' . route('usuarios.edit', $usuario->id_usuario) . '" class="text-secondary font-weight-bold text-xs me-2" title="Editar"><i class="ni ni-ruler-pencil text-info"></i></a>'
+                            ? '<a href="' . route('usuarios.edit', $usuario->id_usuario) . '" class="text-secondary font-weight-bold text-xs me-2" title="Editar"><i class="fas fa-pen-to-square text-info"></i></a>'
                             : '';
                     }
 
@@ -67,7 +67,7 @@ class UsuarioController extends Controller
                         ? '<form action="' . route('usuarios.destroy', $usuario->id_usuario) . '" method="POST" class="d-inline">'
                         . csrf_field() . method_field('DELETE') .
                         '<button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm(\'¿Estás seguro de que quieres eliminar este usuario?\')" title="Eliminar">'
-                        . '<i class="ni ni-fat-remove"></i></button></form>'
+                        . '<i class="fas fa-trash-alt"></i></button></form>'
                         : '';
 
                     if ($usuario->tipo_usuario === 'admin') {

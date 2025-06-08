@@ -17,6 +17,8 @@
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ url('assets/css/argon-dashboard.css') }}" rel="stylesheet" />
     <!-- Google Fonts -->
@@ -179,6 +181,35 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggleBtn = document.getElementById("sidenav-toggle");
+            const sidenav = document.getElementById("sidenav-main-collapsed");
+
+            toggleBtn.addEventListener("click", function () {
+                sidenav.classList.toggle("collapsed");
+            });
+
+            // Asegurar que se muestre correctamente al redimensionar
+            window.addEventListener("resize", function () {
+                if (window.innerWidth >= 1200) {
+                    sidenav.classList.remove("collapsed");
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidenav = document.getElementById('sidenav-main-collapsed');
+            const closeIcon = document.getElementById('iconSidenav');
+
+            closeIcon?.addEventListener('click', function () {
+                const bsCollapse = bootstrap.Collapse.getInstance(sidenav) || new bootstrap.Collapse(sidenav);
+                bsCollapse.hide();
+            });
+        });
+    </script>
+
 
     @stack('js')
     @stack('scripts')

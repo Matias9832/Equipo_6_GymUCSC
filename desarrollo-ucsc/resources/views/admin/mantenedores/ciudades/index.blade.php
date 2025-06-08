@@ -44,7 +44,7 @@
                                                 <a href="{{ route('ciudades.edit', $ciudad->id_ciudad) }}"
                                                     class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip"
                                                     title="Editar">
-                                                    <i class="ni ni-ruler-pencil text-info"></i>
+                                                    <i class="fas fa-pen-to-square text-info"></i>
                                                 </a>
                                                 <form action="{{ route('ciudades.destroy', $ciudad->id_ciudad) }}" method="POST"
                                                     class="d-inline">
@@ -54,7 +54,7 @@
                                                         class="btn btn-link text-danger p-0 m-0 align-baseline"
                                                         onclick="return confirm('¿Estás seguro de que quieres eliminar esta ciudad?')"
                                                         title="Eliminar">
-                                                        <i class="ni ni-fat-remove"></i>
+                                                        <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </form>
                                             </td>

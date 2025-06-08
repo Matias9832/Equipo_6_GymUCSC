@@ -3,7 +3,7 @@
     data-scroll="false">
     <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
-            <h4 class="font-weight-bolder text-white mb-0">{{ $title }}</h4>
+            <h4 class="font-weight-bolder text-white mb-0 ms-0 ms-xl-0 ms-lg-5 ms-md-5 ms-sm-5 ms-5">{{ $title }}</h4>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
