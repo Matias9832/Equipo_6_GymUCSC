@@ -44,11 +44,19 @@
                                         Mi Cuenta
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('edit-perfil.edit') }}">
-                                                <i class="fas fa-user-edit me-1"></i> Editar Perfil
-                                            </a>
-                                        </li>
+                                        @if(auth()->user()->tipo_usuario === 'admin')
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('docentes.perfil') }}">
+                                                    <i class="fas fa-user-circle me-sm-1"></i>Mi perfil
+                                                </a>
+                                            </li>
+                                        @else
+                                            <li>
+                                                <a class="dropdown-item" href="{{ route('edit-perfil.edit') }}">
+                                                    <i class="fas fa-user-edit me-1"></i> Editar Perfil
+                                                </a>
+                                            </li>
+                                        @endif    
                                         <li>
                                             <a class="dropdown-item" href="{{ route('ingreso.mostrar') }}">
                                                 <i class="fas fa-door-open me-1"></i> Salas

@@ -8,7 +8,7 @@
             <div class="row gx-4">
                 <div class="col-auto">
                     <div class="avatar avatar-xl position-relative">
-                        <img src="{{ asset('img/perfiles/' . $administrador->foto_perfil) }}" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+                        <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}" class="rounded-circle img-fluid border border-2 border-white">
                     </div>
                 </div>
                 <div class="col-auto my-auto">
@@ -119,12 +119,12 @@
             <!-- Tarjeta lateral -->
             <div class="col-md-4">
                 <div class="card card-profile">
-                    <img src="/img/bg-profile.jpg" alt="Image placeholder" class="card-img-top">
+                    <img src="/img/gym/foto-gimnasio.jpeg" alt="Image placeholder" class="card-img-top">
                     <div class="row justify-content-center">
                         <div class="col-4 col-lg-4 order-lg-2">
                             <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
                                 <a href="javascript:;">
-                                    <img src="{{ asset('img/perfiles/' . $administrador->foto_perfil) }}" class="rounded-circle img-fluid border border-2 border-white">
+                                    <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}" class="rounded-circle img-fluid border border-2 border-white">
                                 </a>
                             </div>
                         </div>

@@ -101,7 +101,7 @@
 
                             <div class="d-flex justify-content-between gap-2 mt-3">
                                 <button type="submit" class="btn btn-primary">Actualizar</button>
-                                <a href="{{ route('mi-perfil.edit') }}" class="btn btn-secondary">Volver</a>
+                                <a href="{{ route('edit-perfil.edit') }}" class="btn btn-secondary">Volver</a>
                             </div>
                         </form>
                     </div>

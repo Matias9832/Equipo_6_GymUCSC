@@ -140,13 +140,13 @@ class SaludController extends Controller
         }
 
         if ($sinCambios) {
-            return redirect()->route('mi-perfil.edit')->with('info', 'No se han realizado cambios.');
+            return redirect()->route('edit-perfil.edit')->with('info', 'No se han realizado cambios.');
         }
 
         // Guardar solo si hay cambios
         $salud->update($nuevosDatos);
 
-        return redirect()->route('mi-perfil.edit')->with('success', 'Información de salud actualizada.');
+        return redirect()->route('edit-perfil.edit')->with('success', 'Información de salud actualizada.');
     }
     
 }
