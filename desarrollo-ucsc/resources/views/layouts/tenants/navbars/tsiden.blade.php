@@ -1,69 +1,85 @@
 {{-- Tenants --}}
 <li class="nav-item">
-    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
-        href="#submenuGeografia" role="button" aria-expanded="false" aria-controls="submenuGeografia">
+    <a class="nav-link d-flex justify-content-between align-items-center" href="{{ route('empresas.index') }}">
         <div class="d-flex align-items-center">
             <div class="ps-1">
-                <i class="ni ni-world-2 text-info text-sm opacity-10"></i>
+                <i class="ni ni-building text-primary text-sm opacity-10"></i>
             </div>
-            <span class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Geografía</span>
+            <span class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Empresas</span>
         </div>
     </a>
-    <div class="collapse" id="submenuGeografia">
+</li>
+
+<li class="nav-item">
+    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+        href="#submenuColores" role="button" aria-expanded="false" aria-controls="submenuColores">
+        <div class="d-flex align-items-center">
+            <div class="ps-1">
+                <i class="ni ni-palette text-primary text-sm opacity-10"></i>
+            </div>
+            <span class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Personalización</span>
+        </div>
+    </a>
+    <div class="collapse" id="submenuColores">
         <ul class="nav flex-column ms-3">
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'ciudades.index' ? 'active' : '' }}"
-                    href="{{ route('ciudades.index') }}">
-                    <i class="ni ni-square-pin text-dark text-sm opacity-10"></i>
-                    <span class="nav-link-text ms-1">Ciudades</span>
+                <a class="nav-link {{ Route::currentRouteName() == 'personalizacion.temas.index' ? 'active' : '' }}"
+                    href="{{ route('personalizacion.temas.index') }}">
+                    <i class="ni ni-badge text-dark text-sm opacity-10"></i>
+                    <span class="nav-link-text ms-1">Temas</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'regiones.index' ? 'active' : '' }}"
-                    href="{{ route('regiones.index') }}">
-                    <i class="ni ni-pin-3 text-primary text-sm opacity-10"></i>
-                    <span class="nav-link-text ms-1">Regiones</span>
+                <a class="nav-link {{ Route::currentRouteName() == 'personalizacion.colores.index' ? 'active' : '' }}"
+                    href="{{ route('personalizacion.colores.index') }}">
+                    <i class="ni ni-palette text-dark text-sm opacity-10"></i>
+                    <span class="nav-link-text ms-1">Colores</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'paises.index' ? 'active' : '' }}"
-                    href="{{ route('paises.index') }}">
-                    <i class="ni ni-world text-info text-sm opacity-10"></i>
-                    <span class="nav-link-text ms-1">Países</span>
+                <a class="nav-link {{ Route::currentRouteName() == 'personalizacion.fuentes.index' ? 'active' : '' }}"
+                    href="{{ route('personalizacion.fuentes.index') }}">
+                    <i class="ni ni-align-left-2 text-dark text-sm opacity-10"></i>
+                    <span class="nav-link-text ms-1">Fuentes</span>
                 </a>
             </li>
         </ul>
     </div>
 </li>
 
-{{-- Reportes --}}
-{{-- Otros --}}
-<!-- <li class="nav-item d-flex align-items-center">
-                <div class="ps-4">
-                    <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
-                </div>
-                <h6 class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Configuración General</h6>
+<li class="nav-item">
+    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+        href="#submenuPlanes" role="button" aria-expanded="false" aria-controls="submenuPlanes">
+        <div class="d-flex align-items-center">
+            <div class="ps-1">
+                <i class="ni ni-folder-17 text-primary text-sm opacity-10"></i>
+            </div>
+            <span class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Planes</span>
+        </div>
+    </a>
+    <div class="collapse" id="submenuPlanes">
+        <ul class="nav flex-column ms-3">
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'planes.index' ? 'active' : '' }}"
+                    href="{{ route('planes.index') }}">
+                    <i class="ni ni-collection text-dark text-sm opacity-10"></i>
+                    <span class="nav-link-text ms-1">Planes</span>
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'control-salas.seleccionar' ? 'active' : '' }}" href="{{ route('control-salas.seleccionar') }}">
-                    <div class="ps-1">
-                        <i class="ni ni-planet text-dark text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Personalización</span>
+                <a class="nav-link {{ Route::currentRouteName() == 'planes.cuentas.index' ? 'active' : '' }}"
+                    href="{{ route('planes.cuentas.index') }}">
+                    <i class="ni ni-single-copy-04 text-dark text-sm opacity-10"></i>
+                    <span class="nav-link-text ms-1">Cuentas</span>
                 </a>
-            </li> -->
-<li class="nav-item">
-    <a class="#">
-        <span class="nav-link-text ms-1"></span>
-    </a>
-</li>
-<li class="nav-item">
-    <a class="#">
-        <span class="nav-link-text ms-1"></span>
-    </a>
-</li>
-<li class="nav-item">
-    <a class="#">
-        <span class="nav-link-text ms-1"></span>
-    </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'planes.permisos.index' ? 'active' : '' }}"
+                    href="{{ route('planes.permisos.index') }}">
+                    <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
+                    <span class="nav-link-text ms-1">Permisos</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 </li>

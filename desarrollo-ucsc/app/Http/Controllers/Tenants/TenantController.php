@@ -12,7 +12,7 @@ class TenantController extends Controller
     {
         $tenants = Tenant::all(); // Ya tienes el modelo extendido
 
-        return view('tenants.index', compact('tenants'));
+        return view('tenants.subdominios.index', compact('tenants'));
     }
 
     public function store(Request $request)

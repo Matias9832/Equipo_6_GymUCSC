@@ -62,6 +62,6 @@
             </div>
         </div>
     </div>
-    @include('tenants._modal')
+    @include('tenants.subdominios._modal')
 
 @endsection
