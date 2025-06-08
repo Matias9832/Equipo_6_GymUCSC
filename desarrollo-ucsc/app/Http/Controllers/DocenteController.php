@@ -80,7 +80,15 @@ class DocenteController extends Controller
                     </td>';
             })
             ->rawColumns(['rol_name', 'acciones'])
-            ->toJson();
+            ->filter(function ($query) use ($request) {
+            if ($request->has('search') && $search = $request->search['value']) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('administrador.rut_admin', 'like', "%{$search}%")
+                    ->orWhere('administrador.nombre_admin', 'like', "%{$search}%");
+                });
+            }
+        })
+        ->toJson();
     }
 
     public function create()
