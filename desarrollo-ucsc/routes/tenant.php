@@ -116,8 +116,8 @@ Route::middleware([
         Route::match(['get', 'post'], '/ingreso/actual', [ControlSalasController::class, 'mostrarIngreso'])->name('ingreso.mostrar');
 
         // Perfil usuario
-        Route::get('/mi-perfil', [LoginController::class, 'editProfile'])->name('mi-perfil.edit');
-        Route::post('/mi-perfil', [LoginController::class, 'updateProfile'])->name('mi-perfil.update');
+        Route::get('/edit-perfil', [LoginController::class, 'editProfile'])->name('edit-perfil.edit');
+        Route::post('/edit-perfil', [LoginController::class, 'updateProfile'])->name('edit-perfil.update');
 
         Route::get('/mis-rutinas', [RutinaPersonalizadaController::class, 'index'])->name('rutinas.personalizadas.index');
 
@@ -214,6 +214,7 @@ Route::middleware([
         // Usuarios
         Route::middleware(['permission:Ver Usuarios'])->group(function () {
             Route::get('usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+            Route::get('/mi-perfil', [DocenteController::class, 'indexPerfil'])->name('docentes.perfil');
         });
         Route::middleware(['permission:Crear Usuarios'])->group(function () {
             Route::get('usuarios/create', [UsuarioController::class, 'create'])->name('usuarios.create');
@@ -227,6 +228,7 @@ Route::middleware([
         Route::middleware(['permission:Eliminar Usuarios'])->group(function () {
             Route::delete('usuarios/{usuario}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
         });
+        
         // Rutas para el mantenedor de Docentes
         Route::middleware(['permission:Ver Docentes'])->group(function () {
             Route::get('docentes', [DocenteController::class, 'index'])->name('docentes.index');
@@ -243,6 +245,8 @@ Route::middleware([
             Route::delete('docentes/{docente}', [DocenteController::class, 'destroy'])->name('docentes.destroy');
         });    
         Route::get('/docentes/data', [DocenteController::class, 'data'])->name('docentes.data');
+
+
         // Busqueda de usuarios para Select2  
         Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('usuarios.buscar');
 

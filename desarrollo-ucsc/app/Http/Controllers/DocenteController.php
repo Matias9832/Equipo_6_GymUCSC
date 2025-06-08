@@ -26,6 +26,23 @@ class DocenteController extends Controller
         return view('admin.mantenedores.docentes.index');
     }
 
+    public function indexPerfil()
+    {
+        $admin = auth()->user();
+
+        $administrador = Administrador::where('rut_admin', $admin->rut)
+            ->with([
+                'sucursales' => function ($query) {
+                    $query->wherePivot('activa', true);
+                }
+            ])->first();
+
+        $rol = $admin->roles->pluck('name')->first(); // Solo un rol
+        $sucursal = $administrador->sucursales->first();
+
+        return view('admin.mantenedores.docentes.mi-perfil.index', compact('administrador', 'admin', 'rol', 'sucursal'));
+    }
+
     public function data(Request $request)
     {
         $sucursalId = session('sucursal_activa');

@@ -45,7 +45,7 @@
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
-                                            <a class="dropdown-item" href="{{ route('mi-perfil.edit') }}">
+                                            <a class="dropdown-item" href="{{ route('edit-perfil.edit') }}">
                                                 <i class="fas fa-user-edit me-1"></i> Editar Perfil
                                             </a>
                                         </li>

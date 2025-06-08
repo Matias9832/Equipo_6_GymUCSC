@@ -119,7 +119,7 @@
     @endguest
 
     @auth
-        @if (in_array(request()->route()->getName(), ['login', 'register', 'mi-perfil.edit', 'recover-password', 'salud.edit', 'salud.create']))
+        @if (in_array(request()->route()->getName(), ['login', 'register', 'edit-perfil.edit', 'recover-password', 'salud.edit', 'salud.create']))
             @yield('content')
         @else
             @if (!in_array(request()->route()->getName(), ['profile', 'profile-static']))

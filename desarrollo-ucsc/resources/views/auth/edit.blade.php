@@ -22,7 +22,7 @@
                 <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
                     <div class="card z-index-0">
                         <div class="card-body">
-                            <form method="POST" action="{{ route('mi-perfil.update') }}">
+                            <form method="POST" action="{{ route('edit-perfil.update') }}">
                                 @csrf
                                 @method('POST')
 

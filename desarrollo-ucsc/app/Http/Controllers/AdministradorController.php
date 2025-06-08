@@ -113,11 +113,20 @@ class AdministradorController extends Controller
             // Asignar el rol
             $usuario->assignRole($request->rol);
 
+            // Manejar la foto de perfil si se proporciona
+            $fotoPath = null;
+            if ($request->hasFile('foto_perfil')) {
+                $foto = $request->file('foto_perfil');
+                $fotoNombre = uniqid() . '.' . $foto->getClientOriginalExtension();
+                $foto->move(public_path('img/perfiles'), $fotoNombre);
+                $fotoPath = 'img/perfiles/' . $fotoNombre;
+}
             // Crear el administrador
             $administrador = Administrador::create([
                 'rut_admin' => $request->rut_admin,
                 'nombre_admin' => $request->nombre_admin,
                 'fecha_creacion' => now(),
+                'foto_perfil' => 'default.png',
             ]);
 
             // Asignar la sucursal al administrador

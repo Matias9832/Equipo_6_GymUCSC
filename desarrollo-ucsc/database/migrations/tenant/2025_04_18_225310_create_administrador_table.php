@@ -20,6 +20,11 @@ return new class extends Migration
             $table->string('nombre_admin');
 
             $table->timestamp('fecha_creacion');
+
+            $table->string('numero_contacto')->nullable();
+            $table->text('sobre_mi')->nullable();
+            $table->text('descripcion_ubicacion')->nullable();
+            $table->string('foto_perfil')->default('img/perfiles/default.png');
         });
     }
 

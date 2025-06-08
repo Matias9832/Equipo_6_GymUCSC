@@ -19,6 +19,10 @@ class Administrador extends Model
         'nombre_admin',
         'fecha_creacion',
         'correo_usuario',
+        'numero_contacto',
+        'sobre_mi',
+        'descripcion_ubicacion',
+        'foto_perfil',
     ];
 
     public function usuario()
