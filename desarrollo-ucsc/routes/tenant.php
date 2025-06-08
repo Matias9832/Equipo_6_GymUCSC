@@ -41,6 +41,7 @@ use App\Http\Controllers\RutinaController;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\AsistenciaTallerController;
 use App\Http\Controllers\RutinaPersonalizadaController;
+use App\Http\Controllers\DocenteController;
 use Spatie\Permission\Models\Permission;
 
 /*
@@ -227,6 +228,16 @@ Route::middleware([
             Route::delete('usuarios/{usuario}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
         });
 
+        // Rutas para el mantenedor de Docentes
+        Route::middleware(['permission:Ver Usuarios'])->group(function () {
+            Route::get('docentes', [DocenteController::class, 'index'])->name('docentes.index');
+            Route::get('docentes/create', [DocenteController::class, 'create'])->name('docentes.create');
+            Route::post('docentes', [DocenteController::class, 'store'])->name('docentes.store');
+            Route::get('docentes/{docente}/edit', [DocenteController::class, 'edit'])->name('docentes.edit');
+            Route::put('docentes/{docente}', [DocenteController::class, 'update'])->name('docentes.update');
+            Route::delete('docentes/{docente}', [DocenteController::class, 'destroy'])->name('docentes.destroy');
+            Route::get('/docentes/data', [DocenteController::class, 'data'])->name('docentes.data');
+        });
         // Busqueda de usuarios para Select2  
         Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('usuarios.buscar');
 
