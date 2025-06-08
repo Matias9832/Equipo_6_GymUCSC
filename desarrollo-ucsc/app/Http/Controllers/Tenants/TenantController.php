@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Landlord;
+namespace App\Http\Controllers\Tenants;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tenant;
@@ -12,7 +12,7 @@ class TenantController extends Controller
     {
         $tenants = Tenant::all(); // Ya tienes el modelo extendido
 
-        return view('landlord.index', compact('tenants'));
+        return view('tenants.index', compact('tenants'));
     }
 
     public function store(Request $request)
