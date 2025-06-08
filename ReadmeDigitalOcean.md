@@ -3,12 +3,12 @@
 ## Comandos luego de hacer pull (Copiar y pegar en terminal)
 
 php artisan migrate:fresh
-php artisan db:seed
 php artisan optimize 
 php artisan config:clear
 php artisan cache:clear
 php artisan config:cache
 
+php artisan db:seed
 
 ## Comandos importantes
     1. cd : moverse entre directorios => cd "Nombre_directorio"

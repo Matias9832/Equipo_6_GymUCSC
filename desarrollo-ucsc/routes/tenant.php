@@ -183,6 +183,8 @@ Route::middleware([
         Route::middleware(['permission:Acceso al Mantenedor de Torneos'])->group(function () {
             Route::resource('torneos', TorneoController::class);
         });
+        Route::get('/torneos-por-deporte', [EquipoController::class, 'torneosPorDeporte'])->name('torneos.porDeporte');
+        
         Route::middleware(['permission:Acceso al Mantenedor de Talleres'])->group(function () {
             Route::resource('talleres', TallerController::class)->parameters([
                 'talleres' => 'taller'

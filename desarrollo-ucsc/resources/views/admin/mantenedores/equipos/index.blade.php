@@ -17,6 +17,8 @@
                                     <tr>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nombre del Equipo</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Deporte</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Torneo</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Capitán</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Integrantes</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Acciones</th>
                                     </tr>
@@ -29,6 +31,24 @@
                                             </td>
                                             <td>
                                                 <span class="text-xs">{{ $equipo->deporte->nombre_deporte }}</span>
+                                            </td>
+                                            <td>
+                                                @if($equipo->torneos->isNotEmpty())
+                                                    <ul class="mb-0 ps-3">
+                                                        @foreach($equipo->torneos as $torneo)
+                                                            <li class="text-xs">{{ $torneo->nombre_torneo }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                @else
+                                                    <span class="text-muted text-xs">Sin torneo</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($equipo->capitan)
+                                                    <span class="text-xs">{{ $equipo->capitan->nombre }} ({{ $equipo->capitan->rut }})</span>
+                                                @else
+                                                    <span class="text-muted text-xs">Sin capitán</span>
+                                                @endif
                                             </td>
                                             <td>
                                                 @if($equipo->usuarios->isNotEmpty())
