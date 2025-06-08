@@ -229,7 +229,6 @@ Route::middleware([
         });
 
         // Rutas para el mantenedor de Docentes
-        Route::middleware(['permission:Ver Usuarios'])->group(function () {
             Route::get('docentes', [DocenteController::class, 'index'])->name('docentes.index');
             Route::get('docentes/create', [DocenteController::class, 'create'])->name('docentes.create');
             Route::post('docentes', [DocenteController::class, 'store'])->name('docentes.store');
@@ -237,7 +236,6 @@ Route::middleware([
             Route::put('docentes/{docente}', [DocenteController::class, 'update'])->name('docentes.update');
             Route::delete('docentes/{docente}', [DocenteController::class, 'destroy'])->name('docentes.destroy');
             Route::get('/docentes/data', [DocenteController::class, 'data'])->name('docentes.data');
-        });
         // Busqueda de usuarios para Select2  
         Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('usuarios.buscar');
 

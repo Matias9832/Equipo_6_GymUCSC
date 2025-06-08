@@ -36,18 +36,6 @@
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="sucursal_id" class="form-label">Sucursal</label>
-                            <select name="sucursal_id" class="form-control" required>
-                                @foreach ($sucursales as $sucursal)
-                                    <option value="{{ $sucursal->id_suc }}"
-                                        {{ $sucursalSeleccionada && $sucursalSeleccionada->id_suc == $sucursal->id_suc ? 'selected' : '' }}>
-                                        {{ $sucursal->nombre_suc }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
                         <div class="d-flex justify-content-between mt-4">
                             <a href="{{ route('docentes.index') }}" class="btn btn-outline-secondary">Cancelar</a>
                             <button type="submit" class="btn btn-primary">Actualizar Docente</button>

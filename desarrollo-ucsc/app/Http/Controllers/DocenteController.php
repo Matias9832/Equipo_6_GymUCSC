@@ -16,33 +16,41 @@ class DocenteController extends Controller
 {
     public function index()
     {
+        Administrador::whereHas('sucursales', function ($query) {
+            $query->where('admin_sucursal.activa', true)
+                ->where('admin_sucursal.id_suc', session('sucursal_activa'));
+        })->with([
+            'sucursales' => function ($query) {
+                $query->wherePivot('activa', true);
+            }
+        ])->paginate(20);
+
         return view('admin.mantenedores.docentes.index');
     }
 
     public function data(Request $request)
     {
+        $sucursalId = session('sucursal_activa'); // ID de la sede activa
+
         $query = DB::table('administrador')
             ->join('usuario', 'administrador.rut_admin', '=', 'usuario.rut')
-            ->join('model_has_roles', function ($join) {
+            ->leftJoin('model_has_roles', function ($join) {
                 $join->on('usuario.id_usuario', '=', 'model_has_roles.model_id')
                     ->where('model_has_roles.model_type', Usuario::class);
             })
-            ->join('roles', function ($join) {
-                $join->on('model_has_roles.role_id', '=', 'roles.id')
-                    ->where('roles.name', '=', 'Docente');
-            })
-            ->leftJoin('admin_sucursal', function ($join) {
+            ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
+            ->join('admin_sucursal', function ($join) use ($sucursalId) {
                 $join->on('administrador.id_admin', '=', 'admin_sucursal.id_admin')
-                    ->where('admin_sucursal.activa', 1);
+                    ->where('admin_sucursal.activa', 1)
+                    ->where('admin_sucursal.id_suc', '=', $sucursalId);
             })
             ->leftJoin('sucursal', 'admin_sucursal.id_suc', '=', 'sucursal.id_suc')
             ->select(
                 'administrador.id_admin',
                 'administrador.rut_admin',
                 'administrador.nombre_admin',
-                'usuario.correo_usuario',
+                'usuario.correo_usuario as correo_usuario',
                 'roles.name as rol_name',
-                'sucursal.nombre_suc'
             );
 
         return DataTables::of($query)
@@ -157,7 +165,7 @@ class DocenteController extends Controller
         DB::table('admin_sucursal')->where('id_admin', $administrador->id_admin)->delete();
         DB::table('admin_sucursal')->insert([
             'id_admin' => $administrador->id_admin,
-            'id_suc' => $request->sucursal_id,
+            'id_suc' => session('sucursal_activa'), // ✅ Siempre asigna a la sede activa del admin
             'activa' => true,
         ]);
 

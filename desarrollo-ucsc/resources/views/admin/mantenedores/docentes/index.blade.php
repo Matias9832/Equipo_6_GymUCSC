@@ -20,7 +20,6 @@
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nombre</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Correo</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Rol</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7">Sucursal</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Acciones</th>
                                     </tr>
                                 </thead>
@@ -50,7 +49,6 @@
                     { data: 'nombre_admin', name: 'administrador.nombre_admin', className: 'text-xs' },
                     { data: 'correo_usuario', name: 'usuario.correo_usuario', defaultContent: '-', className: 'text-xs' },
                     { data: 'rol_name', name: 'roles.name', defaultContent: 'Sin rol', className: 'text-xs td-rol' },
-                    { data: 'nombre_suc', name: 'sucursal.nombre_suc', defaultContent: 'Sin sucursal', className: 'text-xs text-center' },
                     {
                         data: 'acciones',
                         name: 'acciones',
