@@ -227,7 +227,6 @@ Route::middleware([
         Route::middleware(['permission:Eliminar Usuarios'])->group(function () {
             Route::delete('usuarios/{usuario}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
         });
-
         // Rutas para el mantenedor de Docentes
         Route::middleware(['permission:Ver Docentes'])->group(function () {
             Route::get('docentes', [DocenteController::class, 'index'])->name('docentes.index');
