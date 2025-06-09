@@ -1,13 +1,13 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Crear Taller'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Talleres'])
     <div class="container-fluid py-4">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10">
                 <div class="card">
                     <div class="card-header pb-0">
-                        <h6>Crear Taller</h6>
+                        <h5>Crear Taller</h5>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('talleres.store') }}" method="POST">
@@ -19,22 +19,22 @@
                                 <label for="activo_taller" class="form-check-label">Taller activo</label>
                             </div>
                             <div class="mb-3">
-                                <label for="nombre_taller" class="form-label">Nombre Taller</label>
-                                <input type="text" name="nombre_taller" id="nombre_taller" class="form-control {{ $errors->has('nombre_taller') ? 'is-invalid' : '' }}"
+                                <label for="nombre_taller" class="form-label">Nombre</label>
+                                <input type="text" name="nombre_taller" id="nombre_taller" placeholder="Nombre del taller" class="form-control {{ $errors->has('nombre_taller') ? 'is-invalid' : '' }}"
                                     value="{{ old('nombre_taller') }}" required maxlength="100">
                                 @error('nombre_taller') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="descripcion_taller" class="form-label">Descripción</label>
-                                <textarea name="descripcion_taller" id="descripcion_taller" class="form-control {{ $errors->has('descripcion_taller') ? 'is-invalid' : '' }}" rows="3"
+                                <textarea name="descripcion_taller" id="descripcion_taller" placeholder="Descripción sobre qué trata el taller" class="form-control {{ $errors->has('descripcion_taller') ? 'is-invalid' : '' }}" rows="3"
                                     required>{{ old('descripcion_taller') }}</textarea>
                                 @error('descripcion_taller') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="cupos_taller" class="form-label">Cupos</label>
-                                <input type="number" name="cupos_taller" id="cupos_taller" class="form-control {{ $errors->has('cupos_taller') ? 'is-invalid' : '' }}"
+                                <input type="number" name="cupos_taller" id="cupos_taller" placeholder="Cantidad de cupos disponibles para el taller" class="form-control {{ $errors->has('cupos_taller') ? 'is-invalid' : '' }}"
                                     value="{{ old('cupos_taller') }}" required min="1">
                                 @error('cupos_taller') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>

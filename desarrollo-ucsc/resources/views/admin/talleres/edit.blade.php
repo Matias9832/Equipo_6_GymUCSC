@@ -1,13 +1,13 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Editar Taller'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Talleres'])
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10">
             <div class="card">
                 <div class="card-header pb-0">
-                    <h6>Editar Taller</h6>
+                    <h5>Editar Taller</h5>
                 </div>
                 <div class="card-body bg-white">
                     <form action="{{ route('talleres.update', $taller) }}" method="POST">
@@ -117,7 +117,7 @@
 
                         <button type="button" class="btn btn-secondary btn-sm mt-2" id="agregar-horario">+ Añadir Horario</button>
 
-                        <<div class="d-flex justify-content-end gap-2 mt-4">
+                        <div class="d-flex justify-content-end gap-2 mt-4">
                             <button type="submit" class="btn btn-primary ">Actualizar</button>
                             <a href="{{ route('talleres.index') }}" class="btn btn-outline-secondary ">Cancelar</a>
                         </div>

@@ -22,28 +22,28 @@
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
-                    <div class="nav-wrapper position-relative end-0">
-                        <ul class="nav nav-pills nav-fill p-1" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link mb-0 px-0 py-1 active d-flex align-items-center justify-content-center" data-bs-toggle="tab" href="javascript:;" role="tab">
-                                    <i class="ni ni-app"></i>
-                                    <span class="ms-2">Información</span>
+                    <li class="dropdown me-3 d-flex justify-content-end">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="configuracionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="ni ni-settings-gear-65 me-1"></i> Configuración
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="configuracionDropdown">
+                            <li>
+                                <a class="dropdown-item" href="javascript:;">
+                                    <i class="ni ni-image me-2 text-primary"></i> Cambiar foto de perfil
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center" data-bs-toggle="tab" href="javascript:;" role="tab">
-                                    <i class="ni ni-email-83"></i>
-                                    <span class="ms-2">Talleres</span>
+                            <li>
+                                <a class="dropdown-item" href="javascript:;">
+                                    <i class="ni ni-single-copy-04 me-2 text-info"></i> Editar información de contacto
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link mb-0 px-0 py-1 d-flex align-items-center justify-content-center" data-bs-toggle="tab" href="javascript:;" role="tab">
-                                    <i class="ni ni-settings-gear-65"></i>
-                                    <span class="ms-2">Cambiar foto de perfil</span>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('edit-perfil.edit') }}">
+                                    <i class="ni ni-lock-circle-open me-2 text-warning"></i> Cambiar contraseña
                                 </a>
                             </li>
                         </ul>
-                    </div>
+                    </li>
                 </div>
             </div>
         </div>
@@ -53,13 +53,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header pb-0">
-                        <div class="d-flex align-items-center">
-                            <p class="mb-0">Perfil personal</p>
-                            <a href="{{ route('edit-perfil.edit') }}" class="btn btn-primary btn-sm ms-auto">Editar perfil</a>
-                        </div>
-                    </div>
-                    <div class="card-body">
+                    <div class="card-body mt-2">
                         <p class="text-uppercase text-sm">Información de usuario</p>
                         <div class="row">
                             <div class="col-md-6">
@@ -93,13 +87,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Número de contacto</label>
-                                    <input class="form-control" type="text" value="{{ $administrador->numero_contacto ?? '-' }}" readonly>
+                                    <input class="form-control" type="text" value="{{ $administrador->numero_contacto ?? 'Puedes agregar aquí un número de contacto' }}" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Descripción de ubicación</label>
-                                    <input class="form-control" type="text" value="{{ $administrador->descripcion_ubicacion ?? '-' }}" readonly>
+                                    <input class="form-control" type="text" value="{{ $administrador->descripcion_ubicacion ?? 'Puedes poner aquí dónde encontrar tu puesta de trabajo' }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -108,7 +102,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input class="form-control" type="text" value="{{ $administrador->sobre_mi ?? 'Agrega aquí una breve descripción sobre tí.' }}" readonly>
+                                    <textarea class="form-control" rows="4" readonly style="width: 100%; overflow-wrap: break-word;">{{ $administrador->sobre_mi ?? 'Agrega aquí una breve descripción sobre ti.' }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -123,9 +117,7 @@
                     <div class="row justify-content-center">
                         <div class="col-4 col-lg-4 order-lg-2">
                             <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
-                                <a href="javascript:;">
-                                    <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}" class="rounded-circle img-fluid border border-2 border-white">
-                                </a>
+                                <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}" class="rounded-circle img-fluid border border-2 border-white">
                             </div>
                         </div>
                     </div>
@@ -136,10 +128,10 @@
                                 {{ $administrador->descripcion_cargo ?? $rol }}
                             </div>
                             <div class="h6 mt-4">
-                                <i class="ni business_briefcase-24 mr-2"></i>Sucursal: {{ $sucursal->nombre_suc ?? 'Sin asignar' }}
+                                <i class="ni business_briefcase-24 mr-2"></i>Sucursal: {{ $sucursal->nombre_suc ?? '' }}
                             </div>
                             <div>
-                                <i class="ni education_hat mr-2"></i>{{ $administrador->descripcion_ubicacion ?? 'Sin ubicación' }}
+                                <i class="ni education_hat mr-2"></i>{{ $administrador->descripcion_ubicacion ?? '' }}
                             </div>
                         </div>
                     </div>
