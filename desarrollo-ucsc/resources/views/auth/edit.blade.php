@@ -81,11 +81,11 @@
 
                                 <!-- Botones para editar y cancelar -->
                                 <div class="d-flex justify-content-between gap-2 mt-3">
-                                    <button type="submit" class="btn bg-gradient-dark w-100">Guardar Cambios</button>
+                                    <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
                                     @if(auth()->user()->tipo_usuario === 'admin')
-                                        <a href="{{ route('docentes.perfil') }}" class="btn btn-secondary w-100">Cancelar</a>
+                                        <a href="{{ route('docentes.perfil') }}" class="btn btn-outline-secondary w-100">Cancelar</a>
                                     @else
-                                        <a href="{{ route('news.index') }}" class="btn btn-secondary w-100">Cancelar</a>
+                                        <a href="{{ route('news.index') }}" class="btn btn-outline-secondary w-100">Cancelar</a>
                                     @endif    
                                 </div>
                             </form>

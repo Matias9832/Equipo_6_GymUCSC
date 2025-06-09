@@ -17,7 +17,7 @@
                             {{ $administrador->nombre_admin }}
                         </h5>
                         <p class="mb-0 font-weight-bold text-sm">
-                            {{ $rol ?? 'Sin rol asignado' }}
+                            {{ $administrador->descripcion_cargo ?? $rol }}
                         </p>
                     </div>
                 </div>
@@ -108,7 +108,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input class="form-control" type="text" value="{{ $administrador->sobre_mi ?? '-' }}" readonly>
+                                    <input class="form-control" type="text" value="{{ $administrador->sobre_mi ?? 'Agrega aquí una breve descripción sobre tí.' }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +133,7 @@
                         <div class="text-center mt-4">
                             <h5>{{ $administrador->nombre_admin }}</h5>
                             <div class="h6 font-weight-300">
-                                {{ $rol }}
+                                {{ $administrador->descripcion_cargo ?? $rol }}
                             </div>
                             <div class="h6 mt-4">
                                 <i class="ni business_briefcase-24 mr-2"></i>Sucursal: {{ $sucursal->nombre_suc ?? 'Sin asignar' }}
@@ -147,5 +147,5 @@
             </div>
         </div>
     </div>
-
+    @include('layouts.footers.auth.footer')
 @endsection
