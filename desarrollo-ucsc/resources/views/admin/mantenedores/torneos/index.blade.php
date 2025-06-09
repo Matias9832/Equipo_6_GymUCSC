@@ -23,6 +23,7 @@
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Tipo</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder">Máx. Equipos</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center">Acciones</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center">Gestión</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -40,6 +41,22 @@
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
                                                 </form>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="{{ route('torneos.iniciar', $torneo->id) }}" class="btn btn-sm btn-success ms-1">
+                                                    <i class="fas fa-play"></i> Iniciar Torneo
+                                                </a>
+                                                <a href="{{ route('torneos.partidos', $torneo->id) }}" class="btn btn-sm btn-info ms-1">
+                                                    <i class="fas fa-futbol"></i> Partidos
+                                                </a>
+                                                <a href="{{ route('torneos.tabla', $torneo->id) }}" class="btn btn-sm btn-warning ms-1">
+                                                    <i class="fas fa-list-ol"></i> Tabla
+                                                </a>
+                                                @if($torneo->tipo_competencia === 'copa')
+                                                <a href="{{ route('torneos.copa', $torneo->id) }}" class="btn btn-sm btn-dark ms-1">
+                                                    <i class="fas fa-sitemap"></i> Llaves
+                                                </a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
