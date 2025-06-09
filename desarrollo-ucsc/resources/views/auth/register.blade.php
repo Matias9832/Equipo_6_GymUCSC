@@ -19,10 +19,10 @@
             <div class="row mt-lg-n10 mt-md-n11 mt-n10 justify-content-center">
                 <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
                     <div class="card z-index-0">
-                        <div class="card-header text-center pt-4">
+                        <div class="card-header text-center mt-1">
                             <h5>Registro de Usuario</h5>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body pt-0">
                             {{-- Mensaje de éxito --}}
                             @if (session('success'))
                                 <div class="alert alert-success">
