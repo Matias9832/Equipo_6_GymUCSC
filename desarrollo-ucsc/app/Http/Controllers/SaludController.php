@@ -140,13 +140,14 @@ class SaludController extends Controller
         }
 
         if ($sinCambios) {
-            return redirect()->route('edit-perfil.edit')->with('info', 'No se han realizado cambios.');
+            $ruta = auth()->user()->tipo_usuario === 'admin' ? 'docentes.perfil' : 'edit-perfil.edit';
+            return redirect()->route($ruta)->with('info', 'No se han realizado cambios.');
         }
 
         // Guardar solo si hay cambios
         $salud->update($nuevosDatos);
-
-        return redirect()->route('edit-perfil.edit')->with('success', 'Información de salud actualizada.');
+        $ruta = auth()->user()->tipo_usuario === 'admin' ? 'docentes.perfil' : 'edit-perfil.edit';
+        return redirect()->route($ruta)->with('success', 'Información de salud actualizada.');
     }
     
 }
