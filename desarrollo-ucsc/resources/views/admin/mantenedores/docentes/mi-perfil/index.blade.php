@@ -8,7 +8,7 @@
             <div class="row gx-4">
                 <div class="col-auto">
                     <div class="avatar avatar-xl position-relative">
-                        <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}" class="rounded-circle img-fluid border border-2 border-white">
+                        <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}" class="rounded-circle img-fluid border border-2 border-white" style="object-fit: cover; width: 100%; height: 100%;">
                     </div>
                 </div>
                 <div class="col-auto my-auto">
@@ -131,8 +131,8 @@
                         <div class="col-4 col-lg-4 order-lg-2">
                             <div class="mt-n7 position-relative z-index-2">
                                 <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}"
-                                    class="rounded-circle img-fluid border border-3 border-white shadow"
-                                    style="width: 120px; height: 120px; object-fit: cover;">
+                                    class="rounded-circle img-fluid border border-2 border-white"
+                                    style="width: 120px !important; height: 120px !important; object-fit: cover;">
                             </div>
                         </div>
                     </div>
