@@ -7,7 +7,7 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                        <h6>Lista de Talleres</h6>
+                        <h5>Lista de Talleres</h5>
                         <a href="{{ route('talleres.create') }}" class="btn btn-primary btn-sm">Crear Taller</a>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
@@ -17,6 +17,11 @@
                                     <tr>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Nombre</th>
+                                        @can(['Acceso a Gestión de Asistencia Talleres'])  
+                                        <th 
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Asistencia</th>
+                                        @endcan    
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Cupos</th>
@@ -31,12 +36,7 @@
                                             Espacio</th>    
                                         <th 
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Profesor </th>
-                                        @can(['Acceso a Gestión de Asistencia Talleres'])  
-                                        <th 
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Asistencia</th>
-                                        @endcan
+                                            Profesor encargado</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Acciones</th>
@@ -46,9 +46,23 @@
                                 <tbody>
                                     @foreach($talleres as $taller)
                                         <tr>
-                                            <td><span class="text-xs font-weight-bold ps-3">{{ $taller->nombre_taller }}</span>
+                                            <td>
+                                                <span class="text-xs font-weight-bold ps-3">{{ $taller->nombre_taller }}</span>
                                             </td>
-                                            <td><span class="text-xs">{{ $taller->cupos_taller }}</span></td>
+                                            @can(['Acceso a Gestión de Asistencia Talleres'])               
+                                            <td>
+                                                <div class="d-flex gap-1">
+                                                    <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-sm btn-outline-primary" style="margin-bottom: 0rem !important;">
+                                                        <i class="fas fa-edit"></i> Registrar
+                                                    </a>
+                                                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-sm btn-outline-secondary" style="margin-bottom: 0rem !important;">
+                                                        <i class="fas fa-eye"></i> Ver asistencia
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            @endcan
+                                            <td>
+                                                <span class="text-xs">{{ $taller->cupos_taller }}</span></td>
                                             <td>
                                                 <span class="badge bg-gradient-{{ $taller->activo_taller ? 'success' : 'secondary' }}">
                                                     {{ $taller->activo_taller ? 'Activo' : 'Inactivo' }}
@@ -85,18 +99,6 @@
                                                     <span class="text-muted text-xs">Sin asignar</span>
                                                 @endif
                                             </td>
-                                            @can(['Acceso a Gestión de Asistencia Talleres'])               
-                                            <td>
-                                                <div class="d-flex gap-1">
-                                                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-sm btn-outline-secondary" style="margin-bottom: 0rem !important;">
-                                                        <i class="fas fa-eye me-1"></i> Ver
-                                                    </a>
-                                                    <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-sm btn-outline-primary" style="margin-bottom: 0rem !important;">
-                                                        <i class="fas fa-edit me-1"></i> Registrar
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            @endcan
                                             <td class="align-middle text-center">
                                                 <a href="{{ route('talleres.edit', $taller->id_taller) }}"
                                                     class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip"

@@ -22,7 +22,7 @@
                 <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
                     <div class="card z-index-0">
                         <div class="card-body">
-                            <form method="POST" action="{{ route('mi-perfil.update') }}">
+                            <form method="POST" action="{{ route('edit-perfil.update') }}">
                                 @csrf
                                 @method('POST')
 
@@ -81,15 +81,21 @@
 
                                 <!-- Botones para editar y cancelar -->
                                 <div class="d-flex justify-content-between gap-2 mt-3">
-                                    <button type="submit" class="btn bg-gradient-dark w-100">Guardar Cambios</button>
-                                    <a href="{{ route('news.index') }}" class="btn btn-secondary w-100">Cancelar</a>
+                                    <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
+                                    @if(auth()->user()->tipo_usuario === 'admin')
+                                        <a href="{{ route('docentes.perfil') }}" class="btn btn-outline-secondary w-100">Cancelar</a>
+                                    @else
+                                        <a href="{{ route('news.index') }}" class="btn btn-outline-secondary w-100">Cancelar</a>
+                                    @endif    
                                 </div>
                             </form>
-                            <div class="mt-3 text-center">
-                                <a href="{{ route('salud.edit') }}" class="btn btn-outline-danger w-100">
-                                    Editar Información de Salud
-                                </a>
-                            </div>
+                            @if (auth()->user()->tipo_usuario !== 'admin')
+                                <div class="mt-3 text-center">
+                                    <a href="{{ route('salud.edit') }}" class="btn btn-outline-danger w-100">
+                                        Editar Información de Salud
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

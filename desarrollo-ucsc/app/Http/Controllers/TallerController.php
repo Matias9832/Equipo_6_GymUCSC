@@ -5,8 +5,8 @@ use App\Models\Administrador;
 use App\Models\Taller;
 use App\Models\Espacio;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Validator; // Asegúrate de que esta línea esté presente
+use Illuminate\Validation\Rule;
 class TallerController extends Controller
 {
     public function index()
@@ -24,55 +24,63 @@ class TallerController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        // Filtrar horarios vacíos ANTES de la validación
+        $horariosValidos = collect($request->input('horarios'))
+            ->filter(function ($horario) {
+                return !empty(array_filter($horario, 'strlen')); // Elimina horarios completamente vacíos
+            })->toArray();
+
+        // Reemplaza los horarios del request con solo los válidos
+        $request->merge(['horarios' => $horariosValidos]);
+        
+        $rules = [
             'nombre_taller' => 'required|string|max:100',
             'descripcion_taller' => 'required|string',
             'cupos_taller' => 'required|integer|min:1',
             'id_admin' => 'nullable|exists:administrador,id_admin',
             'id_espacio' => 'nullable|exists:espacio,id_espacio',
             'activo_taller' => 'boolean',
-            'horarios' => 'required|array|min:1',
-            'horarios.*.dia' => 'required|string|in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo',
-            'horarios.*.hora_inicio' => 'required|date_format:H:i',
-            'horarios.*.hora_termino' => 'required|date_format:H:i|after:horarios.*.hora_inicio',
-        ], [
-            'horarios.*.hora_termino.after' => 'La hora término debe ser posterior a la hora inicio.',
-        ]);
+            'horarios' => ['nullable', 'array'], // Permitir que el array de horarios sea opcional
+            'horarios.*.dia' => ['required', 'string', Rule::in(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'])],
+            'horarios.*.hora_inicio' => ['required', 'date_format:H:i'],
+            'horarios.*.hora_termino' => ['required', 'date_format:H:i', 'after:horarios.*.hora_inicio'],
+        ];
+
+        $messages = [
+            'horarios.*.dia.required' => 'El día del horario es obligatorio.',
+            'horarios.*.dia.in' => 'El día del horario no es válido.',
+            'horarios.*.hora_inicio.required' => 'La hora de inicio es obligatoria.',
+            'horarios.*.hora_inicio.date_format' => 'La hora de inicio debe tener el formato HH:MM.',
+            'horarios.*.hora_termino.required' => 'La hora de término es obligatoria.',
+            'horarios.*.hora_termino.date_format' => 'La hora de término debe tener el formato HH:MM.',
+            'horarios.*.hora_termino.after' => 'La hora de término del horario debe ser posterior a la hora de inicio.',
+        ];
+
+        $request->validate($rules, $messages);
 
         $horariosValidos = collect($request->horarios)
-            ->filter(fn($h) => !empty($h['dia']) && !empty($h['hora_inicio']) && !empty($h['hora_termino']))
+            ->filter(function($h) {
+                return !empty($h['dia']) || !empty($h['hora_inicio']) || !empty($h['hora_termino']);
+            })
             ->values()
             ->all();
 
-
-        if (count($horariosValidos) === 0) {
-            return back()
-                ->withErrors(['horarios' => 'Debes ingresar al menos un horario con día y hora'])
-                ->withInput();
-        }
-
         // Crear Taller
-        $taller = Taller::create([
-            'nombre_taller' => $request->nombre_taller,
-            'descripcion_taller' => $request->descripcion_taller,
-            'cupos_taller' => $request->cupos_taller,
-            'activo_taller' => $request->activo_taller,
-            'id_admin' => $request->id_admin,
-            'id_espacio' => $request->id_espacio,
-        ]);
-
-        // Crear horarios
-        foreach ($horariosValidos as $h) {
+        $taller = Taller::create($request->except('horarios')); // Guardar el taller sin los horarios
+    
+        // Guardar los horarios asociados
+        foreach ($request->horarios as $horarioData) {
+            // Asegúrate de que los IDs existan si estás editando y deseas actualizar
+            // En create, no habrá ID, solo se crea
             $taller->horarios()->create([
-                'dia_taller' => $h['dia'],
-                'hora_inicio' => $h['hora_inicio'],
-                'hora_termino' => $h['hora_termino'],
+                'dia_taller' => $horarioData['dia'],
+                'hora_inicio' => $horarioData['hora_inicio'],
+                'hora_termino' => $horarioData['hora_termino'],
             ]);
         }
 
         return redirect()->route('talleres.index')->with('success', 'Taller creado correctamente');
     }
-
 
     public function edit(Taller $taller)
     {
@@ -81,89 +89,81 @@ class TallerController extends Controller
         $espacios = Espacio::all();
         return view('admin.talleres.edit', compact('taller', 'admins','espacios'));
     }
-
     public function update(Request $request, Taller $taller)
-    {
-        $request->validate([
-            'nombre_taller' => 'required|string|max:100',
-            'descripcion_taller' => 'required|string',
-            'cupos_taller' => 'required|integer|min:1',
-            'id_admin' => 'nullable|exists:administrador,id_admin',
-            'id_espacio' => 'nullable|exists:espacio,id_espacio',
-            'activo_taller' => 'boolean',
-            'horarios' => 'required|array|min:1',
-        ], [
-            'horarios.*.hora_termino.after' => 'La hora término debe ser posterior a la hora inicio.',
-        ]);
-        // Normalizar formatos de hora (en caso de que vengan con segundos u otro formato)
-        $horariosEnviados = collect($request->horarios)->map(function ($h) {
-            $h['hora_inicio'] = isset($h['hora_inicio']) ? date('H:i', strtotime($h['hora_inicio'])) : null;
-            $h['hora_termino'] = isset($h['hora_termino']) ? date('H:i', strtotime($h['hora_termino'])) : null;
-            return $h;
-        });
+{
+    $horariosValidos = collect($request->input('horarios'))
+        ->filter(function ($horario) {
+            return !empty(array_filter($horario, 'strlen'));
+        })->toArray();
+    
+    $request->merge(['horarios' => $horariosValidos]);
 
-        // Validar cada horario manualmente
-        foreach ($horariosEnviados as $i => $h) {
-            if (!empty($h['dia']) || !empty($h['hora_inicio']) || !empty($h['hora_termino'])) {
-                Validator::make($h, [
-                    'dia' => 'required|string|in:Lunes,Martes,Miércoles,Jueves,Viernes,Sábado,Domingo',
-                    'hora_inicio' => 'required|date_format:H:i',
-                    'hora_termino' => 'required|date_format:H:i|after:hora_inicio',
-                ], [], [
-                    "dia" => "día",
-                    "hora_inicio" => "hora inicio",
-                    "hora_termino" => "hora término"
-                ])->validate();
-            }
+    $rules = [
+        'nombre_taller' => 'required|string|max:100',
+        'descripcion_taller' => 'required|string',
+        'cupos_taller' => 'required|integer|min:1',
+        'id_admin' => 'nullable|exists:administrador,id_admin',
+        'id_espacio' => 'nullable|exists:espacio,id_espacio',
+        'activo_taller' => 'boolean',
+        'horarios' => ['nullable', 'array'],
+        // LA LÍNEA MODIFICADA AQUÍ:
+        'horarios.*.id' => ['nullable', 'exists:horarios_talleres,id'], // Cambiado 'horarios' a 'horarios_talleres'
+        'horarios.*.dia' => ['required', 'string', Rule::in(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'])],
+        'horarios.*.hora_inicio' => ['required', 'date_format:H:i'],
+        'horarios.*.hora_termino' => ['required', 'date_format:H:i', 'after:horarios.*.hora_inicio'],
+    ];
+
+    $messages = [
+        'horarios.*.dia.required' => 'El día del horario es obligatorio.',
+        'horarios.*.dia.in' => 'El día del horario no es válido.',
+        'horarios.*.hora_inicio.required' => 'La hora de inicio es obligatoria.',
+        'horarios.*.hora_inicio.date_format' => 'La hora de inicio debe tener el formato HH:MM.',
+        'horarios.*.hora_termino.required' => 'La hora de término es obligatoria.',
+        'horarios.*.hora_termino.date_format' => 'La hora de término debe tener el formato HH:MM.',
+        'horarios.*.hora_termino.after' => 'La hora de término del horario debe ser posterior a la hora de inicio.',
+    ];
+
+    $request->validate($rules, $messages);
+    
+    $horariosEnviados = collect($request->horarios)
+            ->filter(function($h) {
+                // Filtramos solo los horarios que tienen al menos un campo lleno
+                return !empty($h['dia']) || !empty($h['hora_inicio']) || !empty($h['hora_termino']);
+            })
+            ->map(function ($h) {
+                // Normalizar formatos de hora si existen
+                $h['hora_inicio'] = isset($h['hora_inicio']) ? date('H:i', strtotime($h['hora_inicio'])) : null;
+                $h['hora_termino'] = isset($h['hora_termino']) ? date('H:i', strtotime($h['hora_termino'])) : null;
+                return $h;
+            })
+            ->values()
+            ->all();
+
+    $taller->update($request->except('horarios', '_method'));
+
+    $idsExistenteHorarios = [];
+    foreach ($request->horarios as $horarioData) {
+        if (isset($horarioData['id']) && !empty($horarioData['id'])) {
+            $taller->horarios()->where('id', $horarioData['id'])->update([
+                'dia_taller' => $horarioData['dia'],
+                'hora_inicio' => $horarioData['hora_inicio'],
+                'hora_termino' => $horarioData['hora_termino'],
+            ]);
+            $idsExistenteHorarios[] = $horarioData['id'];
+        } else {
+            $horario = $taller->horarios()->create([
+                'dia_taller' => $horarioData['dia'],
+                'hora_inicio' => $horarioData['hora_inicio'],
+                'hora_termino' => $horarioData['hora_termino'],
+            ]);
+            $idsExistenteHorarios[] = $horario->id;
         }
-
-        // Actualizar taller
-        $taller->update([
-            'nombre_taller' => $request->nombre_taller,
-            'descripcion_taller' => $request->descripcion_taller,
-            'cupos_taller' => $request->cupos_taller,
-            'activo_taller' => $request->activo_taller,
-            'id_admin' => $request->id_admin,
-            'id_espacio' => $request->id_espacio,
-        ]);
-
-        // Cargar horarios actuales
-        $taller->load('horarios');
-
-        $idsEnviados = $horariosEnviados->pluck('id')->filter()->all();
-        $idsActuales = $taller->horarios->pluck('id')->all();
-
-        // Eliminar horarios eliminados
-        $idsParaEliminar = array_diff($idsActuales, $idsEnviados);
-        if (count($idsParaEliminar)) {
-            $taller->horarios()->whereIn('id', $idsParaEliminar)->delete();
-        }
-
-        // Crear o actualizar horarios
-        foreach ($horariosEnviados as $h) {
-            if (!empty($h['id'])) {
-                $horario = $taller->horarios->firstWhere('id', $h['id']);
-                if ($horario) {
-                    $horario->update([
-                        'dia_taller' => $h['dia'],
-                        'hora_inicio' => $h['hora_inicio'],
-                        'hora_termino' => $h['hora_termino'],
-                    ]);
-                }
-            } else {
-                $taller->horarios()->create([
-                    'dia_taller' => $h['dia'],
-                    'hora_inicio' => $h['hora_inicio'],
-                    'hora_termino' => $h['hora_termino'],
-                ]);
-            }
-        }
-
-        return redirect()->route('talleres.index')->with('success', 'Taller actualizado correctamente');
     }
 
+    $taller->horarios()->whereNotIn('id', $idsExistenteHorarios)->delete();
 
-
+    return redirect()->route('talleres.index')->with('success', 'Taller actualizado exitosamente.');
+}
 
     public function destroy(Taller $taller)
     {

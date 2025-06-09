@@ -14,6 +14,19 @@
                 @csrf
                 @method('PUT')
 
+                <div class="mb-3">
+                    <label for="capitan_id" class="form-label">Capitán del Equipo</label>
+                    <select name="capitan_id" id="capitan_id" class="form-select" required>
+                        <option value="">Selecciona un capitán</option>
+                        @foreach($usuarios as $usuario)
+                            <option value="{{ $usuario->id_usuario }}" {{ $equipo->capitan_id == $usuario->id_usuario ? 'selected' : '' }}>
+                                {{ $usuario->rut }} - {{ $usuario->nombre }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <div id="usuario-error" class="text-danger mt-2" style="display:none;"></div>
+                </div>
+
                 <div class="mb-4">
                     <h6>Integrantes disponibles <small class="text-muted">(Máx: {{ $deporte->jugadores_por_equipo }})</small></h6>
                     <div class="row">

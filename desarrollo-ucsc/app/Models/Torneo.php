@@ -9,27 +9,18 @@ class Torneo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nombre_torneo', 'id_sucursal', 'id_deporte', 'max_equipos'];
+    protected $fillable = ['nombre_torneo', 'id_sucursal', 'id_deporte', 'max_equipos', 'tipo_competencia'];
 
-    /**
-     * Relación con la sucursal.
-     */
     public function sucursal()
     {
-        return $this->belongsTo(Sucursal::class, 'id_sucursal', 'id_suc');
+        return $this->belongsTo(Sucursal::class, 'id_sucursal');
     }
 
-    /**
-     * Relación con el deporte.
-     */
     public function deporte()
     {
-        return $this->belongsTo(Deporte::class, 'id_deporte', 'id_deporte');
+        return $this->belongsTo(Deporte::class, 'id_deporte');
     }
 
-    /**
-     * Relación con los equipos.
-     */
     public function equipos()
     {
         return $this->belongsToMany(Equipo::class, 'torneo_equipo', 'torneo_id', 'equipo_id');

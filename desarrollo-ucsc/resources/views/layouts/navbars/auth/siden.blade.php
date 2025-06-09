@@ -43,6 +43,14 @@
                                     </a>
                                 </li>
                             @endcan
+                            @can('Acceso al Mantenedor de Alumnos')
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'docentes.index' ? 'active' : '' }}"
+                                        href="{{ route('docentes.index') }}">
+                                        <i class="fas fa-chalkboard-teacher text-purple text-sm opacity-10"></i> Docentes {{-- Icono y color a tu gusto --}}
+                                    </a>
+                                </li>
+                            @endcan
                         </ul>
                     </div>
                 </li>

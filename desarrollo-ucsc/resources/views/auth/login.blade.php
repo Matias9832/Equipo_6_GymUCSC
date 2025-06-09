@@ -28,7 +28,7 @@
                                         @csrf
                                         @method('post')
                                         <div class="flex flex-col mb-3">
-                                            <input type="text" name="rut" class="form-control form-control-lg" placeholder="Rut sin puntos, ni dígito verificador" value="{{ old('rut') }}" required>
+                                            <input type="text" name="rut" class="form-control form-control-lg" placeholder="RUT sin puntos, ni dígito verificador" value="{{ old('rut') }}" required>
                                         </div>
                                         <div class="flex flex-col mb-3">
                                             <input type="password" name="password" class="form-control form-control-lg" placeholder="Ingrese su contraseña" required>

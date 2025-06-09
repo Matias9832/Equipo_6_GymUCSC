@@ -1,23 +1,14 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Crear Taller'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Talleres'])
     <div class="container-fluid py-4">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10">
                 <div class="card">
                     <div class="card-header pb-0">
-                        <h6>Crear Taller</h6>
+                        <h5>Crear Taller</h5>
                     </div>
-                    @if($errors->any())
-                        <div class="alert alert-danger">
-                            <ul class="mb-0">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
                     <div class="card-body">
                         <form action="{{ route('talleres.store') }}" method="POST">
                             @csrf
@@ -28,29 +19,29 @@
                                 <label for="activo_taller" class="form-check-label">Taller activo</label>
                             </div>
                             <div class="mb-3">
-                                <label for="nombre_taller" class="form-label">Nombre Taller</label>
-                                <input type="text" name="nombre_taller" id="nombre_taller" class="form-control"
+                                <label for="nombre_taller" class="form-label">Nombre</label>
+                                <input type="text" name="nombre_taller" id="nombre_taller" placeholder="Nombre del taller" class="form-control {{ $errors->has('nombre_taller') ? 'is-invalid' : '' }}"
                                     value="{{ old('nombre_taller') }}" required maxlength="100">
-                                @error('nombre_taller') <small class="text-danger">{{ $message }}</small> @enderror
+                                @error('nombre_taller') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="descripcion_taller" class="form-label">Descripción</label>
-                                <textarea name="descripcion_taller" id="descripcion_taller" class="form-control" rows="3"
+                                <textarea name="descripcion_taller" id="descripcion_taller" placeholder="Descripción sobre qué trata el taller" class="form-control {{ $errors->has('descripcion_taller') ? 'is-invalid' : '' }}" rows="3"
                                     required>{{ old('descripcion_taller') }}</textarea>
-                                @error('descripcion_taller') <small class="text-danger">{{ $message }}</small> @enderror
+                                @error('descripcion_taller') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label for="cupos_taller" class="form-label">Cupos</label>
-                                <input type="number" name="cupos_taller" id="cupos_taller" class="form-control"
+                                <input type="number" name="cupos_taller" id="cupos_taller" placeholder="Cantidad de cupos disponibles para el taller" class="form-control {{ $errors->has('cupos_taller') ? 'is-invalid' : '' }}"
                                     value="{{ old('cupos_taller') }}" required min="1">
-                                @error('cupos_taller') <small class="text-danger">{{ $message }}</small> @enderror
+                                @error('cupos_taller') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                             
                             <div class="mb-3">
                                 <label for="id_admin" class="form-label">Profesor asignado</label>
-                                <select name="id_admin" id="id_admin" class="form-select">
+                                <select name="id_admin" id="id_admin" class="form-select {{ $errors->has('id_admin') ? 'is-invalid' : '' }}">
                                     <option value="">-- Sin asignar --</option>
                                     @foreach($admins as $admin)
                                         <option value="{{ $admin->id_admin }}" {{ old('id_admin') == $admin->id_admin ? 'selected' : '' }}>
@@ -58,12 +49,12 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('id_admin') <small class="text-danger">{{ $message }}</small> @enderror
+                                @error('id_admin') <div class="invalid-feedback">{{ $message }}</div> @enderror
                             </div>
                             
                             <div class="mb-3">
                                 <label for="id_espacio" class="form-label">Espacio</label>
-                                <select name="id_espacio" id="id_espacio" class="form-select">
+                                <select name="id_espacio" id="id_espacio" class="form-select {{ $errors->has('id_espacio') ? 'is-invalid' : '' }}">
                                     <option value="">-- Sin asignar --</option>
                                     @foreach($espacios as $espacio)
                                         <option value="{{ $espacio->id_espacio }}" {{ old('id_espacio') == $espacio->id_espacio ? 'selected' : '' }}>
@@ -71,42 +62,57 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('id_espacio') <small class="text-danger">{{ $message }}</small> @enderror
-                            </div>                            
+                                @error('id_espacio') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>             
                             <hr>
                             <h6>Horarios</h6>
 
                             @php
                                 $diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                                $horarios_old = old('horarios', []); // Obtiene los horarios previos o un array vacío
                             @endphp
 
-                            <div id="horarios-container">
-                                <div class="row mb-2 horario-item">
-                                    <div class="col-md-3">
-                                        <select name="horarios[0][dia]" class="form-select" required>
-                                            <option value="">-- Día --</option>
-                                            @foreach($diasSemana as $dia)
-                                                <option value="{{ $dia }}">{{ $dia }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="time" name="horarios[0][hora_inicio]" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="time" name="horarios[0][hora_termino]" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-3 d-flex align-items-center">
-                                        <button type="button" class="btn btn-danger btn-sm remove-horario d-none">Eliminar</button>
-                                    </div>
-                                </div>
+                            <div id="horarios-container" data-dias-semana="{{ json_encode($diasSemana) }}" data-index-inicial="{{ count($horarios_old) }}">
+                                @if (count($horarios_old) > 0)
+                                    {{-- Si hay horarios antiguos (ej. después de un error de validación), mostrarlos --}}
+                                    @foreach($horarios_old as $i => $horario)
+                                        <div class="row my-2 horario-item">
+                                            <input type="hidden" name="horarios[{{ $i }}][id]" value="{{ $horario['id'] ?? '' }}">
+                                            <div class="col-md-3">
+                                                <select name="horarios[{{ $i }}][dia]" class="form-select {{ $errors->has('horarios.' . $i . '.dia') ? 'is-invalid' : '' }}">
+                                                    <option value="">-- Día --</option>
+                                                    @foreach($diasSemana as $dia)
+                                                        <option value="{{ $dia }}" @selected(isset($horario['dia']) && $horario['dia'] === $dia)>{{ $dia }}</option>
+                                                    @endforeach
+                                                </select>
+                                                @error('horarios.' . $i . '.dia')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="horarios[{{ $i }}][hora_inicio]" class="form-control time-picker {{ $errors->has('horarios.' . $i . '.hora_inicio') ? 'is-invalid' : '' }}" placeholder="Hora inicio" value="{{ $horario['hora_inicio'] ?? '' }}">
+                                                @error('horarios.' . $i . '.hora_inicio')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="text" name="horarios[{{ $i }}][hora_termino]" class="form-control time-picker {{ $errors->has('horarios.' . $i . '.hora_termino') ? 'is-invalid' : '' }}" placeholder="Hora término" value="{{ $horario['hora_termino'] ?? '' }}">
+                                                @error('horarios.' . $i . '.hora_termino')
+                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                            <div class="col-md-3 d-flex align-items-center">
+                                                <button type="button" class="btn btn-danger btn-sm remove-horario">Eliminar</button>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif    
                             </div>
-
                             <button type="button" class="btn btn-secondary btn-sm mt-2" id="agregar-horario">+ Añadir Horario</button>
 
-                            <div class="mt-3">
+                            <div class="d-flex justify-content-end gap-2 mt-4">
                                 <button type="submit" class="btn btn-primary ">Crear</button>
-                                <a href="{{ route('talleres.index') }}" class="btn btn-link ">Cancelar</a>
+                                <a href="{{ route('talleres.index') }}" class="btn btn-outline-secondary ">Cancelar</a>
                             </div>
                         </form>
                     </div>
@@ -117,41 +123,81 @@
     </div>
     @push('scripts')
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        let index = 1;
-
-        document.getElementById('agregar-horario').addEventListener('click', function () {
+        document.addEventListener('DOMContentLoaded', function () {
             const container = document.getElementById('horarios-container');
-            const original = container.querySelector('.horario-item');
-            const clone = original.cloneNode(true);
+            const diasSemana = JSON.parse(container.dataset.diasSemana);
+            let index = parseInt(container.dataset.indexInicial, 10);
 
-            clone.querySelectorAll('select, input').forEach(input => {
-                input.name = input.name.replace(/\[\d+\]/, `[${index}]`);
-                input.value = '';
-            });
-
-            clone.querySelector('.remove-horario').classList.remove('d-none');
-            clone.querySelector('.remove-horario').addEventListener('click', function () {
-                clone.remove();
-            });
-
-            container.appendChild(clone);
-            index++;
-        });
-    });
-
-    document.addEventListener('input', function (e) {
-        if (e.target && e.target.matches('input[name$="[hora_termino]"]')) {
-            const termino = e.target;
-            // Busca el input de hora_inicio en el mismo horario-item
-            const row = termino.closest('.horario-item');
-            const inicio = row.querySelector('input[name$="[hora_inicio]"]');
-            termino.setCustomValidity('');
-            if (termino.value && inicio.value && termino.value <= inicio.value) {
-                termino.setCustomValidity('La hora término debe ser posterior a la hora inicio.');
+            function initTimePickers(element = document) {
+                flatpickr(element.querySelectorAll('.time-picker'), {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    time_24hr: true,
+                    minuteIncrement: 5
+                });
             }
-        }
-    });
+
+            // Inicializa los time-pickers existentes (si hay errores y se recargó la página)
+            initTimePickers();
+
+            document.getElementById('agregar-horario').addEventListener('click', function () {
+                const newRow = document.createElement('div');
+                newRow.classList.add('row', 'my-2', 'horario-item');
+
+                let selectDiaOptions = `<option value="">-- Día --</option>`;
+                diasSemana.forEach(dia => {
+                    selectDiaOptions += `<option value="${dia}">${dia}</option>`;
+                });
+
+                newRow.innerHTML = `
+                    <input type="hidden" name="horarios[${index}][id]" value="">
+                    <div class="col-md-3">
+                        <select name="horarios[${index}][dia]" class="form-select" required>${selectDiaOptions}</select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="horarios[${index}][hora_inicio]" class="form-control time-picker" placeholder="Hora inicio" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" name="horarios[${index}][hora_termino]" class="form-control time-picker" placeholder="Hora término" required>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-center">
+                        <button type="button" class="btn btn-danger btn-sm remove-horario">Eliminar</button>
+                    </div>
+                `;
+                
+                container.appendChild(newRow);
+                initTimePickers(newRow); // Inicializa flatpickr solo para la nueva fila
+                index++;
+            });
+
+            // Delegación de eventos para el botón eliminar
+            container.addEventListener('click', function(e) {
+                if (e.target && e.target.classList.contains('remove-horario')) {
+                    e.target.closest('.horario-item').remove();
+                }
+            });
+
+            // Delegación de eventos para la validación en tiempo real (hora_termino > hora_inicio)
+            container.addEventListener('input', function (e) {
+                if (e.target && e.target.matches('input[name$="[hora_termino]"]')) {
+                    const terminoInput = e.target;
+                    const row = terminoInput.closest('.horario-item');
+                    const inicioInput = row.querySelector('input[name$="[hora_inicio]"]');
+                    
+                    terminoInput.setCustomValidity(''); // Limpia cualquier mensaje anterior
+                    if (terminoInput.value && inicioInput.value) {
+                        const inicioTime = new Date(`2000/01/01 ${inicioInput.value}`);
+                        const terminoTime = new Date(`2000/01/01 ${terminoInput.value}`);
+
+                        if (terminoTime <= inicioTime) {
+                            terminoInput.setCustomValidity('La hora de término debe ser posterior a la hora de inicio.');
+                            terminoInput.reportValidity(); // Muestra el globo de error
+                        }
+                    }
+                }
+            });
+        });
     </script>
     @endpush
 @endsection
