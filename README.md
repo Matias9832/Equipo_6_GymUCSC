@@ -74,6 +74,7 @@ Crear un seeder, ayuda a cargar datos de manera automatica, para ejecutar un sed
 Para ejecutar todos los sedders:
 
 > php artisan db:seed
+> php artisan db:seed --class=Database/Seeders/CentralSeeder
 
 Para ejecutar un sedder en especifico:
 
