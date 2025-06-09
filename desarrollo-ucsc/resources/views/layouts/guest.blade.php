@@ -20,11 +20,24 @@
     <link href="{{ url('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ url('assets/css/argon-dashboard.css') }}" rel="stylesheet" />
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <!-- Se pretende cambiar la fuente a travez de una variable (Cambio por aplicar) -->
+
+    @php
+        use App\Models\Tenants\TemaTenant;
+
+        // Se obtiene el tenant actual usando Tenancy
+        $tenant = tenancy()->tenant ?? null;
+
+        $tema = $tenant
+            ? TemaTenant::where('tenant_id', $tenant->id)->first()
+            : null;
+    @endphp
+
+    @include('layouts.colors.tema-css', ['tema' => $tema])
 </head>
 
 <body class="{{ $class ?? '' }}">
