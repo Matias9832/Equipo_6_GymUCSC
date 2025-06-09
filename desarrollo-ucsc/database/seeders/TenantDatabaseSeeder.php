@@ -9,6 +9,6 @@ class TenantDatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call(DatabaseSeeder::class);
+        $this->call(DatabaseSeeder_tenant::class);
     }
 }
