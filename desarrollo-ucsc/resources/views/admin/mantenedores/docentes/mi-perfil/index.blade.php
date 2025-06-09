@@ -28,7 +28,12 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="configuracionDropdown">
                             <li>
-                                <a class="dropdown-item" href="javascript:;">
+                                <form id="form-foto" action="{{ route('docentes.foto.update') }}" method="POST" enctype="multipart/form-data" style="display: none;">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="file" name="foto_perfil" id="input_foto" accept="image/*">
+                                </form>
+                                <a class="dropdown-item" href="javascript:;" onclick="document.getElementById('input_foto').click();">
                                     <i class="ni ni-image me-2 text-primary"></i> Cambiar foto de perfil
                                 </a>
                             </li>
@@ -182,4 +187,15 @@
         </div>
     </div>
     @include('layouts.footers.auth.footer')
+    <script>
+    document.getElementById('input_foto').addEventListener('change', function () {
+        const file = this.files[0];
+        if (file && file.size > 2 * 1024 * 1024) { // 2MB en bytes
+            alert('La imagen supera el límite de 2 MB.');
+            this.value = ''; // limpia el input
+        } else {
+            document.getElementById('form-foto').submit();
+        }
+    });
+</script>
 @endsection

@@ -222,7 +222,6 @@ Route::middleware([
         // Usuarios
         Route::middleware(['permission:Ver Usuarios'])->group(function () {
             Route::get('usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
-            Route::get('/mi-perfil', [DocenteController::class, 'indexPerfil'])->name('docentes.perfil');
         });
         Route::middleware(['permission:Crear Usuarios'])->group(function () {
             Route::get('usuarios/create', [UsuarioController::class, 'create'])->name('usuarios.create');
@@ -239,6 +238,8 @@ Route::middleware([
         
         // Rutas para el mantenedor de Docentes
         Route::middleware(['permission:Ver Docentes'])->group(function () {
+            Route::get('/mi-perfil', [DocenteController::class, 'indexPerfil'])->name('docentes.perfil');
+            Route::put('/docentes/mi-perfil/foto', [DocenteController::class, 'updateFoto'])->name('docentes.foto.update');
             Route::get('docentes', [DocenteController::class, 'index'])->name('docentes.index');
         });    
         Route::middleware(['permission:Crear Docentes'])->group(function () {
