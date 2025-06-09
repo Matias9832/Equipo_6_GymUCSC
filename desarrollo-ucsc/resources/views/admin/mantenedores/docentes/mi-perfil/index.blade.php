@@ -38,6 +38,11 @@
                                 </a>
                             </li>
                             <li>
+                                <a class="dropdown-item" href="{{ route('salud.edit') }}">
+                                    <i class="ni ni-collection me-2 text-warning"></i> Editar información de salud
+                                </a>
+                            </li>
+                            <li>
                                 <a class="dropdown-item" href="{{ route('edit-perfil.edit') }}">
                                     <i class="ni ni-lock-circle-open me-2 text-warning"></i> Cambiar contraseña
                                 </a>

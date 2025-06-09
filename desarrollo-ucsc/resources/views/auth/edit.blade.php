@@ -89,11 +89,13 @@
                                     @endif    
                                 </div>
                             </form>
-                            <div class="mt-3 text-center">
-                                <a href="{{ route('salud.edit') }}" class="btn btn-outline-danger w-100">
-                                    Editar Información de Salud
-                                </a>
-                            </div>
+                            @if (auth()->user()->tipo_usuario !== 'admin')
+                                <div class="mt-3 text-center">
+                                    <a href="{{ route('salud.edit') }}" class="btn btn-outline-danger w-100">
+                                        Editar Información de Salud
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
