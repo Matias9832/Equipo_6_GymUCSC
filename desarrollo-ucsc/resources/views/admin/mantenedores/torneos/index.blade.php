@@ -43,19 +43,36 @@
                                                 </form>
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('torneos.iniciar', $torneo->id) }}" class="btn btn-sm btn-success ms-1">
-                                                    <i class="fas fa-play"></i> Iniciar Torneo
-                                                </a>
+                                                @if(!\App\Models\Partido::where('torneo_id', $torneo->id)->exists())
+                                                    <a href="{{ route('torneos.iniciar', $torneo->id) }}" class="btn btn-sm btn-success ms-1">
+                                                        <i class="fas fa-play"></i> Iniciar Torneo
+                                                    </a>
+                                                @endif
                                                 <a href="{{ route('torneos.partidos', $torneo->id) }}" class="btn btn-sm btn-info ms-1">
                                                     <i class="fas fa-futbol"></i> Partidos
                                                 </a>
-                                                <a href="{{ route('torneos.tabla', $torneo->id) }}" class="btn btn-sm btn-warning ms-1">
-                                                    <i class="fas fa-list-ol"></i> Tabla
-                                                </a>
-                                                @if($torneo->tipo_competencia === 'copa')
-                                                <a href="{{ route('torneos.copa', $torneo->id) }}" class="btn btn-sm btn-dark ms-1">
-                                                    <i class="fas fa-sitemap"></i> Llaves
-                                                </a>
+                                                @if($torneo->fase_grupos)
+                                                    <a href="#" class="btn btn-sm btn-warning ms-1">
+                                                        <i class="fas fa-list-ol"></i> Fase de Grupos
+                                                    </a>
+                                                    {{-- Aquí deberías agregar una condición para verificar si la fase de grupos ha finalizado --}}
+                                                    {{-- Por ejemplo, podrías agregar un campo "fase_grupos_finalizada" en la tabla "torneos" --}}
+                                                    {{-- y verificar si ese campo es true --}}
+                                                    @if($torneo->fase_grupos_finalizada)
+                                                        <a href="{{ route('torneos.copa', $torneo->id) }}" class="btn btn-sm btn-dark ms-1">
+                                                            <i class="fas fa-sitemap"></i> Llaves
+                                                        </a>
+                                                    @endif
+                                                @else
+                                                    @if($torneo->tipo_competencia === 'copa')
+                                                        <a href="{{ route('torneos.copa', $torneo->id) }}" class="btn btn-sm btn-dark ms-1">
+                                                            <i class="fas fa-sitemap"></i> Llaves
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('torneos.tabla', $torneo->id) }}" class="btn btn-sm btn-warning ms-1">
+                                                            <i class="fas fa-list-ol"></i> Tabla
+                                                        </a>
+                                                    @endif
                                                 @endif
                                             </td>
                                         </tr>

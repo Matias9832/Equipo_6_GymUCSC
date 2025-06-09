@@ -9,7 +9,19 @@ class Torneo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nombre_torneo', 'id_sucursal', 'id_deporte', 'max_equipos', 'tipo_competencia'];
+    protected $fillable = [
+        'nombre_torneo',
+        'id_sucursal',
+        'id_deporte',
+        'max_equipos',
+        'tipo_competencia',
+        'fase_grupos',
+        'numero_grupos',
+        'equipos_por_grupo',
+        'partidos_ida_vuelta',
+        'tercer_lugar',
+        'fase_grupos_finalizada'
+    ];
 
     public function sucursal()
     {
