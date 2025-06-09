@@ -20,7 +20,7 @@ class NewsController extends Controller
 
     public function index()
     {
-        $news = News::with('administrador')->orderByDesc('fecha_noticia')->paginate(3);
+        $news = News::with('administrador')->orderByDesc('fecha_noticia')->paginate(6);
 
         $sucursalesConSalas = Sucursal::with('salas')
             ->where('id_marca', 1)

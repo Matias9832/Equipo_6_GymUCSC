@@ -34,54 +34,58 @@
                             </div>   
                         @endif
                         
-                        @foreach ($news as $noticias)
-                            <div class="card mb-4 shadow-sm text-start" style="background-color: #f9f9f9;">
-                                <div class="row g-0 flex-column flex-md-row">
-                                    <div class="col-md-4 d-flex align-items-center justify-content-center bg-light" style="padding: 5px;">
-                                        @if ($noticias->images->count())
-                                            <img src="{{ asset($noticias->images->first()->image_path) }}"  
-                                                class="img-fluid rounded-start p-2" 
-                                                alt="Imagen de la noticia" 
-                                                style="max-height: 200px; object-fit: contain; width: 100%;">
-                                        @else
-                                            <div class="d-flex flex-column align-items-center justify-content-center text-muted" style="height: 180px; width: 100%;">
-                                                <i class="ni ni-image" style="font-size: 3rem;"></i>
-                                                <small>Imagen no disponible</small>
-                                            </div>
-                                        @endif
-                                    </div>
-                                    <div class="col-md-8">
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            @foreach ($news as $noticias)
+                                <div class="col">
+                                    <div class="card h-100 shadow-sm position-relative text-start overflow-hidden" style="border-radius: 1rem;">
+
+                                        {{-- Imagen --}}
+                                        <div style="height: 200px; overflow: hidden; background-color: #f9f9f9;" >
+                                             @if ($noticias->images->count())
+                                                <img src="{{ asset('img/' . $noticias->images->first()->image_path) }}"
+                                                    alt="Imagen noticia"
+                                                    class="w-100 h-100"
+                                                    style="object-fit: cover;">
+                                            @else
+                                                <div class="bg-light d-flex justify-content-center align-items-center h-100 text-muted">
+                                                    <i class="ni ni-image" style="font-size: 2rem;"></i>
+                                                </div>
+                                            @endif
+                                        <br>
+                                        <span class="badge bg-danger mb-2">{{ $noticias->tipo_deporte }}</span>
+                                        </div>
+
                                         @if(Auth::check() && Auth::user()->is_admin)
-                                            <div class="d-flex justify-content-end mt-2">
-                                                <a href="{{ route('news.edit', $noticias->id_noticia) }}" class="btn btn-sm btn-info me-2">
+                                            <div class="position-absolute top-0 end-0 m-2 d-flex z-1">
+                                                <a href="{{ route('news.edit', $noticias->id_noticia) }}" class="btn btn-sm btn-info me-1 px-2 py-1" title="Editar">
                                                     <i class="fas fa-pen-to-square"></i>
                                                 </a>
                                                 <form action="{{ route('news.destroy', $noticias->id_noticia) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar esta noticia?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                    <button type="submit" class="btn btn-sm btn-danger px-2 py-1" title="Eliminar">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </form>
                                             </div>
                                         @endif
-                                        <div class="card-body">
+
+                                        <div class="bg-white p-3" style="min-height: 150px;">
+
                                             <a href="{{ route('news.show', $noticias->id_noticia) }}" class="text-decoration-none text-dark">
                                                 <h5 class="card-title">{{ $noticias->nombre_noticia }}</h5>
-                                                <p class="card-text">{{ Str::limit($noticias->descripcion_noticia, 100, '...') }}</p>
                                             </a>
+
+                                            <small class="text-muted d-block mt-2">
+                                                {{ \Carbon\Carbon::parse($noticias->fecha_noticia)->format('d M Y') }} – 
+                                                {{ $noticias->administrador->nombre_admin }}.
+                                            </small>
                                         </div>
-                                        <div class="card-footer bg-transparent border-0">
-                                            <small class="text-muted">
-                                                {{ \Carbon\Carbon::parse($noticias->fecha_noticia)->format('d M Y') }} -
-                                                {{ $noticias->administrador->nombre_admin }} -
-                                                {{ $noticias->tipo_deporte }}
-                                            </small>   
-                                        </div>
+
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>   
                     </div>    
                 @endif
 
