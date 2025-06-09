@@ -113,26 +113,63 @@
             <!-- Tarjeta lateral -->
             <div class="col-md-4">
                 <div class="card card-profile">
+                    <!-- Imagen de cabecera -->
                     <img src="/img/gym/foto-gimnasio.jpeg" alt="Image placeholder" class="card-img-top">
+
+                    <!-- Foto de perfil superpuesta -->
                     <div class="row justify-content-center">
                         <div class="col-4 col-lg-4 order-lg-2">
-                            <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
-                                <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}" class="rounded-circle img-fluid border border-2 border-white">
+                            <div class="mt-n7 position-relative z-index-2">
+                                <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}"
+                                    class="rounded-circle img-fluid border border-3 border-white shadow"
+                                    style="width: 120px; height: 120px; object-fit: cover;">
                             </div>
                         </div>
                     </div>
+
+                    <!-- Cuerpo de la tarjeta -->
                     <div class="card-body pt-0">
-                        <div class="text-center mt-4">
-                            <h5>{{ $administrador->nombre_admin }}</h5>
-                            <div class="h6 font-weight-300">
+                        <div class="text-center mt-3">
+                            <h5 class="mb-1">{{ $administrador->nombre_admin }}</h5>
+                            <div class="h6 font-weight-300 text-muted">
                                 {{ $administrador->descripcion_cargo ?? $rol }}
                             </div>
-                            <div class="h6 mt-4">
-                                <i class="ni business_briefcase-24 mr-2"></i>Sucursal: {{ $sucursal->nombre_suc ?? '' }}
-                            </div>
-                            <div>
-                                <i class="ni education_hat mr-2"></i>{{ $administrador->descripcion_ubicacion ?? '' }}
-                            </div>
+
+                            @if($sucursal)
+                                <div class="mt-2">
+                                    <i class="ni ni-pin-3 me-1"></i> {{ $sucursal->nombre_suc }}
+                                </div>
+                            @endif
+
+                            @if($administrador->descripcion_ubicacion)
+                                <div>
+                                    <i class="ni ni-map-big me-1"></i> {{ $administrador->descripcion_ubicacion }}
+                                </div>
+                            @endif
+
+                            @if($administrador->numero_contacto)
+                                <div class="mt-2">
+                                    <i class="ni ni-mobile-button me-1"></i> {{ $administrador->numero_contacto }}
+                                </div>
+                            @endif
+
+                            @if($administrador->sobre_mi)
+                                <div class="mt-3 px-3">
+                                    <p class="text-sm text-dark fst-italic" style="white-space: pre-wrap;">"{{ $administrador->sobre_mi }}"</p>
+                                </div>
+                            @endif
+
+                            @if($talleres && $talleres->count())
+                                <hr class="horizontal dark mt-3 mb-2">
+                                <h6 class="text-sm text-primary text-uppercase mb-2">Talleres a cargo</h6>
+                                <ul class="list-unstyled text-start ps-4">
+                                    @foreach($talleres as $taller)
+                                        <li class="mb-1">
+                                            <i class="ni ni-hat-3 text-success me-2"></i> {{ $taller->nombre_taller }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         </div>
                     </div>
                 </div>

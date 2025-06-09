@@ -7,7 +7,7 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                        <h6>Lista de Talleres</h6>
+                        <h5>Lista de Talleres</h5>
                         <a href="{{ route('talleres.create') }}" class="btn btn-primary btn-sm">Crear Taller</a>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">

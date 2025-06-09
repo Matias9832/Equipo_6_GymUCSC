@@ -36,11 +36,11 @@ class DocenteController extends Controller
                     $query->wherePivot('activa', true);
                 }
             ])->first();
-
+        $talleres = $administrador->talleres;
         $rol = $admin->roles->pluck('name')->first(); // Solo un rol
         $sucursal = $administrador->sucursales->first();
 
-        return view('admin.mantenedores.docentes.mi-perfil.index', compact('administrador', 'admin', 'rol', 'sucursal'));
+        return view('admin.mantenedores.docentes.mi-perfil.index', compact('administrador', 'admin', 'rol', 'sucursal','talleres'));
     }
 
     public function data(Request $request)
