@@ -13,7 +13,9 @@ class PermisoController extends Controller
      */
     public function index()
     {
-        $permisos = Permiso::orderBy('nombre_permiso')->paginate(10);
+        $permisos = Permiso::orderBy('subpermisos')
+            ->orderBy('nombre_permiso')
+            ->paginate(5);
 
         return view('tenants.plan.permisos.index', compact('permisos'));
     }
@@ -23,7 +25,8 @@ class PermisoController extends Controller
      */
     public function create()
     {
-        return view('tenants.plan.permisos.create');
+        $subpermisos = Permiso::select('subpermisos')->distinct()->orderBy('subpermisos')->pluck('subpermisos');
+        return view('tenants.plan.permisos.create', compact('subpermisos'));
     }
 
     /**
@@ -32,13 +35,34 @@ class PermisoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre_permiso' => 'required|string|max:100|unique:permiso,nombre_permiso',
+            'nombre_permiso' => 'required|string|max:100',
+            'subpermisos' => 'nullable|string|max:100',
+            'nuevo_subpermisos' => 'nullable|string|max:100',
         ]);
+
+        $subgrupo = $request->nuevo_subpermisos ?: $request->subpermisos;
 
         Permiso::create([
             'nombre_permiso' => $request->nombre_permiso,
+            'subpermisos' => $subgrupo,
         ]);
 
         return redirect()->route('plan.permisos.index')->with('success', 'Permiso creado correctamente.');
     }
+
+    public function destroy($id)
+    {
+        $permiso = Permiso::findOrFail($id);
+        $permiso->delete();
+
+        return redirect()->route('plan.permisos.index')->with('success', 'Permiso eliminado correctamente.');
+    }
+
+    public function destroySubgrupo($subgrupo)
+    {
+        Permiso::where('subpermisos', $subgrupo)->delete();
+
+        return redirect()->route('plan.permisos.index')->with('success', 'Grupo de permisos eliminado correctamente.');
+    }
+
 }

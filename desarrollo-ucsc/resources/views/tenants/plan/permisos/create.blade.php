@@ -21,6 +21,21 @@
                                 <input type="text" name="nombre_permiso" id="nombre_permiso" class="form-control" required>
                             </div>
 
+                            <div class="mb-3">
+                                <label for="subpermisos" class="form-label">Subgrupo de Permiso</label>
+                                <select name="subpermisos" id="subpermisos" class="form-control">
+                                    <option value="">-- Seleccionar un subgrupo existente --</option>
+                                    @foreach($subpermisos as $sub)
+                                        <option value="{{ $sub }}">{{ $sub }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="nuevo_subpermisos" class="form-label">... o ingresar uno nuevo</label>
+                                <input type="text" name="nuevo_subpermisos" id="nuevo_subpermisos" class="form-control" placeholder="Ej: Mantenedor Docentes">
+                            </div>
+
                             <div class="d-flex justify-content-between">
                                 <a href="{{ route('plan.permisos.index') }}" class="btn btn-secondary">Cancelar</a>
                                 <button type="submit" class="btn btn-primary">Guardar Permiso</button>

@@ -27,9 +27,43 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @php
+                                            $grupoActual = null;
+                                        @endphp
                                         @foreach ($permisos as $permiso)
+                                            @if ($permiso->subpermisos !== $grupoActual)
+                                                <tr class="bg-light">
+                                                    <td colspan="2"
+                                                        class="fw-bold ps-4 py-2 d-flex justify-content-between align-items-center">
+                                                        {{ $permiso->subpermisos }}
+                                                        <form
+                                                            action="{{ route('plan.permisos.destroySubgrupo', $permiso->subpermisos) }}"
+                                                            method="POST"
+                                                            onsubmit="return confirm('¿Estás seguro de eliminar todos los permisos de este grupo?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-danger px-2 py-0"
+                                                                style="margin-bottom: 0px !important;" title="Eliminar grupo">
+                                                                &times;
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                                @php $grupoActual = $permiso->subpermisos; @endphp
+                                            @endif
                                             <tr>
-                                                <td class="mb-0 text-sm fw-bold ps-4">{{ $permiso->nombre_permiso }}</td>
+                                                <td class="mb-0 text-sm fw-normal ps-4  d-flex justify-content-between align-items-center">{{ $permiso->nombre_permiso }}
+                                                    <form action="{{ route('plan.permisos.destroy', $permiso) }}" method="POST"
+                                                        onsubmit="return confirm('¿Eliminar este permiso?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-link text-danger p-0 m-0"
+                                                            title="Eliminar permiso"
+                                                            style="font-weight: bold; font-size: 1.2rem; line-height: 1;">
+                                                            &times;
+                                                        </button>
+                                                    </form>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
