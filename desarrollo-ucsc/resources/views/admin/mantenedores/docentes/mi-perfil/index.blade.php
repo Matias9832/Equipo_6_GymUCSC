@@ -38,7 +38,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="javascript:;">
+                                <a class="dropdown-item" href="{{ route('docentes.contacto.edit') }}">
                                     <i class="ni ni-single-copy-04 me-2 text-info"></i> Editar información de contacto
                                 </a>
                             </li>
@@ -69,25 +69,25 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Nombres</label>
-                                    <input class="form-control" type="text" value="{{ $administrador->nombre_admin }}" readonly>
+                                    <input class="form-control readonly-input" type="text" value="{{ $administrador->nombre_admin }}" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Correo electrónico</label>
-                                    <input class="form-control" type="text" value="{{ $admin->correo_usuario }}" readonly>
+                                    <input class="form-control readonly-input" type="text" value="{{ $admin->correo_usuario }}" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Rol asignado</label>
-                                    <input class="form-control" type="text" value="{{ $rol }}" readonly>
+                                    <input class="form-control readonly-input" type="text" value="{{ $rol }}" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Sucursal</label>
-                                    <input class="form-control" type="text" value="{{ $sucursal->nombre_suc ?? 'Sin sucursal' }}" readonly>
+                                    <input class="form-control readonly-input" type="text" value="{{ $sucursal->nombre_suc ?? 'Sin sucursal' }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -97,13 +97,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Número de contacto</label>
-                                    <input class="form-control" type="text" value="{{ $administrador->numero_contacto ?? 'Puedes agregar aquí un número de contacto' }}" readonly>
+                                    <input class="form-control readonly-input" type="text" value="{{ $administrador->numero_contacto}}" placeholder="Puedes agregar aquí un número de contacto" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Descripción de ubicación</label>
-                                    <input class="form-control" type="text" value="{{ $administrador->descripcion_ubicacion ?? 'Puedes poner aquí dónde encontrar tu puesta de trabajo' }}" readonly>
+                                    <input class="form-control readonly-input" type="text" value="{{ $administrador->descripcion_ubicacion}}" placeholder="Puedes poner aquí dónde encontrar tu puesto de trabajo" readonly>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +112,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <textarea class="form-control" rows="4" readonly style="width: 100%; overflow-wrap: break-word;">{{ $administrador->sobre_mi ?? 'Agrega aquí una breve descripción sobre ti.' }}</textarea>
+                                    <textarea class="form-control readonly-input" rows="4" readonly placeholder="Agrega aquí una breve descripción sobre ti" style="width: 100%; overflow-wrap: break-word;">{{ $administrador->sobre_mi ?? '' }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -127,16 +127,13 @@
                     <img src="/img/gym/foto-gimnasio.jpeg" alt="Image placeholder" class="card-img-top">
 
                     <!-- Foto de perfil superpuesta -->
-                    <div class="row justify-content-center">
-                        <div class="col-4 col-lg-4 order-lg-2">
-                            <div class="mt-n7 position-relative z-index-2">
-                                <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}"
-                                    class="rounded-circle img-fluid border border-2 border-white"
-                                    style="width: 120px !important; height: 120px !important; object-fit: cover;">
-                            </div>
+                    <div class="d-flex justify-content-center mt-n6">
+                        <div class="avatar position-relative mt-n6" style="width: 150px; height: 150px;">
+                            <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}"
+                                class="rounded-circle img-fluid border border-2 border-white shadow"
+                                style="object-fit: cover; width: 100%; height: 100%;">
                         </div>
-                    </div>
-
+                    </div> 
                     <!-- Cuerpo de la tarjeta -->
                     <div class="card-body pt-0">
                         <div class="text-center mt-3">
@@ -157,12 +154,13 @@
                                 </div>
                             @endif
 
-                            @if($administrador->numero_contacto)
-                                <div class="mt-2">
+                            <div class="mt-2">
+                                <i class="ni ni-email-83 me-1"></i> {{ $admin->correo_usuario }}
+                                @if($administrador->numero_contacto)
                                     <i class="ni ni-mobile-button me-1"></i> {{ $administrador->numero_contacto }}
-                                </div>
-                            @endif
-
+                                @endif
+                            </div>
+                            
                             @if($administrador->sobre_mi)
                                 <div class="mt-3 px-3">
                                     <p class="text-sm text-dark fst-italic" style="white-space: pre-wrap;">"{{ $administrador->sobre_mi }}"</p>
@@ -188,14 +186,20 @@
     </div>
     @include('layouts.footers.auth.footer')
     <script>
-    document.getElementById('input_foto').addEventListener('change', function () {
-        const file = this.files[0];
-        if (file && file.size > 2 * 1024 * 1024) { // 2MB en bytes
-            alert('La imagen supera el límite de 2 MB.');
-            this.value = ''; // limpia el input
-        } else {
-            document.getElementById('form-foto').submit();
+        document.getElementById('input_foto').addEventListener('change', function () {
+            const file = this.files[0];
+            if (file && file.size > 2 * 1024 * 1024) { // 2MB en bytes
+                alert('La imagen supera el límite de 2 MB.');
+                this.value = ''; // limpia el input
+            } else {
+                document.getElementById('form-foto').submit();
+            }
+        });
+    </script>
+    <style>
+        .readonly-input {
+            cursor: default !important;
+            pointer-events: none;
         }
-    });
-</script>
+    </style>
 @endsection
