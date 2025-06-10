@@ -71,6 +71,15 @@ Se debe montar la concección a travez de:
 
 Crear un seeder, ayuda a cargar datos de manera automatica, para ejecutar un sedder se debe:
 
+Para ejecutar todos los sedders:
+
+> php artisan db:seed
+> php artisan db:seed --class=Database/Seeders/CentralSeeder
+
+Para ejecutar un sedder en especifico:
+
+> php artisan db:seed --class=AlumnoSeeder
+
 # Implementación de DataTables
 
 # Creación de un Mantenedor
