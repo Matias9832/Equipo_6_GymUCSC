@@ -35,6 +35,19 @@
                 $rondaSiguiente = $indiceActual !== false && $indiceActual < $fechas->count() - 1 ? $fechas[$indiceActual + 1] : null;
                 // ¿Está finalizada la fecha?
                 $finalizada = isset($partidosPorRonda[$rondaSeleccionada]) && $partidosPorRonda[$rondaSeleccionada]->first()->finalizada;
+
+                // Determinar etapa
+                $etapa = '';
+                if ($torneo->fase_grupos) {
+                    $totalFechasGrupos = $torneo->equipos_por_grupo - 1;
+                    if ($rondaSeleccionada <= $totalFechasGrupos) {
+                        $etapa = 'Fase de Grupos';
+                    } else {
+                        $etapa = 'Eliminatoria';
+                    }
+                } else {
+                    $etapa = 'Liga';
+                }
             @endphp
 
             {{-- Navegación de fechas tipo paginador --}}
@@ -89,7 +102,10 @@
 
             {{-- Tabla de partidos de la fecha seleccionada --}}
             @if(isset($partidosPorRonda[$rondaSeleccionada]))
-                <h5>Fecha {{ $rondaSeleccionada }}</h5>
+                <h5>
+                    Fecha {{ $rondaSeleccionada }}
+                    <span class="badge bg-secondary ms-2">{{ $etapa }}</span>
+                </h5>
                 <div class="table-responsive">
                     <table class="table align-items-center mb-0">
                         <thead>

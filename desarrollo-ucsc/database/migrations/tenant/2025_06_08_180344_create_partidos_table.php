@@ -16,7 +16,8 @@ class CreatePartidosTable extends Migration
             $table->string('resultado_local')->nullable();
             $table->string('resultado_visitante')->nullable();
             $table->integer('ronda')->nullable(); // Para agrupar por fecha/ronda
-            $table->boolean('finalizada')->default(false); // NUEVO: indica si la fecha está finalizada
+            $table->enum('etapa', ['liga', 'fase_grupos', 'eliminatoria'])->default('liga'); // NUEVO: etapa del partido
+            $table->boolean('finalizada')->default(false); // indica si la fecha está finalizada
             $table->timestamps();
 
             $table->foreign('torneo_id')->references('id')->on('torneos')->onDelete('cascade');

@@ -12,7 +12,8 @@ class Partido extends Model
         'resultado_local',
         'resultado_visitante',
         'ronda',
-        'finalizada', // NUEVO
+        'finalizada',
+        'etapa',
     ];
 
     public function local() { return $this->belongsTo(Equipo::class, 'equipo_local_id'); }
