@@ -19,6 +19,7 @@ class CentralSeeder extends Seeder
             FuentesSeeder::class,
             ColoresSeeder::class,
             TemasSeeder::class,
+            PermisoSeeder::class,
         ]);
     }
 }

@@ -48,7 +48,10 @@
 </li>
 
 <li class="nav-item">
-    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+    <a class="nav-link d-flex justify-content-between align-items-center 
+    {{ (Route::currentRouteName() == 'planes.index' or
+    Route::currentRouteName() == 'plan.permisos.index' or
+    Route::currentRouteName() == 'plan.beneficios.index') ? 'active' : '' }}" data-bs-toggle="collapse"
         href="#submenuPlanes" role="button" aria-expanded="false" aria-controls="submenuPlanes">
         <div class="d-flex align-items-center">
             <div class="ps-1">
@@ -67,14 +70,14 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'planes.cuentas.index' ? 'active' : '' }}"
-                    href="{{ route('plan.cuentas.index') }}">
+                <a class="nav-link {{ Route::currentRouteName() == 'plan.beneficios.index' ? 'active' : '' }}"
+                    href="{{ route('plan.beneficios.index') }}">
                     <i class="ni ni-single-copy-04 text-dark text-sm opacity-10"></i>
-                    <span class="nav-link-text ms-1">Cuentas</span>
+                    <span class="nav-link-text ms-1">Beneficios</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'planes.permisos.index' ? 'active' : '' }}"
+                <a class="nav-link {{ Route::currentRouteName() == 'plan.permisos.index' ? 'active' : '' }}"
                     href="{{ route('plan.permisos.index') }}">
                     <i class="ni ni-key-25 text-dark text-sm opacity-10"></i>
                     <span class="nav-link-text ms-1">Permisos</span>
