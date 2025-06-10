@@ -200,6 +200,9 @@ Route::middleware([
             Route::get('torneos/{torneo}/tabla', [TorneoController::class, 'tabla'])->name('torneos.tabla');
             Route::put('partidos/{partido}', [TorneoController::class, 'actualizarPartido'])->name('partidos.update');
             Route::get('torneos/{torneo}/copa', [TorneoController::class, 'copa'])->name('torneos.copa');
+            Route::get('torneos/{torneo}/fase-grupos', [TorneoController::class, 'faseGrupos'])->name('torneos.fase-grupos');
+            Route::put('torneos/{torneo}/finalizar-fecha', [TorneoController::class, 'finalizarFecha'])->name('torneos.finalizar-fecha');
+            Route::post('admin/torneos/{torneo}/reiniciar', [TorneoController::class, 'reiniciar'])->name('torneos.reiniciar');
         });
 
         Route::middleware(['permission:Acceso al Mantenedor de Talleres'])->group(function () {

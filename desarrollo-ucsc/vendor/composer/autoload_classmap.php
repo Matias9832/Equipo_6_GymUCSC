@@ -77,6 +77,7 @@ return array(
     'App\\Models\\News' => $baseDir . '/app/Models/News.php',
     'App\\Models\\NewsImage' => $baseDir . '/app/Models/NewsImage.php',
     'App\\Models\\Pais' => $baseDir . '/app/Models/Pais.php',
+    'App\\Models\\Partido' => $baseDir . '/app/Models/Partido.php',
     'App\\Models\\Personalizar' => $baseDir . '/app/Models/Personalizar.php',
     'App\\Models\\Region' => $baseDir . '/app/Models/Region.php',
     'App\\Models\\Rutina' => $baseDir . '/app/Models/Rutina.php',

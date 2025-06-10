@@ -722,6 +722,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Models\\News' => __DIR__ . '/../..' . '/app/Models/News.php',
         'App\\Models\\NewsImage' => __DIR__ . '/../..' . '/app/Models/NewsImage.php',
         'App\\Models\\Pais' => __DIR__ . '/../..' . '/app/Models/Pais.php',
+        'App\\Models\\Partido' => __DIR__ . '/../..' . '/app/Models/Partido.php',
         'App\\Models\\Personalizar' => __DIR__ . '/../..' . '/app/Models/Personalizar.php',
         'App\\Models\\Region' => __DIR__ . '/../..' . '/app/Models/Region.php',
         'App\\Models\\Rutina' => __DIR__ . '/../..' . '/app/Models/Rutina.php',

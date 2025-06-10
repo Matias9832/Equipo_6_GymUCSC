@@ -32,9 +32,12 @@
                         <option value="encuentro">Encuentro</option>
                     </select>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" id="max-equipos-div">
                     <label for="max_equipos" class="form-label">Máximo de Equipos</label>
-                    <input type="number" name="max_equipos" id="max_equipos" class="form-control" required>
+                    <select name="max_equipos" id="max_equipos" class="form-select" required>
+                        <option value="">Seleccione...</option>
+                        <!-- Opciones generadas por JS si es copa -->
+                    </select>
                 </div>
 
                 <div id="opciones-copa" style="display: none;">
@@ -49,12 +52,18 @@
                     <div id="opciones-grupos" style="display: none;">
                         <div class="mb-3">
                             <label for="numero_grupos" class="form-label">Número de grupos</label>
-                            <input type="number" name="numero_grupos" id="numero_grupos" class="form-control" min="1">
+                            <select name="numero_grupos" id="numero_grupos" class="form-select">
+                                <option value="">Seleccione...</option>
+                                <!-- Opciones generadas por JS -->
+                            </select>
                         </div>
-
+                        
                         <div class="mb-3">
-                            <label for="equipos_por_grupo" class="form-label">Equipos que clasifican por grupo</label>
-                            <input type="number" name="equipos_por_grupo" id="equipos_por_grupo" class="form-control" min="1">
+                            <label for="clasifican_por_grupo" class="form-label">Equipos que clasifican por grupo</label>
+                            <select name="clasifican_por_grupo" id="clasifican_por_grupo" class="form-select">
+                                <option value="">Seleccione...</option>
+                                <!-- Opciones generadas por JS -->
+                            </select>
                         </div>
                     </div>
 
@@ -90,28 +99,81 @@
         const opcionesCopaDiv = document.getElementById('opciones-copa');
         const faseGruposSelect = document.getElementById('fase_grupos');
         const opcionesGruposDiv = document.getElementById('opciones-grupos');
+        const maxEquiposSelect = document.getElementById('max_equipos');
+        const numeroGruposSelect = document.getElementById('numero_grupos');
+        const clasificanPorGrupoSelect = document.getElementById('clasifican_por_grupo');
+        const maxEquiposDiv = document.getElementById('max-equipos-div');
+
+        // Valores permitidos para copa
+        const valoresCopa = [];
+        for(let i=4; i<=30; i+=2) valoresCopa.push(i);
 
         function toggleOpcionesCopa() {
             if (tipoCompetenciaSelect.value === 'copa') {
                 opcionesCopaDiv.style.display = 'block';
+                // Rellenar opciones de max_equipos solo para copa
+                maxEquiposSelect.innerHTML = '<option value="">Seleccione...</option>';
+                valoresCopa.forEach(function(val) {
+                    maxEquiposSelect.innerHTML += `<option value="${val}">${val}</option>`;
+                });
             } else {
                 opcionesCopaDiv.style.display = 'none';
                 opcionesGruposDiv.style.display = 'none';
+                maxEquiposSelect.innerHTML = '<option value="">Seleccione...</option>';
             }
         }
 
         function toggleOpcionesGrupos() {
             if (faseGruposSelect.value === '1') {
                 opcionesGruposDiv.style.display = 'block';
+                actualizarNumeroGrupos();
             } else {
                 opcionesGruposDiv.style.display = 'none';
             }
         }
 
-        tipoCompetenciaSelect.addEventListener('change', toggleOpcionesCopa);
-        faseGruposSelect.addEventListener('change', toggleOpcionesGrupos);
+        function actualizarNumeroGrupos() {
+            const maxEquipos = parseInt(maxEquiposSelect.value);
+            numeroGruposSelect.innerHTML = '<option value="">Seleccione...</option>';
+            if (!isNaN(maxEquipos)) {
+                // Calcular divisores de maxEquipos (sin el 1)
+                for(let i=2; i<maxEquipos; i++) { // i < maxEquipos para excluir el mismo número
+                    if(maxEquipos % i === 0) {
+                        numeroGruposSelect.innerHTML += `<option value="${i}">${i}</option>`;
+                    }
+                }
+            }
+            actualizarClasificanPorGrupo();
+        }
 
-        toggleOpcionesCopa(); // Para mostrar/ocultar al cargar la página
+        function actualizarClasificanPorGrupo() {
+            const maxEquipos = parseInt(maxEquiposSelect.value);
+            const numGrupos = parseInt(numeroGruposSelect.value);
+            clasificanPorGrupoSelect.innerHTML = '<option value="">Seleccione...</option>';
+            if (!isNaN(maxEquipos) && !isNaN(numGrupos) && numGrupos > 0) {
+                const equiposPorGrupo = maxEquipos / numGrupos;
+                // Solo permitir valores entre 1 y equiposPorGrupo-1
+                for(let i=1; i<equiposPorGrupo; i++) {
+                    clasificanPorGrupoSelect.innerHTML += `<option value="${i}">${i}</option>`;
+                }
+            }
+        }
+
+        tipoCompetenciaSelect.addEventListener('change', function() {
+            toggleOpcionesCopa();
+            toggleOpcionesGrupos();
+        });
+        faseGruposSelect.addEventListener('change', toggleOpcionesGrupos);
+        maxEquiposSelect.addEventListener('change', function() {
+            if (faseGruposSelect.value === '1') {
+                actualizarNumeroGrupos();
+            }
+        });
+        numeroGruposSelect.addEventListener('change', actualizarClasificanPorGrupo);
+
+        // Inicialización al cargar
+        toggleOpcionesCopa();
+        toggleOpcionesGrupos();
     });
 </script>
 @endpush

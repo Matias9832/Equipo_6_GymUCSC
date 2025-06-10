@@ -52,7 +52,7 @@
                                                     <i class="fas fa-futbol"></i> Partidos
                                                 </a>
                                                 @if($torneo->fase_grupos)
-                                                    <a href="#" class="btn btn-sm btn-warning ms-1">
+                                                    <a href="{{ route('torneos.fase-grupos', $torneo->id) }}" class="btn btn-sm btn-warning ms-1">
                                                         <i class="fas fa-list-ol"></i> Fase de Grupos
                                                     </a>
                                                     {{-- Aquí deberías agregar una condición para verificar si la fase de grupos ha finalizado --}}

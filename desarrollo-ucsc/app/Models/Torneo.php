@@ -18,6 +18,7 @@ class Torneo extends Model
         'fase_grupos',
         'numero_grupos',
         'equipos_por_grupo',
+        'clasifican_por_grupo',
         'partidos_ida_vuelta',
         'tercer_lugar',
         'fase_grupos_finalizada'
