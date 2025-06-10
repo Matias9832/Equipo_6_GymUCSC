@@ -120,8 +120,8 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end mt-4">
-                                <button type="submit" class="btn btn-primary">Aplicar cambios</button>
-                                <a href="{{ route('docentes.perfil') }}" class="btn btn-outline-secondary me-2">Cancelar</a>
+                                <button type="submit" class="btn btn-primary mx-2">Aplicar cambios</button>
+                                <a href="{{ route('docentes.perfil') }}" class="btn btn-outline-secondary">Cancelar</a>
                             </div>
                         </form>    
                     </div>
