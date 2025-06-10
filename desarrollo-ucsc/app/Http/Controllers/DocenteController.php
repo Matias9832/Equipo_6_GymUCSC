@@ -44,46 +44,6 @@ class DocenteController extends Controller
         return view('admin.mantenedores.docentes.mi-perfil.index', compact('administrador', 'admin', 'rol', 'sucursal','talleres'));
     }
 
-    public function updateFoto(Request $request)
-    {
-        $request->validate([
-            'foto_perfil' => 'required|image|max:2048', // 2MB
-        ]);
-
-        $admin = auth()->user();
-        // Obtener la instancia del modelo Administrador
-        $administrador = Administrador::where('rut_admin', $admin->rut)->first();
-
-        // Verificar si el administrador existe
-        if (!$administrador) {
-            return redirect()->back()->withErrors(['error' => 'No se encontró el perfil de administrador.']);
-        }
-
-        // Procesar y guardar la nueva imagen
-        if ($request->hasFile('foto_perfil')) {
-            $foto = $request->file('foto_perfil');
-            $nombreArchivo = uniqid() . '.' . $foto->getClientOriginalExtension();
-            $rutaDestino = public_path('img/perfiles');
-
-            // Mover la nueva foto
-            $foto->move($rutaDestino, $nombreArchivo);
-
-            // Eliminar foto anterior si no es default y existe físicamente
-            if ($administrador->foto_perfil && $administrador->foto_perfil !== 'default.png') {
-                $rutaAnterior = $rutaDestino . '/' . $administrador->foto_perfil;
-                if (File::exists($rutaAnterior)) { // Usar File::exists
-                    File::delete($rutaAnterior); // Usar File::delete
-                }
-            }
-
-            // Actualizar el nombre de la foto en la base de datos y guardar
-            $administrador->foto_perfil = $nombreArchivo;
-            $administrador->save();
-        }
-
-        return redirect()->back()->with('success', 'Foto de perfil actualizada correctamente.');
-    }
-
     public function data(Request $request)
     {
         $sucursalId = session('sucursal_activa');
@@ -147,6 +107,73 @@ class DocenteController extends Controller
             }
         })
         ->toJson();
+    }
+    public function updateFoto(Request $request)
+    {
+        $request->validate([
+            'foto_perfil' => 'required|image|max:2048', // 2MB
+        ]);
+
+        $admin = auth()->user();
+        $administrador = Administrador::where('rut_admin', $admin->rut)->first();
+
+        // Procesar y guardar la nueva imagen
+        if ($request->hasFile('foto_perfil')) {
+            $foto = $request->file('foto_perfil');
+            $nombreArchivo = uniqid() . '.' . $foto->getClientOriginalExtension();
+            $rutaDestino = public_path('img/perfiles');
+
+            // Mover la nueva foto
+            $foto->move($rutaDestino, $nombreArchivo);
+
+            // Eliminar foto anterior si no es default y existe físicamente
+            if ($administrador->foto_perfil && $administrador->foto_perfil !== 'default.png') {
+                $rutaAnterior = $rutaDestino . '/' . $administrador->foto_perfil;
+                if (File::exists($rutaAnterior)) { // Usar File::exists
+                    File::delete($rutaAnterior); // Usar File::delete
+                }
+            }
+
+            // Actualizar el nombre de la foto en la base de datos y guardar
+            $administrador->foto_perfil = $nombreArchivo;
+            $administrador->save();
+        }
+
+        return redirect()->back()->with('success', 'Foto de perfil actualizada correctamente.');
+    }
+
+    public function editContacto()
+    {
+       $admin = auth()->user();
+
+        $administrador = Administrador::where('rut_admin', $admin->rut)
+            ->with([
+                'sucursales' => function ($query) {
+                    $query->wherePivot('activa', true);
+                }
+            ])->first();
+        $talleres = $administrador->talleres;
+        $rol = $admin->roles->pluck('name')->first(); // Solo un rol
+        $sucursal = $administrador->sucursales->first();
+
+        return view('admin.mantenedores.docentes.mi-perfil.edit', compact('administrador', 'admin', 'rol', 'sucursal','talleres'));
+    }
+
+    public function updateInformacionContacto(Request $request)
+    {
+        $request->validate([
+            'numero_contacto' => 'nullable|string|max:20',
+            'descripcion_ubicacion' => 'nullable|string|max:255',
+            'sobre_mi' => 'nullable|string|max:1000',
+        ]);
+
+        $admin = auth()->user()->administrador;
+        $admin->numero_contacto = $request->numero_contacto;
+        $admin->descripcion_ubicacion = $request->descripcion_ubicacion;
+        $admin->sobre_mi = $request->sobre_mi;
+        $admin->save();
+
+        return redirect()->route('docentes.perfil')->with('success', 'Información actualizada correctamente.');
     }
 
     public function create()

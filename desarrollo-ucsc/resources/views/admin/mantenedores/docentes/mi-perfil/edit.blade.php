@@ -8,7 +8,7 @@
             <div class="row gx-4">
                 <div class="col-auto">
                     <div class="avatar avatar-xl position-relative">
-                        <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}" class="rounded-circle img-fluid border border-2 border-white">
+                        <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}" class="rounded-circle img-fluid border border-2 border-white" style="object-fit: cover; width: 100%; height: 100%;">
                     </div>
                 </div>
                 <div class="col-auto my-auto">
@@ -28,18 +28,28 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="configuracionDropdown">
                             <li>
-                                <a class="dropdown-item" href="javascript:;">
+                                <form id="form-foto" action="{{ route('docentes.foto.update') }}" method="POST" enctype="multipart/form-data" style="display: none;">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="file" name="foto_perfil" id="input_foto" accept="image/*">
+                                </form>
+                                <a class="dropdown-item" href="javascript:;" onclick="document.getElementById('input_foto').click();">
                                     <i class="ni ni-image me-2 text-primary"></i> Cambiar foto de perfil
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="javascript:;">
+                                <a class="dropdown-item">
                                     <i class="ni ni-single-copy-04 me-2 text-info"></i> Editar información de contacto
                                 </a>
                             </li>
                             <li>
+                                <a class="dropdown-item" href="{{ route('salud.edit') }}">
+                                    <i class="ni ni-collection me-2 text-warning"></i> Editar información de salud
+                                </a>
+                            </li>
+                            <li>
                                 <a class="dropdown-item" href="{{ route('edit-perfil.edit') }}">
-                                    <i class="ni ni-lock-circle-open me-2 text-warning"></i> Cambiar contraseña o formulario de salud
+                                    <i class="ni ni-lock-circle-open me-2 text-warning"></i> Cambiar contraseña
                                 </a>
                             </li>
                         </ul>
@@ -59,53 +69,61 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Nombres</label>
-                                    <input class="form-control" type="text" value="{{ $administrador->nombre_admin }}" readonly>
+                                    <input class="form-control readonly-input" type="text" value="{{ $administrador->nombre_admin }}" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Correo electrónico</label>
-                                    <input class="form-control" type="text" value="{{ $admin->correo_usuario }}" readonly>
+                                    <input class="form-control readonly-input" type="text" value="{{ $admin->correo_usuario }}" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Rol asignado</label>
-                                    <input class="form-control" type="text" value="{{ $rol }}" readonly>
+                                    <input class="form-control readonly-input" type="text" value="{{ $rol }}" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Sucursal</label>
-                                    <input class="form-control" type="text" value="{{ $sucursal->nombre_suc ?? 'Sin sucursal' }}" readonly>
+                                    <input class="form-control readonly-input" type="text" value="{{ $sucursal->nombre_suc ?? 'Sin sucursal' }}" readonly>
                                 </div>
                             </div>
                         </div>
                         <hr class="horizontal dark">
-                        <p class="text-uppercase text-sm">Información de contacto</p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-control-label">Número de contacto</label>
-                                    <input class="form-control" type="text" value="{{ $administrador->numero_contacto ?? 'Puedes agregar aquí un número de contacto' }}" readonly>
+                        <form action="{{ route('docentes.contacto.update') }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <p class="text-uppercase text-sm">Información de contacto</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Número de contacto</label>
+                                        <input name="numero_contacto" class="form-control" type="text" placeholder="Puedes agregar aquí un número de contacto" value="{{ old('numero_contacto', $administrador->numero_contacto) }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Descripción de ubicación</label>
+                                        <input name="descripcion_ubicacion" class="form-control" type="text" placeholder="Puedes poner aquí dónde encontrar tu puesto de trabajo" value="{{ old('descripcion_ubicacion', $administrador->descripcion_ubicacion) }}">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-control-label">Descripción de ubicación</label>
-                                    <input class="form-control" type="text" value="{{ $administrador->descripcion_ubicacion ?? 'Puedes poner aquí dónde encontrar tu puesta de trabajo' }}" readonly>
+                            <hr class="horizontal dark">
+                            <p class="text-uppercase text-sm">Sobre mí</p>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <textarea class="form-control" name="sobre_mi" rows="4" placeholder="Agrega aquí una breve descripción sobre ti" style="width: 100%; overflow-wrap: break-word;">{{ $administrador->sobre_mi ?? '' }}</textarea>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <hr class="horizontal dark">
-                        <p class="text-uppercase text-sm">Sobre mí</p>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <textarea class="form-control" rows="4" readonly style="width: 100%; overflow-wrap: break-word;">{{ $administrador->sobre_mi ?? 'Agrega aquí una breve descripción sobre ti.' }}</textarea>
-                                </div>
+                            <div class="d-flex justify-content-end mt-4">
+                                <button type="submit" class="btn btn-primary">Aplicar cambios</button>
+                                <a href="{{ route('docentes.perfil') }}" class="btn btn-outline-secondary me-2">Cancelar</a>
                             </div>
-                        </div>
+                        </form>    
                     </div>
                 </div>
             </div>
@@ -117,16 +135,13 @@
                     <img src="/img/gym/foto-gimnasio.jpeg" alt="Image placeholder" class="card-img-top">
 
                     <!-- Foto de perfil superpuesta -->
-                    <div class="row justify-content-center">
-                        <div class="col-4 col-lg-4 order-lg-2">
-                            <div class="mt-n7 position-relative z-index-2">
-                                <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}"
-                                    class="rounded-circle img-fluid border border-3 border-white shadow"
-                                    style="width: 120px; height: 120px; object-fit: cover;">
-                            </div>
+                    <div class="d-flex justify-content-center mt-n6">
+                        <div class="avatar position-relative mt-n6" style="width: 150px; height: 150px;">
+                            <img src="{{ url('img/perfiles/' . $administrador->foto_perfil) }}"
+                                class="rounded-circle img-fluid border border-2 border-white shadow"
+                                style="object-fit: cover; width: 100%; height: 100%;">
                         </div>
-                    </div>
-
+                    </div> 
                     <!-- Cuerpo de la tarjeta -->
                     <div class="card-body pt-0">
                         <div class="text-center mt-3">
@@ -147,12 +162,13 @@
                                 </div>
                             @endif
 
-                            @if($administrador->numero_contacto)
-                                <div class="mt-2">
+                            <div class="mt-2">
+                                <i class="ni ni-email-83 me-1"></i> {{ $admin->correo_usuario }}
+                                @if($administrador->numero_contacto)
                                     <i class="ni ni-mobile-button me-1"></i> {{ $administrador->numero_contacto }}
-                                </div>
-                            @endif
-
+                                @endif
+                            </div>
+                            
                             @if($administrador->sobre_mi)
                                 <div class="mt-3 px-3">
                                     <p class="text-sm text-dark fst-italic" style="white-space: pre-wrap;">"{{ $administrador->sobre_mi }}"</p>
@@ -177,4 +193,21 @@
         </div>
     </div>
     @include('layouts.footers.auth.footer')
+    <script>
+        document.getElementById('input_foto').addEventListener('change', function () {
+            const file = this.files[0];
+            if (file && file.size > 2 * 1024 * 1024) { // 2MB en bytes
+                alert('La imagen supera el límite de 2 MB.');
+                this.value = ''; // limpia el input
+            } else {
+                document.getElementById('form-foto').submit();
+            }
+        });
+    </script>
+    <style>
+        .readonly-input {
+            cursor: default !important;
+            pointer-events: none;
+        }
+    </style>
 @endsection

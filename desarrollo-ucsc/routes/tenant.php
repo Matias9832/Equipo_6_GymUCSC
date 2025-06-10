@@ -238,9 +238,11 @@ Route::middleware([
         
         // Rutas para el mantenedor de Docentes
         Route::middleware(['permission:Ver Docentes'])->group(function () {
+            Route::get('docentes', [DocenteController::class, 'index'])->name('docentes.index');
             Route::get('/mi-perfil', [DocenteController::class, 'indexPerfil'])->name('docentes.perfil');
             Route::put('/docentes/mi-perfil/foto', [DocenteController::class, 'updateFoto'])->name('docentes.foto.update');
-            Route::get('docentes', [DocenteController::class, 'index'])->name('docentes.index');
+            Route::get('/mi-perfil/edit-contacto', [DocenteController::class, 'editContacto'])->name('docentes.contacto.edit');
+            Route::put('/mi-perfil/edit-contacto', [DocenteController::class, 'updateInformacionContacto'])->name('docentes.contacto.update');
         });    
         Route::middleware(['permission:Crear Docentes'])->group(function () {
             Route::get('docentes/create', [DocenteController::class, 'create'])->name('docentes.create');
