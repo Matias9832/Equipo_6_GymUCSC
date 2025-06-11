@@ -12,7 +12,7 @@
                 <div class="carousel-inner h-100">
                     @foreach($news->images as $index => $image)
                         <div class="carousel-item h-100 {{ $index == 0 ? 'active' : '' }}">
-                            <img src="{{ asset($image->image_path) }}" 
+                            <img src="{{ global_asset($image->image_path) }}" 
                                 class="d-block mx-auto img-fluid"
                                 style="height: 100%; width: auto; object-fit: contain;">
                         </div>

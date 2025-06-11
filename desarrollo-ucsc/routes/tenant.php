@@ -242,7 +242,9 @@ Route::middleware([
         });
         Route::middleware(['permission:Crear Noticias'])->group(function () {
             Route::resource('news', NewsController::class)->except(['index', 'show']);
+            Route::post('/news/{id}/toggle-featured', [NewsController::class, 'toggleFeatured'])->name('news.toggleFeatured');
         });
+       
 
         // Importar alumnos
         Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');

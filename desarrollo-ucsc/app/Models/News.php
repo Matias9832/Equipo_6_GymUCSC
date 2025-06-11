@@ -24,6 +24,8 @@ class News extends Model
         'fecha_noticia',
         'tipo_deporte',
         'id_admin',
+        'is_featured',
+        'featured_until',
     ];
 
     /**
