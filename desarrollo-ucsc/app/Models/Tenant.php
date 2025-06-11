@@ -10,4 +10,9 @@ use Stancl\Tenancy\Database\Concerns\HasDomains;
 class Tenant extends BaseTenant implements TenantWithDatabase
 {
     use HasDatabase, HasDomains;
+
+    public function temaTenant()
+    {
+        return $this->hasOne(\App\Models\Tenants\TemaTenant::class, 'tenant_id', 'id');
+    }
 }

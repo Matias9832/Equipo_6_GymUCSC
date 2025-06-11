@@ -41,6 +41,7 @@ use App\Http\Controllers\RutinaController;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\AsistenciaTallerController;
 use App\Http\Controllers\RutinaPersonalizadaController;
+use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\TorneoUsuarioController;
 use Spatie\Permission\Models\Permission;
 
@@ -116,8 +117,8 @@ Route::middleware([
         Route::match(['get', 'post'], '/ingreso/actual', [ControlSalasController::class, 'mostrarIngreso'])->name('ingreso.mostrar');
 
         // Perfil usuario
-        Route::get('/mi-perfil', [LoginController::class, 'editProfile'])->name('mi-perfil.edit');
-        Route::post('/mi-perfil', [LoginController::class, 'updateProfile'])->name('mi-perfil.update');
+        Route::get('/edit-perfil', [LoginController::class, 'editProfile'])->name('edit-perfil.edit');
+        Route::post('/edit-perfil', [LoginController::class, 'updateProfile'])->name('edit-perfil.update');
 
         Route::get('/mis-rutinas', [RutinaPersonalizadaController::class, 'index'])->name('rutinas.personalizadas.index');
 
@@ -248,6 +249,28 @@ Route::middleware([
         Route::middleware(['permission:Eliminar Usuarios'])->group(function () {
             Route::delete('usuarios/{usuario}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
         });
+        
+        // Rutas para el mantenedor de Docentes
+        Route::middleware(['permission:Ver Docentes'])->group(function () {
+            Route::get('docentes', [DocenteController::class, 'index'])->name('docentes.index');
+            Route::get('/mi-perfil', [DocenteController::class, 'indexPerfil'])->name('docentes.perfil');
+            Route::put('/docentes/mi-perfil/foto', [DocenteController::class, 'updateFoto'])->name('docentes.foto.update');
+            Route::get('/mi-perfil/edit-contacto', [DocenteController::class, 'editContacto'])->name('docentes.contacto.edit');
+            Route::put('/mi-perfil/edit-contacto', [DocenteController::class, 'updateInformacionContacto'])->name('docentes.contacto.update');
+        });    
+        Route::middleware(['permission:Crear Docentes'])->group(function () {
+            Route::get('docentes/create', [DocenteController::class, 'create'])->name('docentes.create');
+            Route::post('docentes', [DocenteController::class, 'store'])->name('docentes.store');
+        });
+        Route::middleware(['permission:Editar Docentes'])->group(function () {
+            Route::get('docentes/{docente}/edit', [DocenteController::class, 'edit'])->name('docentes.edit');
+            Route::put('docentes/{docente}', [DocenteController::class, 'update'])->name('docentes.update');
+        });
+        Route::middleware(['permission:Eliminar Docentes'])->group(function () {    
+            Route::delete('docentes/{docente}', [DocenteController::class, 'destroy'])->name('docentes.destroy');
+        });    
+        Route::get('/docentes/data', [DocenteController::class, 'data'])->name('docentes.data');
+
 
         // Busqueda de usuarios para Select2  
         Route::get('/usuarios/buscar', [UsuarioController::class, 'buscar'])->name('usuarios.buscar');

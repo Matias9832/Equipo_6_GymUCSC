@@ -10,7 +10,6 @@ use App\Models\Usuario;
 use App\Models\Sucursal;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log; // Importar la clase Log
-
 use Yajra\DataTables\Facades\DataTables;
 
 class AdministradorController extends Controller
@@ -95,6 +94,7 @@ class AdministradorController extends Controller
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
             'rol' => 'required|in:Director,Docente,Coordinador,Visor QR',
+            'descripcion_cargo' => 'nullable|string|max:255',
         ]);
 
         try {
@@ -114,11 +114,21 @@ class AdministradorController extends Controller
             // Asignar el rol
             $usuario->assignRole($request->rol);
 
+            // Manejar la foto de perfil si se proporciona
+            $fotoPath = null;
+            if ($request->hasFile('foto_perfil')) {
+                $foto = $request->file('foto_perfil');
+                $fotoNombre = uniqid() . '.' . $foto->getClientOriginalExtension();
+                $foto->move(public_path('img/perfiles'), $fotoNombre);
+                $fotoPath = 'img/perfiles/' . $fotoNombre;
+}
             // Crear el administrador
             $administrador = Administrador::create([
                 'rut_admin' => $request->rut_admin,
                 'nombre_admin' => $request->nombre_admin,
                 'fecha_creacion' => now(),
+                'foto_perfil' => 'default.png',
+                'descripcion_cargo' => $request->descripcion_cargo,
             ]);
 
             // Asignar la sucursal al administrador
@@ -164,12 +174,14 @@ class AdministradorController extends Controller
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $administrador->rut_admin . ',rut',
             'rol' => 'required|in:Director,Docente,Coordinador,Visor QR',
+            'descripcion_cargo' => 'nullable|string|max:255',
         ]);
 
         // Actualizar el administrador
         $administrador = Administrador::findOrFail($id);
         $administrador->update([
             'nombre_admin' => $request->nombre_admin,
+            'descripcion_cargo' => $request->descripcion_cargo,
         ]);
 
         // Actualizar el usuario

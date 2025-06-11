@@ -11,7 +11,6 @@ return new class extends Migration {
             $table->id();
             $table->string('nombre_color', 100);
             $table->string('codigo_hex', 7);
-            $table->boolean('activo_color')->default(true);
             $table->timestamps();
         });
 
@@ -20,7 +19,6 @@ return new class extends Migration {
             $table->string('nombre_fuente', 100);
             $table->string('familia_css', 100);
             $table->string('url_fuente')->nullable();
-            $table->boolean('activo_fuente')->default(true);
             $table->timestamps();
         });
     }
