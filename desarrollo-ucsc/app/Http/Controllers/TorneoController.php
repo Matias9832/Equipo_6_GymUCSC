@@ -232,41 +232,54 @@ class TorneoController extends Controller
         return view('admin.mantenedores.torneos.tabla', compact('torneo', 'tabla'));
     }
 
-    public function copa(Torneo $torneo)
-    {
-        // Solo partidos de etapa eliminatoria, ordenados por ronda
-        $partidos = Partido::where('torneo_id', $torneo->id)
-            ->where('etapa', 'eliminatoria')
-            ->orderBy('ronda')
-            ->with(['local', 'visitante'])
-            ->get();
+public function copa(Torneo $torneo)
+{
+    $partidos = Partido::where('torneo_id', $torneo->id)
+        ->where('etapa', 'eliminatoria')
+        ->orderBy('ronda')
+        ->with(['local', 'visitante'])
+        ->get();
 
-        // Agrupar por ronda para el bracket
-        $equipos = [];
-        $resultados = [];
-        $rondas = $partidos->groupBy('ronda')->sortKeys();
+    if ($partidos->isEmpty()) {
+        return view('admin.mantenedores.torneos.copa', [
+            'torneo' => $torneo,
+            'equipos' => [],
+            'resultados' => []
+        ]);
+    }
 
-        foreach ($rondas as $ronda => $partidosRonda) {
-            $equiposRonda = [];
-            $resultadosRonda = [];
-            foreach ($partidosRonda as $partido) {
-                $equiposRonda[] = [
-                    $partido->local ? $partido->local->nombre_equipo : 'TBD',
-                    $partido->visitante ? $partido->visitante->nombre_equipo : 'TBD'
-                ];
-                $resultadosRonda[] = [
-                    is_numeric($partido->resultado_local) ? (int)$partido->resultado_local : null,
-                    is_numeric($partido->resultado_visitante) ? (int)$partido->resultado_visitante : null
+    $rondas = $partidos->groupBy('ronda')->sortKeys();
+    $equipos = [];
+    $resultados = [];
+
+    $primeraRonda = $rondas->keys()->first();
+
+    foreach ($rondas as $ronda => $partidosRonda) {
+        $resultadosRonda = [];
+
+        foreach ($partidosRonda as $partido) {
+            if ($ronda == $primeraRonda) {
+                $equipos[] = [
+                    $partido->local ? 'Equipo ' . $partido->local->nombre_equipo : 'TBD',
+                    $partido->visitante ? 'Equipo ' . $partido->visitante->nombre_equipo : 'TBD'
                 ];
             }
-            if (empty($equipos)) {
-                $equipos = $equiposRonda;
-            }
-            $resultados[] = $resultadosRonda;
+
+            $resultadosRonda[] = [
+                is_numeric($partido->resultado_local) ? (int)$partido->resultado_local : null,
+                is_numeric($partido->resultado_visitante) ? (int)$partido->resultado_visitante : null
+            ];
         }
 
-        return view('admin.mantenedores.torneos.copa', compact('torneo', 'equipos', 'resultados'));
+        $resultados[] = $resultadosRonda;
     }
+
+    return view('admin.mantenedores.torneos.copa', compact('torneo', 'equipos', 'resultados'));
+}
+
+
+
+
     
     public function iniciar(Torneo $torneo)
     {
@@ -307,6 +320,11 @@ class TorneoController extends Controller
     }
 
 
+        private function esPotenciaDe2($n)
+    {
+        return $n > 0 && ($n & ($n - 1)) === 0;
+    }
+    
     // Algoritmo round robin para un grupo
     private function generarRoundRobin($torneoId, $grupo, $grupoIdx = 0, $etapa = 'liga')
     {

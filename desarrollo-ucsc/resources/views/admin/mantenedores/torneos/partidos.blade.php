@@ -145,4 +145,5 @@
     </div>
 </div>
 @include('layouts.footers.auth.footer')
+<a href="{{ route('torneos.index') }}" class="btn btn-secondary mt-3 float-end">Volver</a>
 @endsection

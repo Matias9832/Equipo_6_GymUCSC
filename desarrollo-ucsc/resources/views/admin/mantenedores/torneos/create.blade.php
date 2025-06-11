@@ -36,7 +36,7 @@
                     <label for="max_equipos" class="form-label">Máximo de Equipos</label>
                     <select name="max_equipos" id="max_equipos" class="form-select" required>
                         <option value="">Seleccione...</option>
-                        <!-- Opciones generadas por JS si es copa -->
+                        <!-- Opciones generadas por JS -->
                     </select>
                 </div>
 
@@ -96,22 +96,27 @@
         const clasificanPorGrupoSelect = document.getElementById('clasifican_por_grupo');
         const maxEquiposDiv = document.getElementById('max-equipos-div');
 
-        // Valores permitidos para copa
-        const valoresCopa = [];
-        for(let i=4; i<=30; i+=2) valoresCopa.push(i);
+        // Valores permitidos para liga y copa (pares del 2 al 30)
+        const valoresPares = [];
+        for(let i=2; i<=30; i+=2) valoresPares.push(i);
 
-        function toggleOpcionesCopa() {
-            if (tipoCompetenciaSelect.value === 'copa') {
-                opcionesCopaDiv.style.display = 'block';
-                // Rellenar opciones de max_equipos solo para copa
+        function toggleOpcionesMaxEquipos() {
+            if (tipoCompetenciaSelect.value === 'copa' || tipoCompetenciaSelect.value === 'liga') {
+                // Mostrar opciones de 2 a 30, solo pares
                 maxEquiposSelect.innerHTML = '<option value="">Seleccione...</option>';
-                valoresCopa.forEach(function(val) {
+                valoresPares.forEach(function(val) {
                     maxEquiposSelect.innerHTML += `<option value="${val}">${val}</option>`;
                 });
             } else {
+                maxEquiposSelect.innerHTML = '<option value="">Seleccione...</option>';
+            }
+
+            // Mostrar/ocultar opciones de copa
+            if (tipoCompetenciaSelect.value === 'copa') {
+                opcionesCopaDiv.style.display = 'block';
+            } else {
                 opcionesCopaDiv.style.display = 'none';
                 opcionesGruposDiv.style.display = 'none';
-                maxEquiposSelect.innerHTML = '<option value="">Seleccione...</option>';
             }
         }
 
@@ -168,7 +173,7 @@
         }
 
         tipoCompetenciaSelect.addEventListener('change', function() {
-            toggleOpcionesCopa();
+            toggleOpcionesMaxEquipos();
             toggleOpcionesGrupos();
         });
         faseGruposSelect.addEventListener('change', toggleOpcionesGrupos);
@@ -180,7 +185,7 @@
         numeroGruposSelect.addEventListener('change', actualizarClasificanPorGrupo);
 
         // Inicialización al cargar
-        toggleOpcionesCopa();
+        toggleOpcionesMaxEquipos();
         toggleOpcionesGrupos();
     });
 </script>
