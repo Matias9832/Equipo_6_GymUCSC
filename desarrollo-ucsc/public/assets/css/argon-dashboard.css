@@ -19000,7 +19000,7 @@ textarea.form-control-lg {
 }
 
 .alert-danger {
-  background-image: linear-gradient(310deg, #fb6340 0%, #fbb140 100%);
+  background-image: linear-gradient(310deg, var(--bs-danger) 0%, var(--danger-gradient) 100%);
 }
 
 .alert-light {

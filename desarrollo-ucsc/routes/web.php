@@ -7,7 +7,7 @@ use App\Http\Controllers\Tenants\Personalizacion\TemaController;
 use App\Http\Controllers\Tenants\Personalizacion\ColorController;
 use App\Http\Controllers\Tenants\Personalizacion\FuenteController;
 use App\Http\Controllers\Tenants\Plan\PlanController;
-use App\Http\Controllers\Tenants\Plan\BeneficioController;
+use App\Http\Controllers\Tenants\Plan\CuentaController;
 use App\Http\Controllers\Tenants\Plan\PermisoController;
 
 Route::get('/start', function () {
@@ -24,8 +24,8 @@ Route::prefix('personalizacion')->name('personalizacion.')->group(function () {
 });
 
 Route::prefix('plan')->name('plan.')->group(function () {
-    Route::resource('planes', PlanController::class);
-    Route::resource('beneficios', BeneficioController::class);
-    Route::resource('permisos', PermisoController::class);
+    Route::get('planes', [PlanController::class, 'index'])->name('planes.index');
+    Route::get('cuentas', [CuentaController::class, 'index'])->name('cuentas.index');
+    Route::get('permisos', [PermisoController::class, 'index'])->name('permisos.index');
 });
 
