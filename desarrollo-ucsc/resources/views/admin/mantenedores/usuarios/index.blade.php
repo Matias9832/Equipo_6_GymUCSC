@@ -7,23 +7,7 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                        <h6>Lista de Usuarios</h6>
-                        @can('Crear Usuarios')
-                            <a href="{{ route('usuarios.create') }}" class="btn btn-primary btn-sm">Crear Usuario</a>
-                        @endcan
-                    </div>
-                    <div class="row px-4 py-2">
-                        <div class="col">
-                            <form method="GET" action="{{ route('usuarios.index') }}" id="filtroAdminsForm" class="mb-4">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" name="solo_admins" id="soloAdmins" {{ request('solo_admins') ? 'checked' : '' }}
-                                        onchange="document.getElementById('filtroAdminsForm').submit();">
-                                    <label class="form-check-label" for="soloAdmins">
-                                        {{ request('solo_admins') ? 'Ocultar administradores' : 'Ocultar administradores' }}
-                                    </label>
-                                </div>
-                            </form>
-                        </div>
+                        <h5>Lista de Usuarios</h5>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">
@@ -60,7 +44,7 @@
             const table = $('#tablaUsuarios').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('usuarios.index', ['solo_admins' => request('solo_admins')]) }}',
+                ajax: '{{ route('usuarios.index') }}',
                 columns: [
                     { data: 'rut', name: 'usuario.rut', className: 'text-xs font-weight-bold ps-3' },
                     { data: 'nombre_usuario', name: 'nombre_usuario', className: 'text-xs' },

@@ -16,11 +16,8 @@ class UsuarioController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Usuario::query();
-
-            if ($request->has('solo_admins') && $request->solo_admins === 'on') {
-                $query->where('tipo_usuario', '!=', 'admin');
-            }
+            $query = Usuario::query()
+                ->whereIn('usuario.tipo_usuario', ['estudiante', 'seleccionado']); // 👈 Solo estudiantes y seleccionados
 
             $query->leftJoin('model_has_roles', function ($join) {
                 $join->on('usuario.id_usuario', '=', 'model_has_roles.model_id')
@@ -35,12 +32,8 @@ class UsuarioController extends Controller
                     'usuario.tipo_usuario',
                     'usuario.correo_usuario',
                     'roles.name as rol_name',
+                    \DB::raw("CONCAT(alumno.nombre_alumno, ' ', alumno.apellido_paterno, ' ', alumno.apellido_materno) as nombre_usuario"),
                     \DB::raw("CASE 
-                        WHEN usuario.tipo_usuario = 'admin' THEN administrador.nombre_admin
-                        ELSE CONCAT(alumno.nombre_alumno, ' ', alumno.apellido_paterno, ' ', alumno.apellido_materno)
-                    END as nombre_usuario"),
-                    \DB::raw("CASE 
-                        WHEN usuario.tipo_usuario = 'admin' THEN COALESCE(roles.name, 'Sin rol')
                         WHEN usuario.tipo_usuario = 'estudiante' THEN 'Estudiante'
                         ELSE 'Seleccionado'
                     END as rol_visible")
@@ -48,21 +41,11 @@ class UsuarioController extends Controller
 
             return DataTables::of($query)
                 ->editColumn('rol_visible', function ($usuario) {
-                    if ($usuario->tipo_usuario === 'admin') {
-                        return '<span class="badge badge-sm bg-gradient-info" style="width:150px;">' . ($usuario->rol_visible ?? 'Sin rol') . '</span>';
-                    }
-
                     $label = $usuario->rol_visible;
                     $class = $usuario->tipo_usuario === 'estudiante' ? 'bg-gradient-success' : 'bg-gradient-warning';
                     return '<span class="badge badge-sm ' . $class . '" style="width:150px;">' . $label . '</span>';
                 })
                 ->addColumn('acciones', function ($usuario) {
-                    if ($usuario->tipo_usuario === 'admin') {
-                        $editar = auth()->user()->can('Editar Usuarios')
-                            ? '<a href="' . route('usuarios.edit', $usuario->id_usuario) . '" class="text-secondary font-weight-bold text-xs me-2" title="Editar"><i class="fas fa-pen-to-square text-info"></i></a>'
-                            : '';
-                    }
-
                     $eliminar = auth()->user()->can('Eliminar Usuarios')
                         ? '<form action="' . route('usuarios.destroy', $usuario->id_usuario) . '" method="POST" class="d-inline">'
                         . csrf_field() . method_field('DELETE') .
@@ -70,11 +53,7 @@ class UsuarioController extends Controller
                         . '<i class="fas fa-trash-alt"></i></button></form>'
                         : '';
 
-                    if ($usuario->tipo_usuario === 'admin') {
-                        return $editar . $eliminar;
-                    } else {
-                        return $eliminar;
-                    }
+                    return $eliminar;
                 })
                 ->rawColumns(['rol_visible', 'acciones'])
                 ->filter(function ($query) use ($request) {
@@ -82,11 +61,7 @@ class UsuarioController extends Controller
                         $query->where(function ($q) use ($search) {
                             $q->where('usuario.rut', 'like', "%{$search}%")
                                 ->orWhere('usuario.correo_usuario', 'like', "%{$search}%")
-                                ->orWhere('roles.name', 'like', "%{$search}%")
-                                ->orWhere(\DB::raw("CASE 
-                                WHEN usuario.tipo_usuario = 'admin' THEN administrador.nombre_admin
-                                ELSE CONCAT(alumno.nombre_alumno, ' ', alumno.apellido_paterno, ' ', alumno.apellido_materno)
-                            END"), 'like', "%{$search}%");
+                                ->orWhere(\DB::raw("CONCAT(alumno.nombre_alumno, ' ', alumno.apellido_paterno, ' ', alumno.apellido_materno)"), 'like', "%{$search}%");
                         });
                     }
                 })
@@ -94,60 +69,6 @@ class UsuarioController extends Controller
         }
 
         return view('admin.mantenedores.usuarios.index');
-    }
-
-
-    public function create()
-    {
-        return view('admin.mantenedores.usuarios.create');
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'rut' => 'required|string|unique:usuario,rut',
-            'nombre_admin' => 'required|string|max:255',
-            'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
-            'rol' => 'required|in:Docente,Coordinador,Visor QR', //Restricción para que solo pueda crear Docente y coordinador
-        ]);
-        try {
-            //Crear contraseña aleatoria
-            $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6);
-            //Reemplazar con la función de generar contraseña aleatoria
-
-            // Crear el usuario 
-            $usuario = Usuario::create([
-                'rut' => $request->rut,
-                'correo_usuario' => $request->correo_usuario,
-                'tipo_usuario' => 'admin',
-                'bloqueado_usuario' => 0,
-                'activado_usuario' => 1,
-                'contrasenia_usuario' => Hash::make($password),
-            ]);
-            $usuario->assignRole($request->rol);
-
-            // Crear el administrador
-            $administrador = Administrador::create([
-                'rut_admin' => $request->rut,
-                'nombre_admin' => $request->nombre_admin,
-                'fecha_creacion' => now(),
-            ]);
-
-            // Asignar la sucursal al administrador
-            DB::table('admin_sucursal')->insert([
-                'id_admin' => $administrador->id_admin,
-                'id_suc' => session('sucursal_activa'),
-                'activa' => true,
-            ]);
-
-            Mail::to($usuario->correo_usuario)->send(new \App\Mail\AdministradorPasswordMail($request->nombre_admin, $password));
-
-            return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente.');
-        } catch (\Exception $e) {
-            // Manejar errores
-            Log::error('Error al crear administrador: ' . $e->getMessage());
-            return back()->withErrors(['error' => 'Ocurrió un error al crear el administrador. Inténtalo nuevamente.']);
-        }
     }
 
     public function edit(Usuario $usuario)
