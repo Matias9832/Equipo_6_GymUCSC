@@ -2,16 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Tenants\TenantController;
+use App\Http\Controllers\Tenants\EmpresaController;
 
 use App\Http\Controllers\Tenants\Personalizacion\TemaController;
 use App\Http\Controllers\Tenants\Personalizacion\ColorController;
 use App\Http\Controllers\Tenants\Personalizacion\FuenteController;
 
-Route::get('/start', function () {
-    return view('start');
-})->name('start');
+Route::get('/inicio', function () {
+    return view('inicio');
+})->name('inicio');
 Route::resource('tenants', TenantController::class)->only(['index', 'store']);
-Route::resource('empresas', TenantController::class)->only(['index', 'store']);
+Route::resource('empresas', EmpresaController::class);
 
 
 Route::prefix('personalizacion')->name('personalizacion.')->group(function () {

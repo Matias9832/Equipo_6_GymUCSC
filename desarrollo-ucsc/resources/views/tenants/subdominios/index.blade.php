@@ -5,11 +5,6 @@
 @section('content')
     @include('layouts.tenants.navbars.ttopnav', ['title' => 'Subdominios'])
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
@@ -55,7 +50,7 @@
                                 </table>
                             </div>
                         @else
-                            <div class="alert alert-info">No hay tenants registrados aún.</div>
+                            <div class="alert alert-info m-3">No hay tenants registrados aún.</div>
                         @endif
                     </div>
                 </div>
