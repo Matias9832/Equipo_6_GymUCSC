@@ -282,26 +282,30 @@ class TorneoController extends Controller
             return redirect()->route('torneos.partidos', $torneo->id)->with('error', 'No hay suficientes equipos para iniciar el torneo.');
         }
 
-        if ($torneo->tipo_competencia === 'copa' && $torneo->fase_grupos) {
-            $numeroGrupos = $torneo->numero_grupos;
-            $equiposPorGrupo = $torneo->equipos_por_grupo;
+        if ($torneo->tipo_competencia === 'copa') {
+            if ($torneo->fase_grupos) {
+                // Fase de grupos: round robin por grupo
+                $numeroGrupos = $torneo->numero_grupos;
+                $equiposPorGrupo = $torneo->equipos_por_grupo;
+                $grupos = array_chunk($equipos, $equiposPorGrupo);
 
-            $grupos = array_chunk($equipos, $equiposPorGrupo);
-
-            foreach ($grupos as $grupoIdx => $grupo) {
-                // PASA 'fase_grupos' como etapa
-                $this->generarRoundRobin($torneo->id, $grupo, $grupoIdx, 'fase_grupos');
+                foreach ($grupos as $grupoIdx => $grupo) {
+                    $this->generarRoundRobin($torneo->id, $grupo, $grupoIdx, 'fase_grupos');
+                }
+            } else {
+                // Eliminatoria directa desde el inicio
+                if (!$this->esPotenciaDe2($numEquipos)) {
+                    return redirect()->route('torneos.partidos', $torneo->id)->with('error', 'La cantidad de equipos debe ser potencia de 2 para copa sin grupos.');
+                }
+                $this->generarCrucesDirectos($torneo->id, $equipos, $torneo->partidos_ida_vuelta, 'eliminatoria');
             }
         } elseif ($torneo->tipo_competencia === 'liga') {
-            // PASA 'liga' como etapa
             $this->generarRoundRobin($torneo->id, $equipos, 0, 'liga');
-        } elseif ($torneo->tipo_competencia === 'copa' && !$torneo->fase_grupos) {
-            // PASA 'eliminatoria' como etapa
-            $this->generarCrucesDirectos($torneo->id, $equipos, $torneo->partidos_ida_vuelta, 'eliminatoria');
         }
 
         return redirect()->route('torneos.partidos', $torneo->id)->with('success', 'Partidos generados correctamente.');
     }
+
 
     // Algoritmo round robin para un grupo
     private function generarRoundRobin($torneoId, $grupo, $grupoIdx = 0, $etapa = 'liga')
@@ -337,15 +341,33 @@ class TorneoController extends Controller
     // Función auxiliar para crear un partido
     private function crearPartido($torneoId, $equipoLocalId, $equipoVisitanteId, $ronda = null, $etapa = 'liga')
     {
-        \App\Models\Partido::create([
-            'torneo_id' => $torneoId,
-            'equipo_local_id' => $equipoLocalId,
-            'equipo_visitante_id' => $equipoVisitanteId,
-            'ronda' => $ronda,
-            'etapa' => $etapa,
-        ]);
+        if (!$equipoLocalId || !$equipoVisitanteId) return;
+
+        $existe = \App\Models\Partido::where('torneo_id', $torneoId)
+            ->where('equipo_local_id', $equipoLocalId)
+            ->where('equipo_visitante_id', $equipoVisitanteId)
+            ->where('ronda', $ronda)
+            ->where('etapa', $etapa)
+            ->exists();
+
+        if (!$existe) {
+            \App\Models\Partido::create([
+                'torneo_id' => $torneoId,
+                'equipo_local_id' => $equipoLocalId,
+                'equipo_visitante_id' => $equipoVisitanteId,
+                'ronda' => $ronda,
+                'etapa' => $etapa,
+            ]);
+        }
     }
-    
+
+    // Crea partido por el tercer lugar si corresponde
+    private function crearPartidoTercerLugar($torneoId, $equipo1, $equipo2, $ronda, $etapa)
+    {
+        // El partido de tercer lugar se marca con ronda igual a la final y etapa 'eliminatoria'
+        $this->crearPartido($torneoId, $equipo1, $equipo2, $ronda, $etapa);
+    }
+
     // Función auxiliar para generar cruces directos
     private function generarCrucesDirectos($torneoId, $equipos, $partidosIdaVuelta, $etapa = 'eliminatoria')
     {
@@ -429,7 +451,7 @@ class TorneoController extends Controller
     }
 
     // Finaliza una fecha/ronda del torneo
-   public function finalizarFecha(Request $request, Torneo $torneo)
+    public function finalizarFecha(Request $request, Torneo $torneo)
     {
         $ronda = $request->input('ronda');
         // Marcar la fecha como finalizada
@@ -438,7 +460,7 @@ class TorneoController extends Controller
             ->update(['finalizada' => true]);
 
         // Si es fase de grupos, verifica si es la última fecha
-        if ($torneo->fase_grupos) {
+        if ($torneo->tipo_competencia === 'copa' && $torneo->fase_grupos) {
             $totalFechas = $torneo->equipos_por_grupo - 1;
             if ($ronda == $totalFechas) {
                 $this->generarEliminacionDirecta($torneo);
@@ -447,48 +469,48 @@ class TorneoController extends Controller
             }
         }
 
-        // --- NUEVO: Generar siguiente ronda de eliminatoria ---
-        // Verifica si la ronda finalizada es de etapa eliminatoria
+        // --- Generar siguiente ronda de eliminatoria ---
         $partidosEliminatoria = \App\Models\Partido::where('torneo_id', $torneo->id)
             ->where('etapa', 'eliminatoria')
             ->where('ronda', $ronda)
             ->get();
 
         if ($partidosEliminatoria->count() > 0) {
-            // Solo si todos los partidos tienen resultado
             $todosConResultado = $partidosEliminatoria->every(function($p) {
                 return is_numeric($p->resultado_local) && is_numeric($p->resultado_visitante);
             });
 
             if ($todosConResultado) {
-                // Obtener ganadores de la ronda actual
                 $ganadores = [];
+                $perdedores = [];
                 foreach ($partidosEliminatoria as $p) {
                     if ($p->resultado_local > $p->resultado_visitante) {
                         $ganadores[] = $p->equipo_local_id;
+                        $perdedores[] = $p->equipo_visitante_id;
                     } elseif ($p->resultado_local < $p->resultado_visitante) {
                         $ganadores[] = $p->equipo_visitante_id;
-                    } else {
-                        // Empate: puedes definir aquí si hay penales, sorteo, etc.
-                        // Por ahora, no agrega ningún equipo
+                        $perdedores[] = $p->equipo_local_id;
                     }
+                    // Si hay empate, no se permite (debe ingresar resultado definitivo)
                 }
 
-                // Si hay más de 1 ganador, genera la siguiente ronda
-                if (count($ganadores) > 1) {
-                    $nuevaRonda = $ronda + 1;
+                $nextRonda = $ronda + 1;
+                // Si quedan 2 ganadores, es la final
+                if (count($ganadores) == 2) {
+                    $this->crearPartido($torneo->id, $ganadores[0], $ganadores[1], $nextRonda, 'eliminatoria');
+                    // Tercer lugar
+                    if ($torneo->tercer_lugar && count($perdedores) == 2) {
+                        $this->crearPartidoTercerLugar($torneo->id, $perdedores[0], $perdedores[1], $nextRonda, 'eliminatoria');
+                    }
+                } elseif (count($ganadores) > 2) {
+                    // Siguiente ronda normal
                     for ($i = 0; $i < count($ganadores); $i += 2) {
                         if (isset($ganadores[$i + 1])) {
-                            $this->crearPartido(
-                                $torneo->id,
-                                $ganadores[$i],
-                                $ganadores[$i + 1],
-                                $nuevaRonda,
-                                'eliminatoria'
-                            );
+                            $this->crearPartido($torneo->id, $ganadores[$i], $ganadores[$i + 1], $nextRonda, 'eliminatoria');
                         }
                     }
                 }
+                // Si solo hay 1 ganador, torneo terminó
             }
         }
 
@@ -547,17 +569,17 @@ class TorneoController extends Controller
             $clasificados = array_merge($clasificados, $tabla->take($clasificanPorGrupo)->pluck('equipo_id')->toArray());
         }
 
-        // Generar partidos de eliminación directa (ejemplo: semifinales)
-        // Emparejar 1° grupo A vs 2° grupo B, 1° grupo B vs 2° grupo A, etc.
-        // Puedes ajustar el emparejamiento según tu lógica
+        // Emparejamiento: 1° grupo A vs 2° grupo B, 1° grupo B vs 2° grupo A, etc.
+        // Por defecto, empareja en orden
         $totalClasificados = count($clasificados);
+        $ronda = $torneo->equipos_por_grupo; // primera ronda eliminatoria después de grupos
         for ($i = 0; $i < $totalClasificados; $i += 2) {
             if (isset($clasificados[$i + 1])) {
                 $this->crearPartido(
                     $torneo->id,
                     $clasificados[$i],
                     $clasificados[$i + 1],
-                    $torneo->equipos_por_grupo, // o la ronda que corresponda
+                    $ronda,
                     'eliminatoria'
                 );
             }

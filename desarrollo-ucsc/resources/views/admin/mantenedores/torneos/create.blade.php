@@ -68,14 +68,6 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="partidos_ida_vuelta" class="form-label">Partidos ida y vuelta</label>
-                        <select name="partidos_ida_vuelta" id="partidos_ida_vuelta" class="form-select">
-                            <option value="0">No</option>
-                            <option value="1">Sí</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
                         <label for="tercer_lugar" class="form-label">Se juega partido por el tercer lugar</label>
                         <select name="tercer_lugar" id="tercer_lugar" class="form-select">
                             <option value="0">No</option>
@@ -131,19 +123,32 @@
                 opcionesGruposDiv.style.display = 'none';
             }
         }
-
         function actualizarNumeroGrupos() {
             const maxEquipos = parseInt(maxEquiposSelect.value);
             numeroGruposSelect.innerHTML = '<option value="">Seleccione...</option>';
             if (!isNaN(maxEquipos)) {
-                // Calcular divisores de maxEquipos (sin el 1)
-                for(let i=2; i<maxEquipos; i++) { // i < maxEquipos para excluir el mismo número
+                // Solo mostrar divisores que permitan al menos una opción válida de clasificados por grupo
+                for(let i=2; i<maxEquipos; i++) {
                     if(maxEquipos % i === 0) {
-                        numeroGruposSelect.innerHTML += `<option value="${i}">${i}</option>`;
+                        const equiposPorGrupo = maxEquipos / i;
+                        let tieneOpcionValida = false;
+                        for(let j=1; j<equiposPorGrupo; j++) {
+                            if(esPotenciaDe2(j * i)) {
+                                tieneOpcionValida = true;
+                                break;
+                            }
+                        }
+                        if (tieneOpcionValida) {
+                            numeroGruposSelect.innerHTML += `<option value="${i}">${i}</option>`;
+                        }
                     }
                 }
             }
             actualizarClasificanPorGrupo();
+        }
+
+        function esPotenciaDe2(n) {
+            return n > 0 && (n & (n - 1)) === 0;
         }
 
         function actualizarClasificanPorGrupo() {
@@ -154,7 +159,10 @@
                 const equiposPorGrupo = maxEquipos / numGrupos;
                 // Solo permitir valores entre 1 y equiposPorGrupo-1
                 for(let i=1; i<equiposPorGrupo; i++) {
-                    clasificanPorGrupoSelect.innerHTML += `<option value="${i}">${i}</option>`;
+                    const totalClasificados = i * numGrupos;
+                    if(esPotenciaDe2(totalClasificados)) {
+                        clasificanPorGrupoSelect.innerHTML += `<option value="${i}">${i}</option>`;
+                    }
                 }
             }
         }

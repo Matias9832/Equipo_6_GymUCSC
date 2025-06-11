@@ -12,7 +12,6 @@
                 $partidosPorRonda = $partidos->groupBy('ronda');
                 $fechas = $partidosPorRonda->keys()->sort()->values();
                 $totalFechas = $fechas->count();
-                // Determinar la ronda actual (la menor ronda con partidos sin resultado)
                 $rondaActual = null;
                 foreach ($partidosPorRonda as $ronda => $partidosDeRonda) {
                     $incompletos = $partidosDeRonda->filter(function($p) {
@@ -23,17 +22,14 @@
                         break;
                     }
                 }
-                // Obtener ronda seleccionada por GET, si no, mostrar la ronda actual o la primera
                 $rondaSeleccionada = request('ronda');
                 if (!$rondaSeleccionada) {
                     $rondaSeleccionada = $rondaActual ?? ($fechas->first() ?? 1);
                 }
                 $rondaSeleccionada = intval($rondaSeleccionada);
-                // Para navegación
                 $indiceActual = $fechas->search($rondaSeleccionada);
                 $rondaAnterior = $indiceActual > 0 ? $fechas[$indiceActual - 1] : null;
                 $rondaSiguiente = $indiceActual !== false && $indiceActual < $fechas->count() - 1 ? $fechas[$indiceActual + 1] : null;
-                // ¿Está finalizada la fecha?
                 $finalizada = isset($partidosPorRonda[$rondaSeleccionada]) && $partidosPorRonda[$rondaSeleccionada]->first()->finalizada;
 
                 // Determinar etapa
@@ -50,7 +46,6 @@
                 }
             @endphp
 
-            {{-- Navegación de fechas tipo paginador --}}
             <div class="mb-3 d-flex align-items-center flex-wrap">
                 <form method="GET" class="me-2">
                     <input type="hidden" name="ronda" value="{{ $rondaAnterior }}">
@@ -81,7 +76,7 @@
             @if(isset($partidosPorRonda[$rondaSeleccionada]) && !$finalizada)
                 @php
                     $todosConResultado = $partidosPorRonda[$rondaSeleccionada]->every(function($p) {
-                        return $p->resultado_local !== null && $p->resultado_visitante !== null;
+                        return is_numeric($p->resultado_local) && is_numeric($p->resultado_visitante);
                     });
                 @endphp
                 <form method="POST" action="{{ route('torneos.finalizar-fecha', $torneo->id) }}" class="mb-3">
@@ -100,7 +95,6 @@
                 </button>
             </form>
 
-            {{-- Tabla de partidos de la fecha seleccionada --}}
             @if(isset($partidosPorRonda[$rondaSeleccionada]))
                 <h5>
                     Fecha {{ $rondaSeleccionada }}
