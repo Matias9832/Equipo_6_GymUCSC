@@ -13,104 +13,56 @@ class PermisoSeeder extends Seeder
      */
     public function run(): void
     {
-        $gruposPermisos = [
-            'Alumnos' => [
-                'Acceso al Mantenedor de Alumnos',
-            ],
-            'Deportes' => [
-                'Acceso al Mantenedor de Deportes',
-            ],
-            'Máquinas' => [
-                'Acceso al Mantenedor de Máquinas',
-            ],
-            'Marcas' => [
-                'Acceso al Mantenedor de Marcas',
-            ],
-            'Países' => [
-                'Acceso al Mantenedor de Países',
-            ],
-            'Regiones' => [
-                'Acceso al Mantenedor de Regiones',
-            ],
-            'Ciudades' => [
-                'Acceso al Mantenedor de Ciudades',
-            ],
-            'Sucursales' => [
-                'Acceso al Mantenedor de Sucursales',
-            ],
-            'Espacios' => [
-                'Acceso al Mantenedor de Espacios',
-            ],
-            'Salas' => [
-                'Acceso al Mantenedor de Salas',
-            ],
-            'Tipos de Espacios' => [
-                'Acceso al Mantenedor de Tipos de Espacios',
-            ],
-            'Tipos de Sanción' => [
-                'Acceso al Mantenedor de Tipos de Sanción',
-            ],
-            'Administradores' => [
-                'Acceso al Mantenedor de Administradores',
-            ],
-            'Roles' => [
-                'Acceso al Mantenedor de Roles',
-            ],
-            'Equipos' => [
-                'Acceso al Mantenedor de Equipos',
-            ],
-            'Torneos' => [
-                'Acceso al Mantenedor de Torneos',
-            ],
-            'Rutinas' => [
-                'Acceso al Mantenedor de Rutinas',
-            ],
-            'Talleres' => [
-                'Acceso al Mantenedor de Talleres',
-                'Acceso a Gestión de Asistencia Talleres',
-            ],
-            'Ejercicios' => [
-                'Acceso al Mantenedor de Ejercicios',
-            ],
-            'Carreras' => [
-                'Acceso al Mantenedor de Carreras',
-            ],
-            'Usuarios' => [
-                'Acceso al Mantenedor de Usuarios',
-                'Ver Usuarios',
-                'Crear Usuarios',
-                'Editar Usuarios',
-                'Eliminar Usuarios',
-            ],
-            'Docentes' => [
-                'Acceso al Mantenedor de Docentes',
-                'Ver Docentes',
-                'Crear Docentes',
-                'Editar Docentes',
-                'Eliminar Docentes',
-            ],
-            'Noticias' => [
-                'Crear Noticias',
-            ],
-            'Gestión' => [
-                'Acceso a Gestión de QR',
-            ],
-            'Salas Abiertas' => [
-                'Acceso a Salas Abiertas',
-            ],
+        $permisos = [
+            'Acceso al Mantenedor de Alumnos',
+            'Acceso al Mantenedor de Deportes',
+            'Acceso al Mantenedor de Máquinas',
+            'Acceso al Mantenedor de Marcas',
+            'Acceso al Mantenedor de Países',
+            'Acceso al Mantenedor de Regiones',
+            'Acceso al Mantenedor de Ciudades',
+            'Acceso al Mantenedor de Sucursales',
+            'Acceso al Mantenedor de Espacios',
+            'Acceso al Mantenedor de Salas',
+            'Acceso al Mantenedor de Tipos de Espacios',
+            'Acceso al Mantenedor de Tipos de Sanción',
+            'Acceso al Mantenedor de Administradores',
+            'Acceso al Mantenedor de Roles',
+            'Acceso al Mantenedor de Equipos',
+            'Acceso al Mantenedor de Torneos',
+            'Acceso al Mantenedor de Rutinas',
+            'Acceso al Mantenedor de Talleres',
+            'Acceso al Mantenedor de Ejercicios',
+            'Acceso al Mantenedor de Carreras',
+
+            // Acceso a funcionalidades de gestión
+            'Acceso a Gestión de QR',
+            'Acceso a Gestión de Asistencia Talleres',
+
+            // Accesos a Salas Abiertas
+            'Acceso a Salas Abiertas',
+
+            // Acceso al Mantenedor de Usuarios
+            'Ver Usuarios',
+            'Crear Usuarios',
+            'Editar Usuarios',
+            'Eliminar Usuarios',
+
+            // Acceso al Mantenedor de Docentes
+            'Ver Docentes',
+            'Crear Docentes',
+            'Editar Docentes',
+            'Eliminar Docentes',
+
+            // Acceso a las noticias
+            'Crear Noticias',
         ];
 
-        foreach ($gruposPermisos as $subpermiso => $permisos) {
-            foreach ($permisos as $permiso) {
-                DB::table('permiso')->updateOrInsert(
-                    ['nombre_permiso' => $permiso],
-                    [
-                        'subpermisos' => $subpermiso,
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
-                    ]
-                );
-            }
+        foreach ($permisos as $permiso) {
+            DB::table('permiso')->updateOrInsert(
+                ['nombre_permiso' => $permiso],
+                ['created_at' => Carbon::now(), 'updated_at' => Carbon::now()]
+            );
         }
     }
 }

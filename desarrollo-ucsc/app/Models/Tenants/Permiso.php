@@ -15,6 +15,5 @@ class Permiso extends Model
 
     protected $fillable = [
         'nombre_permiso',
-        'subpermisos',
     ];
 }

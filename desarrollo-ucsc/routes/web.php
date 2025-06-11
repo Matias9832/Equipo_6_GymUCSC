@@ -27,7 +27,5 @@ Route::prefix('plan')->name('plan.')->group(function () {
     Route::resource('planes', PlanController::class);
     Route::resource('beneficios', BeneficioController::class);
     Route::resource('permisos', PermisoController::class);
-
-    Route::delete('permisos/subgrupo/{subgrupo}', [PermisoController::class, 'destroySubgrupo'])->name('permisos.destroySubgrupo');
 });
 
