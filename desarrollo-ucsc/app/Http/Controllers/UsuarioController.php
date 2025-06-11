@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use \App\Models\Administrador;
 use App\Models\Usuario;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use App\Models\Alumno;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 
 class UsuarioController extends Controller
 {
@@ -24,7 +20,6 @@ class UsuarioController extends Controller
                     ->where('model_has_roles.model_type', '=', Usuario::class);
             })
                 ->leftJoin('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                ->leftJoin('administrador', 'usuario.rut', '=', 'administrador.rut_admin')
                 ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
                 ->select([
                     'usuario.id_usuario',
@@ -46,6 +41,9 @@ class UsuarioController extends Controller
                     return '<span class="badge badge-sm ' . $class . '" style="width:150px;">' . $label . '</span>';
                 })
                 ->addColumn('acciones', function ($usuario) {
+                    $editar = '<a href="' . route('usuarios.edit', $usuario->id_usuario) . '" class="btn btn-link text-primary p-0 m-0 align-baseline" title="Editar">
+                    <i class="fas fa-edit"></i>
+                </a>';
                     $eliminar = auth()->user()->can('Eliminar Usuarios')
                         ? '<form action="' . route('usuarios.destroy', $usuario->id_usuario) . '" method="POST" class="d-inline">'
                         . csrf_field() . method_field('DELETE') .
@@ -53,7 +51,7 @@ class UsuarioController extends Controller
                         . '<i class="fas fa-trash-alt"></i></button></form>'
                         : '';
 
-                    return $eliminar;
+                    return $editar .' '. $eliminar;
                 })
                 ->rawColumns(['rol_visible', 'acciones'])
                 ->filter(function ($query) use ($request) {
@@ -73,65 +71,25 @@ class UsuarioController extends Controller
 
     public function edit(Usuario $usuario)
     {
-        $administrador = Administrador::where('rut_admin', $usuario->rut)->firstorfail();
-        return view('admin.mantenedores.usuarios.edit', compact('usuario', 'administrador'));
+        return view('admin.mantenedores.usuarios.edit', compact('usuario'));
     }
 
     public function update(Request $request, Usuario $usuario)
     {
-        $rules = [
-            'rut' => 'required|string|unique:usuario,rut,' . $usuario->id_usuario . ',id_usuario',
-            'nombre_admin' => 'required|string|max:255',
-            'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $usuario->id_usuario . ',id_usuario',
-        ];
-        // Si el usuario NO es admin, entonces validamos tipo_usuario
-        if ($usuario->tipo_usuario !== 'admin') {
-            $rules['tipo_usuario'] = 'required|in:estudiante,seleccionado';
-        } else {
-            $rules['rol'] = 'required|in:Docente,Coordinador,Visor QR'; // Si es admin, validamos el rol
+        // Solo permitir actualizar si es estudiante o seleccionado
+        if (!in_array($usuario->tipo_usuario, ['estudiante', 'seleccionado'])) {
+            abort(403, 'Solo se puede editar tipo_usuario de estudiantes o seleccionados.');
         }
 
-        $request->validate($rules);
-
-
-
-        if ($request->correo_usuario !== $request->correo_antiguo) {
-            // Si el correo ha cambiado, se envía un nuevo correo con la contraseña
-            $password = substr(str_shuffle('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6);
-            $data = [
-                'nombre_admin' => $request->nombre_admin,
-                'correo_usuario' => $request->correo_usuario,
-                'contrasenia_usuario' => Hash::make($password),
-            ];
-
-            Mail::to($usuario->correo_usuario)->send(new \App\Mail\AdministradorPasswordMail($request->nombre_admin, $password));
-
-        } else {
-            // Si el correo no ha cambiado, no se actualiza el campo correo_usuario
-            $data = [
-                'nombre_admin' => $request->nombre_admin,
-            ];
-        }
-
-        // Solo actualiza tipo_usuario si no es admin
-        if ($usuario->tipo_usuario !== 'admin') {
-            $data['tipo_usuario'] = $request->tipo_usuario;
-            $usuario->syncRoles([]); // Asegúrate de quitar cualquier rol si ya no es admin
-        }
-
-        $usuario->update($data);
-
-        $administrador = Administrador::where('rut_admin', $request->rut)->firstorfail();
-        $administrador->update([
-            'nombre_admin' => $request->nombre_admin,
+        $request->validate([
+            'tipo_usuario' => 'required|in:estudiante,seleccionado',
         ]);
 
-        // Si es admin, sincroniza el rol
-        if ($usuario->tipo_usuario === 'admin' && $request->has('rol')) {
-            $usuario->syncRoles([$request->rol]);
-        }
+        $usuario->update([
+            'tipo_usuario' => $request->tipo_usuario,
+        ]);
 
-        return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente.');
+        return redirect()->route('usuarios.index')->with('success', 'Tipo de usuario actualizado correctamente.');
     }
 
     public function buscar(Request $request)
@@ -162,7 +120,6 @@ class UsuarioController extends Controller
 
     public function destroy(Usuario $usuario)
     {
-        Administrador::where('rut_admin', $usuario->rut)->delete(); // Eliminar el administrador asociado
         $usuario->delete();
         return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado correctamente.');
     }
