@@ -126,6 +126,11 @@ Route::middleware([
         Route::get('/torneos/{torneo}/agregar-miembros', [TorneoUsuarioController::class, 'agregarMiembros'])->name('torneos.agregar.miembros');
         Route::post('/torneos/{torneo}/guardar-miembros', [TorneoUsuarioController::class, 'guardarMiembros'])->name('torneos.guardar.miembros');
         Route::get('/buscar-usuario', [TorneoUsuarioController::class, 'buscarUsuario'])->name('torneos.buscar.usuario');
+
+        Route::get('/torneos/{torneo}/tabla', [TorneoController::class, 'tabla'])->name('usuario.torneos.tabla');
+        Route::get('/torneos/{torneo}/partidos', [TorneoController::class, 'partidos'])->name('usuario.torneos.partidos');
+        Route::get('/torneos/{torneo}/fase-grupos', [TorneoController::class, 'faseGrupos'])->name('usuario.torneos.fase-grupos');
+        Route::get('/torneos/{torneo}/copa', [TorneoController::class, 'copa'])->name('usuario.torneos.copa');
         
     
         

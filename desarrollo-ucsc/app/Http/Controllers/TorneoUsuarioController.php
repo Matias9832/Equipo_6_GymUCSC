@@ -12,13 +12,10 @@ class TorneoUsuarioController extends Controller
 {
     public function index()
     {
-        $usuario = Auth::user();
-        // Mostrar todos los torneos donde el usuario participa en algún equipo
-        $torneos = $usuario->equipos->flatMap(function ($equipo) {
-            return $equipo->torneos;
-        })->unique('id');
+        // Mostrar todos los torneos disponibles
+        $torneos = Torneo::with('deporte')->get();
 
-        return view('usuarios.torneos', compact('torneos'));
+        return view('usuarios.torneos.torneos', compact('torneos'));
     }
 
     public function agregarMiembros(Torneo $torneo)
