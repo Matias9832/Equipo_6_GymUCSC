@@ -13,9 +13,26 @@
                             class="me-2">
                             DEPORTES
                         </span> -->
+
                         <img src="{{ url('img/gym/ucsc_logo.png') }}" alt="Logo UCSC" style="height: 30px;"
                             class="me-2">
                     </a>
+                    <div class="d-flex align-items-center flex-wrap overflow-auto" >
+                        <ul class="nav nav-tabs " role="tablist">
+                            <li class="nav-item" role="presentation" >
+                                <a class="nav-link {{ request()->routeIs('welcome') ? 'active' : '' }}" 
+                                href="{{ route('welcome') }}" role="tab">
+                                    Inicio
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link {{ request()->routeIs('newsAcademy.index') ? 'active' : '' }}" 
+                                href="{{ route('newsAcademy.index') }}" role="tab">
+                                    Academia Deportiva
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
                         aria-label="Toggle navigation">

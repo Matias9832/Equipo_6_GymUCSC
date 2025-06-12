@@ -41,6 +41,8 @@ use App\Http\Controllers\RutinaController;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\AsistenciaTallerController;
 use App\Http\Controllers\RutinaPersonalizadaController;
+use App\Http\Controllers\AcademyNewsController;
+use App\Models\AcademyNews;
 use Spatie\Permission\Models\Permission;
 
 /*
@@ -96,6 +98,8 @@ Route::middleware([
     // Noticias públicas
     Route::get('/noticias', [NewsController::class, 'index'])->name('news.index');
     Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
+    Route::get('/noticias-academia', [AcademyNewsController::class, 'index'])->name('newsAcademy.index');
+    Route::get('/noticias-academia/{news}', [AcademyNewsController::class, 'show'])->name('newsAcademy.show');
 
     // Grupo de rutas protegidas por auth
     Route::group(['middleware' => 'auth'], function () {
@@ -243,6 +247,8 @@ Route::middleware([
         Route::middleware(['permission:Crear Noticias'])->group(function () {
             Route::resource('news', NewsController::class)->except(['index', 'show']);
             Route::post('/news/{id}/toggle-featured', [NewsController::class, 'toggleFeatured'])->name('news.toggleFeatured');
+            Route::resource('academynews', AcademyNewsController::class)->except(['index', 'show']);
+            Route::post('/academynews/{id}/toggle-featured', [AcademyNewsController::class, 'toggleFeatured'])->name('newsAcademy.toggleFeatured');
         });
        
 
