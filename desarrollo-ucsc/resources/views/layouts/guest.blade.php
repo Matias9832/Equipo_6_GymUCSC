@@ -41,6 +41,11 @@
 </head>
 
 <body class="{{ $class ?? '' }}">
+    @php
+        use App\Models\Marca;
+        $ultimaMarca = Marca::orderBy('id_marca', 'desc')->first();
+    @endphp
+    
     <div class="min-height-300 bg-primary position-absolute w-100"></div>
     @yield('content')
 

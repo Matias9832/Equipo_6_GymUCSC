@@ -15,4 +15,8 @@ class Tenant extends BaseTenant implements TenantWithDatabase
     {
         return $this->hasOne(\App\Models\Tenants\TemaTenant::class, 'tenant_id', 'id');
     }
+    public function empresa()
+    {
+        return $this->belongsTo(\App\Models\Tenants\Empresa::class);
+    }
 }

@@ -5,20 +5,13 @@
 @section('content')
     @include('layouts.tenants.navbars.ttopnav', ['title' => 'Subdominios'])
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h6 class="text-dark">Subdominios Activos</h6>
-                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#crearTenantModal">
-                            Crear nuevo Tenant
-                        </button>
+                        <a class="btn btn-primary btn-sm" href="{{ route('tenants.create') }}">Crear nuevo Tenant</a>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         @if($tenants->count())
@@ -28,25 +21,42 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    ID</th>
+                                                    Logo</th>
+                                                <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                    Empresa</th> -->
                                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                     Dominio</th>
-                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Acción</th>
+                                                <th
+                                                    class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                                                    Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($tenants as $tenant)
                                                 <tr>
-                                                    <td><span class="text-xs font-weight-bold ps-3">{{ $tenant->id }}</span></td>
-                                                    <td><span
-                                                            class="text-xs ps-3">{{ $tenant->domains->first()->domain ?? 'Sin dominio' }}</span>
+                                                    <td class="ps-4">
+                                                        @if ($tenant->empresa && $tenant->empresa->logo)
+                                                            <img src="{{ url($tenant->empresa->logo) }}" alt="Logo"
+                                                                style="max-height: 34px;">
+                                                        @else
+                                                            —
+                                                        @endif
                                                     </td>
-                                                    <td>
-                                                        <a href="http://{{ $tenant->domains->first()->domain }}:8000"
-                                                            target="_blank" class="btn btn-sm btn-secondary">
-                                                            Visitar
-                                                        </a>
+                                                    <!-- <td class="text-sm fw-bold">
+                                                        {{ $tenant->empresa->nombre ?? 'Empresa no asignada' }}
+                                                    </td> -->
+                                                    <td class="text-sm ps-4">
+                                                        {{ $tenant->domains->first()->domain ?? 'Sin dominio asignado' }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        @if ($tenant->domains->first())
+                                                            <a href="http://{{ $tenant->domains->first()->domain }}:8000"
+                                                                target="_blank" class="btn btn-sm btn-secondary">
+                                                                Visitar
+                                                            </a>
+                                                        @else
+                                                            —
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -55,13 +65,12 @@
                                 </table>
                             </div>
                         @else
-                            <div class="alert alert-info">No hay tenants registrados aún.</div>
+                            <div class="alert alert-info m-3">No hay tenants registrados aún.</div>
                         @endif
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    @include('tenants.subdominios._modal')
 
 @endsection

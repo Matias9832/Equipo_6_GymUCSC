@@ -2,8 +2,9 @@
     tabindex="-1" id="sidenav-central" aria-labelledby="offcanvasLabel" style="max-width: 17.125rem !important;">
 
     <div class="offcanvas-body position-sticky top-0 bg-white d-flex justify-content-center" style="z-index: 2;">
-        <a class="navbar-brand m-0" href="{{ route('start') }}">
-            <img src="{{ url('img\tenants\logo_ugym-fondoblanco.png') }}" class="navbar-brand-img h-100" alt="main_logo">
+        <a class="navbar-brand m-0" href="{{ route('inicio') }}">
+            <img src="{{ url('img\tenants\logo_ugym-fondoblanco.png') }}" class="navbar-brand-img h-100"
+                alt="main_logo">
         </a>
     </div>
 
@@ -11,11 +12,12 @@
     <ul class="navbar-nav">
         {{-- Inicio --}}
         <li class="nav-item">
-            <a class="nav-link {{ Route::currentRouteName() == 'tenants.index' ? 'active' : '' }}" href="{{ route('home') }}">
+            <a class="nav-link {{ Route::currentRouteName() == 'tenants.index' ? 'active' : '' }}"
+                href="{{ route('tenants.index') }}">
                 <div class="ps-1">
                     <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
-                    <span class="nav-link-text ms-1">Subdominios</span>
                 </div>
+                <span class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Subdominios</span>
             </a>
         </li>
 
@@ -28,7 +30,7 @@
     style="max-width: 17.125rem !important;" id="sidenav-central">
 
     <div class="sidenav-header position-sticky top-0 bg-white d-flex justify-content-center" style="z-index: 2;">
-        <a class="navbar-brand m-0" href="{{ route('welcome') }}">
+        <a class="navbar-brand m-0" href="{{ route('inicio') }}">
             <img src="{{ url('img\tenants\logo_ugym-fondoblanco.png') }}" class="navbar-brand-img" alt="main_logo">
         </a>
     </div>
@@ -39,7 +41,7 @@
         <ul class="navbar-nav">
             {{-- Inicio --}}
             <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'teanants.index' ? 'active' : '' }}"
+                <a class="nav-link {{ Route::currentRouteName() == 'tenants.index' ? 'active' : '' }}"
                     href="{{ route('tenants.index') }}">
                     <div class="ps-1">
                         <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
