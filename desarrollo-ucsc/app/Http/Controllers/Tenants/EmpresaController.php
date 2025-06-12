@@ -66,7 +66,7 @@ class EmpresaController extends Controller
             $request->validate([
                 'dominio' => 'nullable|string|max:100',
             ]);
-            $empresa->dominio = $request->dominio ?: 'Sin dominio asignado';
+            $empresa->dominio = $request->dominio ?: NULL;
         }
 
         if ($request->hasFile('logo')) {

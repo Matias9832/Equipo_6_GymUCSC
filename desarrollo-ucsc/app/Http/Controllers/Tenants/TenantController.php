@@ -11,10 +11,16 @@ class TenantController extends Controller
 {
     public function index()
     {
-        $tenants = Tenant::all();
+        $tenants = Tenant::with(['empresa', 'domains'])->get();
+
+        return view('tenants.subdominios.index', compact('tenants'));
+    }
+    public function create()
+    {
+        $empresasDisponibles = \App\Models\Tenants\Empresa::whereDoesntHave('tenant')->get();
         $temas = Tema::all();
 
-        return view('tenants.subdominios.index', compact('tenants', 'temas'));
+        return view('tenants.subdominios.create', compact('empresasDisponibles', 'temas'));
     }
 
     public function store(Request $request)

@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\Tenants\FuentesSeeder;
 use Database\Seeders\Tenants\ColoresSeeder;
 use Database\Seeders\Tenants\TemasSeeder;
+use Database\Seeders\Tenants\EmpresaSeeder;
 
 class CentralSeeder extends Seeder
 {
@@ -19,6 +20,7 @@ class CentralSeeder extends Seeder
             FuentesSeeder::class,
             ColoresSeeder::class,
             TemasSeeder::class,
+            EmpresaSeeder::class,
         ]);
     }
 }

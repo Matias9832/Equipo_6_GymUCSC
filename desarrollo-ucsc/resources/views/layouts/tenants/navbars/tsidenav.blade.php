@@ -2,7 +2,7 @@
     tabindex="-1" id="sidenav-central" aria-labelledby="offcanvasLabel" style="max-width: 17.125rem !important;">
 
     <div class="offcanvas-body position-sticky top-0 bg-white d-flex justify-content-center" style="z-index: 2;">
-        <a class="navbar-brand m-0" href="{{ route('start') }}">
+        <a class="navbar-brand m-0" href="{{ route('inicio') }}">
             <img src="{{ url('img\tenants\logo_ugym-fondoblanco.png') }}" class="navbar-brand-img h-100" alt="main_logo">
         </a>
     </div>
@@ -28,7 +28,7 @@
     style="max-width: 17.125rem !important;" id="sidenav-central">
 
     <div class="sidenav-header position-sticky top-0 bg-white d-flex justify-content-center" style="z-index: 2;">
-        <a class="navbar-brand m-0" href="{{ route('welcome') }}">
+        <a class="navbar-brand m-0" href="{{ route('inicio') }}">
             <img src="{{ url('img\tenants\logo_ugym-fondoblanco.png') }}" class="navbar-brand-img" alt="main_logo">
         </a>
     </div>

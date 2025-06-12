@@ -11,8 +11,12 @@
 </li>
 
 <li class="nav-item">
-    <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
-        href="#submenuColores" role="button" aria-expanded="false" aria-controls="submenuColores">
+    <a class="nav-link d-flex justify-content-between align-items-center
+    {{ Route::currentRouteName() == 'personalizacion.temas.index' ? 'active' : '' }}
+    {{ Route::currentRouteName() == 'personalizacion.colores.index' ? 'active' : '' }}
+    {{ Route::currentRouteName() == 'personalizacion.fuentes.index' ? 'active' : '' }}
+    " data-bs-toggle="collapse" href="#submenuColores" role="button" aria-expanded="false"
+        aria-controls="submenuColores">
         <div class="d-flex align-items-center">
             <div class="ps-1">
                 <i class="ni ni-palette text-primary text-sm opacity-10"></i>

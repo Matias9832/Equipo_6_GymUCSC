@@ -17,4 +17,10 @@ class Empresa extends Model
         'subdominio',
         'dominio',
     ];
+
+    public function tenant()
+    {
+        return $this->hasOne(\App\Models\Tenant::class);
+    }
+
 }

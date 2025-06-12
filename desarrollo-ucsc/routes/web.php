@@ -11,7 +11,7 @@ use App\Http\Controllers\Tenants\Personalizacion\FuenteController;
 Route::get('/inicio', function () {
     return view('inicio');
 })->name('inicio');
-Route::resource('tenants', TenantController::class)->only(['index', 'store']);
+Route::resource('tenants', TenantController::class);
 Route::resource('empresas', EmpresaController::class);
 
 
