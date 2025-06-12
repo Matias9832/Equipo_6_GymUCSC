@@ -401,13 +401,13 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         ),
         'Spatie\\LaravelIgnition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
-            1 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
+            0 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
+            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
         ),
         'Spatie\\Ignition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
-            1 => __DIR__ . '/..' . '/spatie/ignition/src',
+            0 => __DIR__ . '/..' . '/spatie/ignition/src',
+            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
         ),
         'Spatie\\FlareClient\\' => 
         array (
@@ -749,6 +749,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Controllers\\SaludController' => __DIR__ . '/../..' . '/app/Http/Controllers/SaludController.php',
         'App\\Http\\Controllers\\SucursalController' => __DIR__ . '/../..' . '/app/Http/Controllers/SucursalController.php',
         'App\\Http\\Controllers\\TallerController' => __DIR__ . '/../..' . '/app/Http/Controllers/TallerController.php',
+        'App\\Http\\Controllers\\Tenants\\EmpresaController' => __DIR__ . '/../..' . '/app/Http/Controllers/Tenants/EmpresaController.php',
         'App\\Http\\Controllers\\Tenants\\Personalizacion\\ColorController' => __DIR__ . '/../..' . '/app/Http/Controllers/Tenants/Personalizacion/ColorController.php',
         'App\\Http\\Controllers\\Tenants\\Personalizacion\\FuenteController' => __DIR__ . '/../..' . '/app/Http/Controllers/Tenants/Personalizacion/FuenteController.php',
         'App\\Http\\Controllers\\Tenants\\Personalizacion\\TemaController' => __DIR__ . '/../..' . '/app/Http/Controllers/Tenants/Personalizacion/TemaController.php',
@@ -801,6 +802,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Models\\Taller' => __DIR__ . '/../..' . '/app/Models/Taller.php',
         'App\\Models\\Tenant' => __DIR__ . '/../..' . '/app/Models/Tenant.php',
         'App\\Models\\Tenants\\Color' => __DIR__ . '/../..' . '/app/Models/Tenants/Color.php',
+        'App\\Models\\Tenants\\Empresa' => __DIR__ . '/../..' . '/app/Models/Tenants/Empresa.php',
         'App\\Models\\Tenants\\Fuente' => __DIR__ . '/../..' . '/app/Models/Tenants/Fuente.php',
         'App\\Models\\Tenants\\Tema' => __DIR__ . '/../..' . '/app/Models/Tenants/Tema.php',
         'App\\Models\\Tenants\\TemaTenant' => __DIR__ . '/../..' . '/app/Models/Tenants/TemaTenant.php',
