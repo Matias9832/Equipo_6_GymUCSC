@@ -45,8 +45,8 @@
     @if(session('success') || session('update') || session('delete'))
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
             <div id="toastSuccess" class="toast align-items-center text-white 
-                                                            {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
-                                                            border-0 show" role="alert" aria-live="assertive"
+                                                                        {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
+                                                                        border-0 show" role="alert" aria-live="assertive"
                 aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body text-center w-100">
@@ -115,11 +115,17 @@
         </script>
     @endif
 
-    <div class="min-height-300 bg-primary position-absolute w-100"></div>
-    @include('layouts.tenants.navbars.tsidenav')
-    <main class="main-content border-radius-lg">
-        @yield('content')
-    </main>
+    @if (in_array(request()->route()->getName(), ['inicio']))
+        <main class="main-content border-radius-lg">
+            @yield('content')
+        </main>
+    @else
+        <div class="min-height-300 bg-primary position-absolute w-100"></div>
+        @include('layouts.tenants.navbars.tsidenav')
+        <main class="main-content border-radius-lg">
+            @yield('content')
+        </main>
+    @endif
 
     <!--   Core JS Files   -->
     <script src="{{ url('assets/js/core/popper.min.js') }}"></script>
