@@ -11,22 +11,6 @@
                     </a>
                     <div class="collapse" id="submenuComunidad">
                         <ul class="nav flex-column ms-3">
-                            @can('Acceso al Mantenedor de Alumnos')
-                                <li class="nav-item">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'alumnos.index' ? 'active' : '' }}"
-                                        href="{{ route('alumnos.index') }}">
-                                        <i class="ni ni-hat-3 text-primary text-sm opacity-10"></i> Alumnos
-                                    </a>
-                                </li>
-                            @endcan
-                            @can('Acceso al Mantenedor de Carreras')
-                                <li class="nav-item">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'carreras.index' ? 'active' : '' }}"
-                                        href="{{ route('carreras.index') }}">
-                                        <i class="ni ni-book-bookmark text-info text-sm opacity-10"></i> Carreras
-                                    </a>
-                                </li>
-                            @endcan
                             @canany(['Ver Usuarios', 'Crear Usuarios', 'Editar Usuarios', 'Eliminar Usuarios'])
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'usuarios.index' ? 'active' : '' }}"
@@ -35,19 +19,27 @@
                                     </a>
                                 </li>
                             @endcanany
-                            @can('Acceso al Mantenedor de Administradores')
+                            @can('Acceso al Mantenedor de Alumnos')
                                 <li class="nav-item">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'administradores.index' ? 'active' : '' }}"
-                                        href="{{ route('administradores.index') }}">
-                                        <i class="ni ni-badge text-danger text-sm opacity-10"></i> Administradores
+                                    <a class="nav-link {{ Route::currentRouteName() == 'docentes.index' ? 'active' : '' }}"
+                                        href="{{ route('docentes.index') }}">
+                                        <i class="fas fa-chalkboard-teacher text-dark text-sm opacity-10"></i> Docentes {{-- Icono y color a tu gusto --}}
                                     </a>
                                 </li>
                             @endcan
                             @can('Acceso al Mantenedor de Alumnos')
                                 <li class="nav-item">
-                                    <a class="nav-link {{ Route::currentRouteName() == 'docentes.index' ? 'active' : '' }}"
-                                        href="{{ route('docentes.index') }}">
-                                        <i class="fas fa-chalkboard-teacher text-purple text-sm opacity-10"></i> Docentes {{-- Icono y color a tu gusto --}}
+                                    <a class="nav-link {{ Route::currentRouteName() == 'alumnos.index' ? 'active' : '' }}"
+                                        href="{{ route('alumnos.index') }}">
+                                        <i class="ni ni-hat-3 text-dark text-sm opacity-10"></i> Alumnos
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('Acceso al Mantenedor de Carreras')
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'carreras.index' ? 'active' : '' }}"
+                                        href="{{ route('carreras.index') }}">
+                                        <i class="ni ni-book-bookmark text-dark text-sm opacity-10"></i> Carreras
                                     </a>
                                 </li>
                             @endcan
@@ -83,7 +75,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'talleres.index' ? 'active' : '' }}"
                                         href="{{ route('talleres.index') }}">
-                                        <i class="ni ni-briefcase-24 text-warning text-sm opacity-10"></i> Talleres
+                                        <i class="ni ni-briefcase-24 text-dark text-sm opacity-10"></i> Talleres
                                     </a>
                                 </li>
                             @endcanany
@@ -99,7 +91,7 @@
                         href="#submenuGestionEspacios" role="button" aria-expanded="false"
                         aria-controls="submenuGestionEspacios">
                         <div class="d-flex align-items-center">
-                            <i class="ni ni-building text-success text-sm opacity-10 ps-1"></i>
+                            <i class="ni ni-building text-dark text-sm opacity-10 ps-1"></i>
                             <span class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Gestión de
                                 Espacios</span>
                         </div>
@@ -110,7 +102,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'sucursales.index' ? 'active' : '' }}"
                                         href="{{ route('sucursales.index') }}">
-                                        <i class="ni ni-shop text-success text-sm opacity-10"></i> Sucursales
+                                        <i class="ni ni-shop text-dark text-sm opacity-10"></i> Sucursales
                                     </a>
                                 </li>
                             @endcan
@@ -118,7 +110,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'espacios.index' ? 'active' : '' }}"
                                         href="{{ route('espacios.index') }}">
-                                        <i class="ni ni-album-2 text-info text-sm opacity-10"></i> Espacios
+                                        <i class="ni ni-album-2 text-dark text-sm opacity-10"></i> Espacios
                                     </a>
                                 </li>
                             @endcan
@@ -126,7 +118,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'salas.index' ? 'active' : '' }}"
                                         href="{{ route('salas.index') }}">
-                                        <i class="ni ni-building text-warning text-sm opacity-10"></i> Salas
+                                        <i class="ni ni-building text-dark text-sm opacity-10"></i> Salas
                                     </a>
                                 </li>
                             @endcan
@@ -134,7 +126,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'maquinas.index' ? 'active' : '' }}"
                                         href="{{ route('maquinas.index') }}">
-                                        <i class="ni ni-settings text-secondary text-sm opacity-10"></i> Máquinas
+                                        <i class="ni ni-settings text-dark text-sm opacity-10"></i> Máquinas
                                     </a>
                                 </li>
                             @endcan
@@ -142,7 +134,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'tipos_espacio.index' ? 'active' : '' }}"
                                         href="{{ route('tipos_espacio.index') }}">
-                                        <i class="ni ni-collection text-primary text-sm opacity-10"></i> Tipos de Espacios
+                                        <i class="ni ni-collection text-dark text-sm opacity-10"></i> Tipos de Espacios
                                     </a>
                                 </li>
                             @endcan
@@ -150,7 +142,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'tipos_sancion.index' ? 'active' : '' }}"
                                         href="{{ route('tipos_sancion.index') }}">
-                                        <i class="ni ni-watch-time text-danger text-sm opacity-10"></i> Tipos de Sanción
+                                        <i class="ni ni-watch-time text-dark text-sm opacity-10"></i> Tipos de Sanción
                                     </a>
                                 </li>
                             @endcan
@@ -167,7 +159,7 @@
                         aria-controls="submenuDeportivo">
                         <div class="d-flex align-items-center">
                             <div class="ps-1">
-                                <i class="ni ni-trophy text-warning text-sm opacity-10"></i>
+                                <i class="ni ni-trophy text-dark text-sm opacity-10"></i>
                             </div>
                             <span class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Gestión
                                 Deportiva</span>
@@ -188,7 +180,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'equipos.index' ? 'active' : '' }}"
                                         href="{{ route('equipos.index') }}">
-                                        <i class="ni ni-user-run text-info text-sm opacity-10"></i>
+                                        <i class="ni ni-user-run text-dark text-sm opacity-10"></i>
                                         <span class="nav-link-text ms-1">Equipos</span>
                                     </a>
                                 </li>
@@ -197,7 +189,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'torneos.index' ? 'active' : '' }}"
                                         href="{{ route('torneos.index') }}">
-                                        <i class="ni ni-trophy text-success text-sm opacity-10"></i>
+                                        <i class="ni ni-trophy text-dark text-sm opacity-10"></i>
                                         <span class="nav-link-text ms-1">Torneos</span>
                                     </a>
                                 </li>
@@ -213,7 +205,7 @@
                     <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
                         href="#submenuRutinas" role="button" aria-expanded="false" aria-controls="submenuRutinas">
                         <div class="d-flex align-items-center ps-1">
-                            <i class="ni ni-calendar-grid-58 text-success text-sm opacity-10"></i>
+                            <i class="ni ni-calendar-grid-58 text-dark text-sm opacity-10"></i>
                             <span class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Gestión de
                                 Rutinas</span>
                         </div>
@@ -224,7 +216,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'rutinas.index' ? 'active' : '' }}"
                                         href="{{ route('rutinas.index') }}">
-                                        <i class="fas fa-tasks text-success text-sm opacity-10"></i>Rutinas
+                                        <i class="fas fa-tasks text-dark text-sm opacity-10"></i>Rutinas
                                     </a>
                                 </li>
                             @endcan
@@ -232,7 +224,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'ejercicios.index' ? 'active' : '' }}"
                                         href="{{ route('ejercicios.index') }}">
-                                        <i class="fas fa-dumbbell text-primary text-sm opacity-10"></i>Ejercicios
+                                        <i class="fas fa-dumbbell text-dark text-sm opacity-10"></i>Ejercicios
                                     </a>
                                 </li>
                             @endcan
@@ -248,7 +240,7 @@
                         href="#submenuGeografia" role="button" aria-expanded="false" aria-controls="submenuGeografia">
                         <div class="d-flex align-items-center">
                             <div class="ps-1">
-                                <i class="ni ni-world-2 text-info text-sm opacity-10"></i>
+                                <i class="ni ni-world-2 text-dark text-sm opacity-10"></i>
                             </div>
                             <span class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Geografía</span>
                         </div>
@@ -268,7 +260,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'regiones.index' ? 'active' : '' }}"
                                         href="{{ route('regiones.index') }}">
-                                        <i class="ni ni-pin-3 text-primary text-sm opacity-10"></i>
+                                        <i class="ni ni-pin-3 text-dark text-sm opacity-10"></i>
                                         <span class="nav-link-text ms-1">Regiones</span>
                                     </a>
                                 </li>
@@ -277,7 +269,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'paises.index' ? 'active' : '' }}"
                                         href="{{ route('paises.index') }}">
-                                        <i class="ni ni-world text-info text-sm opacity-10"></i>
+                                        <i class="ni ni-world text-dark text-sm opacity-10"></i>
                                         <span class="nav-link-text ms-1">Países</span>
                                     </a>
                                 </li>

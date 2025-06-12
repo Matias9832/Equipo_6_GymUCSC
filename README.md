@@ -345,7 +345,7 @@ $(document).ready(function () {
 
 ---
 
-## 3. Filtro de "Ocultar inactivos"
+## Filtro de "Ocultar inactivos"
 
 Puedes usar un checkbox para enviar el parámetro al controlador:
 
@@ -359,6 +359,24 @@ Puedes usar un checkbox para enviar el parámetro al controlador:
 ```
 
 ---
+
+## Cards de docentes 
+Esta card puede ser llamada en cualquier parte si se quieren mostrar los datos del docente o administrador
+```blade
+<x-card-docente 
+    :nombre="$administrador->nombre_admin"
+    :foto="$administrador->foto_perfil"
+    :cargo="$administrador->descripcion_cargo ?? $rol"
+    :sucursal="$sucursal->nombre_suc ?? null"
+    :ubicacion="$administrador->descripcion_ubicacion"
+    :correo="$admin->correo_usuario"
+    :telefono="$administrador->numero_contacto"
+    :sobre-mi="$administrador->sobre_mi"
+    :talleres="$talleres?->pluck('nombre_taller')->toArray()"
+/>
+
+```
+
 
 ## Recomendaciones
 

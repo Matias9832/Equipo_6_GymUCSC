@@ -1,1 +1,5 @@
 desarrollo-ucsc/vendor/composer/autoload_classmap.php
+/desarrollo-ucsc/vendor/composer
+/desarrollo-ucsc/vendor
+desarrollo-ucsc/composer.json
+desarrollo-ucsc/composer.lock

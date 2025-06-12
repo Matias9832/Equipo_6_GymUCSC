@@ -1,9 +1,9 @@
 <!-- Navbar -->
 <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
     data-scroll="false">
-    <div class="container-fluid py-1 px-3">
+    <div class="container-fluid px-3 mt-3">
         <nav aria-label="breadcrumb">
-            <h4 class="font-weight-bolder text-white mb-0 ms-0 ms-xl-0 ms-lg-5 ms-md-5 ms-sm-5 ms-5">{{ $title }}</h4>
+            <h3 class="font-weight-bolder text-white mb-0 ms-0 ms-xl-0 ms-lg-5 ms-md-5 ms-sm-5 ms-5">{{ $title }}</h3>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -17,7 +17,7 @@
             <ul class="navbar-nav justify-content-end align-items-center">
                 {{-- Enlace a Mi perfil --}}
                 <li class="nav-item d-flex align-items-center me-3">
-                    <a href="{{ route('docentes.perfil') }}" class="nav-link text-white font-weight-bold px-0">
+                    <a class="nav-link text-white font-weight-bold px-0 mx-2" href="{{ route('docentes.perfil') }}">
                         <i class="fas fa-user-circle me-sm-1"></i>
                         <span class="d-sm-inline d-none">Mi perfil</span>
                     </a>

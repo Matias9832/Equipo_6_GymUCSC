@@ -127,6 +127,8 @@ Route::middleware([
         Route::post('/torneos/{torneo}/guardar-miembros', [TorneoUsuarioController::class, 'guardarMiembros'])->name('torneos.guardar.miembros');
         Route::get('/buscar-usuario', [TorneoUsuarioController::class, 'buscarUsuario'])->name('torneos.buscar.usuario');
         
+    
+        
         // Buscar alumno por RUT (para el formulario de rutinas)
         Route::get('/buscar-alumno-por-rut/{rut}', [App\Http\Controllers\RutinaController::class, 'buscarPorRut'])->name('buscar.alumno.rut');
 
@@ -192,6 +194,18 @@ Route::middleware([
         });
         Route::get('/torneos-por-deporte', [EquipoController::class, 'torneosPorDeporte'])->name('torneos.porDeporte');
         
+        Route::middleware(['permission:Acceso al Mantenedor de Torneos'])->group(function () {
+            Route::resource('torneos', TorneoController::class);
+            Route::get('torneos/{torneo}/iniciar', [TorneoController::class, 'iniciar'])->name('torneos.iniciar');
+            Route::get('torneos/{torneo}/partidos', [TorneoController::class, 'partidos'])->name('torneos.partidos');
+            Route::get('torneos/{torneo}/tabla', [TorneoController::class, 'tabla'])->name('torneos.tabla');
+            Route::put('partidos/{partido}', [TorneoController::class, 'actualizarPartido'])->name('partidos.update');
+            Route::get('torneos/{torneo}/copa', [TorneoController::class, 'copa'])->name('torneos.copa');
+            Route::get('torneos/{torneo}/fase-grupos', [TorneoController::class, 'faseGrupos'])->name('torneos.fase-grupos');
+            Route::put('torneos/{torneo}/finalizar-fecha', [TorneoController::class, 'finalizarFecha'])->name('torneos.finalizar-fecha');
+            Route::post('admin/torneos/{torneo}/reiniciar', [TorneoController::class, 'reiniciar'])->name('torneos.reiniciar');
+        });
+
         Route::middleware(['permission:Acceso al Mantenedor de Talleres'])->group(function () {
             Route::resource('talleres', TallerController::class)->parameters([
                 'talleres' => 'taller'

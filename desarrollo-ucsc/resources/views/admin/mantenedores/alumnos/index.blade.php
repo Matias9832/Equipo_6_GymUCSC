@@ -10,7 +10,7 @@
                     <div class="card-header pb-0">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h6 class="mb-0">Lista de Alumnos</h6>
+                                <h5 class="mb-0">Lista de Alumnos</h5>
                             </div>
                             <div class="col-auto d-flex align-items-center">
                                 <form action="{{ route('alumnos.import') }}" method="POST" enctype="multipart/form-data"
@@ -33,7 +33,7 @@
                                     id="ocultarInactivos" {{ request('ocultar_inactivos') ? 'checked' : '' }}
                                     onchange="document.getElementById('filtroForm').submit();">
                                 <label class="form-check-label" for="ocultarInactivos">
-                                    {{ request('ocultar_inactivos') ? 'Ocultar Inactivos' : 'Ocultar Inactivos' }}
+                                    {{ request('ocultar_inactivos') ? 'Mostrar' : 'Ocultar Inactivos' }}
                                 </label>
                             </div>
                         </form>
