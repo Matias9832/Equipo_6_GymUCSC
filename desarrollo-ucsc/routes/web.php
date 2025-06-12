@@ -7,19 +7,10 @@ use App\Http\Controllers\Tenants\EmpresaController;
 use App\Http\Controllers\Tenants\Personalizacion\TemaController;
 use App\Http\Controllers\Tenants\Personalizacion\ColorController;
 use App\Http\Controllers\Tenants\Personalizacion\FuenteController;
+use App\Http\Controllers\Tenants\InicioController;
 
-Route::get('/inicio', function () {
-    return view('tenants.inicio');
-})->name('inicio');
-Route::get('/paginas', function () {
-    return view('tenants.paginas');
-})->name('paginas');
-Route::get('/beneficios', function () {
-    return view('tenants.beneficios');
-})->name('beneficios');
-Route::get('/nosotros', function () {
-    return view('tenants.nosotros');
-})->name('nosotros');
+
+Route::get('/inicio', [InicioController::class, 'index'])->name('inicio');
 
 Route::resource('tenants', TenantController::class);
 Route::resource('empresas', EmpresaController::class);
