@@ -175,7 +175,51 @@ class DocenteController extends Controller
 
         return redirect()->route('docentes.perfil')->with('success', 'Información actualizada correctamente.');
     }
+    // En: app/Http/Controllers/DocenteController.php
 
+public function show($id)
+{
+    // --- MODO DISEÑO ULTRA-SEGURO ---
+    // Usamos datos 100% fijos para garantizar que el renderizado de la vista funcione.
+    // Si esto falla, el problema está en el archivo 'card-docente.blade.php' o en la ruta.
+    try {
+        $datos_fijos = [
+            'nombre' => 'Alexi Great',
+            'foto' => 'default.png', // Usamos la foto por defecto que siempre existe.
+            'cargo' => 'Docente de Prueba',
+            'sucursal' => 'Gimnasio Central',
+            'ubicacion' => 'Área de Musculación',
+            'correo' => 'correo.prueba@gym.cl',
+            'telefono' => '+56 9 8765 4321',
+            'sobreMi' => 'Descripción de prueba para asegurar que el componente de la tarjeta se renderiza correctamente sin depender de ninguna base de datos.',
+            'talleres' => ['Taller A', 'Taller B', 'Taller C']
+        ];
+
+        // Verificamos que el componente exista antes de intentar renderizarlo
+        if (!view()->exists('components.card-docente')) {
+            throw new \Exception('La vista del componente "components.card-docente" no existe.');
+        }
+
+        // Renderizamos el componente Blade a HTML con los datos fijos
+        $cardHtml = view('components.card-docente', $datos_fijos)->render();
+
+        return response()->json(['success' => true, 'html' => $cardHtml]);
+
+    } catch (\Exception $e) {
+        // Si incluso con datos 100% fijos esto falla, el error es grave.
+        Log::error('Error CRÍTICO al renderizar CardDocente con datos FIJOS: ' . $e->getMessage());
+        // Devolvemos un JSON con el mensaje de error para que el frontend lo muestre
+        return response()->json([
+            'success' => false,
+            'html' => '<div class="alert alert-danger text-white p-3">
+                        <strong>Error Crítico</strong>
+                        <p class="mb-0">No se pudo generar la tarjeta de perfil.</p>
+                        <hr class="horizontal light mt-2 mb-2">
+                        <p class="mb-0 text-xs">Revise los logs del servidor para más detalles.</p>
+                       </div>'
+        ]);
+    }
+}
     public function create()
     {
         return view('admin.mantenedores.docentes.create');
