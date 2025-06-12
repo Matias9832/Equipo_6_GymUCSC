@@ -4,9 +4,11 @@
 
 php artisan migrate:fresh
 php artisan optimize 
+php artisan db:seed --class=CentralSeeder
 php artisan config:clear
 php artisan cache:clear
 php artisan config:cache
+
 
 php artisan db:seed
 

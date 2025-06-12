@@ -237,50 +237,38 @@ public function copa(Torneo $torneo)
     $partidos = Partido::where('torneo_id', $torneo->id)
         ->where('etapa', 'eliminatoria')
         ->orderBy('ronda')
-        ->with(['local', 'visitante'])
-        ->get();
+        ->get()
+        ->groupBy('ronda')
+        ->sortKeys();
 
-    if ($partidos->isEmpty()) {
-        return view('admin.mantenedores.torneos.copa', [
-            'torneo' => $torneo,
-            'equipos' => [],
-            'resultados' => []
-        ]);
-    }
+    $primerRonda = $partidos->keys()->first();
+    $teams   = [];
+    $results = [];
 
-    $rondas = $partidos->groupBy('ronda')->sortKeys();
-    $equipos = [];
-    $resultados = [];
-
-    $primeraRonda = $rondas->keys()->first();
-
-    foreach ($rondas as $ronda => $partidosRonda) {
-        $resultadosRonda = [];
-
-        foreach ($partidosRonda as $partido) {
-            if ($ronda == $primeraRonda) {
-                $equipos[] = [
-                    $partido->local ? 'Equipo ' . $partido->local->nombre_equipo : 'TBD',
-                    $partido->visitante ? 'Equipo ' . $partido->visitante->nombre_equipo : 'TBD'
+    foreach ($partidos as $ronda => $matches) {
+        if ($ronda == $primerRonda) {
+            foreach ($matches as $m) {
+                $teams[] = [
+                    $m->local->nombre_equipo,
+                    $m->visitante->nombre_equipo
                 ];
             }
-
-            $resultadosRonda[] = [
-                is_numeric($partido->resultado_local) ? (int)$partido->resultado_local : null,
-                is_numeric($partido->resultado_visitante) ? (int)$partido->resultado_visitante : null
+        }
+        $row = [];
+        foreach ($matches as $m) {
+            $row[] = [
+                is_numeric($m->resultado_local) ? (int)$m->resultado_local : null,
+                is_numeric($m->resultado_visitante) ? (int)$m->resultado_visitante : null
             ];
         }
-
-        $resultados[] = $resultadosRonda;
+        $results[] = $row;
     }
 
-    return view('admin.mantenedores.torneos.copa', compact('torneo', 'equipos', 'resultados'));
+    return view('admin.mantenedores.torneos.copa', compact('torneo','teams','results'));
 }
 
 
 
-
-    
     public function iniciar(Torneo $torneo)
     {
         // Evitar duplicar partidos
