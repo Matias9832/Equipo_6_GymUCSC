@@ -20,8 +20,8 @@
                                 <label for="subdominio" class="form-label">Subdominio</label>
                                 <div class="input-group">
                                     <input type="text" name="subdominio" id="subdominio"
-                                           class="form-control @error('subdominio') is-invalid @enderror"
-                                           value="{{ old('subdominio') }}" placeholder="ej: empresa1">
+                                        class="form-control @error('subdominio') is-invalid @enderror"
+                                        value="{{ old('subdominio') }}" placeholder="ej: empresa1" required>
                                     <span class="input-group-text">.ugym.local</span>
                                     @error('subdominio')
                                         <span class="invalid-feedback d-block">{{ $message }}</span>
@@ -30,13 +30,27 @@
                             </div>
 
                             <div class="mb-3">
+                                <label for="empresa_id" class="form-label">Empresa</label>
+                                <select name="empresa_id" id="empresa_id"
+                                    class="form-select @error('empresa_id') is-invalid @enderror" required>
+                                    <option value="" disabled selected>Seleccione una empresa</option>
+                                    @foreach($empresasDisponibles as $empresa)
+                                        <option value="{{ $empresa->id }}" {{ old('empresa_id') == $empresa->id ? 'selected' : '' }}>{{ $empresa->nombre }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('empresa_id')
+                                    <span class="invalid-feedback d-block">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="id_tema" class="form-label">Tema base</label>
                                 <select name="id_tema" id="id_tema"
-                                        class="form-select @error('id_tema') is-invalid @enderror">
+                                    class="form-select @error('id_tema') is-invalid @enderror" required>
                                     <option value="" disabled selected>Seleccione un tema</option>
                                     @foreach($temas as $tema)
-                                        <option value="{{ $tema->id_tema }}" {{ old('id_tema') == $tema->id_tema ? 'selected' : '' }}>
-                                            {{ $tema->nombre_tema }}
+                                        <option value="{{ $tema->id_tema }}" {{ old('id_tema') == $tema->id_tema ? 'selected' : '' }}>{{ $tema->nombre_tema }}
                                         </option>
                                     @endforeach
                                 </select>

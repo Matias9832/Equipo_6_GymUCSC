@@ -22,8 +22,8 @@
                                             <tr>
                                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                     Logo</th>
-                                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Empresa</th>
+                                                <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                    Empresa</th> -->
                                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                     Dominio</th>
                                                 <th
@@ -34,7 +34,7 @@
                                         <tbody>
                                             @foreach ($tenants as $tenant)
                                                 <tr>
-                                                    <td class="ps-3">
+                                                    <td class="ps-4">
                                                         @if ($tenant->empresa && $tenant->empresa->logo)
                                                             <img src="{{ url($tenant->empresa->logo) }}" alt="Logo"
                                                                 style="max-height: 34px;">
@@ -42,10 +42,10 @@
                                                             —
                                                         @endif
                                                     </td>
-                                                    <td class="text-sm fw-bold">
+                                                    <!-- <td class="text-sm fw-bold">
                                                         {{ $tenant->empresa->nombre ?? 'Empresa no asignada' }}
-                                                    </td>
-                                                    <td class="text-sm">
+                                                    </td> -->
+                                                    <td class="text-sm ps-4">
                                                         {{ $tenant->domains->first()->domain ?? 'Sin dominio asignado' }}
                                                     </td>
                                                     <td class="text-center">

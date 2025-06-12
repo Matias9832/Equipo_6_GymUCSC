@@ -38,9 +38,9 @@
                                             @php
                                                 $url = null;
                                                 if ($empresa->dominio && $empresa->dominio !== 'Sin dominio asignado') {
-                                                    $url = 'https://' . $empresa->dominio;
+                                                    $url = 'http://' . $empresa->dominio;
                                                 } elseif ($empresa->subdominio && $empresa->subdominio !== 'Sin subdominio asignado') {
-                                                    $url = 'https://' . $empresa->subdominio . '.ugym.cl';
+                                                    $url = 'http://' . $empresa->subdominio;
                                                 }
                                             @endphp
                                             <tr>
@@ -48,13 +48,13 @@
                                                     <img src="{{ url($empresa->logo) }}" alt="Logo" style="max-height: 34px;">
                                                 </td>
                                                 <td class="text-sm fw-bold ps-4">{{ $empresa->nombre }}</td>
-                                                <td class="text-sm">
+                                                <td class="text-sm ps-4">
                                                     @if($empresa->dominio && $empresa->dominio !== 'Sin dominio asignado')
                                                         {{ $empresa->dominio }}
                                                     @elseif($empresa->subdominio && $empresa->subdominio !== 'Sin subdominio asignado')
-                                                        {{ $empresa->subdominio }}.ugym.cl
+                                                        {{ $empresa->subdominio }}
                                                     @else
-                                                        <span class="text-muted ps-3">Sin subdominio asignado</span>
+                                                        <span class="text-muted">Sin subdominio asignado</span>
                                                     @endif
                                                 </td>
                                                 <td class="align-middle text-center">
@@ -73,7 +73,7 @@
                                                         </button>
                                                     </form>
                                                     @if($url)
-                                                        <a href="{{ $url }}" class="ms-2" target="_blank" title="Visitar sitio">
+                                                        <a href="{{ $url }}:8000" class="ms-2" target="_blank" title="Visitar sitio">
                                                             <i class="fas fa-globe text-success"></i>
                                                         </a>
                                                     @endif
