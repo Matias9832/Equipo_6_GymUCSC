@@ -153,17 +153,21 @@ class TorneoController extends Controller
         }
     }
 
-   public function partidos(Torneo $torneo)
+    public function partidos(Torneo $torneo)
     {
-        $partidos = Partido::where('torneo_id', $torneo->id)
+        $partidos = \App\Models\Partido::where('torneo_id', $torneo->id)
             ->with(['local', 'visitante'])
             ->orderBy('ronda')
             ->get();
 
-        // Calcular la ronda actual (la menor ronda con partidos sin resultado)
-        $rondas = $partidos->groupBy('ronda');
+        // Agrupar partidos por ronda
+        $partidosPorRonda = $partidos->groupBy('ronda');
+        $fechas = $partidosPorRonda->keys()->sort()->values();
+        $totalFechas = $fechas->count();
+
+        // Determinar ronda actual (la menor ronda con partidos sin resultado)
         $rondaActual = null;
-        foreach ($rondas as $ronda => $partidosDeRonda) {
+        foreach ($partidosPorRonda as $ronda => $partidosDeRonda) {
             $incompletos = $partidosDeRonda->filter(function($p) {
                 return $p->resultado_local === null || $p->resultado_visitante === null;
             });
@@ -173,7 +177,42 @@ class TorneoController extends Controller
             }
         }
 
-        return view('admin.mantenedores.torneos.partidos', compact('torneo', 'partidos', 'rondaActual'));
+        // Determinar ronda seleccionada
+        $rondaSeleccionada = request('ronda');
+        if (!$rondaSeleccionada) {
+            $rondaSeleccionada = $rondaActual ?? ($fechas->first() ?? 1);
+        }
+        $rondaSeleccionada = intval($rondaSeleccionada);
+
+        $indiceActual = $fechas->search($rondaSeleccionada);
+        $rondaAnterior = $indiceActual > 0 ? $fechas[$indiceActual - 1] : null;
+        $rondaSiguiente = $indiceActual !== false && $indiceActual < $fechas->count() - 1 ? $fechas[$indiceActual + 1] : null;
+
+        $finalizada = isset($partidosPorRonda[$rondaSeleccionada]) && $partidosPorRonda[$rondaSeleccionada]->first()->finalizada;
+
+        // Determinar etapa
+        $etapa = '';
+        if ($torneo->fase_grupos) {
+            $totalFechasGrupos = $torneo->equipos_por_grupo - 1;
+            if ($rondaSeleccionada <= $totalFechasGrupos) {
+                $etapa = 'Fase de Grupos';
+            } else {
+                $etapa = 'Eliminatoria';
+            }
+        } else {
+            $etapa = 'Liga';
+        }
+
+        // Mostrar vista según tipo de usuario
+        if (Auth::user()->hasRole('admin')) {
+            return view('admin.mantenedores.torneos.partidos', compact(
+                'torneo', 'partidos', 'partidosPorRonda', 'fechas', 'rondaSeleccionada', 'rondaAnterior', 'rondaSiguiente', 'finalizada', 'etapa'
+            ));
+        } else {
+            return view('usuarios.torneos.usuario_partidos', compact(
+                'torneo', 'partidosPorRonda', 'fechas', 'rondaSeleccionada', 'rondaAnterior', 'rondaSiguiente', 'etapa'
+            ));
+        }
     }
 
     public function actualizarPartido(Request $request, Partido $partido)
@@ -192,17 +231,17 @@ class TorneoController extends Controller
     public function tabla(Torneo $torneo)
     {
         $equipos = $torneo->equipos()->get();
-        $partidos = Partido::where('torneo_id', $torneo->id)->get();
-    
+        $partidos = \App\Models\Partido::where('torneo_id', $torneo->id)->get();
+
         $tabla = [];
         foreach ($equipos as $equipo) {
             $tabla[$equipo->id] = [
                 'equipo' => $equipo,
-                'pj' => 0, 'pg' => 0, 'pe' => 0, 'pp' => 0, 'gf' => 0, 'gc' => 0, 'pts' => 0
+                'pj' => 0, 'pg' => 0, 'pe' => 0, 'pp' => 0,
+                'gf' => 0, 'gc' => 0, 'pts' => 0,
             ];
         }
         foreach ($partidos as $p) {
-            // Solo sumar si ambos resultados son numéricos (para deportes con puntaje numérico)
             if (is_numeric($p->resultado_local) && is_numeric($p->resultado_visitante)) {
                 $tabla[$p->equipo_local_id]['pj']++;
                 $tabla[$p->equipo_visitante_id]['pj']++;
@@ -210,6 +249,7 @@ class TorneoController extends Controller
                 $tabla[$p->equipo_local_id]['gc'] += $p->resultado_visitante;
                 $tabla[$p->equipo_visitante_id]['gf'] += $p->resultado_visitante;
                 $tabla[$p->equipo_visitante_id]['gc'] += $p->resultado_local;
+
                 if ($p->resultado_local > $p->resultado_visitante) {
                     $tabla[$p->equipo_local_id]['pg']++;
                     $tabla[$p->equipo_local_id]['pts'] += 3;
@@ -220,67 +260,63 @@ class TorneoController extends Controller
                     $tabla[$p->equipo_local_id]['pp']++;
                 } else {
                     $tabla[$p->equipo_local_id]['pe']++;
-                    $tabla[$p->equipo_local_id]['pts'] += 1;
+                    $tabla[$p->equipo_local_id]['pts']++;
                     $tabla[$p->equipo_visitante_id]['pe']++;
-                    $tabla[$p->equipo_visitante_id]['pts'] += 1;
+                    $tabla[$p->equipo_visitante_id]['pts']++;
                 }
             }
         }
-        // Ordenar por puntos, diferencia de puntaje, puntaje a favor
         $tabla = collect($tabla)->sortByDesc(fn($e) => [$e['pts'], $e['gf'] - $e['gc'], $e['gf']])->values();
-    
-        return view('admin.mantenedores.torneos.tabla', compact('torneo', 'tabla'));
+
+        if (Auth::user()->hasRole('admin')) {
+            return view('admin.mantenedores.torneos.tabla', compact('torneo', 'tabla'));
+        } else {
+            return view('usuarios.torneos.usuario_tabla', compact('torneo', 'tabla'));
+        }
     }
 
-public function copa(Torneo $torneo)
-{
-    $partidos = Partido::where('torneo_id', $torneo->id)
-        ->where('etapa', 'eliminatoria')
-        ->orderBy('ronda')
-        ->with(['local', 'visitante'])
-        ->get();
+    public function copa(Torneo $torneo)
+    {
+        $partidos = \App\Models\Partido::where('torneo_id', $torneo->id)
+            ->where('etapa', 'eliminatoria')
+            ->orderBy('ronda')
+            ->get()
+            ->groupBy('ronda')
+            ->sortKeys();
 
-    if ($partidos->isEmpty()) {
-        return view('admin.mantenedores.torneos.copa', [
-            'torneo' => $torneo,
-            'equipos' => [],
-            'resultados' => []
-        ]);
-    }
+        $primerRonda = $partidos->keys()->first();
+        $teams   = [];
+        $results = [];
 
-    $rondas = $partidos->groupBy('ronda')->sortKeys();
-    $equipos = [];
-    $resultados = [];
-
-    $primeraRonda = $rondas->keys()->first();
-
-    foreach ($rondas as $ronda => $partidosRonda) {
-        $resultadosRonda = [];
-
-        foreach ($partidosRonda as $partido) {
-            if ($ronda == $primeraRonda) {
-                $equipos[] = [
-                    $partido->local ? 'Equipo ' . $partido->local->nombre_equipo : 'TBD',
-                    $partido->visitante ? 'Equipo ' . $partido->visitante->nombre_equipo : 'TBD'
+        foreach ($partidos as $ronda => $matches) {
+            if ($ronda == $primerRonda) {
+                foreach ($matches as $m) {
+                    $teams[] = [
+                        $m->local ? $m->local->nombre_equipo : 'Sin equipo',
+                        $m->visitante ? $m->visitante->nombre_equipo : 'Sin equipo'
+                    ];
+                }
+            }
+            $row = [];
+            foreach ($matches as $m) {
+                $row[] = [
+                    is_numeric($m->resultado_local) ? (int)$m->resultado_local : null,
+                    is_numeric($m->resultado_visitante) ? (int)$m->resultado_visitante : null
                 ];
             }
-
-            $resultadosRonda[] = [
-                is_numeric($partido->resultado_local) ? (int)$partido->resultado_local : null,
-                is_numeric($partido->resultado_visitante) ? (int)$partido->resultado_visitante : null
-            ];
+            $results[] = $row;
         }
 
-        $resultados[] = $resultadosRonda;
+        // Mostrar vista según tipo de usuario
+        if (Auth::user()->hasRole('admin')) {
+            return view('admin.mantenedores.torneos.copa', compact('torneo','teams','results'));
+        } else {
+            return view('usuarios.torneos.usuario_copa', compact('torneo','teams','results'));
+        }
     }
 
-    return view('admin.mantenedores.torneos.copa', compact('torneo', 'equipos', 'resultados'));
-}
 
 
-
-
-    
     public function iniciar(Torneo $torneo)
     {
         // Evitar duplicar partidos
@@ -434,7 +470,8 @@ public function copa(Torneo $torneo)
             foreach ($equiposGrupo as $equipo) {
                 $tabla[$equipo->id] = [
                     'equipo' => $equipo,
-                    'pj' => 0, 'pg' => 0, 'pe' => 0, 'pp' => 0, 'gf' => 0, 'gc' => 0, 'pts' => 0
+                    'pj' => 0, 'pg' => 0, 'pe' => 0, 'pp' => 0,
+                    'gf' => 0, 'gc' => 0, 'pts' => 0,
                 ];
             }
             foreach ($partidosPorGrupo[$idx] as $p) {
@@ -445,6 +482,7 @@ public function copa(Torneo $torneo)
                     $tabla[$p->equipo_local_id]['gc'] += $p->resultado_visitante;
                     $tabla[$p->equipo_visitante_id]['gf'] += $p->resultado_visitante;
                     $tabla[$p->equipo_visitante_id]['gc'] += $p->resultado_local;
+
                     if ($p->resultado_local > $p->resultado_visitante) {
                         $tabla[$p->equipo_local_id]['pg']++;
                         $tabla[$p->equipo_local_id]['pts'] += 3;
@@ -455,9 +493,9 @@ public function copa(Torneo $torneo)
                         $tabla[$p->equipo_local_id]['pp']++;
                     } else {
                         $tabla[$p->equipo_local_id]['pe']++;
-                        $tabla[$p->equipo_local_id]['pts'] += 1;
+                        $tabla[$p->equipo_local_id]['pts']++;
                         $tabla[$p->equipo_visitante_id]['pe']++;
-                        $tabla[$p->equipo_visitante_id]['pts'] += 1;
+                        $tabla[$p->equipo_visitante_id]['pts']++;
                     }
                 }
             }
@@ -465,7 +503,11 @@ public function copa(Torneo $torneo)
             $tablas[$idx] = collect($tabla)->sortByDesc(fn($e) => [$e['pts'], $e['gf'] - $e['gc'], $e['gf']])->values();
         }
 
-        return view('admin.mantenedores.torneos.fase_grupos', compact('torneo', 'tablas'));
+        if (Auth::user()->hasRole('admin')) {
+            return view('admin.mantenedores.torneos.fase_grupos', compact('torneo', 'tablas'));
+        } else {
+            return view('usuarios.torneos.usuario_fase_grupos', compact('torneo', 'tablas'));
+        }
     }
 
     // Finaliza una fecha/ronda del torneo

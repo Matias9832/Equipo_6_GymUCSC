@@ -1,17 +1,16 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
 @section('title', 'Llaves de Copa')
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Llaves de Copa'])
-
+@include('layouts.navbars.guest.navbar')
 <div class="d-flex justify-content-center py-4">
   <div id="bracket-container">
     <div id="bracket"></div>
   </div>
 </div>
 <div class="text-center">
-  <a href="{{ route('torneos.index') }}" class="btn btn-secondary">Volver</a>
+  <a href="{{ route('torneos.usuario.index') }}" class="btn btn-secondary">Volver</a>
 </div>
 @endsection
 
@@ -36,7 +35,7 @@ $(function() {
 
   $('#bracket').bracket({
     init: { teams, results },
-    skipConsolationRound: !mostrarTercerLugar, // Oculta el partido por el 3er lugar si corresponde
+    skipConsolationRound: !mostrarTercerLugar,
     teamWidth: 120,
     scoreWidth: 30,
     matchMargin: 20,
@@ -49,12 +48,8 @@ $(function() {
     }
   });
 
-  // Si el bracket ya fue generado y el partido de tercer lugar existe pero no debe mostrarse, lo ocultamos por CSS/JS
   if (!mostrarTercerLugar) {
-    // El partido de tercer lugar suele ser el último .round > .match
     $('.jQBracket .final .match').last().hide();
-    // O bien, si hay una clase específica para el partido de tercer lugar, puedes ocultarla así:
-    // $('.jQBracket .consolation .match').hide();
   }
 });
 </script>
