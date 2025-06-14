@@ -35,20 +35,23 @@
                                             <tr>
                                                 <td class="mb-0 text-sm fw-bold ps-4">{{ $color->nombre_color }}</td>
                                                 <td class="">
-                                                    <span class="badge" style="background-color: {{ $color->codigo_hex }}; min-width:150px !important;">
+                                                    <span class="badge"
+                                                        style="background-color: {{ $color->codigo_hex }}; min-width:150px !important;">
                                                         {{ $color->codigo_hex }}
                                                     </span>
                                                 </td>
                                                 <td class="align-middle text-center">
                                                     <a href="{{ route('personalizacion.colores.edit', $color->id) }}"
-                                                        class="btn btn-sm btn-warning" style="margin-bottom: 0rem !important;">Editar</a>
+                                                        class="text-secondary font-weight-bold text-xs me-2" style="margin-bottom: 0rem !important;"><i
+                                                            class="fas fa-pen-to-square text-primary"></i></a>
                                                     <form action="{{ route('personalizacion.colores.destroy', $color) }}"
                                                         method="POST" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button class="btn btn-sm btn-danger" style="margin-bottom: 0rem !important;"
+                                                        <button class="btn btn-link text-danger p-0 m-0 align-baseline"
+                                                            style="margin-bottom: 0rem !important;"
                                                             onclick="return confirm('¿Eliminar este color?')">
-                                                            Eliminar
+                                                            <i class="fas fa-trash-alt"></i>
                                                         </button>
                                                     </form>
                                                 </td>

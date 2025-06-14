@@ -24,7 +24,7 @@
                                         value="{{ old('subdominio') }}" placeholder="ej: empresa1" required>
                                     <span class="input-group-text">.ugym.cl</span>
                                     @error('subdominio')
-                                        <span class="invalid-feedback d-block">{{ $message }}</span>
+                                        <span class="invalid-feedback d-block">El subdominio ya está asignado</span>
                                     @enderror
                                 </div>
                             </div>
@@ -58,9 +58,10 @@
                                     <span class="invalid-feedback d-block">{{ $message }}</span>
                                 @enderror
                             </div>
-
-                            <button type="submit" class="btn btn-primary">Crear</button>
-                            <a href="{{ route('tenants.index') }}" class="btn btn-secondary">Cancelar</a>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ route('tenants.index') }}" class="btn btn-secondary">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">Crear Subdominio</button>
+                            </div>
                         </form>
                     </div>
                 </div>
