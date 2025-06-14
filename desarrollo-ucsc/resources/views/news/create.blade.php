@@ -7,14 +7,14 @@
         <div class="card">
             <div class="card-body">
                 @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
 
                 <form action="{{ route('news.store') }}" method="POST" enctype="multipart/form-data">
@@ -64,8 +64,10 @@
                             value="{{ old('featured_until', isset($noticia) && $noticia->featured_until ? \Carbon\Carbon::parse($noticia->featured_until)->format('Y-m-d\TH:i') : '') }}">
                     </div>
 
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
 
-                    <button class="btn btn-success mt-2">Guardar</button>
+                        <button class="btn btn-success mt-2">Guardar</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -23,4 +23,17 @@ class AcademyNews extends Model
         'featured_until'
     ];
 
+    public function administrador()
+    {
+        return $this->belongsTo(Administrador::class, 'id_admin');
+    }
+
+    /**
+     * Relación con las imágenes asociadas a la noticia
+     */
+    public function images()
+    {
+        return $this->hasMany(AcademyImg::class, 'id_noticia', 'id_noticia');
+    }
+
 }

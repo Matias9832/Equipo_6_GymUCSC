@@ -89,7 +89,9 @@
                         </div>
 
 
-                        <button class="btn btn-primary mt-2">Actualizar</button>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-primary mt-2">Actualizar</button>
+                        </div>
                     </form>
             </div>
         </div>

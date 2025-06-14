@@ -98,8 +98,8 @@ Route::middleware([
     // Noticias públicas
     Route::get('/noticias', [NewsController::class, 'index'])->name('news.index');
     Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
-    Route::get('/noticias-academia', [AcademyNewsController::class, 'index'])->name('newsAcademy.index');
-    Route::get('/noticias-academia/{news}', [AcademyNewsController::class, 'show'])->name('newsAcademy.show');
+    Route::get('/noticias-academia', [AcademyNewsController::class, 'index'])->name('academynews.index');
+    Route::get('/noticias-academia/{news}', [AcademyNewsController::class, 'show'])->name('academynews.show');
 
     // Grupo de rutas protegidas por auth
     Route::group(['middleware' => 'auth'], function () {
@@ -247,8 +247,8 @@ Route::middleware([
         Route::middleware(['permission:Crear Noticias'])->group(function () {
             Route::resource('news', NewsController::class)->except(['index', 'show']);
             Route::post('/news/{id}/toggle-featured', [NewsController::class, 'toggleFeatured'])->name('news.toggleFeatured');
-            Route::resource('academynews', AcademyNewsController::class)->except(['index', 'show']);
-            Route::post('/academynews/{id}/toggle-featured', [AcademyNewsController::class, 'toggleFeatured'])->name('newsAcademy.toggleFeatured');
+            Route::resource('noticias-academia', AcademyNewsController::class)->except(['index', 'show'])->names('academynews');
+            Route::post('/newsAcademy/{id}/toggle-featured', [AcademyNewsController::class, 'toggleFeatured'])->name('newsAcademy.toggleFeatured');
         });
        
 
@@ -276,5 +276,7 @@ Route::middleware([
 
         // Eliminar imagen de noticia
         Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
+        Route::delete('/noticias-academia/image/{id}', [AcademyNewsController::class, 'destroyImage'])->name('newsAcademy.image.destroy');
+
     });
 });

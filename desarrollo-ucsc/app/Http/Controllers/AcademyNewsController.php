@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\File;
 
-
 use Illuminate\Http\Request;
 use App\Models\AcademyNews; 
 use App\Models\Administrador; 
-use App\Models\NewsImage; 
+use App\Models\AcademyImg; 
 
 class AcademyNewsController extends Controller
 {
@@ -66,12 +65,11 @@ class AcademyNewsController extends Controller
         $data = $request->validate([
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'nombre_noticia' => 'required|string|max:255',
-            'encargado_noticia' => 'required|string|max:255',
-            'descripcion_noticia' => 'required|string',
-            'is_featured' => 'boolean',
+            'descripcion_noticia' => 'required',
+            'is_featured' => 'nullable|boolean',
             'featured_until' => 'nullable|date',
         ]);
-
+        
         $data['is_featured'] = $request->boolean('is_featured');
         $admin = Administrador::where('rut_admin', auth()->user()->rut)->firstOrFail();
 
@@ -96,7 +94,7 @@ class AcademyNewsController extends Controller
      */
     public function show($id)
     {
-        $newsacademy = AcademyNews::with('images')->findOrFail($id);
+        $academynews = AcademyNews::with('images')->findOrFail($id);
         return view('academynews.show', compact('academynews'));
     }
     
@@ -142,7 +140,7 @@ class AcademyNewsController extends Controller
         // Eliminar imágenes seleccionadas
         if ($request->has('delete_images')) {
             foreach ($request->delete_images as $imageId) {
-                $image = NewsImage::find($imageId);
+                $image = AcademyImg::find($imageId);
                 if ($image) {
                     $this->eliminarImagenFisica($image->image_path);
                     $image->delete();
@@ -219,6 +217,17 @@ class AcademyNewsController extends Controller
         return response()->json([
             'success' => true,
             'destacado' => $newsacademy->is_featured,
+        ]);
+    }
+    public function destroyImage($id)
+    {
+        $image = AcademyImg::findOrFail($id);
+        $this->eliminarImagenFisica($image->image_path);
+        $image->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Imagen eliminada con éxito.'
         ]);
     }
 }

@@ -59,7 +59,7 @@
 <style>
 @media (max-width: 768px) {
     #carouselNews{{ $news->id }} {
-        height: 20vh !important; /* o usa 40vh si prefieres */
+        height: 20vh !important; 
     }
 }
 </style>

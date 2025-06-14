@@ -112,9 +112,6 @@
                                                     </div>
                                                 @endif
 
-                                                <span class="badge bg-danger position-absolute m-2 mt-4" style="top: 0; left: 0;">
-                                                    {{ $noticias->tipo_deporte }}
-                                                </span>
                                             </div>
 
                                             <div class="bg-white p-3" style="min-height: 150px;">

@@ -26,8 +26,8 @@
                                 </a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ request()->routeIs('newsAcademy.index') ? 'active' : '' }}" 
-                                href="{{ route('newsAcademy.index') }}" role="tab">
+                                <a class="nav-link {{ request()->routeIs('academynews.index') ? 'active' : '' }}" 
+                                href="{{ route('academynews.index') }}" role="tab">
                                     Academia Deportiva
                                 </a>
                             </li>
