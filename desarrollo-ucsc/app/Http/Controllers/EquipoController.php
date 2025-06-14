@@ -14,7 +14,7 @@ class EquipoController extends Controller
     public function index()
     {
         // Cargar equipos con sus deportes e integrantes
-        $equipos = Equipo::with(['deporte', 'usuarios', 'capitan'])->get();
+        $equipos = Equipo::with(['deporte', 'usuarios', 'capitan', 'torneos'])->get();
 
         return view('admin.mantenedores.equipos.index', compact('equipos'));
     }
@@ -63,18 +63,38 @@ class EquipoController extends Controller
     public function update(Request $request, Equipo $equipo)
     {
         $request->validate([
+            'nombre_equipo' => 'required|string|max:255',
             'usuarios' => 'nullable|array',
-            'usuarios.*' => 'exists:usuario,id_usuario', // Cambiar a la tabla y clave primaria correctas
+            'usuarios.*' => 'exists:usuario,id_usuario',
         ]);
 
         $deporte = $equipo->deporte;
 
-        // Validar que no se seleccionen más usuarios que el límite permitido por el deporte
+        // Validar nombre único en los torneos del equipo
+        $torneoIds = $equipo->torneos->pluck('id');
+        $existe = Equipo::where('nombre_equipo', $request->nombre_equipo)
+            ->whereHas('torneos', function($q) use ($torneoIds) {
+                $q->whereIn('torneo_id', $torneoIds);
+            })
+            ->where('id', '!=', $equipo->id)
+            ->exists();
+
+        if ($existe) {
+            return redirect()->back()->withInput()->withErrors([
+                'nombre_equipo' => 'Ya existe un equipo con ese nombre en el torneo.',
+            ]);
+        }
+
+        // Validar límite de integrantes
         if ($request->has('usuarios') && count($request->usuarios) > $deporte->jugadores_por_equipo) {
-            return redirect()->back()->withErrors([
+            return redirect()->back()->withInput()->withErrors([
                 'usuarios' => "No se pueden seleccionar más de {$deporte->jugadores_por_equipo} jugadores para este deporte.",
             ]);
         }
+
+        $equipo->update([
+            'nombre_equipo' => $request->nombre_equipo,
+        ]);
 
         // Sincronizar los usuarios seleccionados con el equipo
         if ($request->has('usuarios')) {
@@ -85,6 +105,7 @@ class EquipoController extends Controller
 
         return redirect()->route('equipos.index')->with('success', 'Equipo actualizado correctamente.');
     }
+
     public function destroy(Equipo $equipo)
     {
         // Eliminar las relaciones del equipo con los usuarios
