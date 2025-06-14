@@ -12,7 +12,7 @@
 
             {{-- Mensajes de error generales --}}
             @if($errors->any())
-                <div class="alert alert-danger mt-3">
+                <div class="alert alert-danger mt-3 text-white">
                     @foreach($errors->all() as $error)
                         <div class="small">{{ $error }}</div>
                     @endforeach
@@ -25,30 +25,14 @@
                 <div class="mb-3">
                     <label class="form-label">Correo Electrónico</label>
                     <input type="email" name="gmail" class="form-control" required autofocus value="{{ old('gmail') }}">
-                    @error('gmail')
-                        <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Contraseña</label>
                     <input type="password" name="password" class="form-control" required>
-                    @error('password')
-                        <div class="text-danger small mt-1">{{ $message }}</div>
-                    @enderror
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Entrar</button>
-
-                @if ($errors->any())
-                    <div class="alert alert-danger mt-3">
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li class="small">{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
             </form>
         </div>
     </div>
