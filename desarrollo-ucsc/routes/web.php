@@ -8,8 +8,25 @@ use App\Http\Controllers\Tenants\Personalizacion\TemaController;
 use App\Http\Controllers\Tenants\Personalizacion\ColorController;
 use App\Http\Controllers\Tenants\Personalizacion\FuenteController;
 use App\Http\Controllers\Tenants\InicioController;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Tenants\Auth\LoginTenantController;
+
+use App\Models\Tenant;
+
+Route::get('/', function () {
+    $host = request()->getHost();
+
+    $tenant = Tenant::whereHas('domains', function ($query) use ($host) {
+        $query->where('domain', $host);
+    })->first();
+
+    if ($tenant) {
+        tenancy()->initialize($tenant);
+        return redirect()->route('news.index');
+    }
+
+    return redirect()->route('inicio');
+});
+
 
 Route::get('tenant-login', [LoginTenantController::class, 'showLoginForm'])->name('tenant-login');
 Route::post('tenant-login', [LoginTenantController::class, 'login']);

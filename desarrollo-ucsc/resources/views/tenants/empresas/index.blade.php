@@ -73,7 +73,7 @@
                                                         </button>
                                                     </form>
                                                     @if($url)
-                                                        <a href="{{ $url }}:8000" class="ms-2" target="_blank" title="Visitar sitio">
+                                                        <a href="{{ $url }}" class="ms-2" target="_blank" title="Visitar sitio">
                                                             <i class="fas fa-globe text-success"></i>
                                                         </a>
                                                     @endif

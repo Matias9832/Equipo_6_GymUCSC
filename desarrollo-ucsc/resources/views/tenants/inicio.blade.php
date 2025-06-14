@@ -220,7 +220,7 @@
                 @foreach ($empresas as $empresa)
                     <div class="col-6 col-md-3 mb-4">
                         <div class="card border-0 shadow-sm h-100 text-center p-3">
-                            <a href="http://{{ $empresa->subdominio }}:8000" target="_blank" class="text-decoration-none">
+                            <a href="http://{{ $empresa->subdominio }}" target="_blank" class="text-decoration-none">
                                 <img src="{{ url($empresa->logo) }}" alt="{{ $empresa->nombre }}" class="img-fluid mb-2"
                                     style="max-height: 60px;">
                                 <h6 class="fw-bold text-dark mt-2">{{ $empresa->nombre }}</h6>
