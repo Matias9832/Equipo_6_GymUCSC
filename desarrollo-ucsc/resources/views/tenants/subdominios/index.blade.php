@@ -50,7 +50,7 @@
                                                     </td>
                                                     <td class="text-center">
                                                         @if ($tenant->domains->first())
-                                                            <a href="http://{{ $tenant->domains->first()->domain }}:8000"
+                                                            <a href="http://{{ $tenant->domains->first()->domain }}"
                                                                 target="_blank" class="btn btn-sm btn-secondary">
                                                                 Visitar
                                                             </a>

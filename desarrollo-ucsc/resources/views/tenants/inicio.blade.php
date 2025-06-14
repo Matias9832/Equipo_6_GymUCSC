@@ -91,7 +91,7 @@
                     </ul>
                 </div>
 
-                <div class="d-flex align-items-center">
+                <div class="d-none d-sm-flex align-items-center">
                     @if(session()->has('tenant_id'))
                         <a href="{{ route('tenants.index') }}" class="btn btn-sm btn-outline-primary"
                             style="margin-bottom: 0rem !important;">
@@ -103,6 +103,37 @@
                             <i class="fas fa-user me-1"></i> Iniciar sesión
                         </a>
                     @endif
+                </div>
+                <div class="d-flex d-sm-none align-items-center">
+                    <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarTenant" aria-controls="navbarTenant" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon mt-2">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </span>
+                    </button>
+                </div>
+                <div class="collapse d-lg-none d-sm-none w-100" id="navbarTenant">
+                    <ul class="navbar-nav align-items-center">
+                        @if(session()->has('tenant_id'))
+                            <li class="nav-item me-2 mb-1" style="width: 176px;">
+                                <a href="{{ route('tenants.index') }}"
+                                    class="btn btn-sm btn-primary mb-0 d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-tachometer-alt me-1 text-white"></i>
+                                    Panel de control
+                                </a>
+                            </li>
+                        @else
+                            <li class="nav-item me-2 mb-1" style="width: 176px;">
+                                <a href="{{ route('tenant-login') }}"
+                                    class="btn btn-sm btn-outline-primary mb-0 d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-user me-1"></i> Iniciar Sesión
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -124,13 +155,17 @@
                 centralizada y adaptable para gestionar múltiples centros deportivos bajo distintas sucursales, con acceso
                 personalizado.
             </p>
+            <p class="text-center">
+                <strong>Correo:</strong>
+                <a href="mailto:contacto@ugym.cl" class="text-primary">contacto@ugym.cl</a>
+            </p>
         </div>
     </section>
 
     <section id="beneficios" class="section">
         <div class="container">
             <h2 class="section-title text-center">Beneficios</h2>
-            <div class="row">
+            <div class="row d-flex justify-content-center">
                 <div class="col-md-4 mb-4">
                     <div class="benefit-card text-center">
                         <i class="fas fa-building fa-2x text-primary mb-3"></i>
