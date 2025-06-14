@@ -51,8 +51,9 @@
                                                     <td class="text-center">
                                                         @if ($tenant->domains->first())
                                                             <a href="http://{{ $tenant->domains->first()->domain }}"
-                                                                target="_blank" class="btn btn-sm btn-secondary">
-                                                                Visitar
+                                                                target="_blank" class="btn-sm btn-primary">
+                                                                <i class="fas fa-arrow-up-right-from-square me-1"></i>
+                                                                Ir
                                                             </a>
                                                         @else
                                                             —
