@@ -1,4 +1,4 @@
- <!-- Tarjeta lateral -->
+            <!-- Tarjeta lateral -->
             <div class="col-md-4">
                 <div class="card card-profile">
                     <!-- Imagen de cabecera -->
@@ -58,24 +58,4 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    @include('layouts.footers.auth.footer')
-    <script>
-    document.getElementById('input_foto').addEventListener('change', function () {
-            const file = this.files[0];
-            if (file && file.size > 2 * 1024 * 1024) { // 2MB en bytes
-                alert('La imagen supera el límite de 2 MB.');
-                this.value = ''; // limpia el input
-            } else {
-                document.getElementById('form-foto').submit();
-            }
-        });
-    </script>
-    <style>
-        .readonly-input {
-            cursor: default !important;
-            pointer-events: none;
-        }
-        </style>
-@endsection    
+
