@@ -27,6 +27,14 @@
                                     </a>
                                 </li>
                             @endcan
+                            @can('Acceso al Mantenedor de Administradores')
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'administradores.index' ? 'active' : '' }}"
+                                        href="{{ route('administradores.index') }}">
+                                        <i class="ni ni-badge text-dark text-sm opacity-10"></i> Administradores
+                                    </a>    
+                                </li>
+                            @endcan    
                             @can('Acceso al Mantenedor de Alumnos')
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'alumnos.index' ? 'active' : '' }}"
@@ -43,6 +51,7 @@
                                     </a>
                                 </li>
                             @endcan
+
                         </ul>
                     </div>
                 </li>
