@@ -15,8 +15,11 @@ class VerificarSalud
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && !Auth::user()->salud && !$request->is('salud*')) {
-            return redirect()->route('salud.create');
+        if (tenancy()->initialized && Auth::check()) {
+            $usuario = Auth::user();
+            if (!$usuario->salud && !$request->is('salud*')) {
+                return redirect()->route('salud.create');
+            }
         }
 
         return $next($request);

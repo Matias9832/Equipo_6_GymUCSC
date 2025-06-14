@@ -57,6 +57,24 @@ use Spatie\Permission\Models\Permission;
 |
 */
 
+
+use App\Models\Tenant;
+
+Route::get('/', function () {
+    $host = request()->getHost();
+
+    $tenant = Tenant::whereHas('domains', function ($query) use ($host) {
+        $query->where('domain', $host);
+    })->first();
+
+    if ($tenant) {
+        tenancy()->initialize($tenant);
+        return redirect()->route('news.index');
+    }
+
+    return redirect()->route('inicio');
+});
+
 Route::middleware([
     'web',
     InitializeTenancyByDomain::class,
@@ -126,9 +144,9 @@ Route::middleware([
         Route::get('/torneos/{torneo}/partidos', [TorneoController::class, 'partidos'])->name('usuario.torneos.partidos');
         Route::get('/torneos/{torneo}/fase-grupos', [TorneoController::class, 'faseGrupos'])->name('usuario.torneos.fase-grupos');
         Route::get('/torneos/{torneo}/copa', [TorneoController::class, 'copa'])->name('usuario.torneos.copa');
-        
-    
-        
+
+
+
         // Buscar alumno por RUT (para el formulario de rutinas)
         Route::get('/buscar-alumno-por-rut/{rut}', [App\Http\Controllers\RutinaController::class, 'buscarPorRut'])->name('buscar.alumno.rut');
 
@@ -193,7 +211,7 @@ Route::middleware([
             Route::resource('torneos', TorneoController::class);
         });
         Route::get('/torneos-por-deporte', [EquipoController::class, 'torneosPorDeporte'])->name('torneos.porDeporte');
-        
+
         Route::middleware(['permission:Acceso al Mantenedor de Torneos'])->group(function () {
             Route::resource('torneos', TorneoController::class);
             Route::get('torneos/{torneo}/iniciar', [TorneoController::class, 'iniciar'])->name('torneos.iniciar');
@@ -249,7 +267,7 @@ Route::middleware([
         Route::middleware(['permission:Eliminar Usuarios'])->group(function () {
             Route::delete('usuarios/{usuario}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
         });
-        
+
         // Rutas para el mantenedor de Docentes
         Route::middleware(['permission:Ver Docentes'])->group(function () {
             Route::get('docentes', [DocenteController::class, 'index'])->name('docentes.index');
@@ -257,7 +275,7 @@ Route::middleware([
             Route::put('/docentes/mi-perfil/foto', [DocenteController::class, 'updateFoto'])->name('docentes.foto.update');
             Route::get('/mi-perfil/edit-contacto', [DocenteController::class, 'editContacto'])->name('docentes.contacto.edit');
             Route::put('/mi-perfil/edit-contacto', [DocenteController::class, 'updateInformacionContacto'])->name('docentes.contacto.update');
-        });    
+        });
         Route::middleware(['permission:Crear Docentes'])->group(function () {
             Route::get('docentes/create', [DocenteController::class, 'create'])->name('docentes.create');
             Route::post('docentes', [DocenteController::class, 'store'])->name('docentes.store');
@@ -266,9 +284,9 @@ Route::middleware([
             Route::get('docentes/{docente}/edit', [DocenteController::class, 'edit'])->name('docentes.edit');
             Route::put('docentes/{docente}', [DocenteController::class, 'update'])->name('docentes.update');
         });
-        Route::middleware(['permission:Eliminar Docentes'])->group(function () {    
+        Route::middleware(['permission:Eliminar Docentes'])->group(function () {
             Route::delete('docentes/{docente}', [DocenteController::class, 'destroy'])->name('docentes.destroy');
-        });    
+        });
         Route::get('/docentes/data', [DocenteController::class, 'data'])->name('docentes.data');
 
 

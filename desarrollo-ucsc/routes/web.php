@@ -10,23 +10,7 @@ use App\Http\Controllers\Tenants\Personalizacion\FuenteController;
 use App\Http\Controllers\Tenants\InicioController;
 use App\Http\Controllers\Tenants\Auth\LoginTenantController;
 
-use App\Models\Tenant;
-
-Route::get('/', function () {
-    $host = request()->getHost();
-
-    $tenant = Tenant::whereHas('domains', function ($query) use ($host) {
-        $query->where('domain', $host);
-    })->first();
-
-    if ($tenant) {
-        tenancy()->initialize($tenant);
-        return redirect()->route('news.index');
-    }
-
-    return redirect()->route('inicio');
-});
-
+Route::middleware(['web', 'preventTenant'])->group(function () {
 
 Route::get('tenant-login', [LoginTenantController::class, 'showLoginForm'])->name('tenant-login');
 Route::post('tenant-login', [LoginTenantController::class, 'login']);
@@ -47,4 +31,6 @@ Route::middleware(['checkTenantSession'])->group(function () {
         Route::resource('colores', ColorController::class);
         Route::resource('fuentes', FuenteController::class);
     });
+});
+    
 });
