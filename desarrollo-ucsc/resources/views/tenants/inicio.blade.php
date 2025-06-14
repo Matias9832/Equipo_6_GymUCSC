@@ -92,10 +92,17 @@
                 </div>
 
                 <div class="d-flex align-items-center">
-                    <a href="{{ route('tenants.index') }}" class="btn btn-sm btn-outline-primary"
-                        style="margin-bottom: 0rem !important;">
-                        <i class="fas fa-user me-1"></i> Iniciar sesión
-                    </a>
+                    @if(session()->has('tenant_id'))
+                        <a href="{{ route('tenants.index') }}" class="btn btn-sm btn-outline-primary"
+                            style="margin-bottom: 0rem !important;">
+                            <i class="fas fa-tachometer-alt me-1"></i> Panel de control
+                        </a>
+                    @else
+                        <a href="{{ route('tenant-login') }}" class="btn btn-sm btn-outline-primary"
+                            style="margin-bottom: 0rem !important;">
+                            <i class="fas fa-user me-1"></i> Iniciar sesión
+                        </a>
+                    @endif
                 </div>
             </div>
         </nav>

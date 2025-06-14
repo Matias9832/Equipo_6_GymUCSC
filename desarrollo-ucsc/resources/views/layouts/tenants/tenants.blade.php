@@ -115,7 +115,7 @@
         </script>
     @endif
 
-    @if (in_array(request()->route()->getName(), ['inicio']))
+    @if (in_array(request()->route()->getName(), ['inicio', 'tenant-login']))
         @yield('content')
     @else
         <div class="min-height-300 bg-primary position-absolute w-100"></div>

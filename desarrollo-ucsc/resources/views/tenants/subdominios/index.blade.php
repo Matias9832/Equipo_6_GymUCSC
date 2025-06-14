@@ -23,7 +23,7 @@
                                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                     Logo</th>
                                                 <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                                    Empresa</th> -->
+                                                            Empresa</th> -->
                                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                                     Dominio</th>
                                                 <th
@@ -43,8 +43,8 @@
                                                         @endif
                                                     </td>
                                                     <!-- <td class="text-sm fw-bold">
-                                                        {{ $tenant->empresa->nombre ?? 'Empresa no asignada' }}
-                                                    </td> -->
+                                                                    {{ $tenant->empresa->nombre ?? 'Empresa no asignada' }}
+                                                                </td> -->
                                                     <td class="text-sm ps-4">
                                                         {{ $tenant->domains->first()->domain ?? 'Sin dominio asignado' }}
                                                     </td>

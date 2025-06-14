@@ -8,6 +8,7 @@ use Database\Seeders\tenants\FuentesSeeder;
 use Database\Seeders\tenants\ColoresSeeder;
 use Database\Seeders\tenants\TemasSeeder;
 use Database\Seeders\tenants\EmpresaSeeder;
+use Database\Seeders\tenants\UsuarioTenantSeeder;
 
 class CentralSeeder extends Seeder
 {
@@ -21,6 +22,7 @@ class CentralSeeder extends Seeder
             ColoresSeeder::class,
             TemasSeeder::class,
             EmpresaSeeder::class,
+            UsuarioTenantSeeder::class,
         ]);
     }
 }

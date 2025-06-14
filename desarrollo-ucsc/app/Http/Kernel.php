@@ -72,6 +72,7 @@ class Kernel extends HttpKernel
     ];
     protected $routeMiddleware = [
         'permission' => \App\Http\Middleware\CheckPermission::class,
+        'checkTenantSession' => \App\Http\Middleware\CheckTenantSession::class,
     ];
 
 }
