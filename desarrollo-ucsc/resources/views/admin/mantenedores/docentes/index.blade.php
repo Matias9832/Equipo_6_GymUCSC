@@ -53,8 +53,8 @@
                 lengthChange: false,
                 ajax: '{{ route('docentes.data') }}',
                 columns: [
-                    { data: 'rut_admin', name: 'administrador.rut_admin', className: 'text-xs font-weight-bold ps-3' },
-                    { data: 'nombre_admin', name: 'administrador.nombre_admin', className: 'text-xs' },
+                    { data: 'rut_admin', name: 'administrador.rut_admin', className: 'text-xs ps-3' },
+                    { data: 'nombre_admin', name: 'administrador.nombre_admin', className: 'text-xs font-weight-bold' },
                     { data: 'correo_usuario', name: 'usuario.correo_usuario', defaultContent: '-', className: 'text-xs' },
                     { data: 'rol_name', name: 'roles.name', defaultContent: 'Sin rol', className: 'text-xs td-rol' },
                     { data: 'acciones', name: 'acciones', orderable: false, searchable: false, className: 'text-center text-xs' }
