@@ -22,6 +22,16 @@ class TallerController extends Controller
         return view('admin.talleres.create', compact('admins', 'espacios'));
     }
 
+    public function misTalleres()
+    {
+        $usuario = auth()->user();
+        $talleres = $usuario->talleres()
+            ->orderByDesc('taller_usuario.fecha_asistencia')
+            ->get()
+            ->unique('id_taller');
+        return view('usuarios.mis_talleres', compact('talleres'));
+    }
+
     public function store(Request $request)
     {
         // Filtrar horarios vacíos ANTES de la validación

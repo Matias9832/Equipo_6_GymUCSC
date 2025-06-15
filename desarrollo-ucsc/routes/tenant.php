@@ -128,6 +128,9 @@ Route::middleware([
         Route::get('/mi-actividad', [ActividadController::class, 'actividadUsuario'])->name('actividad.usuario');
         Route::get('/actividades', [ActividadController::class, 'eventosCalendario'])->name('actividad.eventos');
 
+        // Mis talleres
+        Route::get('/mis-talleres', [TallerController::class, 'misTalleres'])->name('usuario.talleres');
+        
         // Control de salas
         Route::get('/ingreso/registro', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
         Route::post('/sala/salida', [ControlSalasController::class, 'registrarSalida'])->name('sala.registrarSalida');

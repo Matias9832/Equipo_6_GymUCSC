@@ -70,4 +70,11 @@ class Usuario extends Authenticatable
         return $this->hasOne(Administrador::class, 'rut_admin', 'rut');
     }
 
+    public function talleres()
+    {
+        return $this->belongsToMany(Taller::class, 'taller_usuario', 'id_usuario', 'id_taller')
+                    ->withPivot('fecha_asistencia')
+                    ->withTimestamps();
+    }
+
 }
