@@ -281,7 +281,8 @@ Route::middleware([
             Route::put('/docentes/mi-perfil/foto', [DocenteController::class, 'updateFoto'])->name('docentes.foto.update');
             Route::get('/mi-perfil/edit-contacto', [DocenteController::class, 'editContacto'])->name('docentes.contacto.edit');
             Route::put('/mi-perfil/edit-contacto', [DocenteController::class, 'updateInformacionContacto'])->name('docentes.contacto.update');
-        });    
+            Route::get('/docentes/perfil/{id}', [App\Http\Controllers\DocenteController::class, 'show'])->name('docentes.show');
+        });
         Route::middleware(['permission:Crear Docentes'])->group(function () {
             Route::get('docentes/create', [DocenteController::class, 'create'])->name('docentes.create');
             Route::post('docentes', [DocenteController::class, 'store'])->name('docentes.store');
@@ -325,6 +326,7 @@ Route::middleware([
             Route::get('/control-salas/seleccionar', [ControlSalasController::class, 'seleccionarSala'])->name('control-salas.seleccionar');
             Route::post('/control-salas/generar-qr', [ControlSalasController::class, 'generarQR'])->name('control-salas.generarQR');
             Route::get('control-salas/ver-qr', [ControlSalasController::class, 'verQR'])->name('control-salas.verQR');
+            Route::get('/control-salas/aforo/{idSala}', [ControlSalasController::class, 'aforoData']);
             Route::post('/control-salas/registro-manual', [ControlSalasController::class, 'registroManual'])->name('registro.manual');
             Route::post('/salida-manual', [ControlSalasController::class, 'salidaManual'])->name('salida.manual');
             Route::post('/control-salas/cambiar-aforo', [ControlSalasController::class, 'cambiarAforo'])->name('control-salas.cambiar_aforo');
@@ -337,5 +339,7 @@ Route::middleware([
 
         // Eliminar imagen de noticia
         Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
+
+        Route::get('/datos-salas', [App\Http\Controllers\DatosSalaController::class, 'index'])->name('datos-salas.index');
     });
 });

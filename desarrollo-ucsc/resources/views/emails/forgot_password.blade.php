@@ -20,14 +20,14 @@
         }
         .header {
             text-align: center;
-            color: #D12421;
+            color: #2d3e50;
             font-size: 2rem;
             font-weight: bold;
             margin-bottom: 24px;
         }
         .btn-primary {
             display: inline-block;
-            background: #D12421 !important; /* <-- Color UCSC */
+            background: #2d3e50 !important; /* <-- Color UCSC */
             color: #fff !important;
             padding: 12px 32px;
             border-radius: 6px;
@@ -54,7 +54,7 @@
         <p>Si no solicitaste este cambio, puedes ignorar este correo.</p>
         <p>¡Gracias!</p>
         <div class="footer">
-            © {{ date('Y') }} UCSC. Todos los derechos reservados.
+            © {{ date('Y') }} UGym. Todos los derechos reservados.
         </div>
     </div>
 </body>
