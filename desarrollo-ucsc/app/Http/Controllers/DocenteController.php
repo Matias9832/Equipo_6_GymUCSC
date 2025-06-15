@@ -11,6 +11,7 @@ use App\Models\Administrador;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\File;
 use Yajra\DataTables\Facades\DataTables;
+use App\View\Components\CardDocente;
 
 class DocenteController extends Controller
 {
@@ -117,24 +118,39 @@ class DocenteController extends Controller
         try {
             Log::info('Entrando a showPerfil con ID: ' . $id);
 
-            $administrador = Administrador::with('talleres', 'sucursales', 'usuario')->find($id);
+            $administrador = Administrador::with(['talleres', 'sucursales', 'usuario'])->find($id);
 
             if (!$administrador) {
                 Log::warning("Administrador con ID $id no encontrado.");
                 return response()->json(['success' => false]);
             }
 
-            $html = view('admin.mantenedores.docentes.mi-perfil._card', compact('administrador'))->render();
+            $sucursal = $administrador->sucursales->first();
+            $admin = $administrador->usuario;
+            $rol = $admin?->roles->pluck('name')->first() ?? 'Sin rol';
 
-            return response()->json([
-                'success' => true,
-                'html' => $html
-            ]);
+            // Usamos el componente como clase correctamente
+            $card = new \App\View\Components\CardDocente(
+                nombre: $administrador->nombre_admin,
+                foto: $administrador->foto_perfil,
+                cargo: $administrador->descripcion_cargo ?? $rol,
+                sucursal: $sucursal?->nombre_suc,
+                ubicacion: $administrador->descripcion_ubicacion,
+                correo: $admin?->correo_usuario,
+                telefono: $administrador->numero_contacto,
+                sobreMi: $administrador->sobre_mi,
+                talleres: $administrador->talleres?->pluck('nombre_taller')->toArray()
+            );
+
+            $html = view($card->render()->getName(), $card->data())->render();
+
+            return response()->json(['html' => $html]);
+
         } catch (\Exception $e) {
             Log::error("Error al mostrar perfil del docente: " . $e->getMessage());
             return response()->json(['success' => false], 500);
         }
-    }    
+    }
     public function updateFoto(Request $request)
     {
         $request->validate([

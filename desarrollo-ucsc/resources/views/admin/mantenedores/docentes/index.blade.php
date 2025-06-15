@@ -114,21 +114,18 @@
 
                 // Petición AJAX para obtener la card
                 $.ajax({
-                    url: url,
-                    type: 'GET',
+                    url: `/docentes/perfil/${idDocente}`,
+                    method: 'GET',
                     success: function(response) {
-                        if (response.success) {
+                        if (response.html) {
                             $('#card-container').html(response.html);
                         } else {
-                            $('#card-container').html('<p class="text-danger">No se pudo cargar el perfil.</p>');
+                            $('#card-container').html('<p class="text-center text-danger">No se pudo cargar el perfil del docente.</p>');
                         }
                     },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        if(jqXHR.status === 403 || jqXHR.status === 401) {
-                            $('#card-container').html('<p class="text-danger">Acceso denegado. Por favor, inicia sesión o revisa tus permisos.</p>');
-                        } else {
-                            $('#card-container').html('<div class="alert alert-danger text-white" role="alert"><strong>¡Error!</strong> No se pudo contactar al servidor para cargar el perfil.</div>');
-                        }
+                    error: function(xhr, status, error) {
+                        console.error('Error al cargar perfil:', error);
+                        $('#card-container').html('<p class="text-center text-danger">Error al cargar el perfil del docente.</p>');
                     }
                 });
             });
