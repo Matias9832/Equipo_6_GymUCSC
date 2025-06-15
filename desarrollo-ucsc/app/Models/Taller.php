@@ -30,6 +30,12 @@ class Taller extends Model
     {
         return $this->belongsTo(Administrador::class, 'id_admin');
     }
+    public function usuarios()
+    {
+        return $this->belongsToMany(Usuario::class, 'taller_usuario', 'id_taller', 'id_usuario')
+                    ->withPivot('fecha_asistencia')
+                    ->withTimestamps();
+    }
     public function espacio()
     {
         return $this->belongsTo(Espacio::class, 'id_espacio');
