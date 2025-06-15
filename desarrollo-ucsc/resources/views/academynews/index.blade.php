@@ -145,14 +145,15 @@
                                 </div>
                             @endforeach
                         </div>
+                        <br>
+                        <div class="d-flex justify-content-center">
+                                    {{ $news->links() }}
+                                </div>     
 
                         </div>
    
                     </div>    
                     @endif
-                    <div class="d-flex justify-content-center">
-                                {{ $news->links() }}
-                            </div>     
                 </div>    
                 </div>
             </div>   
