@@ -46,7 +46,7 @@
                             </div>
                             {{-- Solo los usuarios que pertenecen a un equipo pueden ver miembros --}}
                             @if($equipo)
-                                <a href="{{ route('torneos.agregar.miembros', $torneo->id) }}" class="btn btn-primary btn-sm" style="background:#D12421; border:none;">
+                                <a href="{{ route('torneos.ver.miembros', $torneo->id) }}" class="btn btn-primary btn-sm" style="background:#D12421; border:none;">
                                     Ver miembros
                                 </a>
                             @endif
