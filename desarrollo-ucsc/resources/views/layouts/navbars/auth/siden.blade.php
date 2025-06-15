@@ -287,6 +287,29 @@
                     </div>
                 </li>
             @endcanany
+            <li class="nav-item">
+                <a class="nav-link d-flex justify-content-between align-items-center {{ request()->is('datos-salas') ? '' : 'collapsed' }}"
+                    data-bs-toggle="collapse" href="#submenuDatos" role="button" aria-expanded="false"
+                    aria-controls="submenuDatos">
+                    <div class="d-flex align-items-center">
+                        <div class="ps-1">
+                            <i class="ni ni-chart-bar-32 text-dark text-sm opacity-10"></i>
+                        </div>
+                        <span class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Datos</span>
+                    </div>
+                </a>
+                <div class="collapse {{ request()->is('datos-salas') ? 'show' : '' }}" id="submenuDatos">
+                    <ul class="nav flex-column ms-3">
+                        <li class="nav-item">
+                            <a class="nav-link {{ Route::currentRouteName() == 'datos-salas.index' ? 'active' : '' }}"
+                                href="{{ route('datos-salas.index') }}">
+                                <i class="fas fa-chart-line text-dark text-sm opacity-10"></i>
+                                <span class="nav-link-text ms-1">Datos Salas</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
 
             {{-- Reportes --}}
             {{-- Otros --}}

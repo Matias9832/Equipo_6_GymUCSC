@@ -276,7 +276,7 @@ Route::middleware([
             Route::get('/mi-perfil/edit-contacto', [DocenteController::class, 'editContacto'])->name('docentes.contacto.edit');
             Route::put('/mi-perfil/edit-contacto', [DocenteController::class, 'updateInformacionContacto'])->name('docentes.contacto.update');
             Route::get('/docentes/perfil/{id}', [App\Http\Controllers\DocenteController::class, 'show'])->name('docentes.show');
-        });    
+        });
         Route::middleware(['permission:Crear Docentes'])->group(function () {
             Route::get('docentes/create', [DocenteController::class, 'create'])->name('docentes.create');
             Route::post('docentes', [DocenteController::class, 'store'])->name('docentes.store');
@@ -332,5 +332,7 @@ Route::middleware([
 
         // Eliminar imagen de noticia
         Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
+
+        Route::get('/datos-salas', [App\Http\Controllers\DatosSalaController::class, 'index'])->name('datos-salas.index');
     });
 });
