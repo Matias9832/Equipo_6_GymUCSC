@@ -103,7 +103,8 @@
                 if (window.innerWidth < 768) {
                     // Mostrar la tabla y ocultar la card en móvil
                     $('#columna-tabla').show();
-                    $('#columna-perfil').hide().removeClass('col-12');
+                    $('#columna-perfil').addClass('card-salir');
+                    setTimeout(() => { $('#columna-perfil').hide().removeClass('col-12 card-salir');}, 300);
                 } else {
                     // Restaurar layout en escritorio
                     $('#columna-tabla').removeClass('col-8').addClass('col-12');
@@ -140,7 +141,7 @@
                     url: `/docentes/perfil/${idDocente}`,
                     method: 'GET',
                     success: function(response) {
-                        $('#card-container').html(response.html);
+                        $('#card-container').hide().html(response.html).addClass('card-animar').show();
 
                         // --- Transición siempre que sea necesario ---
                         if (!perfilVisible) {
@@ -175,7 +176,13 @@
             // Resetear bandera
             perfilVisible = false;
         });
-        
+        function cerrarCard() {
+            $('#columna-tabla').removeClass('col-8').addClass('col-12'); // tabla vuelve a 12 cols
+            $('#columna-perfil').hide();                                // oculta la columna perfil
+            $('#card-container').html('');                              // limpia el contenido del perfil
+            $('.fila-docente').removeClass('table-active');             // quita highlight en filas
+            perfilVisible = false;                                       // resetea la variable para poder abrir de nuevo
+        }
     </script>
 
     <style>
@@ -215,6 +222,38 @@
          /* Estilos para la transición de las columnas */
         #columna-tabla, #columna-perfil {
             transition: all 0.3s ease-in-out;
+        }
+
+        /* Animación elegante para entrada lateral en móvil */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Para ocultar con efecto hacia la derecha */
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .card-animar {
+            animation: slideInRight 0.3s ease-out forwards;
+        }
+
+        .card-salir {
+            animation: slideOutRight 0.3s ease-in forwards;
         }
     </style>
 @endsection

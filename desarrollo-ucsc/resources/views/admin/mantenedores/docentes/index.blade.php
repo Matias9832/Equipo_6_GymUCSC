@@ -5,7 +5,6 @@
 
     <div class="container-fluid py-4">
         <div class="row">
-            {{-- Columna para la tabla de docentes --}}
             <div class="col-12" id="columna-tabla">
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
@@ -30,11 +29,9 @@
                 </div>
             </div>
 
-            {{-- Columna para la CardDocente (inicialmente oculta) --}}
-            <div class="col-4" id="columna-perfil" style="display: none;">
-                <div id="card-container" class="position-sticky" style="top: 20px;">
-                    {{-- El CardDocente se cargará aquí vía AJAX --}}
-                </div>
+            <!-- Contenedor para la card del perfil -->
+            <div class="col-lg-4 col-12" id="columna-perfil" style="display: none;">
+                <div id="card-container" class="position-sticky" style="top: 20px;"></div>
             </div>
 
         </div>
@@ -88,8 +85,17 @@
             let perfilVisible = false;
 
             function cerrarCard() {
-                $('#columna-tabla').removeClass('col-8').addClass('col-12');
-                $('#columna-perfil').hide();
+                if (window.innerWidth < 768) {
+                    // Mostrar la tabla y ocultar la card en móvil
+                    $('#columna-tabla').show();
+                    $('#columna-perfil').addClass('card-salir');
+                    setTimeout(() => { $('#columna-perfil').hide().removeClass('col-12 card-salir');}, 300);
+                } else {
+                    // Restaurar layout en escritorio
+                    $('#columna-tabla').removeClass('col-8').addClass('col-12');
+                    $('#columna-perfil').hide().removeClass('col-4');
+                }
+
                 $('#card-container').html('');
                 $('.fila-docente').removeClass('table-active');
                 perfilVisible = false;
@@ -116,19 +122,26 @@
                     </div>
                 `);
 
-                // --- Transición siempre que sea necesario ---
-                if (!perfilVisible) {
-                    $('#columna-tabla').removeClass('col-12').addClass('col-8');
-                    $('#columna-perfil').show();
-                    perfilVisible = true;
-                }
-
                 // Petición AJAX para obtener la card
                 $.ajax({
                     url: `/docentes/perfil/${idDocente}`,
                     method: 'GET',
                     success: function(response) {
-                        $('#card-container').html(response.html);
+                        $('#card-container').hide().html(response.html).addClass('card-animar').show();
+
+                        // --- Transición siempre que sea necesario ---
+                        if (!perfilVisible) {
+                            if (window.innerWidth < 768) {
+                                // Modo móvil
+                                $('#columna-tabla').hide();
+                                $('#columna-perfil').removeClass('col-4').addClass('col-12').show();
+                            } else {
+                                // Modo escritorio
+                                $('#columna-tabla').removeClass('col-12').addClass('col-8');
+                                $('#columna-perfil').removeClass('col-12').addClass('col-4').show();
+                            }
+                            perfilVisible = true;
+                        }
                     },
                     error: function() {
                         $('#card-container').html(`<div class="alert alert-danger m-3">Error al cargar perfil del docente.</div>`);
@@ -169,6 +182,37 @@
         /* Estilos para la transición de las columnas */
         #columna-tabla, #columna-perfil {
             transition: all 0.3s ease-in-out;
+        }
+        /* Animación elegante para entrada lateral en móvil */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Para ocultar con efecto hacia la derecha */
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .card-animar {
+            animation: slideInRight 0.3s ease-out forwards;
+        }
+
+        .card-salir {
+            animation: slideOutRight 0.3s ease-in forwards;
         }
     </style>
 @endsection
