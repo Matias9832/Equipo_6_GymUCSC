@@ -68,17 +68,17 @@ class AsistenciaTallerController extends Controller
     public function verMiAsistencia($tallerId)
     {
         $userId = auth()->id();
-
         $taller = Taller::findOrFail($tallerId);
 
-        // Obtener solo las asistencias de este usuario
-        $asistencias = $taller->usuarios()
-            ->where('taller_usuario.id_usuario', $userId)  // <-- aclara la tabla
-            ->orderByPivot('fecha_asistencia', 'desc')
+        $asistencias = DB::table('taller_usuario')
+            ->where('id_taller', $tallerId)
+            ->where('id_usuario', $userId)
+            ->orderBy('fecha_asistencia', 'desc')
             ->get();
 
         return view('usuarios.mis_asistencias', compact('taller', 'asistencias'));
     }
+
 
     // Mostrar formulario para registrar asistencia manual
     public function registrar(Request $request, Taller $taller)
