@@ -64,7 +64,8 @@ Route::middleware([
 ])->group(function () {
 
     Route::get('/docentes/perfil/{id}', [DocenteController::class, 'showPerfil'])->name('docentes.perfilAjax');
-    
+    Route::get('/administradores/perfil/{id}', [AdministradorController::class, 'showPerfil'])->name('administradores.perfil');
+
     Route::get('/', function () {
         return redirect()->route('news.index');
     })->name('welcome');

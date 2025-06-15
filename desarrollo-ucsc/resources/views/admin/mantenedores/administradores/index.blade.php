@@ -4,7 +4,7 @@
     @include('layouts.navbars.auth.topnav', ['title' => 'Administradores'])
     <div class="container-fluid py-4">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12" id="columna-tabla">
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h5>Lista de Administradores</h5>
@@ -39,6 +39,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <!-- Contenedor para la card del perfil -->
+            <div class="col-4" id="columna-perfil" style="display: none;">
+                <div id="card-container" class="position-sticky" style="top: 20px;"></div>
             </div>
         </div>
         @include('layouts.footers.auth.footer')
@@ -92,7 +96,76 @@
             $('#buscador-general').on('keyup', function () {
                 table.search(this.value).draw();
             });
+            // --- LÓGICA PARA MOSTRAR LA CARD ---
+            let perfilVisible = false;
+            function cerrarCard() {
+                $('#columna-tabla').removeClass('col-8').addClass('col-12');
+                $('#columna-perfil').hide();
+                $('#card-container').html('');
+                $('.fila-docente').removeClass('table-active');
+                perfilVisible = false;
+            }
+
+            $('#card-container').on('click', '.btn-cerrar-card', function () {
+                cerrarCard();
+            });
+            $('#tabla-administradores tbody').on('click', '.nombre-administrador', function (e) {
+                const idDocente = $(this).data('id');
+                const url = `{{ url('/administradores/perfil') }}/${idDocente}`;
+
+                // Resaltar fila seleccionada
+                $('.fila-docente').removeClass('table-active');
+                $(this).addClass('table-active');
+
+                // Mostrar un spinner/loading mientras se carga la tarjeta
+                $('#card-container').html(`
+                    <div class="d-flex justify-content-center align-items-center" style="height: 400px;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                `);
+
+                // --- Transición siempre que sea necesario ---
+                if (!perfilVisible) {
+                    $('#columna-tabla').removeClass('col-12').addClass('col-8');
+                    $('#columna-perfil').show();
+                    perfilVisible = true;
+                }
+
+                // Petición AJAX para obtener la card
+                $.ajax({
+                    url: `/docentes/perfil/${idDocente}`,
+                    method: 'GET',
+                    success: function(response) {
+                        $('#card-container').html(response.html);
+                    },
+                    error: function() {
+                        $('#card-container').html(`<div class="alert alert-danger m-3">Error al cargar perfil del docente.</div>`);
+                    }
+                });
+            });
         });
+        $(document).on('click', '#cerrar-perfil-docente', function () {
+            // Ocultar la columna del perfil
+            $('#columna-perfil').hide();
+
+            // Expandir la tabla nuevamente
+            $('#columna-tabla').removeClass('col-8').addClass('col-12');
+
+            // Quitar la selección de fila activa
+            $('.fila-docente').removeClass('table-active');
+
+            // Resetear bandera
+            perfilVisible = false;
+        });
+        function cerrarCard() {
+            $('#columna-tabla').removeClass('col-8').addClass('col-12'); // tabla vuelve a 12 cols
+            $('#columna-perfil').hide();                                // oculta la columna perfil
+            $('#card-container').html('');                              // limpia el contenido del perfil
+            $('.fila-docente').removeClass('table-active');             // quita highlight en filas
+            perfilVisible = false;                                       // resetea la variable para poder abrir de nuevo
+        }
     </script>
 
     <style>
