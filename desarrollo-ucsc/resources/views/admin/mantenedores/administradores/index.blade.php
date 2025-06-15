@@ -61,8 +61,8 @@
                 lengthChange: false,
                 ajax: '{{ route('administradores.data') }}',
                 columns: [
-                    { data: 'rut_admin', name: 'administrador.rut_admin', className: 'text-xs font-weight-bold ps-3' },
-                    { data: 'nombre_admin', name: 'administrador.nombre_admin', className: 'text-xs' },
+                    { data: 'rut_admin', name: 'administrador.rut_admin', className: 'text-xs ps-3' },
+                    { data: 'nombre_admin', name: 'administrador.nombre_admin', className: 'text-xs font-weight-bold' },
                     { data: 'correo_usuario', name: 'usuario.correo_usuario', defaultContent: 'N/A', className: 'text-xs' },
                     { data: 'rol_name', name: 'roles.name', defaultContent: 'Sin rol', className: '' },
                     { data: 'nombre_suc', name: 'sucursal.nombre_suc', defaultContent: 'Sin sucursal', className: 'text-xs' },
@@ -201,6 +201,10 @@
 
         .dataTables_filter {
             display: none !important;
+        }
+         /* Estilos para la transición de las columnas */
+        #columna-tabla, #columna-perfil {
+            transition: all 0.3s ease-in-out;
         }
     </style>
 @endsection
