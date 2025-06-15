@@ -20,6 +20,22 @@
                         <img src="{{ url($ultimaMarca->logo_marca) }}" alt="Logo Marca" style="height: 30px;"
                             class="me-2">
                     </a>
+                    <div class="d-flex align-items-center flex-wrap overflow-auto" >
+                        <ul class="nav nav-tabs " role="tablist">
+                            <li class="nav-item" role="presentation" >
+                                <a class="nav-link {{ request()->routeIs('welcome') ? 'active' : '' }}" 
+                                href="{{ route('welcome') }}" role="tab">
+                                    Inicio
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link {{ request()->routeIs('academynews.index') ? 'active' : '' }}" 
+                                href="{{ route('academynews.index') }}" role="tab">
+                                    Academia Deportiva
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
                         aria-label="Toggle navigation">

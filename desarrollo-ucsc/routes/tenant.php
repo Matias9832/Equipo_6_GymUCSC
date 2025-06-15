@@ -43,6 +43,9 @@ use App\Http\Controllers\AsistenciaTallerController;
 use App\Http\Controllers\RutinaPersonalizadaController;
 use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\TorneoUsuarioController;
+use App\Http\Controllers\AcademyNewsController;
+use App\Http\Controllers\AcademySettingController;
+use App\Models\AcademyNews;
 use Spatie\Permission\Models\Permission;
 
 /*
@@ -115,6 +118,8 @@ Route::middleware([
     // Noticias públicas
     Route::get('/noticias', [NewsController::class, 'index'])->name('news.index');
     Route::get('/noticias/{news}', [NewsController::class, 'show'])->name('news.show');
+    Route::get('/noticias-academia', [AcademyNewsController::class, 'index'])->name('academynews.index');
+    Route::get('/noticias-academia/{news}', [AcademyNewsController::class, 'show'])->name('academynews.show');
 
     // Grupo de rutas protegidas por auth
     Route::group(['middleware' => 'auth'], function () {
@@ -312,7 +317,14 @@ Route::middleware([
         });
         Route::middleware(['permission:Crear Noticias'])->group(function () {
             Route::resource('news', NewsController::class)->except(['index', 'show']);
+            Route::post('/news/{id}/toggle-featured', [NewsController::class, 'toggleFeatured'])->name('news.toggleFeatured');
+            Route::resource('noticias-academia', AcademyNewsController::class)->except(['index', 'show'])->names('academynews');
+            Route::post('/newsAcademy/{id}/toggle-featured', [AcademyNewsController::class, 'toggleFeatured'])->name('newsAcademy.toggleFeatured');
+            Route::resource('academy-settings', AcademySettingController::class)->names('academysettings');
+            //Route::put('/admin/academy-settings', [AcademySettingController::class, 'update'])->name('academysettings.update');
+
         });
+       
 
         // Importar alumnos
         Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
@@ -341,5 +353,7 @@ Route::middleware([
         Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
 
         Route::get('/datos-salas', [App\Http\Controllers\DatosSalaController::class, 'index'])->name('datos-salas.index');
+        Route::delete('/noticias-academia/image/{id}', [AcademyNewsController::class, 'destroyImage'])->name('newsAcademy.image.destroy');
+
     });
 });

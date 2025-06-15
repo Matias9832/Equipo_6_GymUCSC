@@ -1,16 +1,14 @@
 <?php
+
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\File;
 
-use App\Models\News;
-use App\Models\NewsImage;
-use App\Models\Administrador;
-use App\Models\Deporte;
-use App\Models\Sucursal;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Models\AcademyNews; 
+use App\Models\Administrador; 
+use App\Models\AcademyImg; 
 
-class NewsController extends Controller
+class AcademyNewsController extends Controller
 {
     public function __construct()
     {
@@ -18,10 +16,10 @@ class NewsController extends Controller
         $this->middleware('admin')->except(['index', 'show']);
     }
 
-   public function index()
+    public function index()
     {
-        // Paso 1: Desmarcar noticias cuya fecha destacada ha expirado
-        News::where('is_featured', true)
+         // Paso 1: Desmarcar noticias cuya fecha destacada ha expirado
+        AcademyNews::where('is_featured', true)
             ->whereNotNull('featured_until')
             ->where('featured_until', '<', now())
             ->update([
@@ -30,12 +28,12 @@ class NewsController extends Controller
             ]);
 
         // Paso 2: Obtener todas las noticias con paginación
-        $news = News::with('administrador', 'images') // también cargamos imágenes si las usas en la vista
+        $news = AcademyNews::with('administrador', 'images') // también cargamos imágenes si las usas en la vista
             ->orderByDesc('fecha_noticia')
-            ->paginate(6);
+            ->paginate(4);
 
         // Paso 3: Obtener noticias destacadas válidas
-        $featuredNews = News::with('images', 'administrador')
+        $featuredNews = AcademyNews::with('images', 'administrador')
             ->where('is_featured', true)
             ->where(function ($query) {
                 $query->whereNull('featured_until')
@@ -45,30 +43,31 @@ class NewsController extends Controller
             ->take(5)
             ->get();
 
-        // Paso 4: Sucursales con salas
-        $sucursalesConSalas = Sucursal::with('salas')
-            ->where('id_marca', 1)
-            ->whereHas('salas')
-            ->get();
+        $banner = \App\Models\AcademySetting::first();
+        return view('academynews.index', compact('news', 'featuredNews', 'banner'));
 
-        return view('news.index', compact('news', 'sucursalesConSalas', 'featuredNews'));
+     
+
+        
     }
 
-
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        $deportes = Deporte::all();
-        return view('news.create', compact('deportes'));
+        return view('academynews.create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        
         $data = $request->validate([
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'nombre_noticia' => 'required|string|max:255',
             'descripcion_noticia' => 'required',
-            'tipo_deporte' => 'required|string',
             'is_featured' => 'nullable|boolean',
             'featured_until' => 'nullable|date',
         ]);
@@ -76,10 +75,9 @@ class NewsController extends Controller
         $data['is_featured'] = $request->boolean('is_featured');
         $admin = Administrador::where('rut_admin', auth()->user()->rut)->firstOrFail();
 
-        $news = News::create([
+        $newsacademy = AcademyNews::create([
             'nombre_noticia' => $data['nombre_noticia'],
             'descripcion_noticia' => $data['descripcion_noticia'],
-            'tipo_deporte' => $data['tipo_deporte'],
             'encargado_noticia' => $admin->nombre_admin,
             'fecha_noticia' => now(),
             'id_admin' => $admin->id_admin,
@@ -88,49 +86,55 @@ class NewsController extends Controller
 
         ]);
 
-        $this->guardarImagenes($request, $news);
+        $this->guardarImagenes($request, $newsacademy);
 
-        return redirect('/')->with('success', 'Noticia creada con éxito.');
+        return redirect()->route('academynews.index')->with('success', 'Noticia creada con éxito.');
     }
 
+    /**
+     * Display the specified resource.
+     */
     public function show($id)
     {
-        $news = News::with('images')->findOrFail($id);
-        return view('news.show', compact('news'));
+        $academynews = AcademyNews::with('images')->findOrFail($id);
+        return view('academynews.show', compact('academynews'));
     }
-
+    
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit($id)
     {
-        $news = News::with('images')->findOrFail($id);
-        $deportes = Deporte::all();
-        if ($news->is_featured && $news->featured_until && now()->greaterThan($news->featured_until)) {
-            $news->is_featured = false;
-            $news->featured_until = null;
-            $news->save();
+        $newsacademy = AcademyNews::with('images')->findOrFail($id);
+        if ($newsacademy->is_featured && $newsacademy->featured_until && now()->greaterThan($newsacademy->featured_until)) {
+            $newsacademy->is_featured = false;
+            $newsacademy->featured_until = null;
+            $newsacademy->save();
         }
-        return view('news.edit', compact('news', 'deportes'));
+        return view('academynews.edit', compact('newsacademy'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
     {
-        $news = News::findOrFail($id);
+        $newsacademy = AcademyNews::findOrFail($id);
 
         $data = $request->validate([
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'nombre_noticia' => 'required|string|max:255',
             'descripcion_noticia' => 'required',
-            'tipo_deporte' => 'required|string',
             'is_featured' => 'nullable|boolean',
             'featured_until' => 'nullable|date',
         ]);
         
         $data['is_featured'] = $request->boolean('is_featured');
 
-        $news->update([
+        $newsacademy->update([
             'nombre_noticia' => $data['nombre_noticia'],
             'descripcion_noticia' => $data['descripcion_noticia'],
-            'tipo_deporte' => $data['tipo_deporte'],
             'is_featured' => $data['is_featured'] ?? 0,
             'featured_until' => $data['featured_until'] ?? null,
         ]);
@@ -138,7 +142,7 @@ class NewsController extends Controller
         // Eliminar imágenes seleccionadas
         if ($request->has('delete_images')) {
             foreach ($request->delete_images as $imageId) {
-                $image = NewsImage::find($imageId);
+                $image = AcademyImg::find($imageId);
                 if ($image) {
                     $this->eliminarImagenFisica($image->image_path);
                     $image->delete();
@@ -146,29 +150,28 @@ class NewsController extends Controller
             }
         }
 
-        $this->guardarImagenes($request, $news);
-
-        return redirect('/')->with('update', 'Noticia actualizada.');
+        $this->guardarImagenes($request, $newsacademy);
+        return redirect()->route('academynews.index')->with('success', 'Noticia actualizada con éxito.');
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
     {
-        $news = News::with('images')->findOrFail($id);
+        $newsacademy = AcademyNews::with('images')->findOrFail($id);
 
-        foreach ($news->images as $image) {
+        foreach ($newsacademy->images as $image) {
             $this->eliminarImagenFisica($image->image_path);
             $image->delete();
         }
 
-        $news->delete();
-
-        return redirect('/')->with('delete', 'Noticia eliminada.');
+        $newsacademy->delete();
+        
+        return redirect()->route('academynews.index')->with('success', 'Noticia eliminada con éxito.');
     }
 
-    /**
-     * Función auxiliar para guardar imágenes en public/img/news_images
-     */
-     private function guardarImagenes(Request $request, News $news)
+     private function guardarImagenes(Request $request, AcademyNews $newsacademy)
     {
         if ($request->hasFile('images')) {
             $destinationPath = public_path('img/noticias');
@@ -180,7 +183,7 @@ class NewsController extends Controller
                 $filename = uniqid('noticia_') . '.' . $image->getClientOriginalExtension();
                 $image->move($destinationPath, $filename);
 
-                $news->images()->create([
+                $newsacademy->images()->create([
                     'image_path' => 'img/noticias/' . $filename
                 ]);
             }
@@ -197,28 +200,36 @@ class NewsController extends Controller
 
    public function toggleFeatured($id)
     {
-        $noticia = News::findOrFail($id);
+        $newsacademy = AcademyNews::findOrFail($id);
 
         // Solo admin o usuario con permiso
         $this->authorize('Editar Noticias');
 
-        $noticia->is_featured = !$noticia->is_featured;
+        $newsacademy->is_featured = !$newsacademy->is_featured;
 
-        if ($noticia->is_featured) {
+        if ($newsacademy->is_featured) {
             // Ejemplo: destacar por 7 días
-            $noticia->featured_until = now()->addDays(7);
+            $newsacademy->featured_until = now()->addDays(7);
         } else {
-            $noticia->featured_until = null;
+            $newsacademy->featured_until = null;
         }
 
-        $noticia->save();
+        $newsacademy->save();
 
         return response()->json([
             'success' => true,
-            'destacado' => $noticia->is_featured,
+            'destacado' => $newsacademy->is_featured,
         ]);
     }
+    public function destroyImage($id)
+    {
+        $image = AcademyImg::findOrFail($id);
+        $this->eliminarImagenFisica($image->image_path);
+        $image->delete();
 
-
-
+        return response()->json([
+            'success' => true,
+            'message' => 'Imagen eliminada con éxito.'
+        ]);
+    }
 }
