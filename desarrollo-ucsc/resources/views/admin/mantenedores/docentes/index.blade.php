@@ -5,7 +5,6 @@
 
     <div class="container-fluid py-4">
         <div class="row">
-            {{-- Columna para la tabla de docentes --}}
             <div class="col-12" id="columna-tabla">
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
@@ -30,11 +29,9 @@
                 </div>
             </div>
 
-            {{-- Columna para la CardDocente (inicialmente oculta) --}}
-            <div class="col-4" id="columna-perfil" style="display: none;">
-                <div id="card-container" class="position-sticky" style="top: 20px;">
-                    {{-- El CardDocente se cargará aquí vía AJAX --}}
-                </div>
+            <!-- Contenedor para la card del perfil -->
+            <div class="col-lg-4 col-12" id="columna-perfil" style="display: none;">
+                <div id="card-container" class="position-sticky" style="top: 20px;"></div>
             </div>
 
         </div>
@@ -53,8 +50,8 @@
                 lengthChange: false,
                 ajax: '{{ route('docentes.data') }}',
                 columns: [
-                    { data: 'rut_admin', name: 'administrador.rut_admin', className: 'text-xs font-weight-bold ps-3' },
-                    { data: 'nombre_admin', name: 'administrador.nombre_admin', className: 'text-xs' },
+                    { data: 'rut_admin', name: 'administrador.rut_admin', className: 'text-xs ps-3' },
+                    { data: 'nombre_admin', name: 'administrador.nombre_admin', className: 'text-xs font-weight-bold' },
                     { data: 'correo_usuario', name: 'usuario.correo_usuario', defaultContent: '-', className: 'text-xs' },
                     { data: 'rol_name', name: 'roles.name', defaultContent: 'Sin rol', className: 'text-xs td-rol' },
                     { data: 'acciones', name: 'acciones', orderable: false, searchable: false, className: 'text-center text-xs' }
@@ -87,11 +84,31 @@
             // --- LÓGICA PARA MOSTRAR LA CARD ---
             let perfilVisible = false;
 
+            function cerrarCard() {
+                if (window.innerWidth < 768) {
+                    // Mostrar la tabla y ocultar la card en móvil
+                    $('#columna-tabla').show();
+                    $('#columna-perfil').addClass('card-salir');
+                    setTimeout(() => { $('#columna-perfil').hide().removeClass('col-12 card-salir');}, 300);
+                } else {
+                    // Restaurar layout en escritorio
+                    $('#columna-tabla').removeClass('col-8').addClass('col-12');
+                    $('#columna-perfil').hide().removeClass('col-4');
+                }
+
+                $('#card-container').html('');
+                $('.fila-docente').removeClass('table-active');
+                perfilVisible = false;
+            }
+
+            $('#card-container').on('click', '.btn-cerrar-card', function () {
+                cerrarCard();
+            });
             // Evento de clic en una fila de la tabla
-            $('#tabla-docentes tbody').on('click', '.fila-docente', function () {
+            $('#tabla-docentes tbody').on('click', '.nombre-docente', function (e) {
                 const idDocente = $(this).data('id');
                 const url = `{{ url('/docentes/perfil') }}/${idDocente}`;
-                
+
                 // Resaltar fila seleccionada
                 $('.fila-docente').removeClass('table-active');
                 $(this).addClass('table-active');
@@ -105,34 +122,53 @@
                     </div>
                 `);
 
-                // Hacer la transición de columnas si es la primera vez que se abre
-                if (!perfilVisible) {
-                    $('#columna-tabla').removeClass('col-12').addClass('col-8');
-                    $('#columna-perfil').show();
-                    perfilVisible = true;
-                }
-
                 // Petición AJAX para obtener la card
                 $.ajax({
-                    url: url,
-                    type: 'GET',
+                    url: `/docentes/perfil/${idDocente}`,
+                    method: 'GET',
                     success: function(response) {
-                        if (response.success) {
-                            // Si todo va bien, inyectamos el HTML de la tarjeta
-                            $('#card-container').html(response.html);
-                        } else {
-                            // Si el controlador dice que hubo un error (success: false)
-                            $('#card-container').html(response.html || '<p class="text-danger">No se pudo cargar el perfil.</p>');
+                        $('#card-container').hide().html(response.html).addClass('card-animar').show();
+
+                        // --- Transición siempre que sea necesario ---
+                        if (!perfilVisible) {
+                            if (window.innerWidth < 768) {
+                                // Modo móvil
+                                $('#columna-tabla').hide();
+                                $('#columna-perfil').removeClass('col-4').addClass('col-12').show();
+                            } else {
+                                // Modo escritorio
+                                $('#columna-tabla').removeClass('col-12').addClass('col-8');
+                                $('#columna-perfil').removeClass('col-12').addClass('col-4').show();
+                            }
+                            perfilVisible = true;
                         }
                     },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        // Si hay un error de servidor (404, 500, etc.)
-                        console.error("Error AJAX:", textStatus, errorThrown, jqXHR.responseText);
-                        $('#card-container').html('<div class="alert alert-danger text-white" role="alert"><strong>¡Error!</strong> No se pudo contactar al servidor para cargar el perfil.</div>');
+                    error: function() {
+                        $('#card-container').html(`<div class="alert alert-danger m-3">Error al cargar perfil del docente.</div>`);
                     }
                 });
             });
         });
+        $(document).on('click', '#cerrar-perfil-docente', function () {
+            // Ocultar la columna del perfil
+            $('#columna-perfil').hide();
+
+            // Expandir la tabla nuevamente
+            $('#columna-tabla').removeClass('col-8').addClass('col-12');
+
+            // Quitar la selección de fila activa
+            $('.fila-docente').removeClass('table-active');
+
+            // Resetear bandera
+            perfilVisible = false;
+        });
+        function cerrarCard() {
+            $('#columna-tabla').removeClass('col-8').addClass('col-12'); // tabla vuelve a 12 cols
+            $('#columna-perfil').hide();                                // oculta la columna perfil
+            $('#card-container').html('');                              // limpia el contenido del perfil
+            $('.fila-docente').removeClass('table-active');             // quita highlight en filas
+            perfilVisible = false;                                       // resetea la variable para poder abrir de nuevo
+        }
     </script>
 
     <style>
@@ -146,6 +182,37 @@
         /* Estilos para la transición de las columnas */
         #columna-tabla, #columna-perfil {
             transition: all 0.3s ease-in-out;
+        }
+        /* Animación elegante para entrada lateral en móvil */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Para ocultar con efecto hacia la derecha */
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .card-animar {
+            animation: slideInRight 0.3s ease-out forwards;
+        }
+
+        .card-salir {
+            animation: slideOutRight 0.3s ease-in forwards;
         }
     </style>
 @endsection

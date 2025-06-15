@@ -80,7 +80,11 @@ Route::middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
-    Route::get('/home', function () {
+
+    Route::get('/docentes/perfil/{id}', [DocenteController::class, 'showPerfil'])->name('docentes.perfilAjax');
+    Route::get('/administradores/perfil/{id}', [AdministradorController::class, 'showPerfil'])->name('administradores.perfil');
+
+    Route::get('/', function () {
         return redirect()->route('news.index');
     })->name('welcome');
 
@@ -136,9 +140,7 @@ Route::middleware([
         Route::get('/mis-rutinas', [RutinaPersonalizadaController::class, 'index'])->name('rutinas.personalizadas.index');
 
         Route::get('/mis-torneos', [TorneoUsuarioController::class, 'index'])->name('torneos.usuario.index');
-        Route::get('/torneos/{torneo}/agregar-miembros', [TorneoUsuarioController::class, 'agregarMiembros'])->name('torneos.agregar.miembros');
-        Route::post('/torneos/{torneo}/guardar-miembros', [TorneoUsuarioController::class, 'guardarMiembros'])->name('torneos.guardar.miembros');
-        Route::get('/buscar-usuario', [TorneoUsuarioController::class, 'buscarUsuario'])->name('torneos.buscar.usuario');
+        Route::get('/torneos/{torneo}/ver-miembros', [TorneoUsuarioController::class, 'verMiembros'])->name('torneos.ver.miembros');
 
         Route::get('/torneos/{torneo}/tabla', [TorneoController::class, 'tabla'])->name('usuario.torneos.tabla');
         Route::get('/torneos/{torneo}/partidos', [TorneoController::class, 'partidos'])->name('usuario.torneos.partidos');

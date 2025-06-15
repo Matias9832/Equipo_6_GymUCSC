@@ -28,7 +28,12 @@ class ResetPassword extends Controller
         $user = Usuario::where('correo_usuario', $email['email'])->first();
 
         if ($user) {
-            $this->notify(new ForgotPassword($user->id_usuario));
+            try {
+                $this->notify(new ForgotPassword($user->id_usuario));
+            } catch (\Exception $e) {
+                \Log::error('Error al enviar correo de recuperación: ' . $e->getMessage());
+                return back()->withErrors(['error' => 'No se pudo enviar el correo. Intenta más tarde.']);
+            }
             return back()->with('success', 'El correo fue enviado con éxito a ' . $request->email);
         } else {
             return back()->withErrors(['email' => 'Ingrese un correo válido'])->withInput();
