@@ -80,7 +80,11 @@ Route::middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
-    Route::get('/home', function () {
+
+    Route::get('/docentes/perfil/{id}', [DocenteController::class, 'showPerfil'])->name('docentes.perfilAjax');
+    Route::get('/administradores/perfil/{id}', [AdministradorController::class, 'showPerfil'])->name('administradores.perfil');
+
+    Route::get('/', function () {
         return redirect()->route('news.index');
     })->name('welcome');
 
@@ -123,6 +127,10 @@ Route::middleware([
         // Actividades
         Route::get('/mi-actividad', [ActividadController::class, 'actividadUsuario'])->name('actividad.usuario');
         Route::get('/actividades', [ActividadController::class, 'eventosCalendario'])->name('actividad.eventos');
+
+        // Mis talleres
+        Route::get('/mis-talleres', [TallerController::class, 'misTalleres'])->name('usuario.talleres');
+        Route::get('talleres/{taller}/asistencia/mis', [AsistenciaTallerController::class, 'verMiAsistencia'])->name('usuario.asistencias');
 
         // Control de salas
         Route::get('/ingreso/registro', [ControlSalasController::class, 'registroDesdeQR'])->name('sala.registro');
@@ -274,7 +282,7 @@ Route::middleware([
             Route::get('/mi-perfil/edit-contacto', [DocenteController::class, 'editContacto'])->name('docentes.contacto.edit');
             Route::put('/mi-perfil/edit-contacto', [DocenteController::class, 'updateInformacionContacto'])->name('docentes.contacto.update');
             Route::get('/docentes/perfil/{id}', [App\Http\Controllers\DocenteController::class, 'show'])->name('docentes.show');
-        });    
+        });
         Route::middleware(['permission:Crear Docentes'])->group(function () {
             Route::get('docentes/create', [DocenteController::class, 'create'])->name('docentes.create');
             Route::post('docentes', [DocenteController::class, 'store'])->name('docentes.store');
@@ -318,6 +326,7 @@ Route::middleware([
             Route::get('/control-salas/seleccionar', [ControlSalasController::class, 'seleccionarSala'])->name('control-salas.seleccionar');
             Route::post('/control-salas/generar-qr', [ControlSalasController::class, 'generarQR'])->name('control-salas.generarQR');
             Route::get('control-salas/ver-qr', [ControlSalasController::class, 'verQR'])->name('control-salas.verQR');
+            Route::get('/control-salas/aforo/{idSala}', [ControlSalasController::class, 'aforoData']);
             Route::post('/control-salas/registro-manual', [ControlSalasController::class, 'registroManual'])->name('registro.manual');
             Route::post('/salida-manual', [ControlSalasController::class, 'salidaManual'])->name('salida.manual');
             Route::post('/control-salas/cambiar-aforo', [ControlSalasController::class, 'cambiarAforo'])->name('control-salas.cambiar_aforo');
@@ -330,5 +339,7 @@ Route::middleware([
 
         // Eliminar imagen de noticia
         Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
+
+        Route::get('/datos-salas', [App\Http\Controllers\DatosSalaController::class, 'index'])->name('datos-salas.index');
     });
 });

@@ -72,7 +72,7 @@ class ControlSalasController extends Controller
             ->whereNull('hora_salida')
             ->count();
 
-        
+
         //contar los usuarios tipo estudiantes y tipo seleccionado.
         $estudiantes = $ingresos->filter(function ($ingreso) {
             return $ingreso->usuario->tipo_usuario === 'estudiante';
@@ -91,7 +91,7 @@ class ControlSalasController extends Controller
             'desdeQR' => true,
             'aforoPermitido' => $request->aforo_qr,
             'usuariosActivos' => $usuariosActivos,
-            'personasConEnfermedad' => $personasConEnfermedad ,
+            'personasConEnfermedad' => $personasConEnfermedad,
             'estudiantes' => $estudiantes,
             'seleccionados' => $seleccionados,
             'sala' => $sala,
@@ -358,29 +358,29 @@ class ControlSalasController extends Controller
             ->whereDate('fecha_ingreso', today())
             ->with(['usuario.alumno', 'usuario.administrador'])
             ->get();
-    
+
 
         return view('admin.control-salas.ver_usuarios', compact('sala'));
     }
 
     public function registroManual(Request $request)
     {
-        
+
         $request->validate([
             'rut' => 'required|string',
             'password' => 'required|string',
             'id_sala' => 'required|exists:sala,id_sala',
         ]);
 
-        
-        
+
+
         // Buscar el usuario por RUT
         $usuario = Usuario::where('rut', $request->rut)->first();
-        
+
         if (!$usuario || !Hash::check($request->password, $usuario->contrasenia_usuario)) {
-            return back()->with('error', 'El rut o la contraseña son incorrectos.') ->withInput();
+            return back()->with('error', 'El rut o la contraseña son incorrectos.')->withInput();
         }
-        
+
         // Verificar si la sala está activa
         $sala = Sala::findOrFail($request->id_sala);
 
@@ -462,7 +462,7 @@ class ControlSalasController extends Controller
         $registro->save();
 
         return back()->with('success', 'Salida registrada correctamente.');
-    }   
+    }
 
     public function estadoUsuario()
     {
@@ -476,5 +476,38 @@ class ControlSalasController extends Controller
         ]);
     }
 
+    public function aforoData($idSala)
+    {
+        $sala = Sala::findOrFail($idSala);
+
+        $ingresos = Ingreso::where('id_sala', $sala->id_sala)
+            ->whereNull('hora_salida')
+            ->with(['usuario.alumno', 'usuario.administrador', 'usuario.salud'])
+            ->get();
+
+        $usuariosActivos = $ingresos->count();
+
+        $estudiantes = $ingresos->filter(function ($ingreso) {
+            return $ingreso->usuario && $ingreso->usuario->tipo_usuario === 'estudiante';
+        })->count();
+
+        $seleccionados = $ingresos->filter(function ($ingreso) {
+            return $ingreso->usuario && $ingreso->usuario->tipo_usuario === 'seleccionado';
+        })->count();
+
+        $personasConEnfermedad = $ingresos->filter(function ($ingreso) {
+            return $ingreso->usuario &&
+                $ingreso->usuario->salud &&
+                $ingreso->usuario->salud->enfermo_cronico == 1;
+        })->count();
+
+        return response()->json([
+            'aforoPermitido' => $sala->aforo_qr ?? $sala->aforo_sala,
+            'usuariosActivos' => $usuariosActivos,
+            'estudiantes' => $estudiantes,
+            'seleccionados' => $seleccionados,
+            'personasConEnfermedad' => $personasConEnfermedad,
+        ]);
+    }
 
 }

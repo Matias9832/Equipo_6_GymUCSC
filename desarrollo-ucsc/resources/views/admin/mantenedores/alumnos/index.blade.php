@@ -38,7 +38,7 @@
                             </div>
                         </form>
                         @if(session('warning'))
-                            <div class="alert alert-warning">
+                            <div class="alert alert-warning text-white">
                                 <strong>{{ session('warning') }}</strong>
                                 @if(session('import_errors_missing_rut'))
                                     <h5>Errores por RUT faltante:</h5>

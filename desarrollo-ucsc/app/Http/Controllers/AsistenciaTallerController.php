@@ -65,6 +65,24 @@ class AsistenciaTallerController extends Controller
         return view('admin.talleres.asistencia.ver', compact('taller'));
     }
 
+    public function verMiAsistencia($tallerId)
+    {
+        $userId = auth()->id();
+        $taller = Taller::findOrFail($tallerId);
+
+        $asistencias = DB::table('taller_usuario')
+            ->where('id_taller', $tallerId)
+            ->where('id_usuario', $userId)
+            ->orderBy('fecha_asistencia', 'desc')
+            ->get()
+            ->groupBy(function ($item) {
+                return Carbon::parse($item->fecha_asistencia)->format('Y-m');
+            });
+
+        return view('usuarios.mis_asistencias', compact('taller', 'asistencias'));
+    }
+
+
     // Mostrar formulario para registrar asistencia manual
     public function registrar(Request $request, Taller $taller)
     {

@@ -67,6 +67,11 @@
                                             </a>
                                         </li>
                                         <li>
+                                            <a href="{{ route('usuario.talleres') }}" class="dropdown-item">
+                                                <i class="fas fa-chalkboard-teacher me-2"></i> Mis Talleres
+                                            </a>
+                                        </li>
+                                        <li>
                                             <a href="{{ route('rutinas.personalizadas.index') }}" class="dropdown-item">
                                                 <i class="fa fa-dumbbell me-2"></i> Rutinas
                                             </a>
