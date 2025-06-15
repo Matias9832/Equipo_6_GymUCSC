@@ -3,12 +3,6 @@
 @section('content')
      @include('layouts.navbars.guest.navbar')
 
-    @if(session('mensaje'))
-        <div class="alert alert-success mt-3">
-            {{ session('mensaje') }}
-        </div>
-    @endif
-
     <div class="container d-flex flex-column justify-content-center align-items-center vh-100 text-center">
         <div id="contenido-ingreso">
             @if (isset($horaIngreso))

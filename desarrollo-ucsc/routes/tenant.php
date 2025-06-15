@@ -320,6 +320,7 @@ Route::middleware([
             Route::get('/control-salas/seleccionar', [ControlSalasController::class, 'seleccionarSala'])->name('control-salas.seleccionar');
             Route::post('/control-salas/generar-qr', [ControlSalasController::class, 'generarQR'])->name('control-salas.generarQR');
             Route::get('control-salas/ver-qr', [ControlSalasController::class, 'verQR'])->name('control-salas.verQR');
+            Route::get('/control-salas/aforo/{idSala}', [ControlSalasController::class, 'aforoData']);
             Route::post('/control-salas/registro-manual', [ControlSalasController::class, 'registroManual'])->name('registro.manual');
             Route::post('/salida-manual', [ControlSalasController::class, 'salidaManual'])->name('salida.manual');
             Route::post('/control-salas/cambiar-aforo', [ControlSalasController::class, 'cambiarAforo'])->name('control-salas.cambiar_aforo');

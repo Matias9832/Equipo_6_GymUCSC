@@ -56,13 +56,13 @@
                                 <i
                                     class="fas fa-user fs-4 {{ ($personasConEnfermedad ?? 0) > 0 ? 'text-primary' : 'text-success' }}"></i>
                                 <div>
-                                    <h4 class="fw-bold text-danger">{{ $estudiantes ?? 0 }}</h4>
+                                    <h4 class="fw-bold text-danger" id="aforo-estudiantes">{{ $estudiantes ?? 0 }}</h4>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center gap-2">
                                 <i class="fas fa-solid fa-medal fs-4 text-success"></i>
                                 <div>
-                                    <h4 class="fw-bold text-danger">{{ $seleccionados ?? 0 }}</h4>
+                                    <h4 class="fw-bold text-danger" id="aforo-seleccionados">{{ $seleccionados ?? 0 }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -71,87 +71,113 @@
 
                 <div class="position-relative my-3 text-center">
                     <hr>
-                    <span class="position-absolute top-50 start-50 translate-middle bg-gray-100 px-3 text-muted" style="z-index: 1;">Ó</span>
+                    <span class="position-absolute top-50 start-50 translate-middle bg-gray-100 px-3 text-muted"
+                        style="z-index: 1;">Ó</span>
                 </div>
-                
+
                 <div class="container">
                     <div class="card shadow-sm p-4 text-center">
-                        <div class="custom-tab-container mt-4">                                 
-                            
+                        <div class="custom-tab-container mt-4">
+
                             <h5 class="font-weight-bolder mb-0">INGRESA CON TUS CREDENCIALES</h5>
                             {{-- Botones para activar modales --}}
                             <div class="d-flex gap-3 justify-content-center mt-4">
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalIngresoManual">
                                     Registrar Ingreso
                                 </button>
-                                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalSalidaManual">
+                                <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                    data-bs-target="#modalSalidaManual">
                                     Registrar Salida
                                 </button>
                             </div>
                         </div>
-                    </div>            
+                    </div>
                 </div>
         @endif
 
-        
-        {{-- Modal Ingreso Manual --}}
-        <div class="modal fade" id="modalIngresoManual" tabindex="-1" aria-labelledby="modalIngresoManualLabel" aria-hidden="true">
-            <div class="modal-dialog" style="margin: 0 auto; margin-top: 530px;">
-                <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
-                    <form action="{{ route('registro.manual') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalIngresoManualLabel">Registrar Ingreso Manual</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="rutIngreso" class="form-label">RUT</label>
-                                <input type="text" name="rut" id="rutIngreso" class="form-control" placeholder="Sin puntos ni dígito verificador" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="passIngreso" class="form-label">Contraseña</label>
-                                <input type="password" name="password" id="passIngreso" class="form-control" placeholder="********" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Registrar Ingreso</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
 
-        {{-- Modal Salida Manual --}}
-        <div class="modal fade align-bottom" id="modalSalidaManual" tabindex="-1" aria-labelledby="modalSalidaManualLabel" aria-hidden="true">
-            <div class="modal-dialog" style="margin: 0 auto; margin-top: 530px;">
-                <div class="modal-content">
-                    <form action="{{ route('salida.manual') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalSalidaManualLabel">Registrar Salida Manual</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="rutSalida" class="form-label">RUT</label>
-                                <input type="text" name="rut" id="rutSalida" class="form-control" placeholder="Sin puntos ni dígito verificador" required>
+            {{-- Modal Ingreso Manual --}}
+            <div class="modal fade" id="modalIngresoManual" tabindex="-1" aria-labelledby="modalIngresoManualLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" style="margin: 0 auto; margin-top: 530px;">
+                    <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+                        <form action="{{ route('registro.manual') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalIngresoManualLabel">Registrar Ingreso Manual</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Cerrar"></button>
                             </div>
-                            <div class="mb-3">
-                                <label for="passSalida" class="form-label">Contraseña</label>
-                                <input type="password" name="password" id="passSalida" class="form-control" placeholder="********" required>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="rutIngreso" class="form-label">RUT</label>
+                                    <input type="text" name="rut" id="rutIngreso" class="form-control"
+                                        placeholder="Sin puntos ni dígito verificador" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="passIngreso" class="form-label">Contraseña</label>
+                                    <input type="password" name="password" id="passIngreso" class="form-control"
+                                        placeholder="********" required>
+                                </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-outline-primary">Registrar Salida</button>
-                        </div>
-                    </form>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Registrar Ingreso</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Modal Salida Manual --}}
+            <div class="modal fade align-bottom" id="modalSalidaManual" tabindex="-1"
+                aria-labelledby="modalSalidaManualLabel" aria-hidden="true">
+                <div class="modal-dialog" style="margin: 0 auto; margin-top: 530px;">
+                    <div class="modal-content">
+                        <form action="{{ route('salida.manual') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalSalidaManualLabel">Registrar Salida Manual</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Cerrar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="rutSalida" class="form-label">RUT</label>
+                                    <input type="text" name="rut" id="rutSalida" class="form-control"
+                                        placeholder="Sin puntos ni dígito verificador" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="passSalida" class="form-label">Contraseña</label>
+                                    <input type="password" name="password" id="passSalida" class="form-control"
+                                        placeholder="********" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-outline-primary">Registrar Salida</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
+        <script>
+            function actualizarAforo(idSala) {
+                fetch(`/admin/control-salas/aforo/${idSala}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.querySelector('h2.text-primary').textContent = data.aforoPermitido;
+                        document.getElementById('aforo-actual').textContent = data.usuariosActivos;
+                        document.getElementById('aforo-estudiantes').textContent = data.estudiantes;
+                        document.getElementById('aforo-seleccionados').textContent = data.seleccionados;
+                    });
+            }
+
+            setInterval(function () {
+                actualizarAforo({{ $sala->id_sala }});
+            }, 2000);
+        </script>
 @endsection
 
 
@@ -187,14 +213,6 @@
                         console.error('Error:', error);
                     });
             });
-
-            function actualizarAforo(idSala) {
-                fetch(`/admin/control-salas/aforo/${idSala}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('aforo-actual').textContent = data.aforo;
-                    });
-            }
         </script>
 
     @endsection
