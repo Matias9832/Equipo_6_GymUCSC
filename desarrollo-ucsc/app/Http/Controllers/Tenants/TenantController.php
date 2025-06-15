@@ -16,7 +16,7 @@ class TenantController extends Controller
         return view('tenants.subdominios.index', compact('tenants'));
     }
     public function create()
-    {   
+    {
         $empresasDisponibles = \App\Models\Tenants\Empresa::where(function ($q) {
             $q->where('subdominio', 'Sin subdominio asignado')
                 ->orWhereNull('subdominio');
@@ -51,6 +51,15 @@ class TenantController extends Controller
         tenancy()->initialize($tenant);
 
         \App\Models\Marca::create([
+        $marca = \App\Models\Marca::first();
+        $marca = \App\Models\Marca::firstOrCreate([], [
+            'nombre_marca' => 'GymUCSC',
+            'logo_marca' => 'logos/default.png',
+            'mision_marca' => 'Default mision',
+            'vision_marca' => 'Default vision',
+        ]);
+
+        $marca->update([
             'nombre_marca' => $empresa->nombre,
             'logo_marca' => $empresa->logo,
             'mision_marca' => $empresa->mision,
