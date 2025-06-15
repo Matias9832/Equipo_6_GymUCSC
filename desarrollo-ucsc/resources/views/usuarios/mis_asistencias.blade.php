@@ -15,28 +15,45 @@
         </div>
 
         <div class="card-body">
+            @php
+                use Illuminate\Support\Carbon;
+
+                $meses = [
+                    '01' => 'enero', '02' => 'febrero', '03' => 'marzo', '04' => 'abril',
+                    '05' => 'mayo', '06' => 'junio', '07' => 'julio', '08' => 'agosto',
+                    '09' => 'septiembre', '10' => 'octubre', '11' => 'noviembre', '12' => 'diciembre',
+                ];
+            @endphp
+
             @if($asistencias->isEmpty())
-                <div class="alert alert-secondary text-center py-3 fs-5 mb-0">
-                    No tienes asistencias registradas para este taller.
-                </div>
+                <div class="alert alert-secondary">No tienes asistencias registradas para este taller.</div>
             @else
-                @foreach($asistencias as $registro)
+                @foreach($asistencias as $mesAnio => $fechas)
                     @php
-                        $fecha = \Carbon\Carbon::parse($registro->fecha_asistencia);
-                        $meses = [
-                            1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril',
-                            5 => 'mayo', 6 => 'junio', 7 => 'julio', 8 => 'agosto',
-                            9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre',
-                        ];
-                        $mesNombre = $meses[$fecha->month];
+                        [$anio, $mes] = explode('-', $mesAnio);
+                        $nombreMes = ucfirst($meses[$mes]);
                     @endphp
 
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Asistencia:
-                        <span class="badge bg-primary rounded-pill">
-                            {{ $fecha->day }} de {{ $mesNombre }} de {{ $fecha->year }}
-                        </span>
-                    </li>
+                    <div class="mb-4">
+                        <h4 class="text-dark fw-bold ms-3 pb-2">{{ $nombreMes }} de {{ $anio }}</h4>
+
+                        <ul class="list-group">
+                            @foreach($fechas as $registro)
+                                @php
+                                    $fecha = Carbon::parse($registro->fecha_asistencia);
+                                @endphp
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span class="text-dark">
+                                        <i class="fas fa-check-circle me-2 text-success"></i>
+                                        Asistencia registrada
+                                    </span>
+                                    <span class="badge bg-primary rounded-pill">
+                                        {{ $fecha->format('d') }} de {{ $meses[$fecha->format('m')] }}
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 @endforeach
             @endif
         </div>

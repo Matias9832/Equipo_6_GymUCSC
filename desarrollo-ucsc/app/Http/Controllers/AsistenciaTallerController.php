@@ -74,7 +74,10 @@ class AsistenciaTallerController extends Controller
             ->where('id_taller', $tallerId)
             ->where('id_usuario', $userId)
             ->orderBy('fecha_asistencia', 'desc')
-            ->get();
+            ->get()
+            ->groupBy(function ($item) {
+                return Carbon::parse($item->fecha_asistencia)->format('Y-m');
+            });
 
         return view('usuarios.mis_asistencias', compact('taller', 'asistencias'));
     }
