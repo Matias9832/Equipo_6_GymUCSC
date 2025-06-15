@@ -190,21 +190,14 @@ class TorneoController extends Controller
 
         $finalizada = isset($partidosPorRonda[$rondaSeleccionada]) && $partidosPorRonda[$rondaSeleccionada]->first()->finalizada;
 
-        // Determinar etapa
+        // Determinar etapa desde la base de datos (columna 'etapa' del primer partido de la ronda seleccionada)
         $etapa = '';
-        if ($torneo->fase_grupos) {
-            $totalFechasGrupos = $torneo->equipos_por_grupo - 1;
-            if ($rondaSeleccionada <= $totalFechasGrupos) {
-                $etapa = 'Fase de Grupos';
-            } else {
-                $etapa = 'Eliminatoria';
-            }
-        } else {
-            $etapa = 'Liga';
+        if (isset($partidosPorRonda[$rondaSeleccionada]) && $partidosPorRonda[$rondaSeleccionada]->count() > 0) {
+            $etapa = $partidosPorRonda[$rondaSeleccionada]->first()->etapa ?? '';
         }
 
         // Mostrar vista según tipo de usuario
-        if (Auth::user()->hasRole('admin')) {
+        if (\Auth::user()->tipo_usuario === 'admin') {
             return view('admin.mantenedores.torneos.partidos', compact(
                 'torneo', 'partidos', 'partidosPorRonda', 'fechas', 'rondaSeleccionada', 'rondaAnterior', 'rondaSiguiente', 'finalizada', 'etapa'
             ));
@@ -268,7 +261,7 @@ class TorneoController extends Controller
         }
         $tabla = collect($tabla)->sortByDesc(fn($e) => [$e['pts'], $e['gf'] - $e['gc'], $e['gf']])->values();
 
-        if (Auth::user()->hasRole('admin')) {
+        if (Auth::user()->tipo_usuario === 'admin') {
             return view('admin.mantenedores.torneos.tabla', compact('torneo', 'tabla'));
         } else {
             return view('usuarios.torneos.usuario_tabla', compact('torneo', 'tabla'));
@@ -308,7 +301,7 @@ class TorneoController extends Controller
         }
 
         // Mostrar vista según tipo de usuario
-        if (Auth::user()->hasRole('admin')) {
+        if (Auth::user()->tipo_usuario === 'admin') {
             return view('admin.mantenedores.torneos.copa', compact('torneo','teams','results'));
         } else {
             return view('usuarios.torneos.usuario_copa', compact('torneo','teams','results'));
@@ -503,7 +496,7 @@ class TorneoController extends Controller
             $tablas[$idx] = collect($tabla)->sortByDesc(fn($e) => [$e['pts'], $e['gf'] - $e['gc'], $e['gf']])->values();
         }
 
-        if (Auth::user()->hasRole('admin')) {
+        if (Auth::user()->tipo_usuario === 'admin') {
             return view('admin.mantenedores.torneos.fase_grupos', compact('torneo', 'tablas'));
         } else {
             return view('usuarios.torneos.usuario_fase_grupos', compact('torneo', 'tablas'));
