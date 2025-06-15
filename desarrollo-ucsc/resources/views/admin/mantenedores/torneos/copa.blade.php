@@ -13,6 +13,8 @@
 <div class="text-center">
   <a href="{{ route('torneos.index') }}" class="btn btn-secondary">Volver</a>
 </div>
+
+<a href="{{ route('torneos.index') }}" class="btn btn-secondary mt-3 float-end">Volver</a>
 @endsection
 
 @push('js')
