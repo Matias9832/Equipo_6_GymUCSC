@@ -52,5 +52,27 @@ class CarreraController extends Controller
                 ]
             );
         }
+
+        $this->actualizarUACarreras();
     }
+    public function actualizarUACarreras()
+    {
+        $carreras = Carrera::all();
+
+        foreach ($carreras as $carrera) {
+            // Obtener el UA más frecuente en alumnos activos para esa carrera
+            $ua = Alumno::where('carrera', $carrera->nombre_carrera)
+                ->where('estado_alumno', 'Activo')
+                ->select('ua_carrera')
+                ->groupBy('ua_carrera')
+                ->orderByRaw('COUNT(*) DESC')
+                ->value('ua_carrera');
+
+            if ($ua) {
+                $carrera->UA = $ua;
+                $carrera->save();
+            }
+        }
+    }
+
 }

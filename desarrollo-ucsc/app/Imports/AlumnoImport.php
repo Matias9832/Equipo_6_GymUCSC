@@ -15,15 +15,16 @@ class AlumnoImport implements OnEachRow, WithHeadingRow, WithEvents
     public static function beforeImport(BeforeImport $event)
     {
         $sheet = $event->getReader()->getActiveSheet();
-        $actualHeaders = $sheet->rangeToArray('A1:F1')[0];
+        $actualHeaders = $sheet->rangeToArray('A1:G1')[0];
 
         $expectedHeaders = [
             'rut',
+            'ua',
             'carr_descripcion',
             'paterno',
             'materno',
             'nombres',
-            'sexo'
+            'sexo',
         ];
 
 
@@ -55,6 +56,7 @@ class AlumnoImport implements OnEachRow, WithHeadingRow, WithEvents
             empty($data['paterno']) ||
             empty($data['materno']) ||
             empty($data['nombres']) ||
+            empty($data['ua']) ||
             empty($data['carr_descripcion']) ||
             empty($data['sexo'])
         ) {
@@ -69,6 +71,7 @@ class AlumnoImport implements OnEachRow, WithHeadingRow, WithEvents
             'apellido_materno' => $data['materno'],
             'nombre_alumno' => $data['nombres'],
             'carrera' => $data['carr_descripcion'],
+            'ua_carrera' => $data['ua'],
             'sexo_alumno' => strtoupper(trim($data['sexo'])),
             'estado_alumno' => 'Activo',
         ];
@@ -79,6 +82,10 @@ class AlumnoImport implements OnEachRow, WithHeadingRow, WithEvents
             $datos['rut_alumno'] = $data['rut'];
             Alumno::create($datos);
         }
+        session()->push('ua_carreras', [
+            'ua' => trim($data['ua']),
+            'carrera' => trim($data['carr_descripcion']),
+        ]);
     }
 
 }

@@ -27,10 +27,11 @@ class Alumno extends Model
         'apellido_materno',
         'nombre_alumno',
         'carrera',
+        'ua_carrera',
         'estado_alumno',
         'sexo_alumno',
     ];
-    
+
     protected $dates = ['created_at', 'updated_at'];
 
 }

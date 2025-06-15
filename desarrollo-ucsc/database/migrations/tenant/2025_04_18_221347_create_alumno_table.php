@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('apellido_paterno');
             $table->string('apellido_materno');
             $table->string('nombre_alumno');
+            $table->integer('ua_carrera');
             $table->string('carrera');
             $table->string('estado_alumno');
             $table->string('sexo_alumno')->nullable();
