@@ -18,8 +18,8 @@ class SucursalController extends Controller
     public function create()
     {
         $ciudades = Ciudad::all();
-        $marcas = Marca::all();
-        return view('admin.sucursales.sucursal.create', compact('ciudades', 'marcas'));
+        $marca = Marca::first();
+        return view('admin.sucursales.sucursal.create', compact('ciudades', 'marca'));
     }
 
     public function store(Request $request)
@@ -41,9 +41,9 @@ class SucursalController extends Controller
         $sucursal = Sucursal::findOrFail($id_suc);
 
         $ciudades = Ciudad::all();
-        $marcas = Marca::all();
+        $marca = Marca::first();
 
-        return view('admin.sucursales.sucursal.edit', compact('sucursal', 'ciudades', 'marcas'));
+        return view('admin.sucursales.sucursal.edit', compact('sucursal', 'ciudades', 'marca'));
     }
 
     public function update(Request $request, $id_suc)

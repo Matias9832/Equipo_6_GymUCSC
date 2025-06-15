@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="/img/gym/logo_icon.png">
+    <link rel="icon" type="image/png" href="{{ url('img\tenants\logo_ugym-cuadrado.png') }}">
     <title>
-        Panel Ugym
+        Ugym
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -17,6 +17,7 @@
     <!-- Font Awesome Icons -->
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ url('assets/css/argon-dashboard.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ url('assets/css/tenants.css') }}">
@@ -44,9 +45,9 @@
     @if(session('success') || session('update') || session('delete'))
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
             <div id="toastSuccess" class="toast align-items-center text-white 
-                                                        {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
-                                                        border-0 show" role="alert" aria-live="assertive"
-                aria-atomic="true">
+                                                                            {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
+                                                                            border-0 show" role="alert"
+                aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body text-center w-100">
                         {{ session('success') ?? session('update') ?? session('delete') }}
@@ -114,11 +115,15 @@
         </script>
     @endif
 
-    <div class="min-height-300 bg-primary position-absolute w-100"></div>
-    @include('layouts.tenants.navbars.tsidenav')
-    <main class="main-content border-radius-lg">
+    @if (in_array(request()->route()->getName(), ['inicio', 'tenant-login']))
         @yield('content')
-    </main>
+    @else
+        <div class="min-height-300 bg-primary position-absolute w-100"></div>
+        @include('layouts.tenants.navbars.tsidenav')
+        <main class="main-content border-radius-lg">
+            @yield('content')
+        </main>
+    @endif
 
     <!--   Core JS Files   -->
     <script src="{{ url('assets/js/core/popper.min.js') }}"></script>

@@ -8,43 +8,6 @@
     <div class="card">
         <div class="card-body">
             <h4>Partidos de {{ $torneo->nombre_torneo }}</h4>
-            @php
-                $partidosPorRonda = $partidos->groupBy('ronda');
-                $fechas = $partidosPorRonda->keys()->sort()->values();
-                $totalFechas = $fechas->count();
-                $rondaActual = null;
-                foreach ($partidosPorRonda as $ronda => $partidosDeRonda) {
-                    $incompletos = $partidosDeRonda->filter(function($p) {
-                        return $p->resultado_local === null || $p->resultado_visitante === null;
-                    });
-                    if ($incompletos->count() > 0) {
-                        $rondaActual = $ronda;
-                        break;
-                    }
-                }
-                $rondaSeleccionada = request('ronda');
-                if (!$rondaSeleccionada) {
-                    $rondaSeleccionada = $rondaActual ?? ($fechas->first() ?? 1);
-                }
-                $rondaSeleccionada = intval($rondaSeleccionada);
-                $indiceActual = $fechas->search($rondaSeleccionada);
-                $rondaAnterior = $indiceActual > 0 ? $fechas[$indiceActual - 1] : null;
-                $rondaSiguiente = $indiceActual !== false && $indiceActual < $fechas->count() - 1 ? $fechas[$indiceActual + 1] : null;
-                $finalizada = isset($partidosPorRonda[$rondaSeleccionada]) && $partidosPorRonda[$rondaSeleccionada]->first()->finalizada;
-
-                // Determinar etapa
-                $etapa = '';
-                if ($torneo->fase_grupos) {
-                    $totalFechasGrupos = $torneo->equipos_por_grupo - 1;
-                    if ($rondaSeleccionada <= $totalFechasGrupos) {
-                        $etapa = 'Fase de Grupos';
-                    } else {
-                        $etapa = 'Eliminatoria';
-                    }
-                } else {
-                    $etapa = 'Liga';
-                }
-            @endphp
 
             <div class="mb-3 d-flex align-items-center flex-wrap">
                 <form method="GET" class="me-2">

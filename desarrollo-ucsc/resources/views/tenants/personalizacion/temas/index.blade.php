@@ -51,16 +51,16 @@
                                                 </td>
                                                 <td class="align-middle text-center">
                                                     <a href="{{ route('personalizacion.temas.edit', $tema) }}"
-                                                        class="btn btn-sm btn-warning"
-                                                        style="margin-bottom: 0rem !important;">Editar</a>
+                                                        class="text-secondary font-weight-bold text-xs me-2" style="margin-bottom: 0rem !important;"><i
+                                                            class="fas fa-pen-to-square text-primary"></i></a>
                                                     <form action="{{ route('personalizacion.temas.destroy', $tema) }}" method="POST"
                                                         style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button class="btn btn-sm btn-danger"
+                                                        <button class="btn btn-link text-danger p-0 m-0 align-baseline"
                                                             style="margin-bottom: 0rem !important;"
                                                             onclick="return confirm('¿Eliminar este tema?')">
-                                                            Eliminar
+                                                            <i class="fas fa-trash-alt"></i>
                                                         </button>
                                                     </form>
                                                 </td>

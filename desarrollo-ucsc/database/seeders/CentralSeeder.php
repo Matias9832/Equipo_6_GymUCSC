@@ -4,9 +4,11 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Database\Seeders\Tenants\FuentesSeeder;
-use Database\Seeders\Tenants\ColoresSeeder;
-use Database\Seeders\Tenants\TemasSeeder;
+use Database\Seeders\tenants\FuentesSeeder;
+use Database\Seeders\tenants\ColoresSeeder;
+use Database\Seeders\tenants\TemasSeeder;
+use Database\Seeders\tenants\EmpresaSeeder;
+use Database\Seeders\tenants\UsuarioTenantSeeder;
 
 class CentralSeeder extends Seeder
 {
@@ -19,6 +21,8 @@ class CentralSeeder extends Seeder
             FuentesSeeder::class,
             ColoresSeeder::class,
             TemasSeeder::class,
+            EmpresaSeeder::class,
+            UsuarioTenantSeeder::class,
         ]);
     }
 }

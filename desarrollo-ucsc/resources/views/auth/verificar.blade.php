@@ -62,9 +62,6 @@
                                                 <label for="codigo" class="form-label">Código de Verificación</label>
                                                 <input type="text" name="codigo" id="codigo" class="form-control"
                                                     placeholder="Ingrese el código enviado a su correo" required>
-                                                @error('codigo')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
                                             </div>
                                             <button type="submit" class="btn btn-primary w-100">Verificar</button>
                                         </form>

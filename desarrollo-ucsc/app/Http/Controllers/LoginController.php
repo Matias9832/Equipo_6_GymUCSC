@@ -113,14 +113,16 @@ class LoginController extends Controller
 
     public function editProfile()
     {
-        $usuario = Auth::user(); // Obtener el usuario autenticado
+        $usuario = \Auth::user();
 
         if ($usuario->is_admin) {
-            // Si el usuario es administrador, obtenemos los datos de la tabla 'administradores'
-            $profile = Administrador::where('rut_admin', $usuario->rut)->first();
+            $profile = \App\Models\Administrador::where('rut_admin', $usuario->rut)->first();
         } else {
-            // Si el usuario es alumno, obtenemos los datos de la tabla 'alumnos'
-            $profile = Alumno::where('rut_alumno', $usuario->rut)->first();
+            $profile = \App\Models\Alumno::where('rut_alumno', $usuario->rut)->first();
+        }
+
+        if (!$profile) {
+            return back()->withErrors(['error' => 'No se encontró el perfil asociado al usuario.']);
         }
 
         return view('auth.edit', compact('usuario', 'profile'));

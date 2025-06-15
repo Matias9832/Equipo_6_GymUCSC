@@ -60,14 +60,15 @@
                                                 </td>
                                                 <td class="align-middle text-center">
                                                     <a href="{{ route('personalizacion.fuentes.edit', $fuente) }}"
-                                                        class="btn btn-sm btn-warning">Editar</a>
+                                                        class="text-secondary font-weight-bold text-xs me-2"><i
+                                                            class="fas fa-pen-to-square text-primary"></i></a>
                                                     <form action="{{ route('personalizacion.fuentes.destroy', $fuente) }}"
                                                         method="POST" style="display:inline;">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button class="btn btn-sm btn-danger"
+                                                        <button class="btn btn-link text-danger p-0 m-0 align-baseline"
                                                             onclick="return confirm('¿Eliminar esta fuente?')">
-                                                            Eliminar
+                                                            <i class="fas fa-trash-alt"></i>
                                                         </button>
                                                     </form>
                                                 </td>

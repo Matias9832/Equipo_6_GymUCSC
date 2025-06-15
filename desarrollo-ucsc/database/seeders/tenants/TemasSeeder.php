@@ -31,6 +31,24 @@ class TemasSeeder extends Seeder
                 'bs_success' => '#2dce89',
                 'bs_danger' => '#646567',
             ],
+            [
+                'nombre_tema' => 'Marino Montserrat',
+                'nombre_fuente' => 'Montserrat',
+                'familia_css' => 'Montserrat, sans-serif',
+                'url_fuente' => 'https://fonts.googleapis.com/css2?family=Montserrat',
+                'bs_primary' => '#001f3f',
+                'bs_success' => '#28a745',
+                'bs_danger' => '#ff4136',
+            ],
+            [
+                'nombre_tema' => 'Morado Interactivo',
+                'nombre_fuente' => 'Poppins',
+                'familia_css' => 'Poppins, sans-serif',
+                'url_fuente' => 'https://fonts.googleapis.com/css2?family=Poppins',
+                'bs_primary' => '#6f42c1',
+                'bs_success' => '#20c997',
+                'bs_danger' => '#e83e8c',
+            ],
         ];
 
         foreach ($temas as &$tema) {

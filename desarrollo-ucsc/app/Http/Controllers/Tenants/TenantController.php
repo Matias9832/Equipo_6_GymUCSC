@@ -11,10 +11,20 @@ class TenantController extends Controller
 {
     public function index()
     {
-        $tenants = Tenant::all();
+        $tenants = Tenant::with(['empresa', 'domains'])->get();
+
+        return view('tenants.subdominios.index', compact('tenants'));
+    }
+    public function create()
+    {
+        $empresasDisponibles = \App\Models\Tenants\Empresa::where(function ($q) {
+            $q->where('subdominio', 'Sin subdominio asignado')
+                ->orWhereNull('subdominio');
+        })->get();
+
         $temas = Tema::all();
 
-        return view('tenants.subdominios.index', compact('tenants', 'temas'));
+        return view('tenants.subdominios.create', compact('empresasDisponibles', 'temas'));
     }
 
     public function store(Request $request)
@@ -22,18 +32,40 @@ class TenantController extends Controller
         $request->validate([
             'subdominio' => 'required|string|alpha_dash|unique:tenants,id',
             'id_tema' => 'required|exists:temas,id_tema',
+            'empresa_id' => 'required|exists:empresas,id',
         ]);
 
+        $empresa = \App\Models\Tenants\Empresa::findOrFail($request->empresa_id);
         $subdominio = strtolower($request->subdominio);
-        $dominioCompleto = "{$subdominio}.ugym.local";
+        $dominioCompleto = "{$subdominio}.ugym.cl";
 
         $tenant = Tenant::create([
             'id' => $subdominio,
+            'empresa_id' => $request->empresa_id,
         ]);
 
         $tenant->domains()->create([
             'domain' => $dominioCompleto,
         ]);
+
+        tenancy()->initialize($tenant);
+
+        $marca = \App\Models\Marca::first();
+        $marca = \App\Models\Marca::firstOrCreate([], [
+            'nombre_marca' => 'GymUCSC',
+            'logo_marca' => 'logos/default.png',
+            'mision_marca' => 'Default mision',
+            'vision_marca' => 'Default vision',
+        ]);
+
+        $marca->update([
+            'nombre_marca' => $empresa->nombre,
+            'logo_marca' => $empresa->logo,
+            'mision_marca' => $empresa->mision,
+            'vision_marca' => $empresa->vision,
+        ]);
+
+        tenancy()->end();
 
         $temaBase = Tema::findOrFail($request->id_tema);
 
@@ -57,7 +89,12 @@ class TenantController extends Controller
             'danger_gradient' => $temaBase->danger_gradient,
         ]);
 
-        return redirect()->back()->with('success', 'Tenant creado correctamente.');
+        $empresa = \App\Models\Tenants\Empresa::find($request->empresa_id);
+        $empresa->update([
+            'subdominio' => $dominioCompleto,
+        ]);
+
+        return redirect()->route('tenants.index')->with('success', 'Tenant creado correctamente.');
     }
 
 

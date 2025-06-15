@@ -13,7 +13,11 @@
                             class="me-2">
                             DEPORTES
                         </span> -->
-                        <img src="{{ url('img/gym/ucsc_logo.png') }}" alt="Logo UCSC" style="height: 30px;"
+                        @php
+                            use App\Models\Marca;
+                            $ultimaMarca = Marca::orderBy('id_marca', 'desc')->first();
+                        @endphp
+                        <img src="{{ url($ultimaMarca->logo_marca) }}" alt="Logo Marca" style="height: 30px;"
                             class="me-2">
                     </a>
                     <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
@@ -56,7 +60,7 @@
                                                     <i class="fas fa-user-edit me-1"></i> Editar Perfil
                                                 </a>
                                             </li>
-                                        @endif    
+                                        @endif
                                         <li>
                                             <a class="dropdown-item" href="{{ route('ingreso.mostrar') }}">
                                                 <i class="fas fa-door-open me-1"></i> Salas

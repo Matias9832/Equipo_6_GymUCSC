@@ -21,10 +21,9 @@ Repositorio Git para plataforma Web UCSC
     composer require spatie/laravel-permission
     composer require laravel/ui
     composer require laravel-frontend-presets/argon
-    composer require yajra/laravel-datatables-oracle  //Necesario para usar dataTables
-    //solo digital ocean
-    composer require symfony/mailgun-mailer mailgun/mailgun-php //mailgun
-    composer require symfony/http-client //mailgun
+    composer require yajra/laravel-datatables-oracle 
+    composer require symfony/mailgun-mailer mailgun/mailgun-php
+    composer require symfony/http-client
 
 ### Hacer:
 
@@ -74,7 +73,6 @@ Crear un seeder, ayuda a cargar datos de manera automatica, para ejecutar un sed
 Para ejecutar todos los sedders:
 
 > php artisan db:seed
-> php artisan db:seed --class=Database/Seeders/CentralSeeder
 
 Para ejecutar un sedder en especifico:
 
@@ -121,10 +119,6 @@ MAIL_FROM_NAME=UCSC
 
 #D12421 Rojo de la universidad
 #646567 Negro de la universidad
-
-# Iconos 
-"fas fa-trash-alt" Eliminar
-"fas fa-pen-to-square" Editar
 
 # Cómo Cambiar el Fondo de una página
 
@@ -345,7 +339,7 @@ $(document).ready(function () {
 
 ---
 
-## Filtro de "Ocultar inactivos"
+## 3. Filtro de "Ocultar inactivos"
 
 Puedes usar un checkbox para enviar el parámetro al controlador:
 
@@ -359,24 +353,6 @@ Puedes usar un checkbox para enviar el parámetro al controlador:
 ```
 
 ---
-
-## Cards de docentes 
-Esta card puede ser llamada en cualquier parte si se quieren mostrar los datos del docente o administrador
-```blade
-<x-card-docente 
-    :nombre="$administrador->nombre_admin"
-    :foto="$administrador->foto_perfil"
-    :cargo="$administrador->descripcion_cargo ?? $rol"
-    :sucursal="$sucursal->nombre_suc ?? null"
-    :ubicacion="$administrador->descripcion_ubicacion"
-    :correo="$admin->correo_usuario"
-    :telefono="$administrador->numero_contacto"
-    :sobre-mi="$administrador->sobre_mi"
-    :talleres="$talleres?->pluck('nombre_taller')->toArray()"
-/>
-
-```
-
 
 ## Recomendaciones
 

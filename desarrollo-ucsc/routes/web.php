@@ -2,30 +2,35 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Tenants\TenantController;
+use App\Http\Controllers\Tenants\EmpresaController;
 
 use App\Http\Controllers\Tenants\Personalizacion\TemaController;
 use App\Http\Controllers\Tenants\Personalizacion\ColorController;
 use App\Http\Controllers\Tenants\Personalizacion\FuenteController;
-use App\Http\Controllers\Tenants\Plan\PlanController;
-use App\Http\Controllers\Tenants\Plan\CuentaController;
-use App\Http\Controllers\Tenants\Plan\PermisoController;
+use App\Http\Controllers\Tenants\InicioController;
+use App\Http\Controllers\Tenants\Auth\LoginTenantController;
 
-Route::get('/start', function () {
-    return view('start');
-})->name('start');
-Route::resource('tenants', TenantController::class)->only(['index', 'store']);
-Route::resource('empresas', TenantController::class)->only(['index', 'store']);
+Route::middleware(['web', 'preventTenant'])->group(function () {
+
+Route::get('tenant-login', [LoginTenantController::class, 'showLoginForm'])->name('tenant-login');
+Route::post('tenant-login', [LoginTenantController::class, 'login']);
+Route::post('tenant-logout', [LoginTenantController::class, 'logout'])->name('tenant-logout');
 
 
-Route::prefix('personalizacion')->name('personalizacion.')->group(function () {
-    Route::resource('temas', TemaController::class);
-    Route::resource('colores', ColorController::class);
-    Route::resource('fuentes', FuenteController::class);
+Route::get('/inicio', [InicioController::class, 'index'])->name('inicio');
+Route::fallback(function () {
+    return redirect()->route('inicio');
 });
 
-Route::prefix('plan')->name('plan.')->group(function () {
-    Route::get('planes', [PlanController::class, 'index'])->name('planes.index');
-    Route::get('cuentas', [CuentaController::class, 'index'])->name('cuentas.index');
-    Route::get('permisos', [PermisoController::class, 'index'])->name('permisos.index');
-});
+Route::middleware(['checkTenantSession'])->group(function () {
+    Route::resource('tenants', TenantController::class);
+    Route::resource('empresas', EmpresaController::class);
 
+    Route::prefix('personalizacion')->name('personalizacion.')->group(function () {
+        Route::resource('temas', TemaController::class);
+        Route::resource('colores', ColorController::class);
+        Route::resource('fuentes', FuenteController::class);
+    });
+});
+    
+});
