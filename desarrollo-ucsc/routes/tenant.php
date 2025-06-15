@@ -63,6 +63,8 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
 
+    Route::get('/docentes/perfil/{id}', [DocenteController::class, 'showPerfil'])->name('docentes.perfilAjax');
+    
     Route::get('/', function () {
         return redirect()->route('news.index');
     })->name('welcome');
@@ -257,7 +259,6 @@ Route::middleware([
             Route::put('/docentes/mi-perfil/foto', [DocenteController::class, 'updateFoto'])->name('docentes.foto.update');
             Route::get('/mi-perfil/edit-contacto', [DocenteController::class, 'editContacto'])->name('docentes.contacto.edit');
             Route::put('/mi-perfil/edit-contacto', [DocenteController::class, 'updateInformacionContacto'])->name('docentes.contacto.update');
-            Route::get('/docentes/perfil/{id}', [App\Http\Controllers\DocenteController::class, 'show'])->name('docentes.show');
         });    
         Route::middleware(['permission:Crear Docentes'])->group(function () {
             Route::get('docentes/create', [DocenteController::class, 'create'])->name('docentes.create');

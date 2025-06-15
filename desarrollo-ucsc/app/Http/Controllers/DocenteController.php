@@ -70,44 +70,71 @@ class DocenteController extends Controller
             );
 
         return DataTables::of($query)
-            ->editColumn('correo_usuario', fn($admin) => $admin->correo_usuario ?? '-')
-            ->editColumn('rol_name', function ($admin) {
-                $rolText = $admin->rol_name ?? 'Sin rol';
-                return '<span class="badge badge-sm bg-gradient-info" style="width: 150px !important;">' . e($rolText) . '</span>';
-            })
-            ->addColumn('acciones', function ($admin) {
-                if (!auth()->user()->hasRole(['Director', 'Super Admin'])) {
-                    return ''; // No muestra acciones
+                ->editColumn('correo_usuario', fn($admin) => $admin->correo_usuario ?? '-')
+                ->editColumn('nombre_admin', function ($admin) {
+                    return '<span class="text-primary nombre-docente" data-id="' . $admin->id_admin . '" style="cursor:pointer;">' . e($admin->nombre_admin) . '</span>';
+                })
+                ->editColumn('rol_name', function ($admin) {
+                    $rolText = $admin->rol_name ?? 'Sin rol';
+                    return '<span class="badge badge-sm bg-gradient-info" style="width: 150px !important;">' . e($rolText) . '</span>';
+                })
+                ->addColumn('acciones', function ($admin) {
+                    if (!auth()->user()->hasRole(['Director', 'Super Admin'])) {
+                        return ''; // No muestra acciones
+                    }
+
+                    $editUrl = route('docentes.edit', $admin->id_admin);
+                    $deleteUrl = route('docentes.destroy', $admin->id_admin);
+
+                    return '
+                        <td class="align-middle text-center">
+                            <a href="' . $editUrl . '" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">
+                                <i class="fas fa-pen-to-square text-info"></i>
+                            </a>
+                            <form action="' . $deleteUrl . '" method="POST" class="d-inline" onsubmit="return confirm(\'¿Estás seguro de que quieres eliminar este docente?\')">
+                                ' . csrf_field() . '
+                                ' . method_field('DELETE') . '
+                                <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" title="Eliminar">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </td>';
+                })
+                ->rawColumns(['rol_name', 'acciones', 'nombre_admin'])
+                ->filter(function ($query) use ($request) {
+                if ($request->has('search') && $search = $request->search['value']) {
+                    $query->where(function ($q) use ($search) {
+                        $q->where('administrador.rut_admin', 'like', "%{$search}%")
+                        ->orWhere('administrador.nombre_admin', 'like', "%{$search}%");
+                    });
                 }
-
-                $editUrl = route('docentes.edit', $admin->id_admin);
-                $deleteUrl = route('docentes.destroy', $admin->id_admin);
-
-                return '
-                    <td class="align-middle text-center">
-                        <a href="' . $editUrl . '" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">
-                            <i class="fas fa-pen-to-square text-info"></i>
-                        </a>
-                        <form action="' . $deleteUrl . '" method="POST" class="d-inline" onsubmit="return confirm(\'¿Estás seguro de que quieres eliminar este docente?\')">
-                            ' . csrf_field() . '
-                            ' . method_field('DELETE') . '
-                            <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" title="Eliminar">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </form>
-                    </td>';
             })
-            ->rawColumns(['rol_name', 'acciones'])
-            ->filter(function ($query) use ($request) {
-            if ($request->has('search') && $search = $request->search['value']) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('administrador.rut_admin', 'like', "%{$search}%")
-                    ->orWhere('administrador.nombre_admin', 'like', "%{$search}%");
-                });
+            ->toJson();
+        }
+
+    public function showPerfil($id)
+    {
+        try {
+            Log::info('Entrando a showPerfil con ID: ' . $id);
+
+            $administrador = Administrador::with('talleres', 'sucursales', 'usuario')->find($id);
+
+            if (!$administrador) {
+                Log::warning("Administrador con ID $id no encontrado.");
+                return response()->json(['success' => false]);
             }
-        })
-        ->toJson();
-    }
+
+            $html = view('admin.mantenedores.docentes.mi-perfil._card', compact('administrador'))->render();
+
+            return response()->json([
+                'success' => true,
+                'html' => $html
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Error al mostrar perfil del docente: " . $e->getMessage());
+            return response()->json(['success' => false], 500);
+        }
+    }    
     public function updateFoto(Request $request)
     {
         $request->validate([

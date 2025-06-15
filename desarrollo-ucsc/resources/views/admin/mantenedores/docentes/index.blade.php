@@ -88,7 +88,7 @@
             let perfilVisible = false;
 
             // Evento de clic en una fila de la tabla
-            $('#tabla-docentes tbody').on('click', '.fila-docente', function () {
+            $('#tabla-docentes tbody').on('click', '.nombre-docente', function (e) {
                 const idDocente = $(this).data('id');
                 const url = `{{ url('/docentes/perfil') }}/${idDocente}`;
                 
@@ -118,17 +118,17 @@
                     type: 'GET',
                     success: function(response) {
                         if (response.success) {
-                            // Si todo va bien, inyectamos el HTML de la tarjeta
                             $('#card-container').html(response.html);
                         } else {
-                            // Si el controlador dice que hubo un error (success: false)
-                            $('#card-container').html(response.html || '<p class="text-danger">No se pudo cargar el perfil.</p>');
+                            $('#card-container').html('<p class="text-danger">No se pudo cargar el perfil.</p>');
                         }
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        // Si hay un error de servidor (404, 500, etc.)
-                        console.error("Error AJAX:", textStatus, errorThrown, jqXHR.responseText);
-                        $('#card-container').html('<div class="alert alert-danger text-white" role="alert"><strong>¡Error!</strong> No se pudo contactar al servidor para cargar el perfil.</div>');
+                        if(jqXHR.status === 403 || jqXHR.status === 401) {
+                            $('#card-container').html('<p class="text-danger">Acceso denegado. Por favor, inicia sesión o revisa tus permisos.</p>');
+                        } else {
+                            $('#card-container').html('<div class="alert alert-danger text-white" role="alert"><strong>¡Error!</strong> No se pudo contactar al servidor para cargar el perfil.</div>');
+                        }
                     }
                 });
             });
