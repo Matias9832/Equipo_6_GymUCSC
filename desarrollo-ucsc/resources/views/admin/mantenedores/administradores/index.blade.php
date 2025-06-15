@@ -41,7 +41,7 @@
                 </div>
             </div>
             <!-- Contenedor para la card del perfil -->
-            <div class="col-4" id="columna-perfil" style="display: none;">
+            <div class="col-lg-4 col-12" id="columna-perfil" style="display: none;">
                 <div id="card-container" class="position-sticky" style="top: 20px;"></div>
             </div>
         </div>
@@ -98,9 +98,18 @@
             });
             // --- LÓGICA PARA MOSTRAR LA CARD ---
             let perfilVisible = false;
+            
             function cerrarCard() {
-                $('#columna-tabla').removeClass('col-8').addClass('col-12');
-                $('#columna-perfil').hide();
+                if (window.innerWidth < 768) {
+                    // Mostrar la tabla y ocultar la card en móvil
+                    $('#columna-tabla').show();
+                    $('#columna-perfil').hide().removeClass('col-12');
+                } else {
+                    // Restaurar layout en escritorio
+                    $('#columna-tabla').removeClass('col-8').addClass('col-12');
+                    $('#columna-perfil').hide().removeClass('col-4');
+                }
+
                 $('#card-container').html('');
                 $('.fila-docente').removeClass('table-active');
                 perfilVisible = false;
@@ -126,19 +135,26 @@
                     </div>
                 `);
 
-                // --- Transición siempre que sea necesario ---
-                if (!perfilVisible) {
-                    $('#columna-tabla').removeClass('col-12').addClass('col-8');
-                    $('#columna-perfil').show();
-                    perfilVisible = true;
-                }
-
                 // Petición AJAX para obtener la card
                 $.ajax({
                     url: `/docentes/perfil/${idDocente}`,
                     method: 'GET',
                     success: function(response) {
                         $('#card-container').html(response.html);
+
+                        // --- Transición siempre que sea necesario ---
+                        if (!perfilVisible) {
+                            if (window.innerWidth < 768) {
+                                // Modo móvil
+                                $('#columna-tabla').hide();
+                                $('#columna-perfil').removeClass('col-4').addClass('col-12').show();
+                            } else {
+                                // Modo escritorio
+                                $('#columna-tabla').removeClass('col-12').addClass('col-8');
+                                $('#columna-perfil').removeClass('col-12').addClass('col-4').show();
+                            }
+                            perfilVisible = true;
+                        }
                     },
                     error: function() {
                         $('#card-container').html(`<div class="alert alert-danger m-3">Error al cargar perfil del docente.</div>`);
@@ -159,13 +175,7 @@
             // Resetear bandera
             perfilVisible = false;
         });
-        function cerrarCard() {
-            $('#columna-tabla').removeClass('col-8').addClass('col-12'); // tabla vuelve a 12 cols
-            $('#columna-perfil').hide();                                // oculta la columna perfil
-            $('#card-container').html('');                              // limpia el contenido del perfil
-            $('.fila-docente').removeClass('table-active');             // quita highlight en filas
-            perfilVisible = false;                                       // resetea la variable para poder abrir de nuevo
-        }
+        
     </script>
 
     <style>
