@@ -30,7 +30,7 @@ class AcademyNewsController extends Controller
         // Paso 2: Obtener todas las noticias con paginación
         $news = AcademyNews::with('administrador', 'images') // también cargamos imágenes si las usas en la vista
             ->orderByDesc('fecha_noticia')
-            ->paginate(6);
+            ->paginate(4);
 
         // Paso 3: Obtener noticias destacadas válidas
         $featuredNews = AcademyNews::with('images', 'administrador')
@@ -43,10 +43,12 @@ class AcademyNewsController extends Controller
             ->take(5)
             ->get();
 
-        // Paso 4: Sucursales con salas
-       
+        $banner = \App\Models\AcademySetting::first();
+        return view('academynews.index', compact('news', 'featuredNews', 'banner'));
 
-        return view('academynews.index', compact('news', 'featuredNews'));
+     
+
+        
     }
 
     /**

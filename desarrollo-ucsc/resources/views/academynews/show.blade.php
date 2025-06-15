@@ -3,6 +3,7 @@
 @section('content')
 @include('layouts.navbars.guest.navbar')
 <div class="container my-4">
+    
     <div class="bg-white border-radius-lg shadow-sm p-4" style="position: relative; z-index: 1000;">
 
         {{-- Si hay imágenes, muestro un carousel simple --}}
