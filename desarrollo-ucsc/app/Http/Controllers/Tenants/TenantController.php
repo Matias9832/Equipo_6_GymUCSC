@@ -50,7 +50,6 @@ class TenantController extends Controller
 
         tenancy()->initialize($tenant);
 
-        \App\Models\Marca::create([
         $marca = \App\Models\Marca::first();
         $marca = \App\Models\Marca::firstOrCreate([], [
             'nombre_marca' => 'GymUCSC',
