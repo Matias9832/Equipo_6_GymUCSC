@@ -87,11 +87,22 @@
             // --- LÓGICA PARA MOSTRAR LA CARD ---
             let perfilVisible = false;
 
+            function cerrarCard() {
+                $('#columna-tabla').removeClass('col-8').addClass('col-12');
+                $('#columna-perfil').hide();
+                $('#card-container').html('');
+                $('.fila-docente').removeClass('table-active');
+                perfilVisible = false;
+            }
+
+            $('#card-container').on('click', '.btn-cerrar-card', function () {
+                cerrarCard();
+            });
             // Evento de clic en una fila de la tabla
             $('#tabla-docentes tbody').on('click', '.nombre-docente', function (e) {
                 const idDocente = $(this).data('id');
                 const url = `{{ url('/docentes/perfil') }}/${idDocente}`;
-                
+
                 // Resaltar fila seleccionada
                 $('.fila-docente').removeClass('table-active');
                 $(this).addClass('table-active');
@@ -105,7 +116,7 @@
                     </div>
                 `);
 
-                // Hacer la transición de columnas si es la primera vez que se abre
+                // --- Transición siempre que sea necesario ---
                 if (!perfilVisible) {
                     $('#columna-tabla').removeClass('col-12').addClass('col-8');
                     $('#columna-perfil').show();
@@ -117,19 +128,34 @@
                     url: `/docentes/perfil/${idDocente}`,
                     method: 'GET',
                     success: function(response) {
-                        if (response.html) {
-                            $('#card-container').html(response.html);
-                        } else {
-                            $('#card-container').html('<p class="text-center text-danger">No se pudo cargar el perfil del docente.</p>');
-                        }
+                        $('#card-container').html(response.html);
                     },
-                    error: function(xhr, status, error) {
-                        console.error('Error al cargar perfil:', error);
-                        $('#card-container').html('<p class="text-center text-danger">Error al cargar el perfil del docente.</p>');
+                    error: function() {
+                        $('#card-container').html(`<div class="alert alert-danger m-3">Error al cargar perfil del docente.</div>`);
                     }
                 });
             });
         });
+        $(document).on('click', '#cerrar-perfil-docente', function () {
+            // Ocultar la columna del perfil
+            $('#columna-perfil').hide();
+
+            // Expandir la tabla nuevamente
+            $('#columna-tabla').removeClass('col-8').addClass('col-12');
+
+            // Quitar la selección de fila activa
+            $('.fila-docente').removeClass('table-active');
+
+            // Resetear bandera
+            perfilVisible = false;
+        });
+        function cerrarCard() {
+            $('#columna-tabla').removeClass('col-8').addClass('col-12'); // tabla vuelve a 12 cols
+            $('#columna-perfil').hide();                                // oculta la columna perfil
+            $('#card-container').html('');                              // limpia el contenido del perfil
+            $('.fila-docente').removeClass('table-active');             // quita highlight en filas
+            perfilVisible = false;                                       // resetea la variable para poder abrir de nuevo
+        }
     </script>
 
     <style>
