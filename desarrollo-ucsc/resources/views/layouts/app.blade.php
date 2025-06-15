@@ -2,12 +2,18 @@
 <html lang="en">
 
 <head>
+    @php
+        use App\Models\Marca;
+        $ultimaMarca = Marca::orderBy('id_marca', 'desc')->first();
+    @endphp
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="/img/gym/logo_icon.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ url($ultimaMarca->logo_marca) }}">
+    <!-- <link rel="apple-touch-icon" sizes="76x76" href="{{ url('/img/apple-icon.png') }}"> -->
+    <link rel="icon" type="image/png" href="{{ url($ultimaMarca->logo_marca) }}">
     <title>
-        Panel de Control | Sistema de Gestión Deportes UCSC
+        Panel de Control | Sistema de Gestión Deportes {{ $ultimaMarca->nombre_marca ?? 'Marca por defecto' }}
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -49,17 +55,14 @@
 </head>
 
 <body class="{{ $class ?? '' }}">
-    @php
-        use App\Models\Marca;
-        $ultimaMarca = Marca::orderBy('id_marca', 'desc')->first();
-    @endphp
 
     @if (!in_array(request()->route()->getName(), ['verificar.vista', 'reset-password', 'login']))
         @if(session('success') || session('update') || session('delete'))
             <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
                 <div id="toastSuccess" class="toast align-items-center text-white 
-                                                        {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
-                                                        border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+                                                                {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
+                                                                border-0 show" role="alert" aria-live="assertive"
+                    aria-atomic="true">
                     <div class="d-flex">
                         <div class="toast-body text-center w-100">
                             {{ session('success') ?? session('update') ?? session('delete') }}
