@@ -5,6 +5,39 @@
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Salas'])
     <div class="container-fluid py-4">
+        <div class="col-xl-12 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <form method="GET" action="{{ route('datos-salas.index') }}" class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label class="form-label text-uppercase font-weight-bold text-sm">Sala</label>
+                            <select class="form-control" name="sala_id" onchange="this.form.submit()">
+                                <option value="">Todas</option>
+                                @foreach($salas as $sala)
+                                    <option value="{{ $sala->id_sala }}" {{ request('sala_id') == $sala->id_sala ? 'selected' : '' }}>{{ $sala->nombre_sala }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label text-uppercase font-weight-bold text-sm">Desde</label>
+                            <input type="date" name="desde" class="form-control"
+                                value="{{ request('desde') ?? now()->startOfMonth()->format('Y-m-d') }}"
+                                onchange="this.form.submit()">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label text-uppercase font-weight-bold text-sm">Hasta</label>
+                            <input type="date" name="hasta" class="form-control"
+                                value="{{ request('hasta') ?? now()->endOfMonth()->format('Y-m-d') }}"
+                                onchange="this.form.submit()">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <!-- Información de Ingresos -->
             <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
@@ -75,7 +108,10 @@
                                 @forelse($rankingCarreras as $carrera)
                                     <tr>
                                         <td class="text-sm">{{ $carrera['ua'] }}</td>
-                                        <td class="text-sm">{{ $carrera['carrera'] }}</td>
+                                        <td class="text-sm text-truncate" style="max-width: 180px;"
+                                            title="{{ $carrera['carrera'] }}">
+                                            {{ $carrera['carrera'] }}
+                                        </td>
                                         <td class="text-center text-sm"><strong>{{ $carrera['cantidad'] }}</strong></td>
                                         <td class="text-center text-sm">{{ $carrera['porcentaje'] }}%</td>
                                     </tr>

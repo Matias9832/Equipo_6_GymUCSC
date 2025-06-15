@@ -3,54 +3,47 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use App\Models\Ingreso;
-use App\Models\Alumno;
+use App\Models\Sala;
+use Carbon\Carbon;
 
 class DatosSalaController extends Controller
 {
-
-    public function index()
+    public function index(Request $request)
     {
+        $salaId = $request->input('sala_id');
+        $desde = $request->input('desde') ?? Carbon::now()->startOfMonth()->toDateString();
+        $hasta = $request->input('hasta') ?? Carbon::now()->endOfMonth()->toDateString();
 
-        //Metricas Por fecha
-        $hoy = Carbon::today();
-        $inicioMes = Carbon::now()->startOfMonth();
-        $finMes = Carbon::now()->endOfMonth();
+        $inicio = Carbon::parse($desde)->startOfDay();
+        $fin = Carbon::parse($hasta)->endOfDay();
 
-        $ingresosMes = Ingreso::whereDate('fecha_ingreso', '>=', $inicioMes)
-            ->whereNotNull('hora_salida')
-            ->count();
+        // Consulta base
+        $query = Ingreso::whereBetween('fecha_ingreso', [$inicio, $fin])
+            ->whereNotNull('hora_salida');
 
-        $ingresosDia = Ingreso::whereDate('fecha_ingreso', $hoy)
-            ->whereNotNull('hora_salida')
-            ->count();
+        if ($salaId) {
+            $query->where('id_sala', $salaId);
+        }
 
-        // Metricas por genero
-        $ingresos = Ingreso::whereBetween('fecha_ingreso', [$inicioMes, $finMes])
-            ->with('usuario')
-            ->get();
+        $ingresosFiltrados = $query->with('usuario.alumno')->get();
 
-        $femenino = $ingresos->filter(function ($ingreso) {
-            return optional($ingreso->usuario->alumno)->sexo_alumno === 'F';
-        })->count();
+        // Métricas por fecha
+        $ingresosMes = $ingresosFiltrados->count();
+        $ingresosDia = $ingresosFiltrados->where('fecha_ingreso', Carbon::today()->toDateString())->count();
 
-        $masculino = $ingresos->filter(function ($ingreso) {
-            return optional($ingreso->usuario->alumno)->sexo_alumno === 'M';
-        })->count();
+        // Métricas por género
+        $femenino = $ingresosFiltrados->filter(fn($i) => optional($i->usuario->alumno)->sexo_alumno === 'F')->count();
+        $masculino = $ingresosFiltrados->filter(fn($i) => optional($i->usuario->alumno)->sexo_alumno === 'M')->count();
 
         $total = $femenino + $masculino;
-
         $porcentajeF = $total ? round(($femenino / $total) * 100, 1) : 0;
         $porcentajeM = $total ? round(($masculino / $total) * 100, 1) : 0;
 
-        // Metricas por carrera
-        $ingresosPorCarrera = Ingreso::whereBetween('fecha_ingreso', [$inicioMes, $finMes])
-            ->whereNotNull('hora_salida')
-            ->with('usuario.alumno')
-            ->get()
-            ->filter(fn($ingreso) => $ingreso->usuario && $ingreso->usuario->alumno)
-            ->groupBy(fn($ingreso) => $ingreso->usuario->alumno->ua_carrera . '|' . $ingreso->usuario->alumno->carrera);
+        // Métricas por carrera
+        $ingresosPorCarrera = $ingresosFiltrados
+            ->filter(fn($i) => $i->usuario && $i->usuario->alumno)
+            ->groupBy(fn($i) => $i->usuario->alumno->ua_carrera . '|' . $i->usuario->alumno->carrera);
 
         $totalIngresosCarrera = $ingresosPorCarrera->flatten()->count();
 
@@ -67,6 +60,10 @@ class DatosSalaController extends Controller
             ];
         })->sortByDesc('cantidad')->values();
 
+        $rankingCarreras = $rankingCarreras->take(8);
+
+        $salas = Sala::all(); // Para el select en la vista
+
         return view('admin.datos.salas.index', [
             'ingresosMes' => $ingresosMes,
             'ingresosDia' => $ingresosDia,
@@ -75,6 +72,10 @@ class DatosSalaController extends Controller
             'porcentajeF' => $porcentajeF,
             'porcentajeM' => $porcentajeM,
             'rankingCarreras' => $rankingCarreras,
+            'salas' => $salas,
+            'salaId' => $salaId,
+            'desde' => $desde,
+            'hasta' => $hasta,
         ]);
     }
 
