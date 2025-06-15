@@ -88,10 +88,6 @@ Route::middleware([
         return redirect()->route('news.index');
     })->name('welcome');
 
-    Route::get('/home', function () {
-        return redirect()->route('news.index');
-    })->name('welcome');
-
     Route::fallback(function () {
         return redirect()->route('news.index');
     });

@@ -316,9 +316,9 @@ class DocenteController extends Controller
 
     public function destroy(Administrador $administrador)
     {
-        Usuario::where('rut', $administrador->rut_admin)->delete();
         $administrador->delete();
-
+        Usuario::where('rut', $administrador->rut_admin)->delete();
+        
         return redirect()->route('docentes.index')->with('success', 'Docente eliminado correctamente.');
     }
 }
