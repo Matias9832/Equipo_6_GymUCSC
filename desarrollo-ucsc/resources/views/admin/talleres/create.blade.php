@@ -7,7 +7,7 @@
             <div class="col-lg-8 col-md-10">
                 <div class="card">
                     <div class="card-header pb-0">
-                        <h5>Crear Taller</h5>
+                        <h5>Registrar nuevo taller</h5>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('talleres.store') }}" method="POST">
@@ -111,7 +111,7 @@
                             <button type="button" class="btn btn-secondary btn-sm mt-2" id="agregar-horario">+ Añadir Horario</button>
 
                             <div class="d-flex justify-content-end gap-2 mt-4">
-                                <button type="submit" class="btn btn-primary ">Crear</button>
+                                <button type="submit" class="btn btn-primary ">Guardar</button>
                                 <a href="{{ route('talleres.index') }}" class="btn btn-outline-secondary ">Cancelar</a>
                             </div>
                         </form>

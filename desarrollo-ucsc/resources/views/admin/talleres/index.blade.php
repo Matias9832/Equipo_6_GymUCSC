@@ -8,7 +8,7 @@
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h5>Lista de Talleres</h5>
-                        <a href="{{ route('talleres.create') }}" class="btn btn-primary btn-sm">Crear Taller</a>
+                        <a href="{{ route('talleres.create') }}" class="btn btn-primary btn-sm">Registrar Taller</a>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">
@@ -51,11 +51,11 @@
                                             </td>
                                             @can(['Acceso a Gestión de Asistencia Talleres'])               
                                             <td>
-                                                <div class="d-flex gap-1">
-                                                    <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-sm btn-outline-primary" style="margin-bottom: 0rem !important;">
-                                                        <i class="fas fa-edit"></i> Registrar
+                                                <div class="d-flex gap-2">
+                                                    <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-sm btn-outline-primary px-3" style="margin-bottom: 0rem !important;">
+                                                        <i class="fas fa-edit"></i> Registrar asistencia
                                                     </a>
-                                                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-sm btn-outline-secondary" style="margin-bottom: 0rem !important;">
+                                                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-sm btn-outline-secondary px-3" style="margin-bottom: 0rem !important;">
                                                         <i class="fas fa-eye"></i> Ver asistencia
                                                     </a>
                                                 </div>

@@ -10,8 +10,8 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                        <h6>Listado de Sucursales</h6>
-                        <a href="{{ route('sucursales.create') }}" class="btn btn-primary btn-sm">Crear Sucursal</a>
+                        <h5>Listado de Sucursales</h5>
+                        <a href="{{ route('sucursales.create') }}" class="btn btn-primary btn-sm">Registrar sucursal</a>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">

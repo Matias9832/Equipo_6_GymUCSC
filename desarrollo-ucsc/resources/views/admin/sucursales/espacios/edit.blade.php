@@ -1,15 +1,13 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
-@section('title', 'Editar Espacio')
-
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Editar Espacio'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Espacios'])
 
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-12">
+        <div class="col-lg-8 mx-auto">
             <div class="card shadow rounded-4 p-4">
-                <h2 class="h4 mb-4">Editar Espacio</h2>
+                <h2 class="h4 mb-4">Editar información del espacio</h2>
 
                 <form action="{{ route('espacios.update', $espacio) }}" method="POST">
                     @csrf
@@ -39,8 +37,8 @@
                     <input type="hidden" name="id_suc" value="{{ session('sucursal_activa') }}">
 
                     <div class="d-flex justify-content-end">
-                        <a href="{{ route('espacios.index') }}" class="btn btn-outline-secondary me-2">Cancelar</a>
-                        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                        <button type="submit" class="btn btn-primary me-2">Guardar Cambios</button>
+                        <a href="{{ route('espacios.index') }}" class="btn btn-outline-secondary">Cancelar</a>
                     </div>
                 </form>
             </div>

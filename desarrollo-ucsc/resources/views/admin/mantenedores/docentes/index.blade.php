@@ -9,7 +9,7 @@
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h5>Lista de Docentes</h5>
-                        <a href="{{ route('docentes.create') }}" class="btn btn-primary btn-sm">Crear Docente</a>
+                        <a href="{{ route('docentes.create') }}" class="btn btn-primary btn-sm">Registrar Docente</a>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">

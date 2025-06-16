@@ -1,7 +1,5 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
-@section('title', 'Espacios')
-
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Espacios'])
 
@@ -10,8 +8,8 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                        <h6>Listado de Espacios - <span class="text-muted">{{ session('nombre_sucursal') }}</span></h6>
-                        <a href="{{ route('espacios.create') }}" class="btn btn-primary btn-sm">Crear Nuevo Espacio</a>
+                        <h5>Listado de Espacios - <span class="text-muted">{{ session('nombre_sucursal') }}</span></h5>
+                        <a href="{{ route('espacios.create') }}" class="btn btn-primary btn-sm">Registrar nuevo espacio</a>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">
