@@ -7,11 +7,9 @@ use App\Models\AcademySetting;
 
 class AcademySettingController extends Controller
 {
-    public function edit()
+    public function edit(AcademySetting $academy_setting)
     {
-        $setting = AcademySetting::firstOrCreate([]);
-        
-        return view('academy_setting.edit', compact('setting'));
+        return view('academy_setting.edit', ['setting' => $academy_setting]);
     }
 
     public function update(Request $request)

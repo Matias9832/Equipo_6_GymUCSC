@@ -16,9 +16,15 @@
                 <div class="bg-primary bg-opacity-75 text-white  p-md-5 rounded shadow" style="max-width: 650px;">
                     <div class="position-absolute top-0 end-0 m-1 d-flex align-items-center gap-1 z-1">
                         @if(Auth::check() && Auth::user()->is_admin)
-                            <a href="{{ route('academysettings.edit') }}" class="btn btn-sm text-white bg-info mt-2  px-2 py-1">
-                                <i class="fas fa-pen-to-square"></i>
-                            </a>
+                            @if($banner)
+                                <a href="{{ route('academysettings.edit', $banner->id) }}" ...>
+                                    <i class="fas fa-pen-to-square"></i>
+                                </a>
+                            @else
+                                <div class="alert alert-warning text-white">
+                                    No hay configuración de banner. Por favor, crea una en el panel de administración.
+                                </div>
+                            @endif
                         @endif
                     </div>
                     <small class="text-uppercase fw-semibold">

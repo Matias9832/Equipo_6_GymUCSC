@@ -71,6 +71,8 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ url('assets/js/argon-dashboard.js') }}"></script>
+    <!-- Headroom para esconder navbar -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.12.0/headroom.min.js"></script>
     @stack('js')
     @stack('scripts')
     @stack('styles')

@@ -321,7 +321,6 @@ Route::middleware([
             Route::resource('noticias-academia', AcademyNewsController::class)->except(['index', 'show'])->names('academynews');
             Route::post('/newsAcademy/{id}/toggle-featured', [AcademyNewsController::class, 'toggleFeatured'])->name('newsAcademy.toggleFeatured');
             Route::resource('academy-settings', AcademySettingController::class)->names('academysettings');
-            //Route::put('/admin/academy-settings', [AcademySettingController::class, 'update'])->name('academysettings.update');
 
         });
        

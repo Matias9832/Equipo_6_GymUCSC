@@ -1,4 +1,4 @@
-<div class="container position-sticky z-index-sticky top-0">
+<div id="main-navbar" class="container position-sticky z-index-sticky top-0">
     <div class="row">
         <div class="col-12">
             <!-- Navbar -->
@@ -7,12 +7,6 @@
                     <!-- Logos -->
                     <a class="navbar-brand d-flex align-items-center font-weight-bolder ms-lg-0 ms-3"
                         href=" {{ route('welcome') }}">
-                        <!-- <img src="{{ url('img/gym/deportes_logo.png') }}" alt="Logo GYM" style="height: 30px;"
-                            class="me-2"> -->
-                        <!-- <span style="font-family: 'Montserrat', sans-serif; font-weight: 1000; font-size: 1.4rem;"
-                            class="me-2">
-                            DEPORTES
-                        </span> -->
                         @php
                             use App\Models\Marca;
                             $ultimaMarca = Marca::orderBy('id_marca', 'desc')->first();
@@ -20,22 +14,26 @@
                         <img src="{{ url($ultimaMarca->logo_marca) }}" alt="Logo Marca" style="height: 30px;"
                             class="me-2">
                     </a>
+                    <!-- Botones de navegación -->
                     <div class="d-flex align-items-center flex-wrap overflow-auto" >
-                        <ul class="nav nav-tabs " role="tablist">
+                        <ul class="nav nav-tabs custom-tab-buttons" role="tablist">
                             <li class="nav-item" role="presentation" >
-                                <a class="nav-link {{ request()->routeIs('welcome') ? 'active' : '' }}" 
-                                href="{{ route('welcome') }}" role="tab">
-                                    Inicio
+                                <a class="nav-link custom-button {{ request()->routeIs('welcome') ? 'active' : '' }}"
+                                href="{{ route('welcome') }}">
+                                    <span class="button-main-text">Inicio</span>
+                                    <span class="underline-text"></span>
                                 </a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link {{ request()->routeIs('academynews.index') ? 'active' : '' }}" 
-                                href="{{ route('academynews.index') }}" role="tab">
-                                    Academia Deportiva
+                                <a class="nav-link custom-button {{ request()->routeIs('academynews.index') ? 'active' : '' }}"
+                                href="{{ route('academynews.index') }}">
+                                    <span class="button-main-text">Academia Deportiva</span>
+                                    <span class="underline-text"></span>
                                 </a>
                             </li>
                         </ul>
                     </div>
+                    <!-- Botones de cuenta -->
                     <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
                         aria-label="Toggle navigation">
@@ -136,3 +134,111 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var navbar = document.getElementById("main-navbar");
+        var headroom = new Headroom(navbar, {
+            tolerance: 5,
+            offset: 100,
+            classes: {
+                initial: "headroom",
+                pinned: "headroom--pinned",
+                unpinned: "headroom--unpinned",
+                top: "headroom--top",
+                notTop: "headroom--not-top"
+            }
+        });
+        headroom.init();
+    });
+</script>
+<style>
+/* Resetear estilos de nav-tabs */
+.custom-tab-buttons {
+    border-bottom: none !important; /* Elimina el borde inferior feo */
+}
+
+.custom-tab-buttons .nav-item {
+    margin-right: 0.5rem; /* Espacio entre los botones */
+    margin-bottom: 0; /* Asegura que no haya margen inferior extra */
+}
+
+/* Estilos para los botones de Inicio y Academia */
+.custom-tab-buttons .custom-button {
+    display: flex; /* Usar flexbox para organizar texto y subrayado */
+    flex-direction: column; /* Apilar texto y subrayado */
+    align-items: center; /* Centrar horizontalmente */
+    justify-content: center; /* Centrar verticalmente */
+    padding: 0.625rem 1.25rem; /* Padding para un tamaño de botón adecuado */
+    border-radius: 0.5rem; /* Bordes redondeados */
+    font-weight: 600; /* Hace el texto un poco más audaz */
+    transition: all 0.2s ease-in-out; /* Transición suave para hover */
+    text-decoration: none; /* Quita el subrayado del enlace */
+    color: #67748e; /* Color de texto por defecto de Argon (gris) */
+    background-color: transparent !important; /* Asegura que no haya background, incluso en active */
+    border: none; /* Elimina cualquier borde no deseado de los enlaces */
+    position: relative; /* Necesario para posicionar el subrayado */
+    overflow: hidden; /* Asegura que el subrayado no se desborde al animarse */
+    white-space: nowrap; /* Evita que el texto se "rompa" en varias líneas */
+}
+
+/* Estilo para el texto principal del botón */
+.custom-tab-buttons .custom-button .button-main-text {
+    position: relative; /* Necesario para que el texto no se mueva */
+    z-index: 2; /* Para que el texto esté por encima del subrayado */
+}
+
+/* Estilo para la línea de subrayado */
+.custom-tab-buttons .custom-button .underline-text {
+    content: '';
+    position: absolute;
+    bottom: 0.2rem; /* Distancia desde la parte inferior del botón */
+    left: 50%; /* Centrar la línea */
+    transform: translateX(-50%); /* Centrar la línea */
+    width: 0; /* Ancho inicial 0 para la animación */
+    height: 3px; /* Grosor de la línea */
+    background-color: var(--bs-primary); /* Color primary de Bootstrap/Argon */
+    transition: width 0.3s ease-in-out; /* Animación de ancho */
+    border-radius: 2px; /* Pequeño radio para suavizar los bordes de la línea */
+}
+
+/* Efecto al pasar el ratón (hover) */
+.custom-tab-buttons .custom-button:hover {
+    color: #344767; /* Color de texto más oscuro al pasar el ratón */
+    background-color: transparent !important; /* Asegura que no haya background en hover */
+}
+
+/* Animación del subrayado al pasar el ratón */
+.custom-tab-buttons .custom-button:hover .underline-text {
+    width: 80%; /* Ancho de la línea al pasar el ratón */
+}
+
+/* Estilo para el botón activo */
+.custom-tab-buttons .custom-button.active {
+    color: #344767; /* Mantenemos el color oscuro para el texto activo sin background */
+    background-color: transparent !important; /* Asegura que no haya background cuando está activo */
+    box-shadow: none !important; /* Elimina cualquier sombra no deseada */
+    border: none !important; /* Elimina cualquier borde cuando está activo */
+}
+
+/* Estilo de la línea de subrayado para el botón activo */
+.custom-tab-buttons .custom-button.active .underline-text {
+    width: 80%; /* La línea siempre visible y al 80% de ancho cuando está activo */
+    background-color: var(--bs-primary); /* La línea se mantiene en color primary */
+}
+
+/* Asegurar que el contenedor no genere scroll inesperado */
+.d-flex.align-items-center.flex-wrap.overflow-auto {
+    overflow: visible !important; /* Esto debería eliminar el scroll en el contenedor principal de los botones */
+}
+
+/* Estilos para el efecto de Headroom.js */
+.headroom--unpinned {
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
+}
+.headroom--pinned {
+    transform: translateY(0);
+    transition: transform 0.3s ease-in-out;
+}
+</style>

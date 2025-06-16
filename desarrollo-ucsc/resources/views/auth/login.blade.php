@@ -58,7 +58,7 @@
                                 style="background-image: url('https://sitios.ucsc.cl/dsi/wp-content/uploads/sites/63/2022/08/gestion-institucional-ucsc.jpg');
               background-size: cover;">
                                 <span class="mask bg-gradient-primary opacity-2"></span>
-                                <h4 class="mt-5 text-white font-weight-bolder position-relative">"Somos una comunidad en movimiento</h4>
+                                <h4 class="mt-5 text-white font-weight-bolder position-relative">Somos una comunidad en movimiento</h4>
                                 <p class="text-white position-relative">Unimos deporte, talleres y gestión en una plataforma pensada para todos.</p>
                             </div>
                         </div>
