@@ -13,7 +13,7 @@ http://ugym.local:8000/tenants
 
 ## Seeder principal para la pagina de creación de Tenants
 
-> php artisan db:seed --class=CentralSeeder
+php artisan db:seed --class=CentralSeeder
 
 ## Configuración necesaria en el archivo hosts (Windows)
 
