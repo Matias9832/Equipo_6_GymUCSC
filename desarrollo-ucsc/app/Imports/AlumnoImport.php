@@ -15,12 +15,13 @@ class AlumnoImport implements OnEachRow, WithHeadingRow, WithEvents
     public static function beforeImport(BeforeImport $event)
     {
         $sheet = $event->getReader()->getActiveSheet();
-        $actualHeaders = $sheet->rangeToArray('A1:G1')[0];
+        $actualHeaders = $sheet->rangeToArray('A1:H1')[0];
 
         $expectedHeaders = [
             'rut',
             'ua',
             'carr_descripcion',
+            'correo_inst',
             'paterno',
             'materno',
             'nombres',
@@ -58,6 +59,7 @@ class AlumnoImport implements OnEachRow, WithHeadingRow, WithEvents
             empty($data['nombres']) ||
             empty($data['ua']) ||
             empty($data['carr_descripcion']) ||
+            empty($data['correo_inst']) ||
             empty($data['sexo'])
         ) {
             session()->push('import_errors_incomplete_data', "RUT '{$data['rut']}': Datos incompletos.");
@@ -72,6 +74,7 @@ class AlumnoImport implements OnEachRow, WithHeadingRow, WithEvents
             'nombre_alumno' => $data['nombres'],
             'carrera' => $data['carr_descripcion'],
             'ua_carrera' => $data['ua'],
+            'correo_alumno' => $data['correo_inst'],
             'sexo_alumno' => strtoupper(trim($data['sexo'])),
             'estado_alumno' => 'Activo',
         ];

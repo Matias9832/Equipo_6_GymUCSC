@@ -7,9 +7,12 @@ use App\Models\AcademySetting;
 
 class AcademySettingController extends Controller
 {
-    public function edit(AcademySetting $academy_setting)
+   
+    public function edit()
     {
-        return view('academy_setting.edit', ['setting' => $academy_setting]);
+        $setting = AcademySetting::firstOrCreate([]);
+        
+        return view('academy_setting.edit', compact('setting'));
     }
 
     public function update(Request $request)
@@ -27,6 +30,24 @@ class AcademySettingController extends Controller
         $banner->banner_subtitle = $request->input('banner_subtitle');
         $banner->save();
 
-        return redirect()->route('academynews.index')->with('success', 'Banner actualizado correctamente');
+        return redirect()->route('academias.index')->with('success', 'Banner actualizado correctamente');
     }
+
+    public function deleteImage()
+    {
+        $setting = AcademySetting::first();
+
+        // Elimina el archivo del servidor si existe
+        if ($setting && $setting->banner_image_path && file_exists(public_path($setting->banner_image_path))) {
+            unlink(public_path($setting->banner_image_path));
+        }
+
+        // Limpia el campo en la base de datos
+        $setting->banner_image_path = null;
+        $setting->save();
+
+        return redirect()->back()->with('success', 'Imagen del banner eliminada correctamente.');
+    }
+
 }
+

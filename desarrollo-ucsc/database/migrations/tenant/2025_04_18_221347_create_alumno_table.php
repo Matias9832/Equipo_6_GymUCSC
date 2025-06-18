@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('ua_carrera');
             $table->string('carrera');
             $table->string('estado_alumno');
+            $table->string('correo_alumno')->nullable();
             $table->string('sexo_alumno')->nullable();
             
             $table->timestamps();
