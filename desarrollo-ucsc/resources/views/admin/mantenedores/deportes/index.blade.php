@@ -7,8 +7,8 @@
             <div class="col-12">
                 <div class="card mb-4">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                        <h6>Lista de Deportes</h6>
-                        <a href="{{ route('deportes.create') }}" class="btn btn-primary btn-sm">Crear Deporte</a>
+                        <h5>Lista de Deportes</h5>
+                        <a href="{{ route('deportes.create') }}" class="btn btn-primary btn-sm">Registrar deporte</a>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">

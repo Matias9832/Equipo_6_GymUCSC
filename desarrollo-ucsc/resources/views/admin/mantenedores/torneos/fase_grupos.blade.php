@@ -1,13 +1,13 @@
-@extends('layouts.app')
-
-@section('title', 'Fase de Grupos')
+@extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Fase de Grupos'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Torneos'])
 <div class="container-fluid py-4">
     <div class="card">
-        <div class="card-body">
+        <div class="card-header pb-0">
             <h4>Fase de Grupos - {{ $torneo->nombre_torneo }}</h4>
+        </div>
+        <div class="card-body">
             @foreach($tablas as $idx => $tabla)
                 <h5>Grupo {{ chr(65 + $idx) }}</h5>
                 <div class="table-responsive mb-4">
@@ -45,7 +45,9 @@
                     </table>
                 </div>
             @endforeach
-            <a href="{{ route('torneos.index') }}" class="btn btn-secondary">Volver</a>
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <a href="{{ route('torneos.index') }}" class="btn btn-outline-secondary px-4">Volver</a>
+            </div>
         </div>
     </div>
 </div>

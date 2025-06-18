@@ -1,9 +1,7 @@
-@extends('layouts.app')
-
-@section('title', 'Partidos del Torneo')
+@extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Partidos del Torneo'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Torneos'])
 <div class="container-fluid py-4">
     <div class="card">
         <div class="card-body">
@@ -50,14 +48,6 @@
                 </form>
             @endif
 
-            {{-- Botón para reiniciar torneo --}}
-            <form action="{{ route('torneos.reiniciar', $torneo->id) }}" method="POST" class="mb-3" onsubmit="return confirm('¿Estás seguro de que deseas reiniciar el torneo? Se borrarán todos los partidos.')">
-                @csrf
-                <button type="submit" class="btn btn-warning">
-                    <i class="fas fa-redo"></i> Reiniciar Torneo
-                </button>
-            </form>
-
             @if(isset($partidosPorRonda[$rondaSeleccionada]))
                 <h5>
                     Fecha {{ $rondaSeleccionada }}
@@ -93,6 +83,7 @@
                                     <td>
                                             @if(!$finalizada)
                                                 <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+                                                <a href="{{ route('torneos.index') }}" class="btn btn-outline-secondary mt-3">Volver</a>
                                             @endif
                                         </form>
                                     </td>
@@ -102,11 +93,24 @@
                     </table>
                 </div>
             @else
-                <div class="alert alert-warning">No hay partidos para esta fecha.</div>
+                <div class="alert alert-warning text-white">No hay partidos para esta fecha.</div>
+                <div class="d-flex align-items-center justify-content-between gap-3 mt-4">
+                    {{-- Botón para reiniciar torneo --}}
+                    <form action="{{ route('torneos.reiniciar', $torneo->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas reiniciar el torneo? Se borrarán todos los partidos.')" class="m-0">
+                        @csrf
+                        <button type="submit" class="btn btn-warning d-flex align-items-center mb-0">
+                            <i class="fas fa-redo me-2"></i> Reiniciar Torneo
+                        </button>
+                    </form>
+                    {{-- Botón para volver a la lista de torneos --}}
+                    <a href="{{ route('torneos.index') }}" class="btn btn-outline-secondary d-flex align-items-center px-4 mb-0">
+                        Volver
+                    </a>
+                </div>
             @endif
         </div>
     </div>
 </div>
+
 @include('layouts.footers.auth.footer')
-<a href="{{ route('torneos.index') }}" class="btn btn-secondary mt-3 float-end">Volver</a>
 @endsection

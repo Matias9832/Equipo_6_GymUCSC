@@ -1,90 +1,96 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
-@section('title', 'Crear Torneo')
-
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Crear Torneo'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Torneos'])
 
 <div class="container-fluid py-4">
-    <div class="card">
-        <div class="card-body">
-            <form action="{{ route('torneos.store') }}" method="POST" id="form-torneo">
-                @csrf
-                <div class="mb-3">
-                    <label for="nombre_torneo" class="form-label">Nombre del Torneo</label>
-                    <input type="text" name="nombre_torneo" id="nombre_torneo" class="form-control" required>
-                    <div id="nombre-torneo-error" class="text-danger mt-1" style="display:none;"></div>
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <h5>Crear nuevo torneo</h5>
                 </div>
-                <div class="mb-3">
-                    <label for="id_deporte" class="form-label">Deporte</label>
-                    <select name="id_deporte" id="id_deporte" class="form-select" required>
-                        <option value="">Seleccione un deporte</option>
-                        @foreach($deportes as $deporte)
-                            <option value="{{ $deporte->id_deporte }}">{{ $deporte->nombre_deporte }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="tipo_competencia" class="form-label">Tipo de Torneo</label>
-                    <select name="tipo_competencia" id="tipo_competencia" class="form-select" required>
-                        <option value="">Seleccione un tipo de torneo</option>
-                        <option value="liga">Liga</option>
-                        <option value="copa">Copa</option>
-                        <option value="encuentro">Encuentro</option>
-                    </select>
-                </div>
+                <div class="card-body">
+                    <form action="{{ route('torneos.store') }}" method="POST" id="form-torneo">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="nombre_torneo" class="form-label">Nombre del Torneo</label>
+                            <input type="text" name="nombre_torneo" id="nombre_torneo" placeholder="Ej: Liga de basketball interfacultades" class="form-control" required>
+                            <div id="nombre-torneo-error" class="text-danger mt-1" style="display:none;"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_deporte" class="form-label">Deporte</label>
+                            <select name="id_deporte" id="id_deporte" class="form-select" required>
+                                <option value="">Seleccione un deporte</option>
+                                @foreach($deportes as $deporte)
+                                    <option value="{{ $deporte->id_deporte }}">{{ $deporte->nombre_deporte }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tipo_competencia" class="form-label">Tipo de Torneo</label>
+                            <select name="tipo_competencia" id="tipo_competencia" class="form-select" required>
+                                <option value="">Seleccione un tipo de torneo</option>
+                                <option value="liga">Liga</option>
+                                <option value="copa">Copa</option>
+                                <option value="encuentro">Encuentro</option>
+                            </select>
+                        </div>
 
-                <div id="opciones-copa" style="display: none;">
-                    <div class="mb-3">
-                        <label for="fase_grupos" class="form-label">¿Tiene fase de grupos?</label>
-                        <select name="fase_grupos" id="fase_grupos" class="form-select">
-                            <option value="">Seleccione...</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                </div>
+                        <div id="opciones-copa" style="display: none;">
+                            <div class="mb-3">
+                                <label for="fase_grupos" class="form-label">¿Tiene fase de grupos?</label>
+                                <select name="fase_grupos" id="fase_grupos" class="form-select">
+                                    <option value="">Seleccione...</option>
+                                    <option value="1">Sí</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                        </div>
 
-                <div class="mb-3" id="max-equipos-div" style="display:none;">
-                    <label for="max_equipos" class="form-label">Cantidad de Equipos</label>
-                    <select name="max_equipos" id="max_equipos" class="form-select" required>
-                        <option value="">Seleccione...</option>
-                        <!-- Opciones generadas por JS -->
-                    </select>
-                </div>
+                        <div class="mb-3" id="max-equipos-div" style="display:none;">
+                            <label for="max_equipos" class="form-label">Cantidad de Equipos</label>
+                            <select name="max_equipos" id="max_equipos" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                                <!-- Opciones generadas por JS -->
+                            </select>
+                        </div>
 
-                <div id="opciones-grupos" style="display: none;">
-                    <div class="mb-3">
-                        <label for="numero_grupos" class="form-label">Número de grupos</label>
-                        <select name="numero_grupos" id="numero_grupos" class="form-select">
-                            <option value="">Seleccione...</option>
-                            <!-- Opciones generadas por JS -->
-                        </select>
-                    </div>
-                    
-                    <div class="mb-3">
-                        <label for="clasifican_por_grupo" class="form-label">Equipos que clasifican por grupo</label>
-                        <select name="clasifican_por_grupo" id="clasifican_por_grupo" class="form-select">
-                            <option value="">Seleccione...</option>
-                            <!-- Opciones generadas por JS -->
-                        </select>
-                    </div>
-                </div>
+                        <div id="opciones-grupos" style="display: none;">
+                            <div class="mb-3">
+                                <label for="numero_grupos" class="form-label">Número de grupos</label>
+                                <select name="numero_grupos" id="numero_grupos" class="form-select">
+                                    <option value="">Seleccione...</option>
+                                    <!-- Opciones generadas por JS -->
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="clasifican_por_grupo" class="form-label">Equipos que clasifican por grupo</label>
+                                <select name="clasifican_por_grupo" id="clasifican_por_grupo" class="form-select">
+                                    <option value="">Seleccione...</option>
+                                    <!-- Opciones generadas por JS -->
+                                </select>
+                            </div>
+                        </div>
 
-                <div class="mb-3" id="tercer-lugar-div" style="display:none;">
-                    <label for="tercer_lugar" class="form-label">¿Se juega partido por el tercer lugar?</label>
-                    <select name="tercer_lugar" id="tercer_lugar" class="form-select">
-                        <option value="0">No</option>
-                        <option value="1">Sí</option>
-                    </select>
+                        <div class="mb-3" id="tercer-lugar-div" style="display:none;">
+                            <label for="tercer_lugar" class="form-label">¿Se juega partido por el tercer lugar?</label>
+                            <select name="tercer_lugar" id="tercer_lugar" class="form-select">
+                                <option value="0">No</option>
+                                <option value="1">Sí</option>
+                            </select>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">Crear Torneo</button>
+                            <a href="{{ route('torneos.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
                 </div>
-
-                <button type="submit" class="btn btn-primary">Crear Torneo</button>
-                <a href="{{ route('torneos.index') }}" class="btn btn-secondary">Cancelar</a>
-            </form>
+            </div>
         </div>
     </div>
-</div>
+</div>        
 @endsection
 
 @push('js')

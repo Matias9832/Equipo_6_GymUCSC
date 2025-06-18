@@ -1,53 +1,62 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Crear Equipo'])
-    <div class="container-fluid py-4">
-        <div class="card">
-            <div class="card-body">
-                @if($errors->any())
-                    <div class="alert alert-danger">
-                        <ul class="mb-0">
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div> 
-                    @endif
-                <form action="{{ route('equipos.store') }}" method="POST">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="nombre_equipo" class="form-label">Nombre del Equipo</label>
-                        <input type="text" name="nombre_equipo" id="nombre_equipo" class="form-control" required>
+@include('layouts.navbars.auth.topnav', ['title' => 'Equipos'])
+
+<div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="container-fluid py-4">
+                <div class="card">
+                    <div class="card-header pb-0">
+                        <h5>Registrar nuevo equipo</h5>
                     </div>
-                    <div class="mb-3">
-                        <label for="id_deporte" class="form-label">Deporte</label>
-                        <select name="id_deporte" id="id_deporte" class="form-select" required>
-                            <option value="">Seleccione un deporte</option>
-                            @foreach($deportes as $deporte)
-                                <option value="{{ $deporte->id_deporte }}">{{ $deporte->nombre_deporte }}</option>
-                            @endforeach
-                        </select>
+                    <div class="card-body">
+                        @if($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div> 
+                            @endif
+                        <form action="{{ route('equipos.store') }}" method="POST">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="nombre_equipo" class="form-label">Nombre</label>
+                                <input type="text" name="nombre_equipo" id="nombre_equipo" placeholder="Nombre del equipo" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_deporte" class="form-label">Deporte</label>
+                                <select name="id_deporte" id="id_deporte" class="form-select" required>
+                                    <option value="">Seleccione un deporte</option>
+                                    @foreach($deportes as $deporte)
+                                        <option value="{{ $deporte->id_deporte }}">{{ $deporte->nombre_deporte }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="torneos" class="form-label">Torneos</label>
+                                <select name="torneos[]" id="torneos" class="form-select" multiple>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="capitan_id" class="form-label">Capitán del Equipo</label>
+                                <select name="capitan_id" id="capitan_id" class="form-select" required>
+                                    <option value="">Selecciona un capitán</option>
+                                </select>
+                                <div id="usuario-error" class="text-danger mt-2" style="display:none;"></div>
+                            </div>
+                            <div class="d-flex justify-content-end gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary">Crear Equipo</button>
+                                <a href="{{ route('equipos.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                            </div>
+                            </form>
                     </div>
-                    <div class="mb-3">
-                        <label for="torneos" class="form-label">Torneos</label>
-                        <select name="torneos[]" id="torneos" class="form-select" multiple>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="capitan_id" class="form-label">Capitán del Equipo</label>
-                        <select name="capitan_id" id="capitan_id" class="form-select" required>
-                            <option value="">Selecciona un capitán</option>
-                        </select>
-                        <div id="usuario-error" class="text-danger mt-2" style="display:none;"></div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Crear Equipo</button>
-                    <a href="{{ route('equipos.index') }}" class="btn btn-secondary">Cancelar</a>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-
+    </div>    
 @endsection
 
 @push('js')

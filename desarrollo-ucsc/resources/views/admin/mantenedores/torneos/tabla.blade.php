@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('title', 'Tabla de Posiciones')
+@extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Tabla de Posiciones'])
@@ -58,9 +56,11 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="{{ route('torneos.index') }}" class="btn btn-outline-secondary mb-0">Volver</a>
+                </div>    
             </div>
         </div>
     </div>
 @include('layouts.footers.auth.footer')
-    <a href="{{ route('torneos.index') }}" class="btn btn-secondary mt-3 float-end">Volver</a>
 @endsection

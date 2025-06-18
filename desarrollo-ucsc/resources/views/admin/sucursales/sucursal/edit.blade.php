@@ -41,7 +41,7 @@
                         </div>
 
                         <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary me-2">Actualizar Sucursal</button>
+                            <button type="submit" class="btn btn-primary me-2">Guardar cambios</button>
                             <a href="{{ route('sucursales.index') }}" class="btn btn-outline-secondary">Cancelar</a>
                         </div>
                     </form>
