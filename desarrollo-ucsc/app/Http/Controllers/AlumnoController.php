@@ -37,7 +37,8 @@ class AlumnoController extends Controller
                 })
                 ->addColumn('estado_html', function ($row) {
                     $clase = $row->estado_alumno === 'Activo' ? 'bg-gradient-success' : 'bg-gradient-secondary';
-                    return '<span class="badge badge-sm ' . $clase . '">' . $row->estado_alumno . '</span>';
+                    $estado = $row->estado_alumno === 'Activo' ? 'Regular' : 'No regular';
+                    return '<span class="badge badge-sm ' . $clase . '">' . $estado . '</span>';
                 })
                 ->addColumn('sexo_html', function ($row) {
                     $color = $row->sexo_alumno === 'M' ? 'bg-gradient-blue' : 'bg-gradient-pink';
