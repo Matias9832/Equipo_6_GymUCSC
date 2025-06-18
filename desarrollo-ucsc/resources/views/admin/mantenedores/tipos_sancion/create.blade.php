@@ -22,7 +22,7 @@
                             <textarea name="descripcion_tipo_sancion" class="form-control" placeholder="Escribe aquí los detalles de la sanción" rows="3" required>{{ old('descripcion_tipo_sancion') }}</textarea>
                         </div>
                         <div class="d-flex justify-content-end gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary">Crear Tipo de Sanción</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
                             <a href="{{ route('tipos_sancion.index') }}" class="btn btn-outline-secondary">Cancelar</a>
                         </div>
                     </form>
