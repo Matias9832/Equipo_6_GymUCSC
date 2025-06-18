@@ -45,6 +45,7 @@ use App\Http\Controllers\DocenteController;
 use App\Http\Controllers\TorneoUsuarioController;
 use App\Http\Controllers\AcademyNewsController;
 use App\Http\Controllers\AcademySettingController;
+use App\Http\Controllers\AcademiaController;
 use App\Models\AcademyNews;
 use Spatie\Permission\Models\Permission;
 
@@ -320,7 +321,10 @@ Route::middleware([
             Route::post('/news/{id}/toggle-featured', [NewsController::class, 'toggleFeatured'])->name('news.toggleFeatured');
             Route::resource('noticias-academia', AcademyNewsController::class)->except(['index', 'show'])->names('academynews');
             Route::post('/newsAcademy/{id}/toggle-featured', [AcademyNewsController::class, 'toggleFeatured'])->name('newsAcademy.toggleFeatured');
-            Route::resource('academy-settings', AcademySettingController::class)->names('academysettings');
+            Route::get('admin/academy-settings/edit', [AcademySettingController::class, 'edit'])->name('academysettings.edit');
+            Route::match(['put', 'post'], '/admin/academy-settings/update', [AcademySettingController::class, 'update'])->name('academysettings.update');
+            Route::resource('academias', AcademiaController::class);
+            Route::delete('/admin/academy-settings/image', [AcademySettingController::class, 'deleteImage'])->name('banner.image.delete');
 
         });
        

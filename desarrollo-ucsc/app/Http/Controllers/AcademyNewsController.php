@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\AcademyNews; 
 use App\Models\Administrador; 
 use App\Models\AcademyImg; 
-
+use App\Models\Academia; 
+use App\Models\Espacio; 
 class AcademyNewsController extends Controller
 {
     public function __construct()
@@ -44,7 +45,8 @@ class AcademyNewsController extends Controller
             ->get();
 
         $banner = \App\Models\AcademySetting::first();
-        return view('academynews.index', compact('news', 'featuredNews', 'banner'));
+        $academias = Academia::with('horarios')->get();
+        return view('academynews.index', compact('news', 'featuredNews', 'banner', 'academias'));
 
      
 
@@ -56,6 +58,7 @@ class AcademyNewsController extends Controller
      */
     public function create()
     {
+         $espacios = Espacio::all();
         return view('academynews.create');
     }
 
@@ -233,3 +236,4 @@ class AcademyNewsController extends Controller
         ]);
     }
 }
+

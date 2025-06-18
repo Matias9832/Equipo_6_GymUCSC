@@ -49,12 +49,13 @@
                     </div>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-
-                        <button class="btn btn-success mt-2">Guardar</button>
+                        <a href="{{ route('academias.index') }}" class="btn btn-outline-secondary mt-2">Cancelar</a>
+                        <button class="btn btn-primary mt-2">Guardar</button>
                     </div>
                 </form>
             </div>
         </div>
+        @include('layouts.footers.auth.footer')
     </div> 
 @endsection
 
