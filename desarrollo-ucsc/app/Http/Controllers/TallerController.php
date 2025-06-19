@@ -49,6 +49,7 @@ class TallerController extends Controller
             'cupos_taller' => 'required|integer|min:1',
             'id_admin' => 'nullable|exists:administrador,id_admin',
             'id_espacio' => 'nullable|exists:espacio,id_espacio',
+            'restricciones_taller' => 'nullable|string',
             'activo_taller' => 'boolean',
             'horarios' => ['nullable', 'array'], // Permitir que el array de horarios sea opcional
             'horarios.*.dia' => ['required', 'string', Rule::in(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'])],
@@ -114,6 +115,7 @@ class TallerController extends Controller
         'cupos_taller' => 'required|integer|min:1',
         'id_admin' => 'nullable|exists:administrador,id_admin',
         'id_espacio' => 'nullable|exists:espacio,id_espacio',
+        'restricciones_taller' => 'nullable|string',
         'activo_taller' => 'boolean',
         'horarios' => ['nullable', 'array'],
         // LA LÍNEA MODIFICADA AQUÍ:
