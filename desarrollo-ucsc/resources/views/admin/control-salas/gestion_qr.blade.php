@@ -101,7 +101,7 @@
                 aria-hidden="true">
                 <div class="modal-dialog" style="margin: 0 auto; margin-top: 530px;">
                     <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
-                        <form id="form-registro-manual" method="POST">
+                        <form id="form-registro-manual" action="{{ route('registro.manual') }}" method="POST">
                             @csrf
                             <input type="hidden" name="id_sala" id="id_sala" value="{{ $sala->id_sala }}">
                             <div class="modal-header">
@@ -134,7 +134,7 @@
                 aria-labelledby="modalSalidaManualLabel" aria-hidden="true">
                 <div class="modal-dialog" style="margin: 0 auto; margin-top: 530px;">
                     <div class="modal-content">
-                        <form id="form-salida-manual"  method="POST">
+                        <form id="form-salida-manual" action="{{ route('salida.manual') }}" method="POST">
                             @csrf
                             <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
                             <div class="modal-header">
@@ -178,7 +178,8 @@
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 },
-                body: formData
+                body: 
+    
             })
             .then(response => response.json())
             .then(data => {

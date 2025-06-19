@@ -27,27 +27,18 @@ class ControlSalasController extends Controller
             return back()->with('error', 'El aforo excede el máximo permitido para esta sala.');
         }
 
+        // Activar la sala y guardar aforo
         $sala->activo = true;
         $sala->aforo_qr = $request->aforo;
         $sala->save();
 
-        $encryptedId = Crypt::encrypt($sala->id_sala);
-        $urlQR = route('sala.registro', ['id_sala' => $encryptedId, 'aforo' => $request->aforo]); //Se pone la url de la ruta que se va a generar el QR
-
-        $qrCode = QrCode::size(300)->generate($urlQR); // Generar el código QR
-
-        $usuariosActivos = Ingreso::where('id_sala', $sala->id_sala)
-            ->whereNull('hora_salida')
-            ->count();
-
-        return view('admin.control-salas.gestion_qr', [
-            'qrCode' => $qrCode,
-            'desdeQR' => true,
-            'aforoPermitido' => $request->aforo,
-            'usuariosActivos' => $usuariosActivos,
-            'sala' => $sala,
+        // Redirigir a la vista correcta donde sí funciona ingreso manual
+        return redirect()->route('control-salas.verQR', [
+            'id_sala' => $sala->id_sala,
+            'aforo_qr' => $request->aforo
         ]);
     }
+
 
     public function verQR(Request $request)
     {
