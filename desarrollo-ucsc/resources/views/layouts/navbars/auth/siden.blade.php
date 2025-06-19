@@ -307,6 +307,13 @@
                                 <span class="nav-link-text ms-1">Datos Salas</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ Route::currentRouteName() == 'datos-talleres.index' ? 'active' : '' }}"
+                                href="{{ route('datos-talleres.index') }}">
+                                <i class="fas fa-chart-line text-dark text-sm opacity-10"></i>
+                                <span class="nav-link-text ms-1">Datos Talleres</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>
