@@ -30,6 +30,7 @@ class Alumno extends Model
         'ua_carrera',
         'estado_alumno',
         'sexo_alumno',
+        'correo_alumno',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
