@@ -101,9 +101,9 @@
                 aria-hidden="true">
                 <div class="modal-dialog" style="margin: 0 auto; margin-top: 530px;">
                     <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
-                        <form action="{{ route('registro.manual') }}" method="POST">
+                        <form id="form-registro-manual" method="POST">
                             @csrf
-                            <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
+                            <input type="hidden" name="id_sala" id="id_sala" value="{{ $sala->id_sala }}">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="modalIngresoManualLabel">Registrar Ingreso Manual</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -134,7 +134,7 @@
                 aria-labelledby="modalSalidaManualLabel" aria-hidden="true">
                 <div class="modal-dialog" style="margin: 0 auto; margin-top: 530px;">
                     <div class="modal-content">
-                        <form action="{{ route('salida.manual') }}" method="POST">
+                        <form id="form-salida-manual"  method="POST">
                             @csrf
                             <input type="hidden" name="id_sala" value="{{ $sala->id_sala }}">
                             <div class="modal-header">
@@ -162,57 +162,69 @@
                 </div>
             </div>
         </div>
-        <script>
-            function actualizarAforo(idSala) {
-                fetch(`/admin/control-salas/aforo/${idSala}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.querySelector('h2.text-primary').textContent = data.aforoPermitido;
-                        document.getElementById('aforo-actual').textContent = data.usuariosActivos;
-                        document.getElementById('aforo-estudiantes').textContent = data.estudiantes;
-                        document.getElementById('aforo-seleccionados').textContent = data.seleccionados;
-                    });
-            }
-
-            setInterval(function () {
-                actualizarAforo({{ $sala->id_sala }});
-            }, 2000);
-        </script>
-@endsection
-
-
-
+    @endsection   
     @section('scripts')
-        <script>
-            document.getElementById('form-registro-manual').addEventListener('submit', function (e) {
-                e.preventDefault();
+    <script>
+        // INICIO REGISTRO MANUAL
+        document.getElementById('form-registro-manual').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const mensaje = document.getElementById('mensajeIngreso');
+            const idSala = document.getElementById('id_sala').value;
 
-                const form = e.target;
-                const formData = new FormData(form);
-                const idSala = document.getElementById('id_sala').value;
-
-                fetch(`/admin/control-salas/registro-manual`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: formData
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        const mensajeDiv = document.getElementById('mensaje');
-                        mensajeDiv.textContent = data.message;
-                        mensajeDiv.style.color = data.success ? 'green' : 'red';
-
-                        if (data.success) {
-                            actualizarAforo(idSala);
-                            form.reset(); // Opcional: limpiar campos si fue exitoso
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+            fetch("{{ route('registro.manual') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                mensaje.textContent = data.message;
+                mensaje.style.color = data.success ? 'green' : 'red';
+                if (data.success) {
+                    actualizarAforo(idSala);
+                    form.reset();
+                }
+            })
+            .catch(error => {
+                mensaje.textContent = 'Ocurrió un error.';
+                mensaje.style.color = 'red';
             });
-        </script>
+        });
+
+        // SALIDA MANUAL
+        document.getElementById('form-salida-manual').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const mensaje = document.getElementById('mensajeSalida');
+            const idSala = document.getElementById('id_sala').value;
+
+            fetch("{{ route('salida.manual') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                mensaje.textContent = data.message;
+                mensaje.style.color = data.success ? 'green' : 'red';
+                if (data.success) {
+                    actualizarAforo(idSala);
+                    form.reset();
+                }
+            })
+            .catch(error => {
+                mensaje.textContent = 'Ocurrió un error.';
+                mensaje.style.color = 'red';
+            });
+        });
+    </script>
+
 
     @endsection

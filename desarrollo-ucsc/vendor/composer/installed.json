@@ -1058,17 +1058,17 @@
         },
         {
             "name": "filp/whoops",
-            "version": "2.18.1",
-            "version_normalized": "2.18.1.0",
+            "version": "2.18.3",
+            "version_normalized": "2.18.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "8fcc6a862f2e7b94eb4221fd0819ddba3d30ab26"
+                "reference": "59a123a3d459c5a23055802237cb317f609867e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/8fcc6a862f2e7b94eb4221fd0819ddba3d30ab26",
-                "reference": "8fcc6a862f2e7b94eb4221fd0819ddba3d30ab26",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/59a123a3d459c5a23055802237cb317f609867e5",
+                "reference": "59a123a3d459c5a23055802237cb317f609867e5",
                 "shasum": ""
             },
             "require": {
@@ -1084,7 +1084,7 @@
                 "symfony/var-dumper": "Pretty print complex values better with var-dumper available",
                 "whoops/soap": "Formats errors as SOAP responses"
             },
-            "time": "2025-06-03T18:56:14+00:00",
+            "time": "2025-06-16T00:02:10+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1120,7 +1120,7 @@
             ],
             "support": {
                 "issues": "https://github.com/filp/whoops/issues",
-                "source": "https://github.com/filp/whoops/tree/2.18.1"
+                "source": "https://github.com/filp/whoops/tree/2.18.3"
             },
             "funding": [
                 {
@@ -7348,17 +7348,17 @@
         },
         {
             "name": "spatie/laravel-permission",
-            "version": "6.19.0",
-            "version_normalized": "6.19.0.0",
+            "version": "6.20.0",
+            "version_normalized": "6.20.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-permission.git",
-                "reference": "0cd412dcad066d75caf0b977716809be7e7642fd"
+                "reference": "31c05679102c73f3b0d05790d2400182745a5615"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/0cd412dcad066d75caf0b977716809be7e7642fd",
-                "reference": "0cd412dcad066d75caf0b977716809be7e7642fd",
+                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/31c05679102c73f3b0d05790d2400182745a5615",
+                "reference": "31c05679102c73f3b0d05790d2400182745a5615",
                 "shasum": ""
             },
             "require": {
@@ -7374,7 +7374,7 @@
                 "orchestra/testbench": "^6.23|^7.0|^8.0|^9.0|^10.0",
                 "phpunit/phpunit": "^9.4|^10.1|^11.5"
             },
-            "time": "2025-05-31T00:50:27+00:00",
+            "time": "2025-06-05T07:33:07+00:00",
             "type": "library",
             "extra": {
                 "laravel": {
@@ -7422,7 +7422,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-permission/issues",
-                "source": "https://github.com/spatie/laravel-permission/tree/6.19.0"
+                "source": "https://github.com/spatie/laravel-permission/tree/6.20.0"
             },
             "funding": [
                 {
