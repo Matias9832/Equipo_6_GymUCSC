@@ -18,17 +18,42 @@ class NewsController extends Controller
         $this->middleware('admin')->except(['index', 'show']);
     }
 
-    public function index()
+   public function index()
     {
-        $news = News::with('administrador')->orderByDesc('fecha_noticia')->paginate(3);
+        // Paso 1: Desmarcar noticias cuya fecha destacada ha expirado
+        News::where('is_featured', true)
+            ->whereNotNull('featured_until')
+            ->where('featured_until', '<', now())
+            ->update([
+                'is_featured' => false,
+                'featured_until' => null
+            ]);
 
+        // Paso 2: Obtener todas las noticias con paginación
+        $news = News::with('administrador', 'images') // también cargamos imágenes si las usas en la vista
+            ->orderByDesc('fecha_noticia')
+            ->paginate(6);
+
+        // Paso 3: Obtener noticias destacadas válidas
+        $featuredNews = News::with('images', 'administrador')
+            ->where('is_featured', true)
+            ->where(function ($query) {
+                $query->whereNull('featured_until')
+                    ->orWhere('featured_until', '>=', now());
+            })
+            ->orderBy('fecha_noticia', 'desc')
+            ->take(5)
+            ->get();
+
+        // Paso 4: Sucursales con salas
         $sucursalesConSalas = Sucursal::with('salas')
             ->where('id_marca', 1)
             ->whereHas('salas')
             ->get();
 
-        return view('news.index', compact('news', 'sucursalesConSalas'));
+        return view('news.index', compact('news', 'sucursalesConSalas', 'featuredNews'));
     }
+
 
     public function create()
     {
@@ -38,13 +63,17 @@ class NewsController extends Controller
 
     public function store(Request $request)
     {
+        
         $data = $request->validate([
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'nombre_noticia' => 'required|string|max:255',
             'descripcion_noticia' => 'required',
             'tipo_deporte' => 'required|string',
+            'is_featured' => 'nullable|boolean',
+            'featured_until' => 'nullable|date',
         ]);
-
+        
+        $data['is_featured'] = $request->boolean('is_featured');
         $admin = Administrador::where('rut_admin', auth()->user()->rut)->firstOrFail();
 
         $news = News::create([
@@ -54,6 +83,9 @@ class NewsController extends Controller
             'encargado_noticia' => $admin->nombre_admin,
             'fecha_noticia' => now(),
             'id_admin' => $admin->id_admin,
+            'is_featured' => $data['is_featured'] ?? 0,
+            'featured_until' => $data['featured_until'] ?? null,
+
         ]);
 
         $this->guardarImagenes($request, $news);
@@ -71,6 +103,11 @@ class NewsController extends Controller
     {
         $news = News::with('images')->findOrFail($id);
         $deportes = Deporte::all();
+        if ($news->is_featured && $news->featured_until && now()->greaterThan($news->featured_until)) {
+            $news->is_featured = false;
+            $news->featured_until = null;
+            $news->save();
+        }
         return view('news.edit', compact('news', 'deportes'));
     }
 
@@ -84,12 +121,18 @@ class NewsController extends Controller
             'nombre_noticia' => 'required|string|max:255',
             'descripcion_noticia' => 'required',
             'tipo_deporte' => 'required|string',
+            'is_featured' => 'nullable|boolean',
+            'featured_until' => 'nullable|date',
         ]);
+        
+        $data['is_featured'] = $request->boolean('is_featured');
 
         $news->update([
             'nombre_noticia' => $data['nombre_noticia'],
             'descripcion_noticia' => $data['descripcion_noticia'],
             'tipo_deporte' => $data['tipo_deporte'],
+            'is_featured' => $data['is_featured'] ?? 0,
+            'featured_until' => $data['featured_until'] ?? null,
         ]);
 
         // Eliminar imágenes seleccionadas
@@ -151,5 +194,31 @@ class NewsController extends Controller
             File::delete($path);
         }
     }
+
+   public function toggleFeatured($id)
+    {
+        $noticia = News::findOrFail($id);
+
+        // Solo admin o usuario con permiso
+        $this->authorize('Editar Noticias');
+
+        $noticia->is_featured = !$noticia->is_featured;
+
+        if ($noticia->is_featured) {
+            // Ejemplo: destacar por 7 días
+            $noticia->featured_until = now()->addDays(7);
+        } else {
+            $noticia->featured_until = null;
+        }
+
+        $noticia->save();
+
+        return response()->json([
+            'success' => true,
+            'destacado' => $noticia->is_featured,
+        ]);
+    }
+
+
 
 }

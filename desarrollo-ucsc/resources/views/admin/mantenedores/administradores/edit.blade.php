@@ -50,7 +50,7 @@
                             </select>
                         </div>
                         <div class="d-flex justify-content-end gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
                             <a href="{{ route('administradores.index') }}" class="btn btn-outline-secondary">Cancelar</a>
                         </div>
                     </form>

@@ -37,7 +37,7 @@ class TenantController extends Controller
 
         $empresa = \App\Models\Tenants\Empresa::findOrFail($request->empresa_id);
         $subdominio = strtolower($request->subdominio);
-        $dominioCompleto = "{$subdominio}.ugym.cl";
+        $dominioCompleto = "{$subdominio}.ugym.local";
 
         $tenant = Tenant::create([
             'id' => $subdominio,

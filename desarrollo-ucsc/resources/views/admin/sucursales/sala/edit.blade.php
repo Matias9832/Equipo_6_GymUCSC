@@ -1,15 +1,13 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
-@section('title', 'Editar Sala')
-
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Editar Sala'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Salas'])
 
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-12">
+        <div class="col-lg-8 mx-auto">
             <div class="card shadow rounded-4 p-4">
-                <h6 class="mb-4">Editar Sala</h6>
+                <h6 class="mb-4">Editar información de la sala</h6>
 
                 <form action="{{ route('salas.update', $sala) }}" method="POST">
                     @csrf
@@ -28,15 +26,15 @@
                     <div class="mb-3">
                         <label class="form-label">Horario (Apertura - Cierre)</label>
                         <div class="d-flex gap-2">
-                            <input type="time" name="horario_apertura" class="form-control" value="{{ $sala->horario_apertura }}" required>
+                            <input type="time" name="horario_apertura" id="horario_apertura" class="form-control" value="{{ $sala->horario_apertura }}" required>
                             <span class="align-self-center">-</span>
-                            <input type="time" name="horario_cierre" class="form-control" value="{{ $sala->horario_cierre }}" required>
+                            <input type="time" name="horario_cierre" id="horario_cierre" class="form-control" value="{{ $sala->horario_cierre }}" required>
                         </div>
                     </div>
 
                     <div class="d-flex justify-content-end">
-                        <a href="{{ route('salas.index') }}" class="btn btn-outline-secondary me-2">Cancelar</a>
-                        <button type="submit" class="btn btn-success">Actualizar</button>
+                        <button type="submit" class="btn btn-primary me-2">Guardar cambios</button>
+                        <a href="{{ route('salas.index') }}" class="btn btn-outline-secondary">Cancelar</a>
                     </div>
                 </form>
             </div>
@@ -45,4 +43,29 @@
 
     @include('layouts.footers.auth.footer')
 </div>
+@push('js')
+<script>
+    flatpickr("#horario_apertura", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+        altInput: true,
+        altFormat: "H:i",
+        locale: "es",
+        minuteIncrement: 10 // Los minutos avanzan de 10 en 10
+    });
+    flatpickr("#horario_cierre", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true,
+        altInput: true,
+        altFormat: "H:i",
+        locale: "es",
+        minuteIncrement: 10 // Los minutos avanzan de 10 en 10
+    });
+</script>
+@endpush
+@stack('js')
 @endsection

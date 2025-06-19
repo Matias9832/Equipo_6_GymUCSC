@@ -1,6 +1,8 @@
+
+ 
  @if(!View::hasSection('ocultarHamburguesa'))
-    <div class="d-flex align-items-center d-xl-none" style="position: fixed; top: .7rem; left: 0.5rem; z-index: 1055;">
-        <button class="btn btn-icon btn-outline-primary text-white" type="button"
+    <div class="d-flex align-items-center d-xl-none" style="position: fixed; top: .7rem; left: 0.5rem; z-index: 1055; ">
+        <button class="btn btn-icon text-white" type="button"
             data-bs-toggle="offcanvas" data-bs-target="#sidenav-main" aria-controls="sidenav-main">
             <i class="fas fa-bars"></i>
         </button>

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->timestamp('fecha_noticia');
             $table->string('tipo_deporte');
             $table->unsignedBigInteger('id_admin');
+            $table->boolean('is_featured')->default(false);
+            $table->dateTime('featured_until')->nullable();
 
             $table->foreign('id_admin')->references('id_admin')->on('administrador')->onDelete('cascade');
         });

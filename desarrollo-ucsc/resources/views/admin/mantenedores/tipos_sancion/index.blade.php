@@ -1,7 +1,5 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
-@section('title', 'Tipos de Sanción')
-
 @section('content')
 @include('layouts.navbars.auth.topnav', ['title' => 'Tipos de Sanción'])
 
@@ -10,8 +8,8 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex justify-content-between align-items-center">
-                    <h6>Listado de Tipos de Sanción</h6>
-                    <a href="{{ route('tipos_sancion.create') }}" class="btn btn-primary btn-sm">Crear Nuevo Tipo de Sanción</a>
+                    <h5>Listado de Tipos de Sanción</h5>
+                    <a href="{{ route('tipos_sancion.create') }}" class="btn btn-primary btn-sm">Crear tipo de sanción</a>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">

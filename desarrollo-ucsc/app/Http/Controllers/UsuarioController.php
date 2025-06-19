@@ -97,12 +97,14 @@ class UsuarioController extends Controller
         $query = $request->get('q', '');
 
         $usuarios = Usuario::with('alumno')
-            ->where('rut', 'like', "%$query%")
-            ->orWhereHas('alumno', function ($queryBuilder) use ($query) {
-                $queryBuilder->where('nombre_alumno', 'like', "%$query%")
-                    ->orWhere('apellido_paterno', 'like', "%$query%")
-                    ->orWhere('apellido_materno', 'like', "%$query%");
+            ->whereIn('tipo_usuario', ['estudiante', 'seleccionado']) // Solo estudiantes y seleccionados
+            ->where(function ($q) use ($query) {
+                $q->where('rut', 'like', "%$query%")
+                ->orWhereHas('alumno', function ($q2) use ($query) {
+                    $q2->whereRaw("CONCAT(nombre_alumno, ' ', apellido_paterno, ' ', apellido_materno) LIKE ?", ["%$query%"]);
+                });
             })
+            ->whereHas('alumno') // Solo usuarios que tengan alumno relacionado
             ->limit(10)
             ->get();
 

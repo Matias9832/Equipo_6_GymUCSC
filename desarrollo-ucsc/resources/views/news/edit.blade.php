@@ -15,7 +15,7 @@
                             @foreach($news->images as $image)
                                 <div class="col-md-3 position-relative">
                                     <div style="width: 100%; height: 200px; overflow: hidden; border-radius: 0.5rem; position: relative;">
-                                        <img src="{{ asset($image->image_path) }}"
+                                        <img src="{{ global_asset($image->image_path) }}"
                                             style="width: 100%; height: 100%; object-fit: cover;">
 
                                         {{-- Botón eliminar imagen, fuera del formulario principal --}}
@@ -55,7 +55,7 @@
 
                         <div>
                             <label for="descripcion_noticia" class="form-label">Contenido:</label>
-                            <textarea name="descripcion_noticia" class="form-control" rows="4" required>{{ $news->descripcion_noticia }}</textarea>
+                            <textarea name="descripcion_noticia" class="form-control" rows="4" required>{{ old('descripcion_noticia', $news->descripcion_noticia) }}</textarea>
                         </div>
 
                         <div>
@@ -71,8 +71,27 @@
                             </select>
                             
                         </div>
+                        <div class="form-check mb-3">
+                            <input type="hidden" name="is_featured" value="0">
+                            <input type="checkbox" class="form-check-input" id="is_featured" name="is_featured" value="1"
+                            {{ (old('is_featured') ?? $news->is_featured) ? 'checked' : '' }}>
+                            <label class="form-check-label" for="is_featured">
+                                <i class="fas fa-star text-warning me-1"></i> Marcar como noticia destacada
+                            </label>
+                        </div>
 
-                        <button class="btn btn-primary mt-2">Actualizar</button>
+                        <div class="mb-3">
+                            <label for="featured_until" class="form-label">
+                                Tiempo hasta que sea destacada (opcional)
+                            </label>
+                            <input type="datetime-local" class="form-control" id="featured_until" name="featured_until"
+                                value="{{ old('featured_until', $news->featured_until ? \Carbon\Carbon::parse($news->featured_until)->format('Y-m-d\TH:i') : '') }}">
+                        </div>
+
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-primary mt-2">Actualizar</button>
+                        </div>
                     </form>
             </div>
         </div>

@@ -14,10 +14,10 @@
                         </div>
                         <div class="col-auto">
                             <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-sm btn-primary me-2">
-                                <i class="fas fa-edit me-1"></i> Registrar
+                                <i class="fas fa-edit me-1"></i> Registrar asistencia
                             </a>
-                            <a href="{{ route('talleres.index') }}" class="btn btn-sm btn-secondary">
-                                <i class="fas fa-arrow-left me-1"></i> Volver a talleres
+                            <a href="{{ route('talleres.index') }}" class="btn btn-sm btn-outline-secondary">
+                                Cancelar
                             </a>
                         </div>
                     </div>
