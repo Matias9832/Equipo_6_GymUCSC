@@ -44,15 +44,16 @@
         </div>
     </div>
 
-    <!-- Métricas -->
+    <!-- Métricas y gráficos principales -->
     <div class="row">
+        <!-- Métrica: Asistentes del Mes -->
         <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-body p-3">
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Asistentes del Mes</p>
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Asistencias del Mes</p>
                                 <h5 class="font-weight-bolder">
                                     {{ $asistentesMes }}
                                 </h5>
@@ -66,38 +67,22 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
-            <div class="card">
+            <!-- Gráfico de curva: Asistentes totales vs mes -->
+            <div class="card mb-4">
+                <div class="card-header pb-0 pt-3 bg-transparent">
+                    <h6 class="text-capitalize">asistencias por día del mes</h6>
+                </div>
                 <div class="card-body p-3">
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Asistencias esta semana</p>
-                                <h5 class="font-weight-bolder">
-                                    {{ $asistenciasSemana }}
-                                </h5>
-                            </div>
-                        </div>
-                        <div class="col-4 text-end">
-                            <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                                <i class="ni ni-time-alarm text-lg opacity-10" aria-hidden="true"></i>
-                            </div>
-                        </div>
+                    <div class="chart">
+                        <canvas id="chart-curva" class="chart-canvas" height="180"></canvas>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Información Gráfica -->
-    <div class="row mt-4">
-        <!-- Asistentes por carrera -->
-        <div class="col-lg-6 mb-lg-0 mb-4">
-            <div class="card">
+            <!-- Asistentes por carrera -->
+            <div class="card mb-4">
                 <div class="card-header pb-0 p-3">
                     <div class="d-flex justify-content-between">
-                        <h6 class="mb-2">Asistentes por Carrera</h6>
+                        <h6 class="mb-2">Asistencias por Carrera</h6>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -131,11 +116,31 @@
                 </div>
             </div>
         </div>
-        <!-- Gráficos -->
-        <div class="col-lg-6 mb-lg-0 mb-4">
-            <div class="card z-index-2 h-100">
+        <!-- Métrica: Asistencias esta semana + gráfico de género -->
+        <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
+            <div class="card mb-4">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Asistencias esta semana</p>
+                                <h5 class="font-weight-bolder">
+                                    {{ $asistenciasSemana }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
+                                <i class="ni ni-time-alarm text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Gráfico de barras: Asistentes por género -->
+            <div class="card z-index-2 mb-4">
                 <div class="card-header pb-0 pt-3 bg-transparent">
-                    <h6 class="text-capitalize">Asistentes por género</h6>
+                    <h6 class="text-capitalize">asistencias por género</h6>
                     <p class="text-sm mb-0">
                         Femenino: <span class="font-weight-bold text-pink">{{ $porcentajeF }}%</span> /
                         Masculino: <span class="font-weight-bold text-primary">{{ $porcentajeM }}%</span>
@@ -143,10 +148,7 @@
                 </div>
                 <div class="card-body p-3">
                     <div class="chart mb-4">
-                        <canvas id="chart-genero" class="chart-canvas" height="150"></canvas>
-                    </div>
-                    <div class="chart">
-                        <canvas id="chart-curva" class="chart-canvas" height="150"></canvas>
+                        <canvas id="chart-genero" class="chart-canvas" height="140"></canvas>
                     </div>
                 </div>
             </div>
@@ -221,7 +223,11 @@
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: { color: '#ccc' },
+                    // Ajusta el stepSize según el máximo de asistentes
+                    ticks: {
+                        color: '#ccc',
+                        stepSize: Math.max(1, Math.ceil(Math.max(...{!! json_encode(array_column($curvaDatos, 'cantidad')) !!}) / 10))
+                    },
                     grid: { display: true, drawBorder: false, borderDash: [5, 5] }
                 },
                 x: {
