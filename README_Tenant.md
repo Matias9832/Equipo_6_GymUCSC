@@ -36,3 +36,13 @@ Agrega lo siguiente al final del archivo:
 127.0.0.1   deportes1.ugym.local
 127.0.0.1   deportes2.ugym.local
 127.0.0.1   deportes3.ugvym.local
+
+127.0.0.1   ugym.cl
+127.0.0.1   deportesucsc.ugym.cl
+127.0.0.1   deportesudec.ugym.cl
+127.0.0.1   deportesunab.ugym.cl
+127.0.0.1   deportesudd.ugym.cl
+127.0.0.1   deportesinacap.ugym.cl
+127.0.0.1   deportes1.ugym.cl
+127.0.0.1   deportes2.ugym.cl
+127.0.0.1   deportes3.ugvym.cl
