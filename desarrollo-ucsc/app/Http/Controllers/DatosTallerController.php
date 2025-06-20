@@ -81,29 +81,39 @@ class DatosTallerController extends Controller
         $rankingCarreras = $rankingCarreras->take(8);
 
         // Gráfico de curva: asistentes por día (solo días con horario de taller)
-        $diasConHorario = [];
+        $curvaDatos = [];
+        $diasNombres = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
         if ($tallerId) {
+            // Solo días con horario de ese taller
             $diasConHorario = HorarioTaller::where('id_taller', $tallerId)
                 ->pluck('dia_taller')
                 ->map(fn($dia) => strtolower($dia))
                 ->unique()
                 ->toArray();
-        }
 
-        $diasMes = [];
-        $curvaDatos = [];
-        $diasNombres = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
-        for ($date = $inicio->copy(); $date->lte($fin); $date->addDay()) {
-            $nombreDia = strtolower($diasNombres[$date->dayOfWeek]);
-            if (in_array($nombreDia, $diasConHorario)) {
-                $diasMes[] = $date->format('Y-m-d');
+            $diasMes = [];
+            for ($date = $inicio->copy(); $date->lte($fin); $date->addDay()) {
+                $nombreDia = strtolower($diasNombres[$date->dayOfWeek]);
+                if (in_array($nombreDia, $diasConHorario)) {
+                    $diasMes[] = $date->format('Y-m-d');
+                }
             }
-        }
-        foreach ($diasMes as $dia) {
-            $curvaDatos[] = [
-                'fecha' => $dia,
-                'cantidad' => $asistenciasFiltradas->where('fecha_asistencia', $dia)->count()
-            ];
+            foreach ($diasMes as $dia) {
+                $curvaDatos[] = [
+                    'fecha' => $dia,
+                    'cantidad' => $asistenciasFiltradas->where('fecha_asistencia', $dia)->count()
+                ];
+            }
+        } else {
+            // TODOS los talleres: muestra todos los días del mes donde hubo al menos una asistencia
+            $diasConAsistencia = $asistenciasFiltradas->pluck('fecha_asistencia')->unique()->sort()->values();
+            foreach ($diasConAsistencia as $dia) {
+                $curvaDatos[] = [
+                    'fecha' => $dia,
+                    'cantidad' => $asistenciasFiltradas->where('fecha_asistencia', $dia)->count()
+                ];
+            }
         }
 
         $talleres = Taller::all();
