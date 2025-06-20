@@ -153,10 +153,11 @@ class DatosTallerController extends Controller
             ->join('usuario', 'usuario.id_usuario', '=', 'taller_usuario.id_usuario')
             ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
             ->join('talleres', 'talleres.id_taller', '=', 'taller_usuario.id_taller')
+            ->where('taller_usuario.id_taller', $tallerId)
             ->whereBetween('fecha_asistencia', [$inicio->toDateString(), $fin->toDateString()]);
 
         if ($tallerId) {
-            $query->where('id_taller', $tallerId);
+            $query->where('taller_usuario.id_taller', $tallerId);
         }
 
         $asistencias = $query->select(
@@ -185,17 +186,30 @@ class DatosTallerController extends Controller
         });
 
         // Exporta usando Laravel Excel (Collection export)
-        return Excel::download(new class($exportData, $tallerId) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings {
-            private $data, $tallerId;
-            public function __construct($data, $tallerId) { $this->data = $data; $this->tallerId = $tallerId; }
-            public function collection() { return collect($this->data); }
-            public function headings(): array {
-                $headings = ['RUT', 'Nombre', 'Carrera', 'Sexo', 'Fecha Asistencia'];
-                if (!$this->tallerId) {
-                    $headings[] = 'Taller';
+        if ($tallerId) {
+            // Busca el nombre del taller
+            $taller = \App\Models\Taller::find($tallerId);
+            $nombreTaller = $taller ? $taller->nombre_taller : 'Taller';
+            $fileName = 'Asistencia_' . str_replace(' ', '_', $nombreTaller) . "_{$mes}_{$anio}.xlsx";
+        } else {
+            $fileName = "Asistencia_total_Talleres_{$mes}_{$anio}.xlsx";
+        }
+
+        // Luego en el return:
+        return Excel::download(
+            new class($exportData, $tallerId) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings {
+                private $data, $tallerId;
+                public function __construct($data, $tallerId) { $this->data = $data; $this->tallerId = $tallerId; }
+                public function collection() { return collect($this->data); }
+                public function headings(): array {
+                    $headings = ['RUT', 'Nombre', 'Carrera', 'Sexo', 'Fecha Asistencia'];
+                    if (!$this->tallerId) {
+                        $headings[] = 'Taller';
+                    }
+                    return $headings;
                 }
-                return $headings;
-            }
-        }, 'asistencias_taller.xlsx');
+            },
+            $fileName // <-- aquí va el nombre personalizado
+        );
     }
 }
