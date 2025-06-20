@@ -35,6 +35,12 @@
                                     </a>    
                                 </li>
                             @endcan    
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'roles.index' ? 'active' : '' }}"
+                                        href="{{ route('roles.index') }}">
+                                        <i class="ni ni-watch-time text-dark text-sm opacity-10"></i> Roles
+                                    </a>
+                                </li>
                             @can('Acceso al Mantenedor de Alumnos')
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'alumnos.index' ? 'active' : '' }}"

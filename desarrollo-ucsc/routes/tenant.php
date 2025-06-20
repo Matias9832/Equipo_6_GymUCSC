@@ -49,6 +49,7 @@ use App\Http\Controllers\AcademiaController;
 use App\Http\Controllers\TalleresNewsController;
 use App\Http\Controllers\TalleresSettingController;
 use App\Http\Controllers\NewsSettingController;
+use App\Http\Controllers\RolesController;
 
 use App\Http\Controllers\TalleresController;
 
@@ -233,6 +234,9 @@ Route::middleware([
         Route::middleware(['permission:Acceso al Mantenedor de Torneos'])->group(function () {
             Route::resource('torneos', TorneoController::class);
         });
+        // Route::middleware(['permission:Acceso al Mantenedor de Administradores'])->group(function () {
+            Route::resource('roles', RolesController::class);
+        // });
         Route::get('/torneos-por-deporte', [EquipoController::class, 'torneosPorDeporte'])->name('torneos.porDeporte');
 
         Route::middleware(['permission:Acceso al Mantenedor de Torneos'])->group(function () {
