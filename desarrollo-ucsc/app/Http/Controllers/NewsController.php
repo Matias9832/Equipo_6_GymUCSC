@@ -7,6 +7,8 @@ use App\Models\NewsImage;
 use App\Models\Administrador;
 use App\Models\Deporte;
 use App\Models\Sucursal;
+use App\Models\NewsSetting;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -50,8 +52,9 @@ class NewsController extends Controller
             ->where('id_marca', 1)
             ->whereHas('salas')
             ->get();
-
-        return view('news.index', compact('news', 'sucursalesConSalas', 'featuredNews'));
+        
+        $banner = \App\Models\NewsSetting::first();
+        return view('news.index', compact('news', 'sucursalesConSalas', 'featuredNews', 'banner'));
     }
 
 

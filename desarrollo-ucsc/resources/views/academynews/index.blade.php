@@ -27,11 +27,11 @@
                     @endif
 
                     <small class="text-uppercase fw-semibold">
-                        {{ $banner?->banner_subtitle ?? 'Unidad de Deportes y Recreación' }}
+                        {{ $banner?->banner_subtitle ?? 'UNIDAD DE DEPORTES Y RECREACIÓN' }}
                     </small>
 
                     <h2 class="fw-bold display-flex text-white">
-                        {{ $banner?->banner_title ?? 'Academias Deportivas' }}
+                        {{ $banner?->banner_title ?? 'ACADEMIAS DEPORTIVAS' }}
                     </h2>                    
                 </div>
             </div>

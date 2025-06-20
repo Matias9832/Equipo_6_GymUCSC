@@ -17,7 +17,7 @@
                         <img src="{{ global_asset($setting->banner_image_path) }}" class="img-fluid" style="max-height: 200px; border-radius: 6px;">
 
                         {{-- Botón eliminar imagen --}}
-                        <form action="{{ route('banner.image.delete') }}" method="POST"
+                        <form action="{{ route('talleres.banner.image.delete') }}" method="POST"
                             onsubmit="return confirm('¿Estás seguro de eliminar esta imagen?');"
                             style="position: absolute; top: 10px; right: 10px; z-index: 10;">
                             @csrf

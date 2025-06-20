@@ -48,6 +48,8 @@ use App\Http\Controllers\AcademySettingController;
 use App\Http\Controllers\AcademiaController;
 use App\Http\Controllers\TalleresNewsController;
 use App\Http\Controllers\TalleresSettingController;
+use App\Http\Controllers\NewsSettingController;
+
 use App\Http\Controllers\TalleresController;
 
 use App\Models\AcademyNews;
@@ -329,6 +331,9 @@ Route::middleware([
             // Noticias
             Route::resource('news', NewsController::class)->except(['index', 'show']);
             Route::post('/news/{id}/toggle-featured', [NewsController::class, 'toggleFeatured'])->name('news.toggleFeatured');
+            Route::get('admin/news-settings/edit', [NewsSettingController::class, 'edit'])->name('newssettings.edit');
+            Route::match(['put', 'post'], '/admin/news-settings/update', [NewsSettingController::class, 'update'])->name('newssettings.update');
+            Route::delete('/admin/news-settings/image', [NewsSettingController::class, 'deleteImage'])->name('news.banner.image.delete');
 
             //Academias
             Route::resource('noticias-academia', AcademyNewsController::class)->except(['index', 'show'])->names('academynews');
@@ -336,14 +341,14 @@ Route::middleware([
             Route::get('admin/academy-settings/edit', [AcademySettingController::class, 'edit'])->name('academysettings.edit');
             Route::match(['put', 'post'], '/admin/academy-settings/update', [AcademySettingController::class, 'update'])->name('academysettings.update');
             Route::resource('academias', AcademiaController::class);
-            Route::delete('/admin/academy-settings/image', [AcademySettingController::class, 'deleteImage'])->name('banner.image.delete');
+            Route::delete('/admin/academy-settings/image', [AcademySettingController::class, 'deleteImage'])->name('academy.banner.image.delete');
 
             // Talleres
             Route::resource('noticias-talleres', TalleresNewsController::class)->except(['index', 'show'])->names('talleresnews');
             Route::post('/newsTalleres/{id}/toggle-featured', [TalleresNewsController::class, 'toggleFeatured'])->name('newsTalleres.toggleFeatured');
             Route::get('admin/talleres-settings/edit', [TalleresSettingController::class, 'edit'])->name('talleressettings.edit');
             Route::match(['put', 'post'], '/admin/talleres-settings/update', [TalleresSettingController::class, 'update'])->name('talleressettings.update');
-            Route::delete('/admin/academy-settings/image', [TalleresSettingController::class, 'deleteImage'])->name('banner.image.delete');
+            Route::delete('/admin/academy-settings/image', [TalleresSettingController::class, 'deleteImage'])->name('talleres.banner.image.delete');
         });
        
 

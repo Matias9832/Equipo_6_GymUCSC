@@ -3,6 +3,38 @@
 @section('content')
     @include('layouts.navbars.guest.navbar')
     <div class="container my-5">
+
+        <div class="position-relative mb-5 overflow-hidden rounded" style="max-height: 600px; max-width: 100%;">
+        <!-- Imagen de fondo -->
+        <img src="{{ global_asset($banner?->banner_image_path ?? url('https://direcciones.ucsc.cl/content/uploads/sites/17/2024/10/extra-desk.png')) }}"
+            class="w-100 h-100 position-absolute top-0 start-0" style="object-fit: cover; z-index: 0;"
+            alt="Banner Noticias">
+
+        <!-- Contenido sobre la imagen -->
+        <div class="position-relative z-1 d-flex align-items-center h-100 ps-5 p-5">
+            <!-- Contenedor del texto con position-relative para posicionar el botón -->
+            <div class="bg-primary bg-opacity-75 text-white p-md-5 rounded shadow position-relative"
+                style="max-width: 650px;">
+
+                <!-- Botón en la esquina superior derecha del card -->
+                @if(Auth::check() && Auth::user()->is_admin)
+                <a href="{{ route('newssettings.edit') }}" class="btn btn-sm text-white bg-info position-absolute"
+                    style="top: 10px; right: 10px; z-index: 2;">
+                    <i class="fas fa-pen-to-square"></i>
+                </a>
+                @endif
+
+                <small class="text-uppercase fw-semibold">
+                    {{ $banner?->banner_subtitle ?? 'Direccion de Apoyo a los Estudiantes' }}
+                </small>
+
+                <h2 class="fw-bold display-flex text-white text-uppercase">
+                    {{ $banner?->banner_title ?? 'Unidad de Deportes y Recreación' }}
+                </h2>
+            </div>
+        </div>
+    </div>
+
         @if ($featuredNews->isNotEmpty())
             <div id="featuredNewsCarousel" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="5000">
                 <div class="carousel-inner">

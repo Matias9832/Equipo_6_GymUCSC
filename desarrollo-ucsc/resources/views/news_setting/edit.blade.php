@@ -1,8 +1,8 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Editar banner de academias'])
-@section('title', 'Editar banner de academias')
+@include('layouts.navbars.auth.topnav', ['title' => 'Editar banner de noticias'])
+@section('title', 'Editar banner de noticias')
     <div class="container-fluid py-4">
         <div class="card">
             <div class="card-body">
@@ -17,7 +17,7 @@
                         <img src="{{ global_asset($setting->banner_image_path) }}" class="img-fluid" style="max-height: 200px; border-radius: 6px;">
 
                         {{-- Botón eliminar imagen --}}
-                        <form action="{{ route('academy.banner.image.delete') }}" method="POST"
+                        <form action="{{ route('news.banner.image.delete') }}" method="POST"
                             onsubmit="return confirm('¿Estás seguro de eliminar esta imagen?');"
                             style="position: absolute; top: 10px; right: 10px; z-index: 10;">
                             @csrf
@@ -32,7 +32,7 @@
 
 
                 {{-- Formulario principal --}}
-                <form action="{{ route('academysettings.update') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('newssettings.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -43,20 +43,20 @@
 
                     <div class="mb-3">
                         <label class="form-label">Subtítulo</label>
-                        <input type="text" name="banner_subtitle" class="form-control"
+                        <input type="text" name="banner_subtitle" class="form-control text-uppercase"
                             value="{{ old('banner_subtitle', $setting->banner_subtitle) }}"
-                            placeholder="Unidad de Deportes y Recreación">
+                            placeholder="Direccion de Apoyo a los Estudiantes">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Título principal</label>
-                        <input type="text" name="banner_title" class="form-control"
+                        <input type="text" name="banner_title" class="form-control text-uppercase"
                             value="{{ old('banner_title', $setting->banner_title) }}"
-                            placeholder="Academias Deportivas">
+                            placeholder="Unidad de Deportes y Recreación">
                     </div>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{{ route('academias.index') }}" class="btn btn-outline-secondary mt-2">Cancelar</a>
+                        <a href="{{ route('news.index') }}" class="btn btn-outline-secondary mt-2">Cancelar</a>
                         <button class="btn btn-primary mt-2">Actualizar</button>
                     </div>
                 </form>

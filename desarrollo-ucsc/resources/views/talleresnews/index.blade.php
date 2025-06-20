@@ -29,7 +29,7 @@
                     {{ $banner?->banner_subtitle ?? 'Unidad de Deportes y Recreación' }}
                 </small>
 
-                <h2 class="fw-bold display-flex text-white">
+                <h2 class="fw-bold display-flex text-white text-uppercase">
                     {{ $banner?->banner_title ?? 'Talleres Extra Programáticos' }}
                 </h2>
             </div>
