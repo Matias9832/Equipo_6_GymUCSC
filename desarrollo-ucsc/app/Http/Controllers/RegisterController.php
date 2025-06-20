@@ -26,16 +26,6 @@ class RegisterController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'correo' => [
-                'required',
-                'email',
-                'unique:usuario,correo_usuario',
-                function ($attribute, $value, $fail) {
-                    if (\DB::table('usuario')->where('correo_usuario', $value)->exists()) {
-                        $fail('El correo ingresado ya está registrado.');
-                    }
-                },
-            ],
             'contraseña' => [
                 'required',
                 'confirmed',
@@ -47,15 +37,13 @@ class RegisterController extends Controller
                 'required',
                 'unique:usuario,rut',
                 function ($attribute, $value, $fail) {
+                    // Verifica que el rut exista en la tabla alumno
                     if (!\DB::table('alumno')->where('rut_alumno', $value)->exists()) {
                         $fail('Ingrese un RUT válido.');
                     }
                 },
             ],
         ], [
-            'correo.required' => 'El campo correo es obligatorio.',
-            'correo.email' => 'El correo debe tener un formato válido.',
-            'correo.unique' => 'El correo ingresado ya está registrado.',
             'contraseña.required' => 'El campo contraseña es obligatorio.',
             'contraseña.confirmed' => 'Las contraseñas no coinciden.',
             'contraseña.min' => 'La contraseña debe tener al menos 8 caracteres.',
@@ -65,10 +53,17 @@ class RegisterController extends Controller
         ]);
 
         try {
+            // Buscar correo en la tabla alumno
+            $alumno = \DB::table('alumno')->where('rut_alumno', $request->rut)->first();
+            if (!$alumno || empty($alumno->correo_alumno)) {
+                return back()->withErrors(['rut' => 'No se encontró correo asociado a este RUT.']);
+            }
+            $correo = $alumno->correo_alumno;
+
             $codigoVerificacion = rand(100000, 999999);
 
             $usuario = Usuario::create([
-                'correo_usuario' => $request->correo,
+                'correo_usuario' => $correo,
                 'contrasenia_usuario' => \Hash::make($request->contraseña),
                 'rut' => $request->rut,
                 'bloqueado_usuario' => 0,
@@ -85,16 +80,15 @@ class RegisterController extends Controller
             session(['verificacion_id_usuario' => $usuario->id_usuario]);
 
             try {
-                \Mail::to($usuario->correo_usuario)->send(new \App\Mail\VerificacionUsuarioMail($usuario->rut, $codigoVerificacion));
+                \Mail::to($correo)->send(new \App\Mail\VerificacionUsuarioMail($usuario->rut, $codigoVerificacion));
             } catch (\Exception $e) {
-                // Si falla el correo, elimina usuario y verificación
                 $usuario->delete();
                 VerificacionUsuario::where('id_usuario', $usuario->id_usuario)->delete();
                 \Log::error('Error al enviar correo de verificación: ' . $e->getMessage());
                 return back()->withErrors(['error' => 'No se pudo enviar el correo de verificación. Intenta nuevamente.']);
             }
 
-            return redirect()->route('verificar.vista')->with('success', 'Se ha enviado un código de verificación a tu correo.');
+            return redirect()->route('verificar.vista')->with('success', 'Se ha enviado un código de verificación a tu correo institucional.');
         } catch (\Exception $e) {
             \Log::error('Error al registrar usuario: ' . $e->getMessage());
             return back()->withErrors(['error' => 'Ocurrió un error al registrar el usuario. Inténtalo nuevamente.']);

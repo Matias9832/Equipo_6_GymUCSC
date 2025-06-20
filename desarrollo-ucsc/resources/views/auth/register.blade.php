@@ -47,9 +47,6 @@
                                     <input type="text" name="rut" class="form-control" placeholder="RUT sin puntos ni dígito verificador" value="{{ old('rut') }}" required>
                                 </div>
                                 <div class="flex flex-col mb-3">
-                                    <input type="email" name="correo" class="form-control" placeholder="Correo electrónico" value="{{ old('correo') }}" required>
-                                </div>
-                                <div class="flex flex-col mb-3">
                                     <input type="password" name="contraseña" class="form-control" placeholder="Contraseña" required>
                                 </div>
                                 <div class="flex flex-col mb-3">
