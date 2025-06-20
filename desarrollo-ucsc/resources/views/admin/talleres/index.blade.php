@@ -53,7 +53,11 @@
                                     @foreach($talleres as $taller)
                                         <tr>
                                             <td>
-                                                <span class="text-xs font-weight-bold ps-3">{{ $taller->nombre_taller }}</span>
+                                                <a href="{{ route('datos-talleres.index', ['taller_id' => $taller->id_taller]) }}"
+                                                    class="text-xs font-weight-bold ps-3"
+                                                    title="Ver datos de este taller">
+                                                    {{ $taller->nombre_taller }}
+                                                </a>
                                             </td>
                                             @can(['Acceso a Gestión de Asistencia Talleres'])               
                                             <td>

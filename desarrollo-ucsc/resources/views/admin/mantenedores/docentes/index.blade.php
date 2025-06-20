@@ -58,7 +58,6 @@
                 ],
                 // Añadimos un cursor-pointer a las filas para indicar que son clickeables
                 createdRow: function(row, data, dataIndex) {
-                    $(row).css('cursor', 'pointer');
                     $(row).addClass('fila-docente');
                     $(row).data('id', data.id_admin); // Guardamos el ID en el data attribute de la fila
                 },
@@ -127,9 +126,10 @@
                     url: `/docentes/perfil/${idDocente}`,
                     method: 'GET',
                     success: function(response) {
-                        $('#card-container').hide().html(response.html).addClass('card-animar').show();
+                        // 1. Oculta el contenedor antes de insertar el HTML
+                        $('#card-container').hide();
 
-                        // --- Transición siempre que sea necesario ---
+                        // 2. Ajusta el layout ANTES de mostrar la card
                         if (!perfilVisible) {
                             if (window.innerWidth < 768) {
                                 // Modo móvil
@@ -142,6 +142,9 @@
                             }
                             perfilVisible = true;
                         }
+
+                        // 3. Ahora sí, inserta el HTML y muestra la card con animación
+                        $('#card-container').html(response.html).addClass('card-animar').show();
                     },
                     error: function() {
                         $('#card-container').html(`<div class="alert alert-danger m-3">Error al cargar perfil del docente.</div>`);
@@ -213,6 +216,14 @@
 
         .card-salir {
             animation: slideOutRight 0.3s ease-in forwards;
+        }
+        .nombre-docente {
+            cursor: pointer;
+            color: #344767;
+            transition: color 0.2s;
+        }
+        .nombre-docente:hover {
+            color: var(--bs-primary) !important;
         }
     </style>
 @endsection

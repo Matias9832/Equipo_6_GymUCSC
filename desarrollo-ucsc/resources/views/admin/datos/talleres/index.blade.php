@@ -57,7 +57,7 @@
                             </div>
 
                             <!-- Botón derecha -->
-                            <a href="{{ route('talleres.index') }}" class="btn btn-secondary mb-1">Ir a talleres</a>
+                            <a href="{{ route('talleres.index') }}" class="btn btn-primary mb-1">Ir a talleres</a>
                         </div>
                     </div>
                 </form>
