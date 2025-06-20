@@ -185,14 +185,15 @@ class DatosTallerController extends Controller
             return $row;
         });
 
-        // Exporta usando Laravel Excel (Collection export)
+        $nombreMes = ucfirst(\Carbon\Carbon::create()->month($mes)->locale('es')->monthName);
+
         if ($tallerId) {
             // Busca el nombre del taller
             $taller = \App\Models\Taller::find($tallerId);
             $nombreTaller = $taller ? $taller->nombre_taller : 'Taller';
-            $fileName = 'Asistencia_' . str_replace(' ', '_', $nombreTaller) . "_{$mes}_{$anio}.xlsx";
+            $fileName = 'Asistencia_' . str_replace(' ', '_', $nombreTaller) . "_{$nombreMes}_{$anio}.xlsx";
         } else {
-            $fileName = "Asistencia_total_Talleres_{$mes}_{$anio}.xlsx";
+            $fileName = "Asistencia_total_Talleres_{$nombreMes}_{$anio}.xlsx";
         }
 
         // Luego en el return:

@@ -30,7 +30,7 @@
                             <select class="form-control" name="mes">
                                 @foreach(range(1,12) as $m)
                                     <option value="{{ sprintf('%02d', $m) }}" {{ $mes == sprintf('%02d', $m) ? 'selected' : '' }}>
-                                        {{ \Carbon\Carbon::create()->month($m)->locale('es')->monthName }}
+                                        {{ ucfirst(\Carbon\Carbon::create()->month($m)->locale('es')->monthName) }}
                                     </option>
                                 @endforeach
                             </select>
