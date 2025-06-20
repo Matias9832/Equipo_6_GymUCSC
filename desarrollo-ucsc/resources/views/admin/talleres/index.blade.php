@@ -10,7 +10,7 @@
                         <h5>Lista de Talleres</h5>
                         <div>
                             <a href="{{ route('talleres.create',['origen' => 'panel'])}}" class="btn btn-primary btn-sm me-3">Registrar Taller</a>
-                            <a href="{{ route('datos-talleres.index') }}" class="btn btn-dark btn-sm"> Ver datos de talleres</a>
+                            <a href="{{ route('datos-talleres.index') }}" class="btn custom-excel-btn btn-sm"> Ver datos de talleres</a>
                         </div>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
@@ -61,7 +61,7 @@
                                                     <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-sm btn-outline-primary px-3" style="margin-bottom: 0rem !important;">
                                                         <i class="fas fa-edit"></i> Registrar asistencia
                                                     </a>
-                                                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-sm btn-outline-dark px-3" style="margin-bottom: 0rem !important;">
+                                                    <a href="{{ route('asistencia.ver', $taller->id_taller) }}" class="btn btn-sm btn-outline-secondary px-3" style="margin-bottom: 0rem !important;">
                                                         <i class="fas fa-eye"></i> Ver asistencia
                                                     </a>
                                                 </div>
@@ -156,3 +156,10 @@
         @include('layouts.footers.auth.footer')
     </div>
 @endsection
+<style>
+    .custom-excel-btn {
+        background-color: rgb(33, 115, 70) !important;
+        color: #fff !important;
+        border: none;
+    }
+</style>

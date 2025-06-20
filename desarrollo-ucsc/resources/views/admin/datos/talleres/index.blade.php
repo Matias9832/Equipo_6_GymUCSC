@@ -30,7 +30,7 @@
                             <select class="form-control" name="mes">
                                 @foreach(range(1,12) as $m)
                                     <option value="{{ sprintf('%02d', $m) }}" {{ $mes == sprintf('%02d', $m) ? 'selected' : '' }}>
-                                        {{ \Carbon\Carbon::create()->month($m)->locale('es')->monthName }}
+                                        {{ ucfirst(\Carbon\Carbon::create()->month($m)->locale('es')->monthName) }}
                                     </option>
                                 @endforeach
                             </select>
@@ -58,7 +58,7 @@
                             </div>
 
                             <!-- Botón derecha -->
-                            <a href="{{ route('talleres.index') }}" class="btn btn-dark mb-1">Ir a talleres</a>
+                            <a href="{{ route('talleres.index') }}" class="btn btn-secondary mb-1">Ir a talleres</a>
                         </div>
                     </div>
                 </form>
@@ -152,7 +152,7 @@
                         </div>
                         <div class="col-4 text-end">
                             <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                                <i class="ni ni-time-alarm text-lg opacity-10" aria-hidden="true"></i>
+                                <i class="ni ni-calendar-grid-58 text-lg opacity-10" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>
@@ -216,7 +216,7 @@
             datasets: [{
                 label: "Cantidad de asistentes",
                 data: [femenino, masculino],
-                backgroundColor: ['#FFB6C1', '#4682B4'],
+                backgroundColor: ['#E83E8C', '	#1E90FF'],
                 borderRadius: 5,
                 barThickness: 50
             }]
@@ -246,7 +246,7 @@
             labels: ["Femenino", "Masculino"],
             datasets: [{
                 data: [femenino, masculino],
-                backgroundColor: ['#FFB6C1', '#4682B4'],
+                backgroundColor: ['#E83E8C', '	#1E90FF'],
                 borderWidth: 1
             }]
         },

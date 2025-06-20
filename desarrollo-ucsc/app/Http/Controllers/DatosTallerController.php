@@ -81,29 +81,39 @@ class DatosTallerController extends Controller
         $rankingCarreras = $rankingCarreras->take(8);
 
         // Gráfico de curva: asistentes por día (solo días con horario de taller)
-        $diasConHorario = [];
+        $curvaDatos = [];
+        $diasNombres = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
         if ($tallerId) {
+            // Solo días con horario de ese taller
             $diasConHorario = HorarioTaller::where('id_taller', $tallerId)
                 ->pluck('dia_taller')
                 ->map(fn($dia) => strtolower($dia))
                 ->unique()
                 ->toArray();
-        }
 
-        $diasMes = [];
-        $curvaDatos = [];
-        $diasNombres = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
-        for ($date = $inicio->copy(); $date->lte($fin); $date->addDay()) {
-            $nombreDia = strtolower($diasNombres[$date->dayOfWeek]);
-            if (in_array($nombreDia, $diasConHorario)) {
-                $diasMes[] = $date->format('Y-m-d');
+            $diasMes = [];
+            for ($date = $inicio->copy(); $date->lte($fin); $date->addDay()) {
+                $nombreDia = strtolower($diasNombres[$date->dayOfWeek]);
+                if (in_array($nombreDia, $diasConHorario)) {
+                    $diasMes[] = $date->format('Y-m-d');
+                }
             }
-        }
-        foreach ($diasMes as $dia) {
-            $curvaDatos[] = [
-                'fecha' => $dia,
-                'cantidad' => $asistenciasFiltradas->where('fecha_asistencia', $dia)->count()
-            ];
+            foreach ($diasMes as $dia) {
+                $curvaDatos[] = [
+                    'fecha' => $dia,
+                    'cantidad' => $asistenciasFiltradas->where('fecha_asistencia', $dia)->count()
+                ];
+            }
+        } else {
+            // TODOS los talleres: muestra todos los días del mes donde hubo al menos una asistencia
+            $diasConAsistencia = $asistenciasFiltradas->pluck('fecha_asistencia')->unique()->sort()->values();
+            foreach ($diasConAsistencia as $dia) {
+                $curvaDatos[] = [
+                    'fecha' => $dia,
+                    'cantidad' => $asistenciasFiltradas->where('fecha_asistencia', $dia)->count()
+                ];
+            }
         }
 
         $talleres = Taller::all();
@@ -142,10 +152,12 @@ class DatosTallerController extends Controller
         $query = DB::table('taller_usuario')
             ->join('usuario', 'usuario.id_usuario', '=', 'taller_usuario.id_usuario')
             ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
+            ->join('talleres', 'talleres.id_taller', '=', 'taller_usuario.id_taller')
+            ->where('taller_usuario.id_taller', $tallerId)
             ->whereBetween('fecha_asistencia', [$inicio->toDateString(), $fin->toDateString()]);
 
         if ($tallerId) {
-            $query->where('id_taller', $tallerId);
+            $query->where('taller_usuario.id_taller', $tallerId);
         }
 
         $asistencias = $query->select(
@@ -154,26 +166,51 @@ class DatosTallerController extends Controller
             DB::raw("CONCAT_WS(' ', alumno.nombre_alumno, alumno.apellido_paterno, alumno.apellido_materno) as nombre"),
             'alumno.carrera',
             'alumno.sexo_alumno',
-            'taller_usuario.fecha_asistencia'
+            'taller_usuario.fecha_asistencia',
+            'talleres.nombre_taller as taller'
         )->get();
 
         // Formatea los datos para el Excel
-        $exportData = $asistencias->map(function ($a) {
-            return [
+        $exportData = $asistencias->map(function ($a) use ($tallerId) {
+            $row = [
                 'RUT' => $a->rut,
                 'Nombre' => $a->nombre,
                 'Carrera' => $a->carrera,
                 'Sexo' => $a->sexo_alumno,
-                'Fecha Asistencia' => Carbon::parse($a->fecha_asistencia)->format('d-m-Y'),
+                'Fecha Asistencia' => \Carbon\Carbon::parse($a->fecha_asistencia)->format('d-m-Y'),
             ];
+            if (!$tallerId) {
+                $row['Taller'] = $a->taller; // Solo si es "Todos"
+            }
+            return $row;
         });
 
-        // Exporta usando Laravel Excel (Collection export)
-        return Excel::download(new class($exportData) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings {
-            private $data;
-            public function __construct($data) { $this->data = $data; }
-            public function collection() { return collect($this->data); }
-            public function headings(): array { return ['RUT', 'Nombre', 'Carrera', 'Sexo', 'Fecha Asistencia']; }
-        }, 'asistencias_taller.xlsx');
+        $nombreMes = ucfirst(\Carbon\Carbon::create()->month($mes)->locale('es')->monthName);
+
+        if ($tallerId) {
+            // Busca el nombre del taller
+            $taller = \App\Models\Taller::find($tallerId);
+            $nombreTaller = $taller ? $taller->nombre_taller : 'Taller';
+            $fileName = 'Asistencia_' . str_replace(' ', '_', $nombreTaller) . "_{$nombreMes}_{$anio}.xlsx";
+        } else {
+            $fileName = "Asistencia_total_Talleres_{$nombreMes}_{$anio}.xlsx";
+        }
+
+        // Luego en el return:
+        return Excel::download(
+            new class($exportData, $tallerId) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings {
+                private $data, $tallerId;
+                public function __construct($data, $tallerId) { $this->data = $data; $this->tallerId = $tallerId; }
+                public function collection() { return collect($this->data); }
+                public function headings(): array {
+                    $headings = ['RUT', 'Nombre', 'Carrera', 'Sexo', 'Fecha Asistencia'];
+                    if (!$this->tallerId) {
+                        $headings[] = 'Taller';
+                    }
+                    return $headings;
+                }
+            },
+            $fileName // <-- aquí va el nombre personalizado
+        );
     }
 }
