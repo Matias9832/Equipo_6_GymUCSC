@@ -401,13 +401,13 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         ),
         'Spatie\\LaravelIgnition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
-            1 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
+            0 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
+            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
         ),
         'Spatie\\Ignition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
-            1 => __DIR__ . '/..' . '/spatie/ignition/src',
+            0 => __DIR__ . '/..' . '/spatie/ignition/src',
+            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
         ),
         'Spatie\\FlareClient\\' => 
         array (
@@ -744,6 +744,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Controllers\\MarcasController' => __DIR__ . '/../..' . '/app/Http/Controllers/MarcasController.php',
         'App\\Http\\Controllers\\NewsController' => __DIR__ . '/../..' . '/app/Http/Controllers/NewsController.php',
         'App\\Http\\Controllers\\NewsImageController' => __DIR__ . '/../..' . '/app/Http/Controllers/NewsImageController.php',
+        'App\\Http\\Controllers\\NewsSettingController' => __DIR__ . '/../..' . '/app/Http/Controllers/NewsSettingController.php',
         'App\\Http\\Controllers\\PageController' => __DIR__ . '/../..' . '/app/Http/Controllers/PageController.php',
         'App\\Http\\Controllers\\PaisController' => __DIR__ . '/../..' . '/app/Http/Controllers/PaisController.php',
         'App\\Http\\Controllers\\RegionController' => __DIR__ . '/../..' . '/app/Http/Controllers/RegionController.php',
@@ -755,6 +756,8 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Controllers\\SaludController' => __DIR__ . '/../..' . '/app/Http/Controllers/SaludController.php',
         'App\\Http\\Controllers\\SucursalController' => __DIR__ . '/../..' . '/app/Http/Controllers/SucursalController.php',
         'App\\Http\\Controllers\\TallerController' => __DIR__ . '/../..' . '/app/Http/Controllers/TallerController.php',
+        'App\\Http\\Controllers\\TalleresNewsController' => __DIR__ . '/../..' . '/app/Http/Controllers/TalleresNewsController.php',
+        'App\\Http\\Controllers\\TalleresSettingController' => __DIR__ . '/../..' . '/app/Http/Controllers/TalleresSettingController.php',
         'App\\Http\\Controllers\\Tenants\\Auth\\LoginTenantController' => __DIR__ . '/../..' . '/app/Http/Controllers/Tenants/Auth/LoginTenantController.php',
         'App\\Http\\Controllers\\Tenants\\EmpresaController' => __DIR__ . '/../..' . '/app/Http/Controllers/Tenants/EmpresaController.php',
         'App\\Http\\Controllers\\Tenants\\InicioController' => __DIR__ . '/../..' . '/app/Http/Controllers/Tenants/InicioController.php',
@@ -806,6 +809,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Models\\Marca' => __DIR__ . '/../..' . '/app/Models/Marca.php',
         'App\\Models\\News' => __DIR__ . '/../..' . '/app/Models/News.php',
         'App\\Models\\NewsImage' => __DIR__ . '/../..' . '/app/Models/NewsImage.php',
+        'App\\Models\\NewsSetting' => __DIR__ . '/../..' . '/app/Models/NewsSetting.php',
         'App\\Models\\Pais' => __DIR__ . '/../..' . '/app/Models/Pais.php',
         'App\\Models\\Partido' => __DIR__ . '/../..' . '/app/Models/Partido.php',
         'App\\Models\\Personalizar' => __DIR__ . '/../..' . '/app/Models/Personalizar.php',
@@ -815,6 +819,9 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Models\\Salud' => __DIR__ . '/../..' . '/app/Models/Salud.php',
         'App\\Models\\Sucursal' => __DIR__ . '/../..' . '/app/Models/Sucursal.php',
         'App\\Models\\Taller' => __DIR__ . '/../..' . '/app/Models/Taller.php',
+        'App\\Models\\TalleresImg' => __DIR__ . '/../..' . '/app/Models/TalleresImg.php',
+        'App\\Models\\TalleresNews' => __DIR__ . '/../..' . '/app/Models/TalleresNews.php',
+        'App\\Models\\TalleresSetting' => __DIR__ . '/../..' . '/app/Models/TalleresSetting.php',
         'App\\Models\\Tenant' => __DIR__ . '/../..' . '/app/Models/Tenant.php',
         'App\\Models\\Tenants\\Color' => __DIR__ . '/../..' . '/app/Models/Tenants/Color.php',
         'App\\Models\\Tenants\\Empresa' => __DIR__ . '/../..' . '/app/Models/Tenants/Empresa.php',
