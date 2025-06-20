@@ -269,3 +269,16 @@
                 </div>
             </div>   
 @endsection
+
+@section('custom-css')
+<style>
+    .accordion .accordion-item .accordion-toggle.collapsed h5{
+        color: black;
+    }
+
+    .accordion .accordion-item .accordion-toggle h5{
+
+        color: var(--bs-primary);
+    }
+</style>
+@endsection

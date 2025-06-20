@@ -3,8 +3,8 @@
 
 <head>
     @php
-        use App\Models\Marca;
-        $ultimaMarca = Marca::orderBy('id_marca', 'desc')->first();
+    use App\Models\Marca;
+    $ultimaMarca = Marca::orderBy('id_marca', 'desc')->first();
     @endphp
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -31,16 +31,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <!-- Se pretende cambiar la fuente a travez de una variable (Cambio por aplicar) -->
-
+    @yield('custom-css')
     @php
-        use App\Models\Tenants\TemaTenant;
+    use App\Models\Tenants\TemaTenant;
 
-        // Se obtiene el tenant actual usando Tenancy
-        $tenant = tenancy()->tenant ?? null;
+    // Se obtiene el tenant actual usando Tenancy
+    $tenant = tenancy()->tenant ?? null;
 
-        $tema = $tenant
-            ? TemaTenant::where('tenant_id', $tenant->id)->first()
-            : null;
+    $tema = $tenant
+    ? TemaTenant::where('tenant_id', $tenant->id)->first()
+    : null;
     @endphp
 
     @include('layouts.colors.tema-css', ['tema' => $tema])
