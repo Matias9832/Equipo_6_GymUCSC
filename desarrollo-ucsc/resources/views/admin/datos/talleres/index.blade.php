@@ -157,7 +157,7 @@
             </div>
             <!-- Gráfico de barras: Asistentes por género -->
             <div class="card z-index-2 mb-4">
-                <div class="card-header pb-0 pt-3 bg-transparent d-flex justify-content-between align-items-center">
+                <div class="card-header pb-0 pt-3 d-flex justify-content-between align-items-center">
                     <div>
                         <h6 class="text-capitalize mb-0">asistencias por género</h6>
                         <p class="text-sm mb-0">
@@ -245,7 +245,7 @@
         options: {
             responsive: true,
             maintainAspectRatio: true,
-            aspectRatio: 1.5,
+            aspectRatio: 2,
             plugins: {
                 legend: { position: 'bottom' }
             }
