@@ -152,6 +152,7 @@ class DatosTallerController extends Controller
         $query = DB::table('taller_usuario')
             ->join('usuario', 'usuario.id_usuario', '=', 'taller_usuario.id_usuario')
             ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
+            ->join('talleres', 'talleres.id_taller', '=', 'taller_usuario.id_taller')
             ->whereBetween('fecha_asistencia', [$inicio->toDateString(), $fin->toDateString()]);
 
         if ($tallerId) {
@@ -164,26 +165,37 @@ class DatosTallerController extends Controller
             DB::raw("CONCAT_WS(' ', alumno.nombre_alumno, alumno.apellido_paterno, alumno.apellido_materno) as nombre"),
             'alumno.carrera',
             'alumno.sexo_alumno',
-            'taller_usuario.fecha_asistencia'
+            'taller_usuario.fecha_asistencia',
+            'talleres.nombre_taller as taller'
         )->get();
 
         // Formatea los datos para el Excel
-        $exportData = $asistencias->map(function ($a) {
-            return [
+        $exportData = $asistencias->map(function ($a) use ($tallerId) {
+            $row = [
                 'RUT' => $a->rut,
                 'Nombre' => $a->nombre,
                 'Carrera' => $a->carrera,
                 'Sexo' => $a->sexo_alumno,
-                'Fecha Asistencia' => Carbon::parse($a->fecha_asistencia)->format('d-m-Y'),
+                'Fecha Asistencia' => \Carbon\Carbon::parse($a->fecha_asistencia)->format('d-m-Y'),
             ];
+            if (!$tallerId) {
+                $row['Taller'] = $a->taller; // Solo si es "Todos"
+            }
+            return $row;
         });
 
         // Exporta usando Laravel Excel (Collection export)
-        return Excel::download(new class($exportData) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings {
-            private $data;
-            public function __construct($data) { $this->data = $data; }
+        return Excel::download(new class($exportData, $tallerId) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings {
+            private $data, $tallerId;
+            public function __construct($data, $tallerId) { $this->data = $data; $this->tallerId = $tallerId; }
             public function collection() { return collect($this->data); }
-            public function headings(): array { return ['RUT', 'Nombre', 'Carrera', 'Sexo', 'Fecha Asistencia']; }
+            public function headings(): array {
+                $headings = ['RUT', 'Nombre', 'Carrera', 'Sexo', 'Fecha Asistencia'];
+                if (!$this->tallerId) {
+                    $headings[] = 'Taller';
+                }
+                return $headings;
+            }
         }, 'asistencias_taller.xlsx');
     }
 }
