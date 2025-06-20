@@ -157,38 +157,43 @@
             </div>
             <!-- Gráfico de barras: Asistentes por género -->
             <div class="card z-index-2 mb-4">
-                <div class="card-header pb-0 pt-3 d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="text-capitalize mb-0">asistencias por género</h6>
-                        <p class="text-sm mb-0">
-                            Femenino: <span class="font-weight-bold text-pink">{{ $porcentajeF }}%</span> /
-                            Masculino: <span class="font-weight-bold text-primary">{{ $porcentajeM }}%</span>
-                        </p>
-                    </div>
-                    <div class="nav-wrapper position-relative">
-                        <ul class="nav nav-pills p-1" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link px-2 py-1 active" data-bs-toggle="tab" href="#barChart" role="tab">Gráfico de Barra</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link px-2 py-1" data-bs-toggle="tab" href="#pieChart" role="tab">Gráfico de Torta</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="card-body p-3">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="barChart">
-                            <canvas id="chart-genero-bar" class="chart-canvas" height="140"></canvas>
+                <div class="card-header pb-0 pt-3">
+                    <div class="row w-100">
+                        <!-- Título y porcentajes: siempre arriba -->
+                        <div class="col-12 col-lg-6 d-flex flex-column justify-content-center">
+                            <h6 class="text-capitalize mb-0">asistencias por género</h6>
+                            <p class="text-sm mb-0">
+                                Femenino: <span class="font-weight-bold text-pink">{{ $porcentajeF }}%</span> /
+                                Masculino: <span class="font-weight-bold text-primary">{{ $porcentajeM }}%</span>
+                            </p>
                         </div>
-                        <div class="tab-pane fade" id="pieChart">
-                            <canvas id="chart-genero-pie" class="chart-canvas" height="140"></canvas>
+                        <!-- Opciones de gráfico: a la derecha en lg, abajo en sm -->
+                        <div class=" col-lg-6 d-flex justify-content-center align-items-center mt-3 mt-lg-0">
+                            <div class="nav-wrapper position-relative">
+                                <ul class="nav nav-pills flex-row gap-2 p-1" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link px-2 py-1 active" data-bs-toggle="tab" href="#barChart" role="tab">Gráfico de Barra</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link px-2 py-1" data-bs-toggle="tab" href="#pieChart" role="tab">Gráfico de Torta</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="barChart">
+                                <canvas id="chart-genero-bar" class="chart-canvas" height="140"></canvas>
+                            </div>
+                            <div class="tab-pane fade" id="pieChart">
+                                <canvas id="chart-genero-pie" class="chart-canvas" height="140"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     @include('layouts.footers.auth.footer')
 </div>
 @endsection
@@ -302,5 +307,11 @@
         background-color: #237346 !important;
         color: #fff !important;
     }
+    @media (max-width: 576px) {
+    .nav-pills .nav-link {
+        font-size: 0.85rem;
+    }
+    }
+
 </style>
 @endpush
