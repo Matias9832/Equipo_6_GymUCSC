@@ -31,6 +31,13 @@
                                     <span class="underline-text"></span>
                                 </a>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link custom-button {{ request()->routeIs('talleresnews.index') ? 'active' : '' }}"
+                                    href="{{ route('talleresnews.index') }}">
+                                    <span class="button-main-text">Talleres Extraprogamaticos</span>
+                                    <span class="underline-text"></span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     <!-- Botones de cuenta -->

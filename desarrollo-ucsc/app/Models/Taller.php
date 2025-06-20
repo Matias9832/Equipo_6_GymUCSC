@@ -39,6 +39,6 @@ class Taller extends Model
     }
     public function espacio()
     {
-        return $this->belongsTo(Espacio::class, 'id_espacio');
+        return $this->belongsTo(Espacio::class, 'id_espacio', 'id_espacio');
     }
 }
