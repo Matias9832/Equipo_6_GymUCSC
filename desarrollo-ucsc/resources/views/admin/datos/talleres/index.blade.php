@@ -51,7 +51,10 @@
                             <!-- Botones izquierda -->
                             <div class="d-flex flex-wrap gap-2 me-auto">
                                 <button type="submit" class="btn btn-primary custom-btn mb-1">Aplicar</button>
-                                <a class="btn custom-excel-btn custom-btn mb-1">Exportar a Excel</a>
+                                <a href="{{ route('datos-talleres.export', ['taller_id' => request('taller_id'), 'mes' => request('mes'), 'anio' => request('anio')]) }}" 
+                                   class="btn custom-excel-btn custom-btn mb-1">
+                                   Exportar a Excel
+                                </a>
                             </div>
 
                             <!-- Botón derecha -->
