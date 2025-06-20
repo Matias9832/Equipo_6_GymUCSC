@@ -83,7 +83,8 @@
     <style>
              /* Encabezados de días con colores */
         .fc-col-header-cell{
-             background-color: #D12421; color: white; 
+             background-color: var(--bs-primary); 
+             color: white; 
         }
 
         .fc-daygrid-day {
@@ -93,12 +94,9 @@
         }
 
         .fc-day-today {
-            background-color: #fef3c7 !important;
-            border: 2px solid #facc15;
-        }
-
-        
-        
+            background-color: #fff7d2 !important;        
+            border: 2px solid #f5e7b1;
+        }      
 
         .fc-toolbar-title {
             color: #1f2937;
@@ -119,25 +117,25 @@
 
         /* Números de los días */
         .fc-daygrid-day-number {
-            color: #000 !important;       /* Negro */
-            text-decoration: none !important; /* Sin subrayado */
+            color: #000 !important;       
+            text-decoration: none !important; 
             font-weight: 500;
         }
 
         /* Nombre de los días */
         .fc-col-header-cell-cushion {
-            color: #fff !important;       /* Ya están con color blanco por fondo */
+            color: #fff !important;       
             text-decoration: none !important;
             font-weight: bold;
         }
           /* Estilo para el texto de los eventos */
         .fc-event-title {
-            color: #000 !important;      /* Negro */
+            color: #000 !important;      
             font-weight: 500;
         }
 
         .fc-event {
-            background-color: #6cdb2b !important; /* fondo suave amarillo */
+            background-color: #daf8c8da !important; 
             border: none;
             padding: 2px 4px;
             border-radius: 6px;
