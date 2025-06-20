@@ -9,6 +9,7 @@ use App\Models\Administrador;
 use App\Models\TalleresImg; 
 use App\Models\Taller; 
 use App\Models\Espacio; 
+
 class TalleresNewsController extends Controller
 {
     public function __construct()
