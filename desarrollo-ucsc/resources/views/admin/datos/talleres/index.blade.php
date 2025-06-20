@@ -5,45 +5,63 @@
 <div class="container-fluid py-4">
     <div class="col-xl-12 mb-4">
         <div class="card">
-            <div class="card-body p-3">
-                <form method="GET" action="{{ route('datos-talleres.index') }}" class="row g-3 align-items-end">
-                    <div class="col-md-4">
-                        <label class="form-label text-uppercase font-weight-bold text-sm">Taller</label>
-                        <select class="form-control" name="taller_id">
-                            <option value="">Todos</option>
-                            @foreach($talleres as $taller)
-                                <option value="{{ $taller->id_taller }}" {{ request('taller_id', $tallerId) == $taller->id_taller ? 'selected' : '' }}>
-                                    {{ $taller->nombre_taller }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label text-uppercase font-weight-bold text-sm">Mes</label>
-                        <select class="form-control" name="mes">
-                            @foreach(range(1,12) as $m)
-                                <option value="{{ sprintf('%02d', $m) }}" {{ $mes == sprintf('%02d', $m) ? 'selected' : '' }}>
-                                    {{ \Carbon\Carbon::create()->month($m)->locale('es')->monthName }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label text-uppercase font-weight-bold text-sm">Año</label>
-                        <select class="form-control" name="anio">
-                            @foreach($anios as $a)
-                                <option value="{{ $a }}" {{ $anio == $a ? 'selected' : '' }}>{{ $a }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary w-100">Aplicar</button>
+            <div class="card-header pb-2">
+                <h5 class="mb-0">Datos de Talleres</h5>
+            </div>
+            <div class="card-body py-2">
+                <form method="GET" action="{{ route('datos-talleres.index') }}">
+                    <div class="row align-items-end gx-3 gy-3">
+                        <!-- Selector de Taller -->
+                        <div class="col-sm-12 col-md-4 col-lg-3 mb-lg-1">
+                            <label class="form-label text-uppercase font-weight-bold text-sm">Taller</label>
+                            <select class="form-control" name="taller_id">
+                                <option value="">Todos</option>
+                                @foreach($talleres as $taller)
+                                    <option value="{{ $taller->id_taller }}" {{ request('taller_id', $tallerId) == $taller->id_taller ? 'selected' : '' }}>
+                                        {{ $taller->nombre_taller }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Mes -->
+                        <div class="col-sm-6 col-md-3 col-lg-2 mb-lg-1">
+                            <label class="form-label text-uppercase font-weight-bold text-sm">Mes</label>
+                            <select class="form-control" name="mes">
+                                @foreach(range(1,12) as $m)
+                                    <option value="{{ sprintf('%02d', $m) }}" {{ $mes == sprintf('%02d', $m) ? 'selected' : '' }}>
+                                        {{ \Carbon\Carbon::create()->month($m)->locale('es')->monthName }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Año -->
+                        <div class="col-sm-6 col-md-3 col-lg-2 mb-lg-1">
+                            <label class="form-label text-uppercase font-weight-bold text-sm">Año</label>
+                            <select class="form-control" name="anio">
+                                @foreach($anios as $a)
+                                    <option value="{{ $a }}" {{ $anio == $a ? 'selected' : '' }}>{{ $a }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="col-12 col-lg d-flex flex-wrap align-items-center gap-2 mt-3">
+                            <!-- Botones izquierda -->
+                            <div class="d-flex flex-wrap gap-2 me-auto">
+                                <button type="submit" class="btn btn-primary custom-btn mb-1">Aplicar</button>
+                                <a class="btn custom-excel-btn custom-btn mb-1">Exportar a Excel</a>
+                            </div>
+
+                            <!-- Botón derecha -->
+                            <a href="{{ route('talleres.index') }}" class="btn btn-secondary mb-1">Ir a talleres</a>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
     <!-- Métricas y gráficos principales -->
     <div class="row">
         <!-- Métrica: Asistentes del Mes -->
@@ -238,4 +256,15 @@
         }
     });
 </script>
+<style>
+    .custom-excel-btn {
+        background-color: rgb(33, 115, 70) !important;
+        color: #fff !important;
+        border: none;
+    }
+    .custom-excel-btn:hover {
+        background-color: #237346 !important;
+        color: #fff !important;
+    }
+</style>
 @endpush
