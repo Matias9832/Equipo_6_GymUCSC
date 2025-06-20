@@ -731,6 +731,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Controllers\\ControlSalasController' => __DIR__ . '/../..' . '/app/Http/Controllers/ControlSalasController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\DatosSalaController' => __DIR__ . '/../..' . '/app/Http/Controllers/DatosSalaController.php',
+        'App\\Http\\Controllers\\DatosTallerController' => __DIR__ . '/../..' . '/app/Http/Controllers/DatosTallerController.php',
         'App\\Http\\Controllers\\DeporteController' => __DIR__ . '/../..' . '/app/Http/Controllers/DeporteController.php',
         'App\\Http\\Controllers\\DocenteController' => __DIR__ . '/../..' . '/app/Http/Controllers/DocenteController.php',
         'App\\Http\\Controllers\\EjercicioController' => __DIR__ . '/../..' . '/app/Http/Controllers/EjercicioController.php',

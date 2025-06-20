@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use App\Models\Taller;
 use App\Models\HorarioTaller;
@@ -128,5 +128,52 @@ class DatosTallerController extends Controller
             'anios' => $anios,
             'curvaDatos' => $curvaDatos,
         ]);
+    }
+    public function exportarExcel(Request $request)
+    {
+        $tallerId = $request->input('taller_id');
+        $mes = $request->input('mes') ?? now()->format('m');
+        $anio = $request->input('anio') ?? now()->format('Y');
+
+        // Reutiliza la lógica de index para obtener los datos filtrados
+        $inicio = Carbon::createFromDate($anio, $mes, 1)->startOfMonth();
+        $fin = Carbon::createFromDate($anio, $mes, 1)->endOfMonth();
+
+        $query = DB::table('taller_usuario')
+            ->join('usuario', 'usuario.id_usuario', '=', 'taller_usuario.id_usuario')
+            ->leftJoin('alumno', 'usuario.rut', '=', 'alumno.rut_alumno')
+            ->whereBetween('fecha_asistencia', [$inicio->toDateString(), $fin->toDateString()]);
+
+        if ($tallerId) {
+            $query->where('id_taller', $tallerId);
+        }
+
+        $asistencias = $query->select(
+            'taller_usuario.id_usuario',
+            'usuario.rut',
+            DB::raw("CONCAT_WS(' ', alumno.nombre_alumno, alumno.apellido_paterno, alumno.apellido_materno) as nombre"),
+            'alumno.carrera',
+            'alumno.sexo_alumno',
+            'taller_usuario.fecha_asistencia'
+        )->get();
+
+        // Formatea los datos para el Excel
+        $exportData = $asistencias->map(function ($a) {
+            return [
+                'RUT' => $a->rut,
+                'Nombre' => $a->nombre,
+                'Carrera' => $a->carrera,
+                'Sexo' => $a->sexo_alumno,
+                'Fecha Asistencia' => Carbon::parse($a->fecha_asistencia)->format('d-m-Y'),
+            ];
+        });
+
+        // Exporta usando Laravel Excel (Collection export)
+        return Excel::download(new class($exportData) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings {
+            private $data;
+            public function __construct($data) { $this->data = $data; }
+            public function collection() { return collect($this->data); }
+            public function headings(): array { return ['RUT', 'Nombre', 'Carrera', 'Sexo', 'Fecha Asistencia']; }
+        }, 'asistencias_taller.xlsx');
     }
 }

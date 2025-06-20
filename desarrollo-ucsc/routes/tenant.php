@@ -378,6 +378,7 @@ Route::middleware([
         // Rutas para la exportación de datos
         Route::get('/datos-salas', [App\Http\Controllers\DatosSalaController::class, 'index'])->name('datos-salas.index');
         Route::get('/datos-talleres', [App\Http\Controllers\DatosTallerController::class, 'index'])->name('datos-talleres.index');
+        Route::get('/datos-talleres/exportar', [App\Http\Controllers\DatosTallerController::class, 'exportarExcel'])->name('datos-talleres.export');
 
     });
 });
