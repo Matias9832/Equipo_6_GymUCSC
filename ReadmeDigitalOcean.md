@@ -3,8 +3,8 @@
 ## Comandos luego de hacer pull (Copiar y pegar en terminal)
 
 php artisan migrate:fresh
-php artisan optimize 
 php artisan db:seed --class=CentralSeeder
+php artisan optimize 
 php artisan config:clear
 php artisan cache:clear
 php artisan config:cache

@@ -70,10 +70,17 @@ class AlumnoController extends Controller
                 // 2. Importar el archivo
                 Excel::import(new AlumnoImport, $request->file('file'));
 
-                // 3. Obtener RUTs de alumnos activos desde el archivo
+                // 3. Actualizar correos de usuario según alumno
+                DB::statement("
+                    UPDATE usuario
+                    INNER JOIN alumno ON usuario.rut = alumno.rut_alumno
+                    SET usuario.correo_usuario = alumno.correo_alumno
+                ");
+
+                // 4. Obtener RUTs de alumnos activos desde el archivo
                 $alumnosActivos = Alumno::where('estado_alumno', 'Activo')->pluck('rut_alumno');
 
-                // 4. Bloquear usuarios relacionados a alumnos que quedaron inactivos
+                // 5. Bloquear usuarios relacionados a alumnos que quedaron inactivos
                 $alumnosInactivos = Alumno::where('estado_alumno', 'Inactivo')->pluck('rut_alumno');
 
                 Usuario::whereIn('rut', $alumnosInactivos)
