@@ -15,11 +15,12 @@ class TallerController extends Controller
         return view('admin.talleres.index', compact('talleres'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $admins = Administrador::all();
         $espacios = Espacio::all();
-        return view('admin.talleres.create', compact('admins', 'espacios'));
+        $origen = $request->query('origen', 'panel');
+        return view('admin.talleres.create', compact('admins', 'espacios', 'origen'));
     }
 
     public function misTalleres()
@@ -29,6 +30,8 @@ class TallerController extends Controller
             ->orderByDesc('taller_usuario.fecha_asistencia')
             ->get()
             ->unique('id_taller');
+        
+        
         return view('usuarios.mis_talleres', compact('talleres'));
     }
 
@@ -89,16 +92,19 @@ class TallerController extends Controller
                 'hora_termino' => $horarioData['hora_termino'],
             ]);
         }
+        $origen = $request->input('origen', 'panel');
 
-        return redirect()->route('talleres.index')->with('success', 'Taller creado correctamente');
+        return redirect()->route($origen === 'noticias' ? 'talleresnews.index' : 'talleres.index')
+                        ->with('success', 'Taller creado correctamente.');
     }
 
-    public function edit(Taller $taller)
+    public function edit(Taller $taller , Request $request)
     {
         $taller->load('horarios');
         $admins = Administrador::all();
         $espacios = Espacio::all();
-        return view('admin.talleres.edit', compact('taller', 'admins','espacios'));
+        $origen = $request->query('origen', 'panel');
+        return view('admin.talleres.edit', compact('taller', 'admins','espacios', 'origen'));
     }
     public function update(Request $request, Taller $taller)
 {
@@ -174,12 +180,18 @@ class TallerController extends Controller
 
     $taller->horarios()->whereNotIn('id', $idsExistenteHorarios)->delete();
 
-    return redirect()->route('talleres.index')->with('success', 'Taller actualizado exitosamente.');
+    $origen = $request->input('origen', 'panel');
+
+    return redirect()->route($origen === 'noticias' ? 'talleresnews.index' : 'talleres.index')
+                     ->with('success', 'Taller actualizado exitosamente.');
 }
 
-    public function destroy(Taller $taller)
+    public function destroy(Taller $taller, Request $request)
     {
         $taller->delete();
-        return redirect()->route('talleres.index')->with('success', 'Taller eliminado correctamente.');
+        $origen = $request->input('origen', 'panel');
+
+        return redirect()->route($origen === 'noticias' ? 'talleresnews.index' : 'talleres.index')
+                        ->with('success', 'Taller actualizado exitosamente.');
     }
 }

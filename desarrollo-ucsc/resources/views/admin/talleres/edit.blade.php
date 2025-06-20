@@ -10,9 +10,11 @@
                     <h5>Editar información del taller</h5>
                 </div>
                 <div class="card-body bg-white">
-                    <form action="{{ route('talleres.update', $taller) }}" method="POST">
+                    <form action="{{ route('talleres.update', $taller->id_taller) }}" method="POST">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="origen" value="{{ $origen }}">
+
                         <div class="mb-3">
                             <label for="nombre_taller" class="form-label">Nombre Taller</label>
                             <input type="text" name="nombre_taller" class="form-control {{ $errors->has('nombre_taller') ? 'is-invalid' : '' }}" value="{{ old('nombre_taller', $taller->nombre_taller) }}" required>
@@ -124,8 +126,10 @@
                         <button type="button" class="btn btn-secondary btn-sm mt-2" id="agregar-horario">+ Añadir Horario</button>
 
                         <div class="d-flex justify-content-end gap-2 mt-4">
+                            <a href="{{ $origen === 'noticias' ? route('talleresnews.index') : route('talleres.index') }}" class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
                             <button type="submit" class="btn btn-primary ">Guardar cambios</button>
-                            <a href="{{ route('talleres.index') }}" class="btn btn-outline-secondary ">Cancelar</a>
                         </div>
                     </form>
                 </div>
