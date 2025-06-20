@@ -58,7 +58,7 @@
                             </div>
 
                             <!-- Botón derecha -->
-                            <a href="{{ route('talleres.index') }}" class="btn btn-secondary mb-1">Ir a talleres</a>
+                            <a href="{{ route('talleres.index') }}" class="btn btn-dark mb-1">Ir a talleres</a>
                         </div>
                     </div>
                 </form>
@@ -216,7 +216,7 @@
             datasets: [{
                 label: "Cantidad de asistentes",
                 data: [femenino, masculino],
-                backgroundColor: ['#f5365c', '#5e72e4'],
+                backgroundColor: ['#FFB6C1', '#4682B4'],
                 borderRadius: 5,
                 barThickness: 50
             }]
@@ -246,7 +246,7 @@
             labels: ["Femenino", "Masculino"],
             datasets: [{
                 data: [femenino, masculino],
-                backgroundColor: ['#f5365c', '#5e72e4'],
+                backgroundColor: ['#FFB6C1', '#4682B4'],
                 borderWidth: 1
             }]
         },
@@ -270,9 +270,9 @@
                 label: "Asistentes por día",
                 data: {!! json_encode(array_column($curvaDatos, 'cantidad')) !!},
                 fill: false,
-                borderColor: '#5e72e4',
+                borderColor: '#218838', 
                 tension: 0.3,
-                pointBackgroundColor: '#f5365c',
+                pointBackgroundColor: '#D12421',
                 pointRadius: 4,
             }]
         },
