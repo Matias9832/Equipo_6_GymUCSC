@@ -234,9 +234,9 @@ Route::middleware([
         Route::middleware(['permission:Acceso al Mantenedor de Torneos'])->group(function () {
             Route::resource('torneos', TorneoController::class);
         });
-        // Route::middleware(['permission:Acceso al Mantenedor de Administradores'])->group(function () {
+        Route::middleware(['permission:Acceso al Mantenedor de Roles'])->group(function () {
             Route::resource('roles', RolesController::class);
-        // });
+        });
         Route::get('/torneos-por-deporte', [EquipoController::class, 'torneosPorDeporte'])->name('torneos.porDeporte');
 
         Route::middleware(['permission:Acceso al Mantenedor de Torneos'])->group(function () {
@@ -385,9 +385,13 @@ Route::middleware([
         Route::delete('/noticias-talleres/image/{id}', [TalleresNewsController::class, 'destroyImage'])->name('newsTalleres.image.destroy');
 
         // Rutas para la exportación de datos
+        Route::middleware(['permission:Datos Salas'])->group(function () {
         Route::get('/datos-salas', [App\Http\Controllers\DatosSalaController::class, 'index'])->name('datos-salas.index');
+        });
+        Route::middleware(['permission:Datos Talleres'])->group(function () {
         Route::get('/datos-talleres', [App\Http\Controllers\DatosTallerController::class, 'index'])->name('datos-talleres.index');
         Route::get('/datos-talleres/exportar', [App\Http\Controllers\DatosTallerController::class, 'exportarExcel'])->name('datos-talleres.export');
+        });
 
     });
 });

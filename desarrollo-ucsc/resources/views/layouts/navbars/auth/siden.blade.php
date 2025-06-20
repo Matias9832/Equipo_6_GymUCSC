@@ -34,13 +34,15 @@
                                         <i class="ni ni-badge text-dark text-sm opacity-10"></i> Administradores
                                     </a>    
                                 </li>
-                            @endcan    
+                            @endcan
+                            @can('Acceso al Mantenedor de Roles')    
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'roles.index' ? 'active' : '' }}"
                                         href="{{ route('roles.index') }}">
                                         <i class="ni ni-watch-time text-dark text-sm opacity-10"></i> Roles
                                     </a>
                                 </li>
+                            @endcan
                             @can('Acceso al Mantenedor de Alumnos')
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::currentRouteName() == 'alumnos.index' ? 'active' : '' }}"
@@ -293,36 +295,42 @@
                     </div>
                 </li>
             @endcanany
-            <li class="nav-item">
-                <a class="nav-link d-flex justify-content-between align-items-center {{ request()->is('datos-salas') ? '' : 'collapsed' }}"
-                    data-bs-toggle="collapse" href="#submenuDatos" role="button" aria-expanded="false"
-                    aria-controls="submenuDatos">
-                    <div class="d-flex align-items-center">
-                        <div class="ps-1">
-                            <i class="ni ni-chart-bar-32 text-dark text-sm opacity-10"></i>
+            @canany(['Datos Salas', 'Datos Talleres'])
+                <li class="nav-item">
+                    <a class="nav-link d-flex justify-content-between align-items-center {{ request()->is('datos-salas') ? '' : 'collapsed' }}"
+                        data-bs-toggle="collapse" href="#submenuDatos" role="button" aria-expanded="false"
+                        aria-controls="submenuDatos">
+                        <div class="d-flex align-items-center">
+                            <div class="ps-1">
+                                <i class="ni ni-chart-bar-32 text-dark text-sm opacity-10"></i>
+                            </div>
+                            <span class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Datos</span>
                         </div>
-                        <span class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Datos</span>
+                    </a>
+                    <div class="collapse {{ request()->is('datos-salas') ? 'show' : '' }}" id="submenuDatos">
+                        <ul class="nav flex-column ms-3">
+                            @can('Datos Salas')
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'datos-salas.index' ? 'active' : '' }}"
+                                        href="{{ route('datos-salas.index') }}">
+                                        <i class="fas fa-chart-line text-dark text-sm opacity-10"></i>
+                                        <span class="nav-link-text ms-1">Datos Salas</span>
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('Datos Talleres')
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::currentRouteName() == 'datos-talleres.index' ? 'active' : '' }}"
+                                        href="{{ route('datos-talleres.index') }}">
+                                        <i class="fas fa-chart-line text-dark text-sm opacity-10"></i>
+                                        <span class="nav-link-text ms-1">Datos Talleres</span>
+                                    </a>
+                                </li>
+                            @endcan
+                        </ul>
                     </div>
-                </a>
-                <div class="collapse {{ request()->is('datos-salas') ? 'show' : '' }}" id="submenuDatos">
-                    <ul class="nav flex-column ms-3">
-                        <li class="nav-item">
-                            <a class="nav-link {{ Route::currentRouteName() == 'datos-salas.index' ? 'active' : '' }}"
-                                href="{{ route('datos-salas.index') }}">
-                                <i class="fas fa-chart-line text-dark text-sm opacity-10"></i>
-                                <span class="nav-link-text ms-1">Datos Salas</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ Route::currentRouteName() == 'datos-talleres.index' ? 'active' : '' }}"
-                                href="{{ route('datos-talleres.index') }}">
-                                <i class="fas fa-chart-line text-dark text-sm opacity-10"></i>
-                                <span class="nav-link-text ms-1">Datos Talleres</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+                </li>
+            @endcanany
 
             {{-- Reportes --}}
             {{-- Otros --}}

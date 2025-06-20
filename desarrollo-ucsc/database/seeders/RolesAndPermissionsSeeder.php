@@ -32,6 +32,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'Acceso al Mantenedor de Ejercicios',
             'Acceso al Mantenedor de Carreras',
 
+            //Acceso al mantenedor de Datos
+            'Datos Salas',
+            'Datos Talleres',
+
             //Acceso a funcionalidades de gestión
             'Acceso a Gestión de QR',
             'Acceso a Gestión de Asistencia Talleres',
@@ -99,6 +103,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'Crear Docentes',
             'Editar Docentes',
             'Eliminar Docentes',
+
+            'Datos Salas',
+            'Datos Talleres',
         ]);
 
         // Asignar permisos específicos al Docente
@@ -114,6 +121,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'Ver Usuarios',
             'Ver Docentes',
             'Crear Noticias',
+
+            'Datos Salas',
+            'Datos Talleres',
         ]);
 
         // Asignar permisos específicos al Coordinador
