@@ -401,13 +401,13 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         ),
         'Spatie\\LaravelIgnition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
-            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
+            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/laravel-ignition',
+            1 => __DIR__ . '/..' . '/spatie/laravel-ignition/src',
         ),
         'Spatie\\Ignition\\' => 
         array (
-            0 => __DIR__ . '/..' . '/spatie/ignition/src',
-            1 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
+            0 => __DIR__ . '/..' . '/spatie/error-solutions/legacy/ignition',
+            1 => __DIR__ . '/..' . '/spatie/ignition/src',
         ),
         'Spatie\\FlareClient\\' => 
         array (
@@ -718,6 +718,9 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
     public static $classMap = array (
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Http\\Controllers\\AcademiaController' => __DIR__ . '/../..' . '/app/Http/Controllers/AcademiaController.php',
+        'App\\Http\\Controllers\\AcademyNewsController' => __DIR__ . '/../..' . '/app/Http/Controllers/AcademyNewsController.php',
+        'App\\Http\\Controllers\\AcademySettingController' => __DIR__ . '/../..' . '/app/Http/Controllers/AcademySettingController.php',
         'App\\Http\\Controllers\\ActividadController' => __DIR__ . '/../..' . '/app/Http/Controllers/ActividadController.php',
         'App\\Http\\Controllers\\AdministradorController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdministradorController.php',
         'App\\Http\\Controllers\\AlumnoController' => __DIR__ . '/../..' . '/app/Http/Controllers/AlumnoController.php',
@@ -734,6 +737,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Http\\Controllers\\EquipoController' => __DIR__ . '/../..' . '/app/Http/Controllers/EquipoController.php',
         'App\\Http\\Controllers\\EspacioController' => __DIR__ . '/../..' . '/app/Http/Controllers/EspacioController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'App\\Http\\Controllers\\HorarioAcademiaController' => __DIR__ . '/../..' . '/app/Http/Controllers/HorarioAcademiaController.php',
         'App\\Http\\Controllers\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/LoginController.php',
         'App\\Http\\Controllers\\MaquinaController' => __DIR__ . '/../..' . '/app/Http/Controllers/MaquinaController.php',
         'App\\Http\\Controllers\\MarcasController' => __DIR__ . '/../..' . '/app/Http/Controllers/MarcasController.php',
@@ -781,6 +785,10 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Jobs\\SeedDatabase' => __DIR__ . '/../..' . '/app/Jobs/SeedDatabase.php',
         'App\\Mail\\AdministradorPasswordMail' => __DIR__ . '/../..' . '/app/Mail/AdministradorPasswordMail.php',
         'App\\Mail\\VerificacionUsuarioMail' => __DIR__ . '/../..' . '/app/Mail/VerificacionUsuarioMail.php',
+        'App\\Models\\Academia' => __DIR__ . '/../..' . '/app/Models/Academia.php',
+        'App\\Models\\AcademyImg' => __DIR__ . '/../..' . '/app/Models/AcademyImg.php',
+        'App\\Models\\AcademyNews' => __DIR__ . '/../..' . '/app/Models/AcademyNews.php',
+        'App\\Models\\AcademySetting' => __DIR__ . '/../..' . '/app/Models/AcademySetting.php',
         'App\\Models\\Administrador' => __DIR__ . '/../..' . '/app/Models/Administrador.php',
         'App\\Models\\Alumno' => __DIR__ . '/../..' . '/app/Models/Alumno.php',
         'App\\Models\\Carrera' => __DIR__ . '/../..' . '/app/Models/Carrera.php',
@@ -790,6 +798,7 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'App\\Models\\EjercicioRutina' => __DIR__ . '/../..' . '/app/Models/EjercicioRutina.php',
         'App\\Models\\Equipo' => __DIR__ . '/../..' . '/app/Models/Equipo.php',
         'App\\Models\\Espacio' => __DIR__ . '/../..' . '/app/Models/Espacio.php',
+        'App\\Models\\HorarioAcademia' => __DIR__ . '/../..' . '/app/Models/HorarioAcademia.php',
         'App\\Models\\HorarioTaller' => __DIR__ . '/../..' . '/app/Models/HorarioTaller.php',
         'App\\Models\\Ingreso' => __DIR__ . '/../..' . '/app/Models/Ingreso.php',
         'App\\Models\\Maquina' => __DIR__ . '/../..' . '/app/Models/Maquina.php',
@@ -1044,8 +1053,8 @@ class ComposerStaticInitbfe12996eeecb6fdc8713a9fd9d431f8
         'Database\\Seeders\\AdminSucursalSeeder' => __DIR__ . '/../..' . '/database/seeders/AdminSucursalSeeder.php',
         'Database\\Seeders\\AdministradorSeeder' => __DIR__ . '/../..' . '/database/seeders/AdministradorSeeder.php',
         'Database\\Seeders\\AlumnoSeeder' => __DIR__ . '/../..' . '/database/seeders/AlumnoSeeder.php',
-        'Database\\Seeders\\Cargar\\CargarIngresos' => __DIR__ . '/../..' . '/database/seeders/Cargar/CargarIngresos.php',
-        'Database\\Seeders\\Cargar\\CargarUsuarios' => __DIR__ . '/../..' . '/database/seeders/Cargar/CargarUsuarios.php',
+        'Database\\Seeders\\CargarIngresoSeeder' => __DIR__ . '/../..' . '/database/seeders/CargarIngresoSeeder.php',
+        'Database\\Seeders\\CargarUsuarioSeeder' => __DIR__ . '/../..' . '/database/seeders/CargarUsuarioSeeder.php',
         'Database\\Seeders\\CentralSeeder' => __DIR__ . '/../..' . '/database/seeders/CentralSeeder.php',
         'Database\\Seeders\\DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeders/DatabaseSeeder.php',
         'Database\\Seeders\\DeporteSeeder' => __DIR__ . '/../..' . '/database/seeders/DeporteSeeder.php',

@@ -64,8 +64,8 @@
                             <table id="tablaAlumnos" class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">RUT
-                                        </th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            RUT</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Apellidos</th>
@@ -75,6 +75,9 @@
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Carrera</th>
+                                        <th 
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Correo</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Sexo</th>
@@ -103,6 +106,7 @@
                     { data: 'apellidos', name: 'apellido_paterno', className: 'text-xs font-weight-bold mb-0' },
                     { data: 'nombre_alumno', name: 'nombre_alumno', className: 'text-xs font-weight-bold mb-0' },
                     { data: 'carrera_html', name: 'carrera', className: 'text-xs font-weight-bold mb-0' },
+                    { data: 'correo_alumno', name: 'correo_alumno', className: 'text-xs font-weight-bold mb-0' },
                     { data: 'sexo_html', name: 'sexo_alumno', className: '' },
                     { data: 'estado_html', name: 'estado_alumno', orderable: false, className: 'align-middle text-center text-sm' },
                 ],

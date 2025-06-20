@@ -36,6 +36,9 @@
                                             Espacio</th>    
                                         <th 
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Restricciones</th>    
+                                        <th 
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Profesor encargado</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -91,6 +94,13 @@
                                             </td>
                                             <td>
                                                 <span class="text-xs">{{ $taller->espacio->nombre_espacio ?? 'Sin asignar' }}</span>
+                                            </td>
+                                            <td>
+                                                @if($taller->restricciones_taller)
+                                                    <span class="text-xs">{{ $taller->restricciones_taller}}</span>
+                                                @else
+                                                    <span class="text-xs text-muted">Sin restricciones</span>
+                                                @endif
                                             </td>
                                             <td>
                                                 @if($taller->administrador)

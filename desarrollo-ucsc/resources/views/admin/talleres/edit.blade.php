@@ -38,6 +38,12 @@
                         </div>
 
                         <div class="mb-3">
+                                <label for="restricciones_taller" class="form-label">Restricciones</label>
+                                <textarea name="restricciones_taller" placeholder="Restricciones para participar en el taller (opcional)" value="{{ old('restricciones_taller', $taller->restricciones_taller) }}"
+                                class="form-control {{ $errors->has('restricciones_taller') ? 'is-invalid' : '' }}" rows="3">{{ old('restricciones_taller', $taller->restricciones_taller) }}</textarea>
+                            </div>
+
+                        <div class="mb-3">
                             <label for="id_admin" class="form-label">Profesor asignado</label>
                             <select name="id_admin" class="form-select {{ $errors->has('id_admin') ? 'is-invalid' : '' }}">
                                 <option value="">-- Sin asignar --</option>

@@ -1,75 +1,77 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
-@section('title', 'Editar Equipo')
-
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Editar Equipo'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Equipos'])
 
 <div class="container-fluid py-4">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="mb-4">Editar Equipo: <strong>{{ $equipo->nombre_equipo }}</strong></h5>
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="mb-4">Editar información del equipo: <strong>{{ $equipo->nombre_equipo }}</strong></h5>
 
-            @if($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+                    @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
-            <form action="{{ route('equipos.update', $equipo->id) }}" method="POST" id="equipo-form">
-                @csrf
-                @method('PUT')
+                    <form action="{{ route('equipos.update', $equipo->id) }}" method="POST" id="equipo-form">
+                        @csrf
+                        @method('PUT')
 
-                <div class="mb-3">
-                    <label for="nombre_equipo" class="form-label">Nombre del Equipo</label>
-                    <input type="text" name="nombre_equipo" id="nombre_equipo" class="form-control" required value="{{ old('nombre_equipo', $equipo->nombre_equipo) }}">
-                </div>
+                        <div class="mb-3">
+                            <h6>Nombre del equipo</h6>
+                            <input type="text" name="nombre_equipo" id="nombre_equipo" class="form-control" required value="{{ old('nombre_equipo', $equipo->nombre_equipo) }}">
+                        </div>
 
-                <div class="mb-4">
-                    <h6>Integrantes <small class="text-muted">(Máx: {{ $deporte->jugadores_por_equipo }})</small></h6>
-                    <div id="integrantes-container">
-                        {{-- Capitán (no editable ni eliminable) --}}
-                        @if($equipo->capitan)
-                            <div class="row g-2 align-items-end integrante-item mb-2">
-                                <div class="col-md-10">
-                                    <select class="form-select" disabled style="width:100%">
-                                        <option selected>{{ $equipo->capitan->rut }} - {{ $equipo->capitan->nombre }}</option>
-                                    </select>
-                                    <input type="hidden" name="usuarios[]" value="{{ $equipo->capitan->id_usuario }}">
-                                </div>
-                                <div class="col-md-2">
-                                    <span class="badge bg-primary w-100">Capitán</span>
-                                </div>
+                        <div class="mb-4">
+                            <h6>Integrantes <small class="text-muted">(Máx: {{ $deporte->jugadores_por_equipo }})</small></h6>
+                            <div id="integrantes-container">
+                                {{-- Capitán (no editable ni eliminable) --}}
+                                @if($equipo->capitan)
+                                    <div class="row g-2 align-items-end integrante-item mb-2">
+                                        <div class="col-md-10">
+                                            <select class="form-select" disabled style="width:100%">
+                                                <option selected>{{ $equipo->capitan->rut }} - {{ $equipo->capitan->nombre }}</option>
+                                            </select>
+                                            <input type="hidden" name="usuarios[]" value="{{ $equipo->capitan->id_usuario }}">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <span class="badge bg-primary w-100">Capitán</span>
+                                        </div>
+                                    </div>
+                                @endif
+                                {{-- Integrantes editables --}}
+                                @foreach($equipo->usuarios->where('id_usuario', '!=', optional($equipo->capitan)->id_usuario) as $usuario)
+                                    <div class="row g-2 align-items-end integrante-item mb-2">
+                                        <div class="col-md-10">
+                                            <select name="usuarios[]" class="form-select integrante-select" required style="width:100%">
+                                                <option value="{{ $usuario->id_usuario }}" selected>{{ $usuario->rut }} - {{ $usuario->nombre }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-danger btn-sm remove-integrante">Eliminar</button>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
-                        @endif
-                        {{-- Integrantes editables --}}
-                        @foreach($equipo->usuarios->where('id_usuario', '!=', optional($equipo->capitan)->id_usuario) as $usuario)
-                            <div class="row g-2 align-items-end integrante-item mb-2">
-                                <div class="col-md-10">
-                                    <select name="usuarios[]" class="form-select integrante-select" required style="width:100%">
-                                        <option value="{{ $usuario->id_usuario }}" selected>{{ $usuario->rut }} - {{ $usuario->nombre }}</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="button" class="btn btn-danger btn-sm remove-integrante">Eliminar</button>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <button type="button" class="btn btn-secondary mb-3" id="agregar-integrante">+ Añadir Integrante</button>
+                            <button type="button" class="btn btn-secondary mb-3" id="agregar-integrante">+ Añadir Integrante</button>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4">    
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            <a href="{{ route('equipos.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
                 </div>
-
-                <button type="submit" class="btn btn-success">Guardar Cambios</button>
-                <a href="{{ route('equipos.index') }}" class="btn btn-secondary">Cancelar</a>
-            </form>
+            </div>
         </div>
     </div>
 </div>
-
 {{-- Plantilla oculta para integrantes --}}
 <div id="integrante-template" style="display:none;">
     <div class="row g-2 align-items-end integrante-item mb-2">

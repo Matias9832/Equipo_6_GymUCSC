@@ -17,7 +17,7 @@
                     <div class="card-body">
                         @cannot(['Acceso a Salas Abiertas'])
                         <form action="{{ route('control-salas.generarQR') }}" method="POST"
-                            class="d-flex flex-wrap gap-2 align-items-end">
+                             target="_blank" class="d-flex flex-wrap gap-2 align-items-end">
                             @csrf
 
                             {{-- Sala --}}
@@ -74,7 +74,7 @@
                                                                             </td>
                                                                             <td>
                                                                                 <a href="{{ route('control-salas.verQR', ['id_sala' => $sala->id_sala, 'aforo_qr' => $sala->aforo_qr]) }}"
-                                                                                    class="btn btn-primary btn-sm">
+                                                                                    target="_blank" class="btn btn-primary btn-sm">
                                                                                     Ver QR
                                                                                 </a>
 

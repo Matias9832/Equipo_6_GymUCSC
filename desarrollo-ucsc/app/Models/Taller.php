@@ -16,6 +16,7 @@ class Taller extends Model
         'nombre_taller',
         'descripcion_taller',
         'cupos_taller',
+        'restricciones_taller',
         'indicaciones_taller',
         'activo_taller',
         'id_admin',

@@ -354,9 +354,11 @@ Route::middleware([
 
         // Eliminar imagen de noticia
         Route::delete('/news/image/{id}', [App\Http\Controllers\NewsImageController::class, 'destroy'])->name('news.image.destroy');
-
-        Route::get('/datos-salas', [App\Http\Controllers\DatosSalaController::class, 'index'])->name('datos-salas.index');
         Route::delete('/noticias-academia/image/{id}', [AcademyNewsController::class, 'destroyImage'])->name('newsAcademy.image.destroy');
+
+        // Rutas para la exportación de datos
+        Route::get('/datos-salas', [App\Http\Controllers\DatosSalaController::class, 'index'])->name('datos-salas.index');
+        Route::get('/datos-talleres', [App\Http\Controllers\DatosTallerController::class, 'index'])->name('datos-talleres.index');
 
     });
 });

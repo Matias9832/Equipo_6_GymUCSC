@@ -6,14 +6,14 @@ Todos los migrations de la pagina web se movieron de migrations/ a migrations/te
 
 ## URL para acceder a la creación de tenants
 
-Abre en tu navegador la siguiente dirección:
+Abre en tu navegador la siguiente dirección: ff
 http://ugym.local:8000/tenants
 
 ---
 
 ## Seeder principal para la pagina de creación de Tenants
 
-> php artisan db:seed --class=CentralSeeder
+php artisan db:seed --class=CentralSeeder
 
 ## Configuración necesaria en el archivo hosts (Windows)
 

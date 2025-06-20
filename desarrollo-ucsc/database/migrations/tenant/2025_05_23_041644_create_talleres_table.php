@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('nombre_taller', 100);
             $table->text('descripcion_taller');
             $table->integer('cupos_taller');
+            $table->text('restricciones_taller')->nullable();
             $table->text('indicaciones_taller')->nullable();
             $table->boolean('activo_taller')->default(true);
             $table->unsignedBigInteger('id_admin')->nullable();
