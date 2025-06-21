@@ -1,5 +1,15 @@
 @extends('layouts.app')
 
+@php
+    use App\Models\Marca;
+    $ultimaMarca = Marca::orderBy('id_marca', 'desc')->first();
+    if ($ultimaMarca->nombre_marca == 'UCSC') {
+        $backgroundImage = 'https://sitios.ucsc.cl/dsi/wp-content/uploads/sites/63/2022/08/gestion-institucional-ucsc.jpg';
+    } else {
+        $backgroundImage = url('/img/imagenes_predeterminadas/Fondo_general1.jpg');
+    }
+@endphp
+
 @section('content')
     @include('layouts.navbars.guest.navbar')
     <main class="main-content  mt-0">
@@ -55,8 +65,7 @@
                         <div
                             class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
                             <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden"
-                                style="background-image: url('https://sitios.ucsc.cl/dsi/wp-content/uploads/sites/63/2022/08/gestion-institucional-ucsc.jpg');
-              background-size: cover;">
+                                style="background-image: url('{{ $backgroundImage }}'); background-size: cover;">
                                 <span class="mask bg-gradient-primary opacity-2"></span>
                                 <h4 class="mt-5 text-white font-weight-bolder position-relative">Somos una comunidad en movimiento</h4>
                                 <p class="text-white position-relative">Unimos deporte, talleres y gestión en una plataforma pensada para todos.</p>

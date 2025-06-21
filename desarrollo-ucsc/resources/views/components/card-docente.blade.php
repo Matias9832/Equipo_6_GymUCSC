@@ -1,8 +1,18 @@
+@php
+    use App\Models\Marca;
+    $ultimaMarca = Marca::orderBy('id_marca', 'desc')->first();
+    if ($ultimaMarca->nombre_marca == 'UCSC') {
+        $backgroundImage = '/img/gym/foto-gimnasio.jpeg';
+    } else {
+        $backgroundImage = url('/img/imagenes_predeterminadas/Fondo_general2.jpg');
+    }
+@endphp
+
 <div class="card card-profile">
     <div class="d-flex justify-content-end">
         <button type="button" class="btn-close btn-cerrar-card" aria-label="Cerrar" id="cerrar-perfil-docente" style="position: absolute; top: 10px; right: 10px;">&times;</button>
     </div>
-    <img src="/img/gym/foto-gimnasio.jpeg" alt="Image placeholder" class="card-img-top">
+    <img src="{{url($backgroundImage)}}" alt="Image placeholder" class="card-img-top">
     <div class="d-flex justify-content-center mt-n6">
         <div class="avatar position-relative mt-n6" style="width: 150px; height: 150px;">
             <img src="{{ url('img/perfiles/' . ($foto ?? 'default.png')) }}"
