@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Ingreso;
 use App\Models\Sala;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
 
 class DatosSalaController extends Controller
 {
@@ -77,6 +79,70 @@ class DatosSalaController extends Controller
             'desde' => $desde,
             'hasta' => $hasta,
         ]);
+    }
+
+    public function exportarExcel(Request $request)
+    {
+        $salaId = $request->input('sala_id');
+        $desde = $request->input('desde') ?? Carbon::now()->startOfMonth()->toDateString();
+        $hasta = $request->input('hasta') ?? Carbon::now()->endOfMonth()->toDateString();
+
+        $inicio = Carbon::parse($desde)->startOfDay();
+        $fin = Carbon::parse($hasta)->endOfDay();
+
+        $query = Ingreso::whereBetween('fecha_ingreso', [$inicio, $fin])
+            ->whereNotNull('hora_salida');
+
+        if ($salaId) {
+            $query->where('id_sala', $salaId);
+        }
+
+        $ingresos = $query->with('usuario.alumno')->get();
+
+        $exportData = $ingresos->map(function ($ingreso) {
+            $alumno = $ingreso->usuario->alumno ?? null;
+
+            return [
+                'Sala' => $ingreso->sala->nombre_sala ?? 'N/A',
+                'Fecha Ingreso' => Carbon::parse($ingreso->fecha_ingreso)->format('d-m-Y'),
+                'Hora Ingreso' => $ingreso->hora_ingreso,
+                'Hora Salida' => $ingreso->hora_salida,
+                'Tiempo de Uso (minutos)' => $ingreso->tiempo_uso,
+                'Rut' => $ingreso->usuario->rut ?? '',
+                'Nombre Completo' => $alumno ? trim("{$alumno->nombre_alumno} {$alumno->apellido_paterno} {$alumno->apellido_materno}") : '',
+                'Carrera' => $alumno->carrera ?? '',
+                'Sexo' => $alumno->sexo_alumno ?? '',
+            ];
+        });
+
+        return Excel::download(new class ($exportData) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings {
+            private $data;
+
+            public function __construct($data)
+            {
+                $this->data = $data;
+            }
+
+            public function collection()
+            {
+                return collect($this->data);
+            }
+
+            public function headings(): array
+            {
+                return [
+                    'Sala',
+                    'Fecha Ingreso',
+                    'Hora Ingreso',
+                    'Hora Salida',
+                    'Tiempo de Uso (minutos)',
+                    'Rut',
+                    'Nombre Completo',
+                    'Carrera',
+                    'Sexo',
+                ];
+            }
+        }, 'ingresos_salas_' . $desde . '_a_' . $hasta . '.xlsx');
     }
 
 }
