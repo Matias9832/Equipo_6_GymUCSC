@@ -158,6 +158,9 @@ Route::middleware([
         Route::post('/sala/salida', [ControlSalasController::class, 'registrarSalida'])->name('sala.registrarSalida');
         Route::match(['get', 'post'], '/ingreso/actual', [ControlSalasController::class, 'mostrarIngreso'])->name('ingreso.mostrar');
 
+        // Estado del usuario en la sala (para notificaciones)
+        Route::get('/estado-usuario', [ControlSalasController::class, 'estadoUsuario'])->middleware('auth');
+
         // Perfil usuario
         Route::get('/edit-perfil', [LoginController::class, 'editProfile'])->name('edit-perfil.edit');
         Route::post('/edit-perfil', [LoginController::class, 'updateProfile'])->name('edit-perfil.update');
@@ -382,7 +385,7 @@ Route::middleware([
             Route::post('control-salas/cerrar-sala', [ControlSalasController::class, 'cerrarSala'])->name('admin.control-salas.cerrar_sala');
             Route::post('/control-salas/sacar-usuario', [ControlSalasController::class, 'sacarUsuario'])->name('admin.control-salas.sacar_usuario');
             Route::get('control-salas/ver-usuarios/{id_sala}', [ControlSalasController::class, 'verUsuarios'])->name('admin.control-salas.ver_usuarios');
-            Route::get('/estado-usuario', [SalaController::class, 'estadoUsuario'])->middleware('auth');
+            //Route::get('/estado-usuario', [SalaController::class, 'estadoUsuario'])->middleware('auth');
 
         });
 
