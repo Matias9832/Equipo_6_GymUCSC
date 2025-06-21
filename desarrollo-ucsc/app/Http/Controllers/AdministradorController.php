@@ -45,8 +45,8 @@ class AdministradorController extends Controller
         return DataTables::of($query)
             ->editColumn('correo_usuario', fn($admin) => $admin->correo_usuario ?? '-')
             ->editColumn('nombre_admin', function ($admin) {
-                    return '<span class="text-dark nombre-administrador" data-id="' . $admin->id_admin . '" style="cursor:pointer;">' . e($admin->nombre_admin) . '</span>';
-                })
+                return '<span class="nombre-administrador" data-id="' . $admin->id_admin . '" style="cursor:pointer;">' . e($admin->nombre_admin) . '</span>';
+            })
             ->editColumn('rol_name', function ($admin) {
                 $rolText = $admin->rol_name ?? 'Sin rol';
                 return '<span class="badge badge-sm bg-gradient-info" style="width: 150px !important;">' . e($rolText) . '</span>';

@@ -15,7 +15,7 @@
                         <div class="col-sm-12 col-md-4 col-lg-3 mb-lg-1">
                             <label class="form-label text-uppercase font-weight-bold text-sm">Taller</label>
                             <select class="form-control" name="taller_id">
-                                <option value="">Todos</option>
+                                <option value="">Todos los talleres</option>
                                 @foreach($talleres as $taller)
                                     <option value="{{ $taller->id_taller }}" {{ request('taller_id', $tallerId) == $taller->id_taller ? 'selected' : '' }}>
                                         {{ $taller->nombre_taller }}
@@ -50,7 +50,6 @@
                         <div class="col-12 col-lg d-flex flex-wrap align-items-center gap-2 mt-3">
                             <!-- Botones izquierda -->
                             <div class="d-flex flex-wrap gap-2 me-auto">
-                                <button type="submit" class="btn btn-primary custom-btn mb-1">Aplicar</button>
                                 <a href="{{ route('datos-talleres.export', ['taller_id' => request('taller_id'), 'mes' => request('mes'), 'anio' => request('anio')]) }}" 
                                    class="btn custom-excel-btn custom-btn mb-1">
                                    Exportar a Excel
@@ -58,7 +57,7 @@
                             </div>
 
                             <!-- Botón derecha -->
-                            <a href="{{ route('talleres.index') }}" class="btn btn-secondary mb-1">Ir a talleres</a>
+                            <a href="{{ route('talleres.index') }}" class="btn btn-primary mb-1">Ir a talleres</a>
                         </div>
                     </div>
                 </form>
@@ -204,8 +203,20 @@
 @push('js')
 <script src="{{ url('/assets/js/plugins/chartjs.min.js') }}"></script>
 <script>
+    //Ajax para actualizar el formulario al cambiar los select
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('form[action="{{ route('datos-talleres.index') }}"]');
+        if (form) {
+            form.querySelectorAll('select[name="taller_id"], select[name="mes"], select[name="anio"]').forEach(function(select) {
+                select.addEventListener('change', function() {
+                    form.submit();
+                });
+            });
+        }
+    });
+
     // Gráfico de barras por género
-     const femenino = {{ $femenino }};
+    const femenino = {{ $femenino }};
     const masculino = {{ $masculino }};
 
     const ctxBar = document.getElementById("chart-genero-bar").getContext("2d");

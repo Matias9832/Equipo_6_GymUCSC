@@ -14,6 +14,40 @@
                         <img src="{{ url($ultimaMarca->logo_marca) }}" alt="Logo Marca" style="height: 30px;"
                             class="me-2">
                     </a>
+                    <!-- Botones de navegación -->
+                    <div class="d-flex align-items-center flex-wrap overflow-auto" >
+                        <ul class="nav nav-tabs custom-tab-buttons" role="tablist">
+                            <li class="nav-item" role="presentation" >
+                                <a class="nav-link custom-button {{ request()->routeIs('welcome') ? 'active' : '' }}"
+                                href="{{ route('welcome') }}">
+                                    <span class="button-main-text">Inicio</span>
+                                    <span class="underline-text"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link custom-button {{ request()->routeIs('academynews.index') ? 'active' : '' }}"
+                                href="{{ route('academynews.index') }}">
+                                    <span class="button-main-text">Academia Deportiva</span>
+                                    <span class="underline-text"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link custom-button {{ request()->routeIs('talleresnews.index') ? 'active' : '' }}"
+                                    href="{{ route('talleresnews.index') }}">
+                                    <span class="button-main-text">Talleres Extraprogamaticos</span>
+                                    <span class="underline-text"></span>
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link custom-button {{ request()->routeIs('quienes-somos.index') ? 'active' : '' }}"
+                                    href="{{ route('quienes-somos.index') }}">
+                                    <span class="button-main-text">Quiénes Somos</span>
+                                    <span class="underline-text"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Botones de cuenta -->
                     <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false"
                         aria-label="Toggle navigation">

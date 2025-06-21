@@ -119,6 +119,7 @@
             $('#card-container').on('click', '.btn-cerrar-card', function () {
                 cerrarCard();
             });
+            // Evento de clic en una fila de la tabla
             $('#tabla-administradores tbody').on('click', '.nombre-administrador', function (e) {
                 const idDocente = $(this).data('id');
                 const url = `{{ url('/administradores/perfil') }}/${idDocente}`;
@@ -141,22 +142,28 @@
                     url: `/docentes/perfil/${idDocente}`,
                     method: 'GET',
                     success: function(response) {
-                        $('#card-container').hide().html(response.html).addClass('card-animar').show();
+                    // 1. Oculta el card-container y limpia su contenido
+                    $('#card-container').hide().html('');
 
-                        // --- Transición siempre que sea necesario ---
-                        if (!perfilVisible) {
-                            if (window.innerWidth < 768) {
-                                // Modo móvil
-                                $('#columna-tabla').hide();
-                                $('#columna-perfil').removeClass('col-4').addClass('col-12').show();
-                            } else {
-                                // Modo escritorio
-                                $('#columna-tabla').removeClass('col-12').addClass('col-8');
-                                $('#columna-perfil').removeClass('col-12').addClass('col-4').show();
-                            }
-                            perfilVisible = true;
+                    // 2. Ajusta el layout ANTES de mostrar la card
+                    if (!perfilVisible) {
+                        if (window.innerWidth < 768) {
+                            // Modo móvil
+                            $('#columna-tabla').hide();
+                            $('#columna-perfil').removeClass('col-4').addClass('col-12').show();
+                        } else {
+                            // Modo escritorio
+                            $('#columna-tabla').removeClass('col-12').addClass('col-8');
+                            $('#columna-perfil').removeClass('col-12').addClass('col-4').show();
                         }
-                    },
+                        perfilVisible = true;
+                    }
+
+                    // 3. Espera a que el layout termine (usa setTimeout o requestAnimationFrame)
+                    setTimeout(function() {
+                        $('#card-container').html(response.html).addClass('card-animar').show();
+                    }, 280); // 50ms suele ser suficiente, puedes ajustar si quieres
+                },
                     error: function() {
                         $('#card-container').html(`<div class="alert alert-danger m-3">Error al cargar perfil del docente.</div>`);
                     }
@@ -254,6 +261,14 @@
 
         .card-salir {
             animation: slideOutRight 0.3s ease-in forwards;
+        }
+        .nombre-administrador {
+            cursor: pointer;
+            color: #344767;
+            transition: color 0.2s;
+        }
+        .nombre-administrador:hover {
+            color: var(--bs-primary) !important;
         }
     </style>
 @endsection

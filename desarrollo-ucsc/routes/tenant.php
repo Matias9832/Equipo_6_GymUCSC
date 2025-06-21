@@ -96,6 +96,9 @@ Route::middleware([
     Route::get('/administradores/perfil/{id}', [AdministradorController::class, 'showPerfil'])->name('administradores.perfil');
 
     Route::get('/home', function () {
+    Route::get('/quienes-somos', [App\Http\Controllers\QuienesSomosController::class, 'index'])->name('quienes-somos.index');
+    
+    Route::get('/', function () {
         return redirect()->route('news.index');
     })->name('welcome');
 
@@ -353,6 +356,10 @@ Route::middleware([
             Route::get('admin/talleres-settings/edit', [TalleresSettingController::class, 'edit'])->name('talleressettings.edit');
             Route::match(['put', 'post'], '/admin/talleres-settings/update', [TalleresSettingController::class, 'update'])->name('talleressettings.update');
             Route::delete('/admin/academy-settings/image', [TalleresSettingController::class, 'deleteImage'])->name('talleres.banner.image.delete');
+
+            //Quienes somos
+            Route::get('/quienes-somos/banner/edit', [App\Http\Controllers\QuienesSomosController::class, 'editBanner'])->name('quienes-somos.banner.edit');    
+            Route::put('/quienes-somos/banner/update', [App\Http\Controllers\QuienesSomosController::class, 'updateBanner'])->name('quienes-somos.banner.update');
         });
 
 
