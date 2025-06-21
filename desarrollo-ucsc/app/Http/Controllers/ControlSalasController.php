@@ -89,11 +89,11 @@ class ControlSalasController extends Controller
         ]);
     }
 
-    public function registroDesdeQR(Request $request) //Aquí va la lógica del QR
+   public function registroDesdeQR(Request $request)
     {
         try {
             $encryptedId = $request->query('id_sala');
-            $idSala = Crypt::decrypt($encryptedId);
+            $idSala = \Crypt::decrypt($encryptedId);
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
             abort(403, 'ID de sala inválido o modificado.');
         }
@@ -111,8 +111,8 @@ class ControlSalasController extends Controller
         }
 
         $horaActual = now();
-        $horaApertura = Carbon::createFromTimeString($sala->horario_apertura);
-        $horaCierre = Carbon::createFromTimeString($sala->horario_cierre);
+        $horaApertura = \Carbon\Carbon::createFromTimeString($sala->horario_apertura);
+        $horaCierre = \Carbon\Carbon::createFromTimeString($sala->horario_cierre);
 
         if ($horaActual->lt($horaApertura) || $horaActual->gt($horaCierre)) {
             return view('usuarios.ingreso.registro', [
@@ -123,7 +123,7 @@ class ControlSalasController extends Controller
             ]);
         }
 
-        if (!Auth::check()) {
+        if (!\Auth::check()) {
             return view('usuarios.ingreso.registro', [
                 'qrCode' => null,
                 'desdeQR' => true,
@@ -133,7 +133,7 @@ class ControlSalasController extends Controller
             ]);
         }
 
-        $usuario = Auth::user();
+        $usuario = \Auth::user();
 
         $registroActivo = Ingreso::where('id_sala', $idSala)
             ->where('id_usuario', $usuario->id_usuario)
@@ -141,11 +141,20 @@ class ControlSalasController extends Controller
             ->first();
 
         if ($registroActivo) {
-            return view('usuarios.ingreso.registro', [
+            // Calcular hora de salida esperada para el registro activo
+            $horaIngreso = \Carbon\Carbon::parse($registroActivo->hora_ingreso);
+            $horaSalidaEsperada = $horaIngreso->copy()->addMinutes(6);
+            if ($horaSalidaEsperada->gt($horaCierre)) {
+                $horaSalidaEsperada = $horaCierre;
+            }
+            return view('usuarios.ingreso.mostrar_ingreso', [
                 'mensaje' => 'Ya ingresaste a la sala previamente.',
-                'aforo' => $aforo,
-                'id_sala' => $idSala,
+                'fecha' => $registroActivo->fecha_ingreso,
+                'horaIngreso' => $registroActivo->hora_ingreso,
+                'idSala' => $idSala,
                 'nombreSala' => $sala->nombre_sala,
+                'horarioCierre' => $sala->horario_cierre,
+                'horaSalidaEsperada' => $horaSalidaEsperada->format('H:i'),
             ]);
         }
 
@@ -171,6 +180,13 @@ class ControlSalasController extends Controller
             'tiempo_uso' => null,
         ]);
 
+        // Calcular hora de salida esperada (90 minutos o cierre de sala)
+        $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
+        $horaSalidaEsperada = $horaIngreso->copy()->addMinutes(6);
+        if ($horaSalidaEsperada->gt($horaCierre)) {
+            $horaSalidaEsperada = $horaCierre;
+        }
+
         return view('usuarios.ingreso.mostrar_ingreso', [
             'fecha' => now()->format('Y-m-d'),
             'horaIngreso' => $registro->hora_ingreso,
@@ -178,17 +194,17 @@ class ControlSalasController extends Controller
             'nombreSala' => $sala->nombre_sala,
             'horarioCierre' => $sala->horario_cierre,
             'mensaje' => null,
+            'horaSalidaEsperada' => $horaSalidaEsperada->format('H:i'),
         ]);
     }
 
-
     public function mostrarIngreso()
     {
-        if (!Auth::check()) {
+        if (!\Auth::check()) {
             return redirect()->route('login');
         }
 
-        $usuario = Auth::user();
+        $usuario = \Auth::user();
         $fecha = now()->format('Y-m-d');
 
         $registro = Ingreso::where('id_usuario', $usuario->id_usuario)
@@ -198,6 +214,12 @@ class ControlSalasController extends Controller
 
         if ($registro) {
             $sala = $registro->sala;
+            $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
+            $horaCierre = \Carbon\Carbon::createFromTimeString($sala->horario_cierre);
+            $horaSalidaEsperada = $horaIngreso->copy()->addMinutes(6);
+            if ($horaSalidaEsperada->gt($horaCierre)) {
+                $horaSalidaEsperada = $horaCierre;
+            }
 
             return view('usuarios.ingreso.mostrar_ingreso', [
                 'mensaje' => null,
@@ -206,6 +228,7 @@ class ControlSalasController extends Controller
                 'idSala' => $registro->id_sala,
                 'nombreSala' => $sala->nombre_sala,
                 'horarioCierre' => $sala->horario_cierre,
+                'horaSalidaEsperada' => $horaSalidaEsperada->format('H:i'),
             ]);
         }
 
@@ -216,6 +239,7 @@ class ControlSalasController extends Controller
             'idSala' => null,
             'nombreSala' => null,
             'horarioCierre' => null,
+            'horaSalidaEsperada' => null,
         ]);
     }
 
@@ -459,11 +483,24 @@ class ControlSalasController extends Controller
     {
         $ingreso = Ingreso::where('id_usuario', auth()->id())->whereNull('hora_salida')->first();
 
+        $horaSalidaEsperada = null;
+        if ($ingreso) {
+            $horaIngreso = \Carbon\Carbon::parse($ingreso->hora_ingreso);
+            $horaCierre = \Carbon\Carbon::createFromTimeString($ingreso->sala->horario_cierre);
+            //Temportalmente 2 para probar (Cambiar a 90 una vez finalizado cambiar a 90 minutos)
+            $horaSalidaEsperada = $horaIngreso->copy()->addMinutes(6);
+            if ($horaSalidaEsperada->gt($horaCierre)) {
+                $horaSalidaEsperada = $horaCierre;
+            }
+            $horaSalidaEsperada = $horaSalidaEsperada->format('H:i');
+        }
+
         return response()->json([
             'enSala' => $ingreso ? true : false,
-            'nombreSala' => $ingreso?->sala->nombre,
+            'nombreSala' => $ingreso?->sala->nombre_sala,
             'horaIngreso' => $ingreso?->hora_ingreso,
             'horarioCierre' => $ingreso?->sala->horario_cierre,
+            'horaSalidaEsperada' => $horaSalidaEsperada,
         ]);
     }
 
