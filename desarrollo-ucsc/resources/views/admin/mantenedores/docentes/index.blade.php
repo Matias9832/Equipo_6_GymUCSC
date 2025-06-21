@@ -126,26 +126,28 @@
                     url: `/docentes/perfil/${idDocente}`,
                     method: 'GET',
                     success: function(response) {
-                        // 1. Oculta el contenedor antes de insertar el HTML
-                        $('#card-container').hide();
+                    // 1. Oculta el card-container y limpia su contenido
+                    $('#card-container').hide().html('');
 
-                        // 2. Ajusta el layout ANTES de mostrar la card
-                        if (!perfilVisible) {
-                            if (window.innerWidth < 768) {
-                                // Modo móvil
-                                $('#columna-tabla').hide();
-                                $('#columna-perfil').removeClass('col-4').addClass('col-12').show();
-                            } else {
-                                // Modo escritorio
-                                $('#columna-tabla').removeClass('col-12').addClass('col-8');
-                                $('#columna-perfil').removeClass('col-12').addClass('col-4').show();
-                            }
-                            perfilVisible = true;
+                    // 2. Ajusta el layout ANTES de mostrar la card
+                    if (!perfilVisible) {
+                        if (window.innerWidth < 768) {
+                            // Modo móvil
+                            $('#columna-tabla').hide();
+                            $('#columna-perfil').removeClass('col-4').addClass('col-12').show();
+                        } else {
+                            // Modo escritorio
+                            $('#columna-tabla').removeClass('col-12').addClass('col-8');
+                            $('#columna-perfil').removeClass('col-12').addClass('col-4').show();
                         }
+                        perfilVisible = true;
+                    }
 
-                        // 3. Ahora sí, inserta el HTML y muestra la card con animación
+                    // 3. Espera a que el layout termine (usa setTimeout o requestAnimationFrame)
+                    setTimeout(function() {
                         $('#card-container').html(response.html).addClass('card-animar').show();
-                    },
+                    }, 280); // 50ms suele ser suficiente, puedes ajustar si quieres
+                },
                     error: function() {
                         $('#card-container').html(`<div class="alert alert-danger m-3">Error al cargar perfil del docente.</div>`);
                     }
