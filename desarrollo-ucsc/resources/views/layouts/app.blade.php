@@ -57,12 +57,18 @@
 
 <body class="{{ $class ?? '' }}">
 
+    <style>
+        #sidenav-main::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+
     @if (!in_array(request()->route()->getName(), ['verificar.vista', 'reset-password', 'login']))
         @if(session('success') || session('update') || session('delete'))
             <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
                 <div id="toastSuccess" class="toast align-items-center text-white 
-                                                                {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
-                                                                border-0 show" role="alert" aria-live="assertive"
+                                                                        {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
+                                                                        border-0 show" role="alert" aria-live="assertive"
                     aria-atomic="true">
                     <div class="d-flex">
                         <div class="toast-body text-center w-100">

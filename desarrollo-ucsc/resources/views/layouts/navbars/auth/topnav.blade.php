@@ -3,11 +3,21 @@
     data-scroll="false">
     <div class="container-fluid px-3 mt-3">
         <nav aria-label="breadcrumb">
-            <h3 class="font-weight-bolder text-white mb-0 ms-0 ms-xl-0 ms-lg-5 ms-md-5 ms-sm-5 ms-5">{{ $title }}</h3>
+            <div class="d-flex align-items-center flex-wrap">
+                @if(!View::hasSection('ocultarHamburguesa'))
+                    <button class="btn btn-icon btn-outline-primary text-white d-xl-none me-2" type="button"
+                        style="padding-left: 10px; padding-right: 10px; margin-bottom: 0 !important;"
+                        data-bs-toggle="offcanvas" data-bs-target="#sidenav-main" aria-controls="sidenav-main">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                @endif
+                <h3 class="font-weight-bolder text-white mb-0">{{ $title }}
+                </h3>
+            </div>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                @if (in_array(request()->route()->getName(), ['carreras.index', 'administradores.index', 'usuarios.index', 'alumnos.index','asistencia.ver','docentes.index']))
+                @if (in_array(request()->route()->getName(), ['carreras.index', 'administradores.index', 'usuarios.index', 'alumnos.index', 'asistencia.ver', 'docentes.index']))
                     <div class="input-group">
                         <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
                         <input id="buscador-general" type="text" class="form-control" placeholder="Búsqueda">
