@@ -34,20 +34,22 @@ class QuienesSomosController extends Controller
     {
         $request->validate([
             'banner_image' => 'nullable|image|max:2048',
-            'banner_title' => 'required|string|max:255',
+            'banner_title' => 'nullable|string|max:255',
             'banner_subtitle' => 'nullable|string|max:255',
         ]);
 
         $banner = QuienesSomosSetting::first() ?? new QuienesSomosSetting();
 
         if ($request->hasFile('banner_image')) {
-            $file = $request->file('banner_image');
-            $path = $file->store('banners', 'public');
-            $banner->banner_image_path = $path;
+            $filename = time() . '.' . $request->banner_image->extension();
+            $request->banner_image->move(public_path('img/banner_nosotros'), $filename);
+
+            $banner->banner_image_path = 'img/banner_nosotros/' . $filename;
+        
         }
 
-        $banner->banner_title = $request->banner_title;
-        $banner->banner_subtitle = $request->banner_subtitle;
+        $banner->banner_title = $request->input('banner_title');
+        $banner->banner_subtitle = $request->input('banner_subtitle');
         $banner->save();
 
         return redirect()->route('quienes-somos.index')->with('success', 'Banner actualizado correctamente.');
