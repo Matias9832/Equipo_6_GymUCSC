@@ -96,11 +96,10 @@ Route::middleware([
     Route::get('/administradores/perfil/{id}', [AdministradorController::class, 'showPerfil'])->name('administradores.perfil');
 
     Route::get('/home', function () {
-    Route::get('/quienes-somos', [App\Http\Controllers\QuienesSomosController::class, 'index'])->name('quienes-somos.index');
-    
-    Route::get('/', function () {
         return redirect()->route('news.index');
     })->name('welcome');
+    
+    Route::get('/quienes-somos', [App\Http\Controllers\QuienesSomosController::class, 'index'])->name('quienes-somos.index');
 
     Route::fallback(function () {
         return redirect()->route('news.index');
@@ -361,7 +360,7 @@ Route::middleware([
             Route::delete('/admin/academy-settings/image', [TalleresSettingController::class, 'deleteImage'])->name('talleres.banner.image.delete');
 
             //Quienes somos
-            Route::get('/quienes-somos/banner/edit', [App\Http\Controllers\QuienesSomosController::class, 'editBanner'])->name('quienes-somos.banner.edit');    
+            Route::get('/quienes-somos/banner/edit', [App\Http\Controllers\QuienesSomosController::class, 'editBanner'])->name('quienes-somos.banner.edit');
             Route::put('/quienes-somos/banner/update', [App\Http\Controllers\QuienesSomosController::class, 'updateBanner'])->name('quienes-somos.banner.update');
         });
 
@@ -405,5 +404,4 @@ Route::middleware([
         });
 
     });
-});
 });
