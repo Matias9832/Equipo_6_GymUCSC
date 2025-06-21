@@ -9,7 +9,12 @@
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                     <h5>Listado de Salas - <span class="text-muted">{{ session('nombre_sucursal') }}</span></h5>
-                    <a href="{{ route('salas.create') }}" class="btn btn-primary btn-sm">Registrar nueva sala</a>
+                    <div>
+                        <a href="{{ route('salas.create') }}" class="btn btn-primary btn-sm">Registrar nueva sala</a>
+                        @can('Datos Salas')
+                            <a href="{{ route('datos-salas.index') }}" class="btn btn-dark btn-sm"> Ver datos de Salas</a>
+                        @endcan
+                    </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">

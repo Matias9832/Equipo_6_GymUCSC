@@ -354,7 +354,7 @@ Route::middleware([
             Route::match(['put', 'post'], '/admin/talleres-settings/update', [TalleresSettingController::class, 'update'])->name('talleressettings.update');
             Route::delete('/admin/academy-settings/image', [TalleresSettingController::class, 'deleteImage'])->name('talleres.banner.image.delete');
         });
-       
+
 
         // Importar alumnos
         Route::post('alumnos/import', [AlumnoController::class, 'import'])->name('alumnos.import');
@@ -386,11 +386,12 @@ Route::middleware([
 
         // Rutas para la exportación de datos
         Route::middleware(['permission:Datos Salas'])->group(function () {
-        Route::get('/datos-salas', [App\Http\Controllers\DatosSalaController::class, 'index'])->name('datos-salas.index');
+            Route::get('/datos-salas', [App\Http\Controllers\DatosSalaController::class, 'index'])->name('datos-salas.index');
+            Route::get('/datos-salas/exportar', [App\Http\Controllers\DatosSalaController::class, 'exportarExcel'])->name('datos-salas.exportar');
         });
         Route::middleware(['permission:Datos Talleres'])->group(function () {
-        Route::get('/datos-talleres', [App\Http\Controllers\DatosTallerController::class, 'index'])->name('datos-talleres.index');
-        Route::get('/datos-talleres/exportar', [App\Http\Controllers\DatosTallerController::class, 'exportarExcel'])->name('datos-talleres.export');
+            Route::get('/datos-talleres', [App\Http\Controllers\DatosTallerController::class, 'index'])->name('datos-talleres.index');
+            Route::get('/datos-talleres/exportar', [App\Http\Controllers\DatosTallerController::class, 'exportarExcel'])->name('datos-talleres.export');
         });
 
     });
