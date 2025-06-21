@@ -406,3 +406,4 @@ Route::middleware([
 
     });
 });
+});
