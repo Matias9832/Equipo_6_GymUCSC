@@ -1,10 +1,20 @@
 @extends('layouts.app')
 
+@php
+    use App\Models\Marca;
+    $ultimaMarca = Marca::orderBy('id_marca', 'desc')->first();
+    if ($ultimaMarca->nombre_marca == 'UCSC') {
+        $backgroundImage = 'https://ucsc.cl/content/uploads/2023/08/hero-facultad.jpg';
+    } else {
+        $backgroundImage = url('/img/imagenes_predeterminadas/Fondo_general2.jpg');
+    }
+@endphp
+
 @section('content')
     @include('layouts.navbars.guest.navbar')
     <main class="main-content  mt-0">
         <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg"
-            style="background-image: url('https://ucsc.cl/content/uploads/2023/08/hero-facultad.jpg'); background-position: top;">
+            style="background-image: url('{{ $backgroundImage }}'); background-position: top;">
             <span class="mask bg-gradient-dark opacity-6"></span>
             <div class="container">
                 <div class="row justify-content-center">
