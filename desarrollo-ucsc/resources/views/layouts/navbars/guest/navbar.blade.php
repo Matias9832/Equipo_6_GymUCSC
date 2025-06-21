@@ -38,6 +38,13 @@
                                     <span class="underline-text"></span>
                                 </a>
                             </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link custom-button {{ request()->routeIs('quienes-somos.index') ? 'active' : '' }}"
+                                    href="{{ route('quienes-somos.index') }}">
+                                    <span class="button-main-text">Quiénes Somos</span>
+                                    <span class="underline-text"></span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     <!-- Botones de cuenta -->
