@@ -32,6 +32,15 @@ class TemasSeeder extends Seeder
                 'bs_danger' => '#646567',
             ],
             [
+                'nombre_tema' => 'UDEC',
+                'nombre_fuente' => null,
+                'familia_css' => null,
+                'url_fuente' => null,
+                'bs_primary' => '#001f3f',
+                'bs_success' => '#f79c01',
+                'bs_danger' => '#d72638',
+            ],
+            [
                 'nombre_tema' => 'Marino Montserrat',
                 'nombre_fuente' => 'Montserrat',
                 'familia_css' => 'Montserrat, sans-serif',

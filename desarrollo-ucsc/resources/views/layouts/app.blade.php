@@ -28,8 +28,8 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ url('assets/css/argon-dashboard.css') }}" rel="stylesheet" />
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Flatpickr CSS -->
     <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
     <!-- CSS Personalizado -->
@@ -51,6 +51,10 @@
             : null;
     @endphp
 
+    @if($tema && $tema->url_fuente && $tema->url_fuente != NULL)
+        <link href="{{ $tema->url_fuente }}" rel="stylesheet">
+    @endif
+
     @include('layouts.colors.tema-css', ['tema' => $tema])
 
 </head>
@@ -67,9 +71,9 @@
         @if(session('success') || session('update') || session('delete'))
             <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
                 <div id="toastSuccess" class="toast align-items-center text-white 
-                                                                        {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
-                                                                        border-0 show" role="alert" aria-live="assertive"
-                    aria-atomic="true">
+                                                                                {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
+                                                                                border-0 show" role="alert"
+                    aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
                         <div class="toast-body text-center w-100">
                             {{ session('success') ?? session('update') ?? session('delete') }}

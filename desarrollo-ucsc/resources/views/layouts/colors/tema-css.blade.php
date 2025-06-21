@@ -16,4 +16,8 @@
     --border-danger-focus: {{ $tema->border_danger_focus ?? '#a50a0a' }};
     --danger-gradient: {{ $tema->danger_gradient ?? '#f55f5f' }};
 }
+
+body {
+    font-family: {{ $tema->familia_css ?? '' }};
+}
 </style>
