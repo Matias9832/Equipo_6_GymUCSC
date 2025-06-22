@@ -5,6 +5,9 @@
     <div class="container-fluid py-4">
         <div class="col-xl-12 mb-4">
             <div class="card">
+                <div class="card-header pb-2">
+                    <h5 class="mb-0">Datos de Ingresos a Salas</h5>
+                </div>
                 <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-end">
                         <form method="GET" action="{{ route('datos-salas.index') }}" class="row g-3 align-items-end"
@@ -38,17 +41,16 @@
                                     'sala_id' => request('sala_id'),
                                     'desde' => request('desde'),
                                     'hasta' => request('hasta')
-                                ]) }}" class="btn custom-excel-btn btn-sm d-flex align-items-center justify-content-center"
-                                    title="Exportar a Excel"
-                                    style="margin-bottom: 0px !important; height: 40px !important;">
-                                    <i class="fas fa-file-excel me-1"></i> Exportar
+                                ]) }}" 
+                                class="btn custom-excel-btn custom-btn mb-1" title="Exportar" style="margin-bottom: 0px !important; height: 40px !important;">
+                                    <i class="fas fa-file-excel me-1"></i> Exportar a excel
                                 </a>
                             </div>
                             <div class="col-md-1">
                             </div>
                             <div class="col-md-2">
                                 <a href="{{ route('salas.index') }}"
-                                    class="btn btn-secondary mb-1 d-flex align-items-center justify-content-center"
+                                    class="btn btn-primary mb-1 d-flex align-items-center justify-content-center"
                                     style="margin-bottom: 0px !important; height: 40px !important;">Ir a Salas
                                 </a>
                             </div>
@@ -260,6 +262,10 @@
                 left: 60% !important;
                 transform: translateX(-50%) !important;
             }
+        }
+        #chart-genero-bar {
+        height: 355px !important;
+            max-height: 380px !important;
         }
     </style>
 @endpush
