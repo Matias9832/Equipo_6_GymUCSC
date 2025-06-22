@@ -13,9 +13,7 @@ class AdministradorSeeder extends Seeder
      */
     public function run(): void
     {
-        //SUPER ADMIN ------------------------------------
-
-        // Crear el usuario super admin
+        // SUPER ADMIN ------------------------------------
         $usuario = Usuario::create([
             'rut' => '6960920',
             'correo_usuario' => 'ugym@gmail.com',
@@ -23,8 +21,6 @@ class AdministradorSeeder extends Seeder
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
         ]);
-
-        // Crear el administrador asociado
         Administrador::create([
             'rut_admin' => '6960920',
             'nombre_admin' => 'Jaime Muñoz Guzmán',
@@ -35,19 +31,18 @@ class AdministradorSeeder extends Seeder
             'foto_perfil' => 'default.png',
             'descripcion_cargo' => 'Super Administrador del Sistema',
         ]);
-        // Asignar el rol de Super Admin al usuario con todos los permisos
         $usuario->assignRole('Super Admin');
 
-        //DIRECTOR ------------------------------------
+        // DIRECTOR ------------------------------------
         $usuario = Usuario::create([
-            'rut' => '12345',
-            'correo_usuario' => 'director@example.com',
+            'rut' => '15345678',
+            'correo_usuario' => 'JaPerez@deportesucsc.cl',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
         ]);
         Administrador::create([
-            'rut_admin' => '12345',
+            'rut_admin' => '15345678',
             'nombre_admin' => 'Javier Pérez',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
@@ -55,17 +50,17 @@ class AdministradorSeeder extends Seeder
         ]);
         $usuario->assignRole('Director');
 
-        // DOCENTES (6) ------------------------------------
+        // DOCENTES ------------------------------------
         // Docente 1
         $usuario = Usuario::create([
-            'rut' => '123456',
-            'correo_usuario' => 'docente1@example.com',
+            'rut' => '17456789',
+            'correo_usuario' => 'ErMaldonado@deportesucsc.cl',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
         ]);
         Administrador::create([
-            'rut_admin' => '123456',
+            'rut_admin' => '17456789',
             'nombre_admin' => 'Eric Maldonado',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
@@ -76,7 +71,7 @@ class AdministradorSeeder extends Seeder
         // Docente 2
         $usuario = Usuario::create([
             'rut' => '16059402',
-            'correo_usuario' => 'docente2@example.com',
+            'correo_usuario' => 'LaFernandez@deportesucsc.cl',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
@@ -93,7 +88,7 @@ class AdministradorSeeder extends Seeder
         // Docente 3
         $usuario = Usuario::create([
             'rut' => '18239123',
-            'correo_usuario' => 'docente3@example.com',
+            'correo_usuario' => 'PeLopez@deportesucsc.cl',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
@@ -110,7 +105,7 @@ class AdministradorSeeder extends Seeder
         // Docente 4
         $usuario = Usuario::create([
             'rut' => '17043569',
-            'correo_usuario' => 'docente4@example.com',
+            'correo_usuario' => 'AnTorres@deportesucsc.cl',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
@@ -127,7 +122,7 @@ class AdministradorSeeder extends Seeder
         // Docente 5
         $usuario = Usuario::create([
             'rut' => '15274053',
-            'correo_usuario' => 'docente5@example.com',
+            'correo_usuario' => 'JaSoto@deportesucsc.cl',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
@@ -143,14 +138,14 @@ class AdministradorSeeder extends Seeder
 
         // Docente 6
         $usuario = Usuario::create([
-            'rut' => '12064277',
-            'correo_usuario' => 'docente6@example.com',
+            'rut' => '17642771',
+            'correo_usuario' => 'SoHerrera@deportesucsc.cl',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
         ]);
         Administrador::create([
-            'rut_admin' => '12064277',
+            'rut_admin' => '17642771',
             'nombre_admin' => 'Sofía Herrera',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
@@ -158,16 +153,16 @@ class AdministradorSeeder extends Seeder
         ]);
         $usuario->assignRole('Docente');
 
-        // ADMINISTRADOR SUCURSAL 2
+        // SUPER ADMIN 2 ------------------------------------
         $usuario = Usuario::create([
-            'rut' => '22222',
-            'correo_usuario' => 'superadmin2@example.com',
+            'rut' => '18888999',
+            'correo_usuario' => 'MaGonzalez@deportesucsc.cl',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
         ]);
         Administrador::create([
-            'rut_admin' => '22222',
+            'rut_admin' => '18888999',
             'nombre_admin' => 'María González',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',
@@ -178,7 +173,7 @@ class AdministradorSeeder extends Seeder
         // COORDINADOR ------------------------------------
         $usuario = Usuario::create([
             'rut' => '18032940',
-            'correo_usuario' => 'superadmin2@example.com',
+            'correo_usuario' => 'VaGomez@deportesucsc.cl',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
@@ -191,17 +186,17 @@ class AdministradorSeeder extends Seeder
             'descripcion_cargo' => 'Coordinadora de Actividades',
         ]);
         $usuario->assignRole('Coordinador');
-        
-        // Visor QR ------------------------------------
+
+        // VISOR QR ------------------------------------
         $usuario = Usuario::create([
-            'rut' => '1234567',
-            'correo_usuario' => 'admin3@example.com',
+            'rut' => '19765432',
+            'correo_usuario' => 'ViSanAndres@deportesucsc.cl',
             'tipo_usuario' => 'admin',
             'contrasenia_usuario' => Hash::make('123456'),
             'activado_usuario' => 1,
         ]);
         Administrador::create([
-            'rut_admin' => '1234567',
+            'rut_admin' => '19765432',
             'nombre_admin' => 'VisorQR SanAndrés',
             'fecha_creacion' => now(),
             'foto_perfil' => 'default.png',

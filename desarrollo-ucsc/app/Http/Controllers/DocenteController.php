@@ -60,7 +60,7 @@ class DocenteController extends Controller
                 $join->on('administrador.id_admin', '=', 'admin_sucursal.id_admin')
                     ->where('admin_sucursal.activa', true);
             })
-            ->where('roles.name', '!=', 'Super Admin')
+            ->whereNotIn('roles.name', ['Super Admin', 'Visor QR'])
             ->where('admin_sucursal.id_suc', $sucursalId)
             ->select(
                 'administrador.id_admin',
