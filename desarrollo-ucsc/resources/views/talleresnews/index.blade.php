@@ -19,9 +19,10 @@
 
                 <!-- Botón en la esquina superior derecha del card -->
                 @if(Auth::check() && Auth::user()->is_admin)
-                <a href="{{ route('talleressettings.edit') }}" class="btn btn-sm text-white bg-info position-absolute"
+                <a href="{{ route('talleressettings.edit') }}" title="Editar banner" class="btn btn-sm text-white bg-secondary position-absolute"
                     style="top: 10px; right: 10px; z-index: 2;">
                     <i class="fas fa-pen-to-square"></i>
+                    Editar Banner
                 </a>
                 @endif
 
@@ -42,7 +43,7 @@
         <div class="card shadow-sm text-center p-5 position-relative mb-2">
 
             @if(Auth::check() && Auth::user()->is_admin)
-            <div class="card-header pb-0 d-flex justify-content-between align-items-center mb-4">
+            <div class="card-header pb-0 d-flex justify-content-between align-items-center mb-2">
                 <a href="{{ route('talleres.create', ['origen' => 'noticias']) }}"
                     class="btn btn-primary position-absolute" style="top: 15px; right: 15px; z-index: 1;">
                     Crear nuevo taller
@@ -50,7 +51,7 @@
             </div>
             @endif
 
-            <h3 class="mb-4">Nuestros talleres extraprogramáticos</h3>
+            <h3 class="mb-4 pb-4">Nuestros talleres extraprogramáticos</h3>
 
 
             @if($taller->isEmpty())
@@ -61,7 +62,7 @@
             </div>
             @else
 
-            <div class="accordion" id="accordionTalleres">
+            <div class="accordion mt-2" id="accordionTalleres">
                 @foreach ($taller as $key => $taller)
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading{{ $key }}">
@@ -81,8 +82,9 @@
                             @if(Auth::check() && Auth::user()->is_admin)
                             <div class="d-flex gap-2 ms-3 pt-2">
                                 <a href="{{ route('talleres.edit',['taller' => $taller->id_taller, 'origen' => 'noticias']) }}"
-                                    class="btn btn-sm btn-info text-white" onclick="event.stopPropagation();">
+                                    class="btn btn-sm btn-primary text-white" onclick="event.stopPropagation();">
                                     <i class="fas fa-edit"></i>
+                                    Editar
                                 </a>
                                 <form
                                     action="{{ route('talleres.destroy', ['taller' => $taller->id_taller, 'origen' => 'noticias']) }}"
@@ -92,6 +94,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger">
                                         <i class="fas fa-trash-alt"></i>
+                                        Eliminar
                                     </button>
                                 </form>
                             </div>
@@ -227,7 +230,7 @@
                                         class="fas fa-star {{ $noticias->is_featured ? 'text-warning' : 'text-muted' }}"></i>
                                 </button>
                                 <a href="{{ route('talleresnews.edit', $noticias->id_noticia) }}"
-                                    class="btn btn-sm btn-info px-2 py-1" title="Editar">
+                                    class="btn btn-sm btn-primary px-2 py-1" title="Editar">
                                     <i class="fas fa-pen-to-square"></i>
                                 </a>
                                 <form action="{{ route('talleresnews.destroy', $noticias->id_noticia) }}" method="POST"

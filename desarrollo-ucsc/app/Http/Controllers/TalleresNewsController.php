@@ -46,7 +46,9 @@ class TalleresNewsController extends Controller
             ->get();
 
         $banner = \App\Models\TalleresSetting::first();
-        $taller = Taller::with('horarios')->get();
+        $taller = Taller::with(['horarios', 'administrador'])
+            ->where('activo_taller', true)
+            ->get();
         return view('talleresnews.index', compact('news', 'featuredNews', 'banner', 'taller'));
 
      
