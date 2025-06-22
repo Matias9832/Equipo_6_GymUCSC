@@ -25,10 +25,9 @@
                             <label for="rol" class="form-label">Rol</label>
                             <select name="rol" id="rol" class="form-control" required>
                                 <option value="">Selecciona un rol</option>
-                                <option value="Director">Director</option>
-                                <option value="Docente">Docente</option>
-                                <option value="Coordinador">Coordinador</option>
-                                <option value="Visor QR">Visor QR</option>
+                                @foreach($roles as $rol)
+                                    <option value="{{ $rol }}">{{ $rol }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="mb-3">

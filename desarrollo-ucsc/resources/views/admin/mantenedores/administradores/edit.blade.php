@@ -23,10 +23,12 @@
                         <div class="mb-3">
                             <label for="rol" class="form-label">Rol</label>
                             <select name="rol" id="rol" class="form-control" required>
-                                <option value="Director" {{ $usuario->hasRole('Director') ? 'selected' : '' }}>Director</option>
-                                <option value="Docente" {{ $usuario->hasRole('Docente') ? 'selected' : '' }}>Docente</option>
-                                <option value="Coordinador" {{ $usuario->hasRole('Coordinador') ? 'selected' : '' }}>Coordinador</option>
-                                <option value="Visor QR" {{ $usuario->hasRole('Visor QR') ? 'selected' : '' }}>Visor QR</option>
+                                <option value="">Selecciona un rol</option>
+                                @foreach(\Spatie\Permission\Models\Role::all() as $rol)
+                                    <option value="{{ $rol->name }}" {{ $usuario->hasRole($rol->name) ? 'selected' : '' }}>
+                                        {{ $rol->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="mb-3">
