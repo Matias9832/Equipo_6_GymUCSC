@@ -66,6 +66,16 @@ class DatosSalaController extends Controller
 
         $salas = Sala::all(); // Para el select en la vista
 
+        // Gráfico de curva: ingresos por día del mes seleccionado
+        $curvaDatos = [];
+        $periodo = \Carbon\CarbonPeriod::create($inicio, $fin);
+        foreach ($periodo as $dia) {
+            $fecha = $dia->format('Y-m-d');
+            $curvaDatos[] = [
+                'fecha' => $fecha,
+                'cantidad' => $ingresosFiltrados->where('fecha_ingreso', $fecha)->count()
+            ];
+        }
         return view('admin.datos.salas.index', [
             'ingresosMes' => $ingresosMes,
             'ingresosDia' => $ingresosDia,
@@ -75,6 +85,7 @@ class DatosSalaController extends Controller
             'porcentajeM' => $porcentajeM,
             'rankingCarreras' => $rankingCarreras,
             'salas' => $salas,
+            'curvaDatos' => $curvaDatos,
             'salaId' => $salaId,
             'desde' => $desde,
             'hasta' => $hasta,

@@ -67,7 +67,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Ingresos</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Ingresos del Mes</p>
                                     <h5 class="font-weight-bolder">
                                         {{ $ingresosMes }}
                                     </h5>
@@ -96,7 +96,7 @@
                             </div>
                             <div class="col-4 text-end">
                                 <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                                    <i class="ni ni-time-alarm text-lg opacity-10" aria-hidden="true"></i>
+                                     <i class="ni ni-calendar-grid-58 text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
@@ -220,26 +220,46 @@
             }
         });
 
-        flatpickr("#desde", {
-            dateFormat: "Y-m-d",
-            altInput: true,
-            altFormat: "d-m-Y",
-            locale: "es",
-            disableMobile: true,
-            minDate: new Date(new Date().getFullYear(), 0, 1),
-            maxDate: new Date(new Date().getFullYear(), 11, 31),
-            defaultDate: "{{ request('desde', now()->startOfMonth()->format('Y-m-d')) }}"
-        });
+        //Configuración de Flatpickr para los selectores de fecha
+        let desdePicker, hastaPicker;
+        document.addEventListener('DOMContentLoaded', function () {
+            desdePicker = flatpickr("#desde", {
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "d-m-Y",
+                locale: "es",
+                disableMobile: true,
+                minDate: new Date(new Date().getFullYear(), 0, 1),
+                maxDate: new Date(new Date().getFullYear(), 11, 31),
+                defaultDate: "{{ request('desde', now()->startOfMonth()->format('Y-m-d')) }}",
+                onChange: function(selectedDates, dateStr) {
+                    if (hastaPicker) {
+                        // Suma un día a la fecha seleccionada en "Desde"
+                        let minHasta = new Date(selectedDates[0]);
+                        minHasta.setDate(minHasta.getDate() + 1);
+                        hastaPicker.set('minDate', minHasta);
+                    }
+                }
+            });
 
-        flatpickr("#hasta", {
-            dateFormat: "Y-m-d",
-            altInput: true,
-            altFormat: "d-m-Y",
-            locale: "es",
-            disableMobile: true,
-            minDate: new Date(new Date().getFullYear(), 0, 1),
-            maxDate: new Date(new Date().getFullYear(), 11, 31),
-            defaultDate: "{{ request('hasta', now()->endOfMonth()->format('Y-m-d')) }}"
+            hastaPicker = flatpickr("#hasta", {
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "d-m-Y",
+                locale: "es",
+                disableMobile: true,
+                minDate: new Date(new Date().getFullYear(), 0, 1),
+                maxDate: new Date(new Date().getFullYear(), 11, 31),
+                defaultDate: "{{ request('hasta', now()->endOfMonth()->format('Y-m-d')) }}"
+            });
+
+            // Inicializa la restricción al cargar la página
+            let desdeValue = document.getElementById('desde').value;
+            if (desdeValue) {
+                let minHasta = new Date(desdeValue);
+                minHasta.setDate(minHasta.getDate() + 1);
+                hastaPicker.set('minDate', minHasta);
+            }
         });
 
     </script>

@@ -10,9 +10,9 @@
                 <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                     <h5>Listado de Salas - <span class="text-muted">{{ session('nombre_sucursal') }}</span></h5>
                     <div>
-                        <a href="{{ route('salas.create') }}" class="btn btn-primary btn-sm">Registrar nueva sala</a>
+                        <a href="{{ route('salas.create') }}" class="btn btn-primary btn-sm me-3">Registrar nueva sala</a>
                         @can('Datos Salas')
-                            <a href="{{ route('datos-salas.index') }}" class="btn btn-dark btn-sm"> Ver datos de Salas</a>
+                            <a href="{{ route('datos-salas.index') }}" class="btn custom-excel-btn btn-sm"> Ver datos de Salas</a>
                         @endcan
                     </div>
                 </div>
@@ -102,3 +102,10 @@
     @include('layouts.footers.auth.footer')
 </div>
 @endsection
+<style>
+    .custom-excel-btn {
+        background-color: rgb(33, 115, 70) !important;
+        color: #fff !important;
+        border: none;
+    }
+</style>
