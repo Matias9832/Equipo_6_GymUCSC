@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->date('fecha_ingreso');
             $table->time('hora_ingreso');
             $table->time('hora_salida')->nullable();
+            $table->time('hora_salida_estimada')->nullable();
             $table->time('tiempo_uso')->nullable();
             $table->timestamps();
             $table->engine = 'InnoDB'; // Asegura que se use InnoDB

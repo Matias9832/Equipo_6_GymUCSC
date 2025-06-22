@@ -3,21 +3,40 @@
 @section('content')
     @include('layouts.navbars.guest.navbar')
 
-    <div class="container d-flex flex-column justify-content-center align-items-center vh-100 text-center">
-        <div id="contenido-ingreso">
-            @if (isset($horaIngreso))
-                <h2 class="mb-3">Estás en la {{ $nombreSala }}</h2>
-                <p>Hora de ingreso: <strong>{{ $horaIngreso }}</strong></p>
-                <p>Tienes acceso hasta: <strong>{{ $horaSalidaEsperada }}</strong></p>
-                <!-- Botón para abrir el modal de confirmación -->
-                <button class="btn btn-outline-danger mt-4" data-bs-toggle="modal" data-bs-target="#confirmarSalidaModal">
-                    Marcar salida
-                </button>
-            @else
-                <div class="alert alert-info">
-                    Escanea el QR para acceder a la Sala de Musculación
-                </div>
-            @endif
+    <!-- La hora actual del navegador ya NO se muestra -->
+
+    <div style="min-height: 100vh; background: #f8f9fa;">
+        <div class="min-height-300 bg-primary position-absolute w-100" style="top:0;left:0;z-index:0;"></div>
+        <div style="
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+            margin-top: 120px;
+            padding: 40px 24px;
+            border-radius: 20px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+            background: #fff;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        ">
+            <div id="contenido-ingreso">
+                @if (isset($horaIngreso))
+                    <h2 class="mb-4" style="font-weight: bold; font-size:2.7rem;">Estás en la {{ $nombreSala }}</h2>
+                    <p style="font-size:1.2rem;">Hora de ingreso: <strong>{{ \Carbon\Carbon::parse($horaIngreso)->format('H:i') }}</strong></p>
+                    <p style="font-size:1.2rem;">Hora estimada de salida: <strong id="hora-salida-estimada">{{ $horaSalidaEsperada }}</strong></p>
+                    <button class="btn btn-outline-danger mt-4" data-bs-toggle="modal" data-bs-target="#confirmarSalidaModal">
+                        Marcar salida
+                    </button>
+                @else
+                    <div class="alert alert-info">
+                        Escanea el QR para acceder a la Sala de Musculación
+                    </div>
+                @endif
+            </div>
+            <!-- Ya no se muestra la hora actual aquí -->
         </div>
     </div>
 
@@ -69,127 +88,32 @@
         </div>
     </div>
 
+    <!-- Script para mostrar el modal automáticamente al llegar a la hora límite -->
+    <script>
+        // La hora actual NO se muestra, pero el script sigue funcionando
+        let modalMostrado = false;
+        function checkHoraSalida() {
+            const horaSalida = document.getElementById('hora-salida-estimada');
+            if (!horaSalida) return;
+            const horaLimite = horaSalida.textContent.trim();
+            if (!horaLimite) return;
+
+            const ahora = new Date();
+            const [h, m, s] = horaLimite.split(':');
+            const salida = new Date();
+            salida.setHours(parseInt(h), parseInt(m), s ? parseInt(s) : 0, 0);
+
+            if (ahora >= salida && !modalMostrado) {
+                const modal = new bootstrap.Modal(document.getElementById('modalTiempoFinalizado'), {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                modal.show();
+                modalMostrado = true;
+            }
+        }
+        setInterval(checkHoraSalida, 1000);
+    </script>
+
     @include('layouts.footers.guest.footer')
 @endsection
-
-@section('scripts')
-<script>
-    let horaSalidaEsperada = "{{ $horaSalidaEsperada ?? '' }}";
-    window.notif5min = false;
-    window.notifSalida = false;
-    let modalMostrado = false;
-    let modalInterval = null;
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const contenedor = document.querySelector('.container');
-
-        setInterval(() => {
-            fetch('/estado-usuario')
-                .then(res => res.json())
-                .then(data => {
-                    if (data.enSala) {
-                        contenedor.innerHTML = `
-                            <h2 class="mb-3">Estás en la ${data.nombreSala}</h2>
-                            <p>Hora de ingreso: <strong>${data.horaIngreso}</strong></p>
-                            <p>Tienes acceso hasta: <strong>${data.horaSalidaEsperada}</strong></p>
-                            <button class="btn btn-outline-danger mt-4" data-bs-toggle="modal" data-bs-target="#confirmarSalidaModal">
-                                Marcar salida
-                            </button>
-                        `;
-                        if (data.horaSalidaEsperada) {
-                            horaSalidaEsperada = data.horaSalidaEsperada;
-                        }
-                    } else {
-                        contenedor.innerHTML = `
-                            <div class="alert alert-info">
-                                Escanea el QR para acceder a la Sala de Musculación
-                            </div>
-                        `;
-                        horaSalidaEsperada = '';
-                        window.notif5min = false;
-                        window.notifSalida = false;
-                        modalMostrado = false;
-                        if (modalInterval) {
-                            clearInterval(modalInterval);
-                            modalInterval = null;
-                        }
-                    }
-                });
-        }, 10000); // cada 10 segundos
-
-        // Notificaciones navegador
-        if (window.Notification && Notification.permission !== "granted") {
-            Notification.requestPermission();
-        }
-
-        function mostrarModalUrgente() {
-            let modal = new bootstrap.Modal(document.getElementById('modalTiempoFinalizado'), {
-                backdrop: 'static',
-                keyboard: false
-            });
-            modal.show();
-
-            // Si el usuario intenta cerrar el modal, lo volvemos a mostrar cada minuto
-            document.getElementById('modalTiempoFinalizado').addEventListener('hidden.bs.modal', function () {
-                if (modalInterval) clearInterval(modalInterval);
-                modalInterval = setInterval(() => {
-                    // Verificamos si sigue pasado el tiempo de salida
-                    const ahora = new Date();
-                    const [h, m] = horaSalidaEsperada.split(':');
-                    const salida = new Date();
-                    salida.setHours(parseInt(h), parseInt(m), 0, 0);
-                    if (ahora >= salida) {
-                        let modal2 = new bootstrap.Modal(document.getElementById('modalTiempoFinalizado'), {
-                            backdrop: 'static',
-                            keyboard: false
-                        });
-                        modal2.show();
-                    } else {
-                        clearInterval(modalInterval);
-                        modalInterval = null;
-                    }
-                }, 60000); // cada 1 minuto
-            }, { once: true });
-        }
-
-        function checkNotificaciones() {
-            if (!horaSalidaEsperada) return;
-            const ahora = new Date();
-            const [h, m] = horaSalidaEsperada.split(':');
-            const salida = new Date();
-            salida.setHours(parseInt(h), parseInt(m), 0, 0);
-
-            const diffMs = salida - ahora;
-            const diffMin = Math.floor(diffMs / 60000);
-
-            // Notificar 5 minutos antes
-            if (diffMin === 5 && !window.notif5min) {
-                window.notif5min = true;
-                if (Notification.permission === "granted") {
-                    new Notification("¡Atención!", {
-                        body: "Te quedan 5 minutos en la sala de musculación.",
-                        icon: "/favicon.ico"
-                    });
-                }
-            }
-
-            // Notificar y mostrar modal cuando se alcanza o pasa la hora de salida
-            if (diffMin <= 0 && !window.notifSalida) {
-                window.notifSalida = true;
-                if (Notification.permission === "granted") {
-                    new Notification("¡Tiempo finalizado!", {
-                        body: "Tu tiempo en la sala de musculación ha finalizado. Por favor, marca tu salida.",
-                        icon: "/favicon.ico"
-                    });
-                }
-                if (!modalMostrado) {
-                    modalMostrado = true;
-                    mostrarModalUrgente();
-                }
-            }
-        }
-
-        setInterval(checkNotificaciones, 30000);
-        checkNotificaciones();
-    });
-</script>
