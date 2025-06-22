@@ -3,19 +3,24 @@
     $ultimaMarca = Marca::orderBy('id_marca', 'desc')->first();
 @endphp
 
+
+
+<!-- Panel lateral -->
 <div class="offcanvas offcanvas-start d-xl-none bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 mt-2"
-    tabindex="-1" id="sidenav-main" aria-labelledby="offcanvasLabel" style="width: 250px;">
+    tabindex="-1" id="sidenav-main" aria-labelledby="offcanvasLabel"
+    style="width: 250px;" style="z-index: 1055;"> 
 
-    <div class="offcanvas-body position-sticky top-0 bg-white" style="z-index: 2;">
-
+    <div class="offcanvas-body position-sticky top-0 bg-white " style= "z-index: 1055;">
+        <!-- Logo y nombre -->
         <a class="navbar-brand m-0" href="{{ route('welcome') }}">
             <img src="{{ url($ultimaMarca->logo_marca) }}" class="navbar-brand-img h-100" alt="main_logo">
             <span class="ms-1 font-weight-bold">Panel de Control</span>
         </a>
     </div>
 
-    <hr class="horizontal dark mt-0 mb-2">
-    <ul class="navbar-nav">
+    <hr class="horizontal dark mt-0 mb-2" style="z-index: 1055;">
+
+    <ul class="navbar-nav" style="z-index: 1055;">
         {{-- Inicio --}}
         <li class="nav-item">
             <a class="nav-link {{ Route::currentRouteName() == 'home' ? 'active' : '' }}" href="{{ route('home') }}">
@@ -26,10 +31,14 @@
             </a>
         </li>
 
-        @include('layouts.navbars.auth.siden')
+        <div style="z-index: 1055;">
+            @include('layouts.navbars.auth.siden')
+        </div>
     </ul>
+    <!-- Botón invisible para cerrar el panel al hacer clic fuera -->
+    <button type="button" class="invisible-overlay hidden" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
 </div>
-</div>
+
 
 <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 "
     id="sidenav-main">
@@ -60,3 +69,37 @@
         </ul>
     </div>
 </aside>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const offcanvas = document.getElementById('sidenav-main');
+        const backdrop = document.querySelector('.btn-close[data-bs-dismiss="offcanvas"]');
+
+        // Mostrar fondo al abrir el panel
+        offcanvas.addEventListener('shown.bs.offcanvas', function () {
+            backdrop.classList.remove('hidden');
+        });
+
+        // Ocultar fondo al cerrar el panel
+        offcanvas.addEventListener('hidden.bs.offcanvas', function () {
+            backdrop.classList.add('hidden');
+        });
+    });
+</script>
+
+<style>
+    .invisible-overlay {
+    position: fixed;
+    top: 0;
+    left: 250px;
+    width: calc(100% - 250px);
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    z-index: 1050;
+    cursor: default;
+    pointer-events: auto;
+}
+</style>
