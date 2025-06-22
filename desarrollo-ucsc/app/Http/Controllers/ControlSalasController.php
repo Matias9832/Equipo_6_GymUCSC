@@ -89,7 +89,7 @@ class ControlSalasController extends Controller
         ]);
     }
 
-   public function registroDesdeQR(Request $request)
+      public function registroDesdeQR(Request $request)
     {
         try {
             $encryptedId = $request->query('id_sala');
@@ -111,8 +111,8 @@ class ControlSalasController extends Controller
         }
 
         $horaActual = now();
-        $horaApertura = \Carbon\Carbon::createFromTimeString($sala->horario_apertura);
-        $horaCierre = \Carbon\Carbon::createFromTimeString($sala->horario_cierre);
+        $horaApertura = Carbon::createFromTimeString($sala->horario_apertura);
+        $horaCierre = Carbon::createFromTimeString($sala->horario_cierre);
 
         if ($horaActual->lt($horaApertura) || $horaActual->gt($horaCierre)) {
             return view('usuarios.ingreso.registro', [
@@ -141,12 +141,6 @@ class ControlSalasController extends Controller
             ->first();
 
         if ($registroActivo) {
-            // Calcular hora de salida esperada para el registro activo
-            $horaIngreso = \Carbon\Carbon::parse($registroActivo->hora_ingreso);
-            $horaSalidaEsperada = $horaIngreso->copy()->addMinutes(6);
-            if ($horaSalidaEsperada->gt($horaCierre)) {
-                $horaSalidaEsperada = $horaCierre;
-            }
             return view('usuarios.ingreso.mostrar_ingreso', [
                 'mensaje' => 'Ya ingresaste a la sala previamente.',
                 'fecha' => $registroActivo->fecha_ingreso,
@@ -154,7 +148,7 @@ class ControlSalasController extends Controller
                 'idSala' => $idSala,
                 'nombreSala' => $sala->nombre_sala,
                 'horarioCierre' => $sala->horario_cierre,
-                'horaSalidaEsperada' => $horaSalidaEsperada->format('H:i'),
+                'horaSalidaEsperada' => $registroActivo->hora_salida_estimada,
             ]);
         }
 
@@ -171,21 +165,23 @@ class ControlSalasController extends Controller
             ]);
         }
 
+        // Calcular hora de salida estimada (90 minutos o cierre de sala)
+        $minutosUso = 6; // Cambia a lo que necesites
+        $horaIngreso = now();
+        $horaSalidaEstimada = $horaIngreso->copy()->addMinutes($minutosUso);
+        if ($horaSalidaEstimada->gt($horaCierre)) {
+            $horaSalidaEstimada = $horaCierre;
+        }
+
         $registro = Ingreso::create([
             'id_sala' => $idSala,
             'id_usuario' => $usuario->id_usuario,
-            'fecha_ingreso' => now()->format('Y-m-d'),
-            'hora_ingreso' => now()->format('H:i'),
+            'fecha_ingreso' => $horaIngreso->format('Y-m-d'),
+            'hora_ingreso' => $horaIngreso->format('H:i'),
             'hora_salida' => null,
+            'hora_salida_estimada' => $horaSalidaEstimada->format('H:i'),
             'tiempo_uso' => null,
         ]);
-
-        // Calcular hora de salida esperada (90 minutos o cierre de sala)
-        $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
-        $horaSalidaEsperada = $horaIngreso->copy()->addMinutes(6);
-        if ($horaSalidaEsperada->gt($horaCierre)) {
-            $horaSalidaEsperada = $horaCierre;
-        }
 
         return view('usuarios.ingreso.mostrar_ingreso', [
             'fecha' => now()->format('Y-m-d'),
@@ -194,7 +190,7 @@ class ControlSalasController extends Controller
             'nombreSala' => $sala->nombre_sala,
             'horarioCierre' => $sala->horario_cierre,
             'mensaje' => null,
-            'horaSalidaEsperada' => $horaSalidaEsperada->format('H:i'),
+            'horaSalidaEsperada' => $registro->hora_salida_estimada,
         ]);
     }
 
@@ -216,7 +212,7 @@ class ControlSalasController extends Controller
             $sala = $registro->sala;
             $horaIngreso = \Carbon\Carbon::parse($registro->hora_ingreso);
             $horaCierre = \Carbon\Carbon::createFromTimeString($sala->horario_cierre);
-            $horaSalidaEsperada = $horaIngreso->copy()->addMinutes(6);
+            $horaSalidaEsperada = $horaIngreso->copy()->addMinutes(2);
             if ($horaSalidaEsperada->gt($horaCierre)) {
                 $horaSalidaEsperada = $horaCierre;
             }
@@ -380,30 +376,24 @@ class ControlSalasController extends Controller
 
     public function registroManual(Request $request)
     {
-
         $request->validate([
             'rut' => 'required|string',
             'password' => 'required|string',
             'id_sala' => 'required|exists:sala,id_sala',
         ]);
 
-
-
-        // Buscar el usuario por RUT
         $usuario = Usuario::where('rut', $request->rut)->first();
 
-        if (!$usuario || !Hash::check($request->password, $usuario->contrasenia_usuario)) {
+        if (!$usuario || !\Hash::check($request->password, $usuario->contrasenia_usuario)) {
             return back()->with('error', 'El rut o la contraseña son incorrectos.')->withInput();
         }
 
-        // Verificar si la sala está activa
         $sala = Sala::findOrFail($request->id_sala);
 
         if (!$sala->activo) {
             return back()->with('error', 'La sala no está activa actualmente.')->withInput();
         }
 
-        // Verificar si la sala está dentro del horario permitido
         $horaActual = now();
         $horaApertura = Carbon::createFromTimeString($sala->horario_apertura);
         $horaCierre = Carbon::createFromTimeString($sala->horario_cierre);
@@ -412,7 +402,6 @@ class ControlSalasController extends Controller
             return back()->with('error', 'La sala no está disponible en este horario.')->withInput();
         }
 
-        // Verificar si ya tiene un ingreso activo
         $yaIngresado = Ingreso::where('id_usuario', $usuario->id_usuario)
             ->where('id_sala', $request->id_sala)
             ->whereDate('fecha_ingreso', today())
@@ -423,13 +412,21 @@ class ControlSalasController extends Controller
             return back()->with('error', 'Ya hay un ingreso activo para este usuario.')->withInput();
         }
 
-        // Registrar el ingreso
+        // Calcular hora de salida estimada (90 minutos o cierre de sala)
+        $minutosUso = 6; // Cambia a lo que necesites
+        $horaIngreso = now();
+        $horaSalidaEstimada = $horaIngreso->copy()->addMinutes($minutosUso);
+        if ($horaSalidaEstimada->gt($horaCierre)) {
+            $horaSalidaEstimada = $horaCierre;
+        }
+
         Ingreso::create([
             'id_sala' => $request->id_sala,
             'id_usuario' => $usuario->id_usuario,
-            'fecha_ingreso' => now()->format('Y-m-d'),
-            'hora_ingreso' => now()->format('H:i'),
+            'fecha_ingreso' => $horaIngreso->format('Y-m-d'),
+            'hora_ingreso' => $horaIngreso->format('H:i'),
             'hora_salida' => null,
+            'hora_salida_estimada' => $horaSalidaEstimada->format('H:i'),
             'tiempo_uso' => null,
         ]);
 
@@ -483,16 +480,9 @@ class ControlSalasController extends Controller
     {
         $ingreso = Ingreso::where('id_usuario', auth()->id())->whereNull('hora_salida')->first();
 
-        $horaSalidaEsperada = null;
+        $horaSalidaEstimada = null;
         if ($ingreso) {
-            $horaIngreso = \Carbon\Carbon::parse($ingreso->hora_ingreso);
-            $horaCierre = \Carbon\Carbon::createFromTimeString($ingreso->sala->horario_cierre);
-            //Temportalmente 2 para probar (Cambiar a 90 una vez finalizado cambiar a 90 minutos)
-            $horaSalidaEsperada = $horaIngreso->copy()->addMinutes(6);
-            if ($horaSalidaEsperada->gt($horaCierre)) {
-                $horaSalidaEsperada = $horaCierre;
-            }
-            $horaSalidaEsperada = $horaSalidaEsperada->format('H:i');
+            $horaSalidaEstimada = $ingreso->hora_salida_estimada;
         }
 
         return response()->json([
@@ -500,7 +490,7 @@ class ControlSalasController extends Controller
             'nombreSala' => $ingreso?->sala->nombre_sala,
             'horaIngreso' => $ingreso?->hora_ingreso,
             'horarioCierre' => $ingreso?->sala->horario_cierre,
-            'horaSalidaEsperada' => $horaSalidaEsperada,
+            'horaSalidaEsperada' => $horaSalidaEstimada,
         ]);
     }
 
