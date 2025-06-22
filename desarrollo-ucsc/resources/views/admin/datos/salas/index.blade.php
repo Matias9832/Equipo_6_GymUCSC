@@ -152,19 +152,40 @@
                         </div>
                     </div>
                 </div>
-                <!-- Información por Genero -->
-                
-                    <div class="card z-index-2 mb-4">
-                        <div class="card-header pb-0 pt-3 bg-transparent">
-                            <h6 class="text-capitalize">Ingresos por género</h6>
-                            <p class="text-sm mb-0">
-                                Femenino: <span class="font-weight-bold text-pink">{{ $porcentajeF }}%</span> /
-                                Masculino: <span class="font-weight-bold text-primary">{{ $porcentajeM }}%</span>
-                            </p>
+                <!-- Información por Género -->
+                <div class="card z-index-2 mb-4">
+                    <div class="card-header pb-0 pt-3">
+                        <div class="row w-100">
+                            <!-- Título y porcentajes -->
+                            <div class="col-12 col-lg-6 d-flex flex-column justify-content-center">
+                                <h6 class="text-capitalize mb-0">Ingresos por género</h6>
+                                <p class="text-sm mb-0">
+                                    Femenino: <span class="font-weight-bold text-pink">{{ $porcentajeF }}%</span> /
+                                    Masculino: <span class="font-weight-bold text-primary">{{ $porcentajeM }}%</span>
+                                </p>
+                            </div>
+                            <!-- Opciones de gráfico -->
+                            <div class="col-lg-6 d-flex justify-content-center align-items-center mt-3 mt-lg-0">
+                                <div class="nav-wrapper position-relative">
+                                    <ul class="nav nav-pills flex-row gap-2 p-1" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link px-2 py-1 active" data-bs-toggle="tab" href="#barChart" role="tab">Gráfico de Barra</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link px-2 py-1" data-bs-toggle="tab" href="#pieChart" role="tab">Gráfico de Torta</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body p-3">
-                            <div class="chart">
-                                <canvas id="chart-genero" class="chart-canvas" height="300"></canvas>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="barChart">
+                                <canvas id="chart-genero-bar" class="chart-canvas" height="140"></canvas>
+                            </div>
+                            <div class="tab-pane fade" id="pieChart">
+                                <canvas id="chart-genero-pie" class="chart-canvas" height="140"></canvas>
                             </div>
                         </div>
                     </div>
@@ -178,51 +199,56 @@
 @push('js')
     <script src="{{ url('/assets/js/plugins/chartjs.min.js') }}"></script>
     <script>
-        const ctxGenero = document.getElementById("chart-genero").getContext("2d");
-
-        new Chart(ctxGenero, {
+        // Gráfico de barras por género
+        const ctxBar = document.getElementById("chart-genero-bar").getContext("2d");
+        new Chart(ctxBar, {
             type: "bar",
             data: {
                 labels: ["Femenino", "Masculino"],
                 datasets: [{
                     label: "Cantidad de ingresos",
                     data: [{{ $femenino }}, {{ $masculino }}],
-                    backgroundColor: [
-                        '#f5365c', // pink
-                        '#5e72e4'  // blue
-                    ],
+                    backgroundColor: ['#E83E8C', '	#1E90FF'],
                     borderRadius: 5,
-                    barThickness: 50,
+                    barThickness: 50
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
+                plugins: { legend: { display: false } },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        ticks: {
-                            color: '#ccc'
-                        },
-                        grid: {
-                            display: true,
-                            drawBorder: false,
-                            borderDash: [5, 5],
-                        }
+                        ticks: { color: '#ccc' },
+                        grid: { display: true, drawBorder: false, borderDash: [5, 5] }
                     },
                     x: {
-                        ticks: {
-                            color: '#ccc'
-                        },
-                        grid: {
-                            display: false
-                        }
+                        ticks: { color: '#ccc' },
+                        grid: { display: false }
                     }
+                }
+            }
+        });
+
+        // Gráfico de torta por género
+        const ctxPie = document.getElementById("chart-genero-pie").getContext("2d");
+        new Chart(ctxPie, {
+            type: "pie",
+            data: {
+                labels: ["Femenino", "Masculino"],
+                datasets: [{
+                    data: [{{ $femenino }}, {{ $masculino }}],
+                    backgroundColor: ['#E83E8C', '	#1E90FF'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                plugins: {
+                    legend: { position: 'bottom' }
                 }
             }
         });
