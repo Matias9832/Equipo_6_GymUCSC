@@ -22,7 +22,7 @@
                                     <input type="text" name="subdominio" id="subdominio"
                                         class="form-control @error('subdominio') is-invalid @enderror"
                                         value="{{ old('subdominio') }}" placeholder="ej: empresa1" required>
-                                    <span class="input-group-text">.ugym.local</span>
+                                    <span class="input-group-text">.ugym.cl</span>
                                     @error('subdominio')
                                         <span class="invalid-feedback d-block">El subdominio ya está asignado</span>
                                     @enderror

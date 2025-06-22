@@ -7,7 +7,7 @@ Todos los migrations de la pagina web se movieron de migrations/ a migrations/te
 ## URL para acceder a la creación de tenants
 
 Abre en tu navegador la siguiente dirección: ff
-http://ugym.local:8000/tenants
+http://ugym.cl:8000/tenants
 
 ---
 
@@ -27,14 +27,14 @@ Agrega lo siguiente al final del archivo:
 
 ```plaintext
 # Hosts para desarrollo local tenants ugym, de lo contrario windows no lo reconoce, es diferente para ubunto **por ver
-127.0.0.1   ugym.local
-127.0.0.1   deportesucsc.ugym.local
-127.0.0.1   deportesudec.ugym.local
-127.0.0.1   deportesunab.ugym.local
-127.0.0.1   deportesudd.ugym.local
-127.0.0.1   deportesinacap.ugym.local
-127.0.0.1   deportes1.ugym.local
-127.0.0.1   deportes2.ugym.local
+127.0.0.1   ugym.cl
+127.0.0.1   deportesucsc.ugym.cl
+127.0.0.1   deportesudec.ugym.cl
+127.0.0.1   deportesunab.ugym.cl
+127.0.0.1   deportesudd.ugym.cl
+127.0.0.1   deportesinacap.ugym.cl
+127.0.0.1   deportes1.ugym.cl
+127.0.0.1   deportes2.ugym.cl
 127.0.0.1   deportes3.ugvym.local
 
 127.0.0.1   ugym.cl

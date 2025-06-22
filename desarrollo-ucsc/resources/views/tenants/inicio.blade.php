@@ -157,7 +157,7 @@
             </p>
             <p class="text-center">
                 <strong>Correo:</strong>
-                <a href="mailto:contacto@ugym.local" class="text-primary">contacto@ugym.local</a>
+                <a href="mailto:contacto@ugym.cl" class="text-primary">contacto@ugym.cl</a>
             </p>
         </div>
     </section>
