@@ -127,6 +127,9 @@
                                 @endforeach
                             </ul>
                             @endif
+                            @if($taller->administrador)
+                                <span> <strong>Profesor: </strong>{{ $taller->administrador->nombre_admin }}</span>
+                            @endif
                         </div>
                     </div>
                 </div>
