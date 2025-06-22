@@ -12,12 +12,18 @@ class QuienesSomosController extends Controller
     {
         $docentes = Administrador::whereHas('sucursales', function ($query) {
             $query->where('admin_sucursal.activa', true)
-                  ->where('admin_sucursal.id_suc', session('sucursal_activa'));
-        })->with([
+                ->where('admin_sucursal.id_suc', session('sucursal_activa'));
+        })
+        ->whereHas('usuario.roles', function ($query) {
+            $query->whereNotIn('name', ['Super Admin', 'Visor QR']);
+        })
+        ->with([
             'sucursales' => function ($query) {
                 $query->wherePivot('activa', true);
-            }
-        ])->get();
+            },
+            'usuario.roles'
+        ])
+        ->get();
 
         $banner = QuienesSomosSetting::first();
 
