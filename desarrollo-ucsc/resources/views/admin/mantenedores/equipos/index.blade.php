@@ -44,8 +44,15 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($equipo->capitan)
-                                                    <span class="text-xs">{{ $equipo->capitan->nombre }} ({{ $equipo->capitan->rut }})</span>
+                                                @if($equipo->capitan && $equipo->capitan->alumno)
+                                                    <span class="text-xs">
+                                                        {{ $equipo->capitan->alumno->nombre_alumno }} {{ $equipo->capitan->alumno->apellido_paterno }}
+                                                        ({{ $equipo->capitan->rut }})
+                                                    </span>
+                                                @elseif($equipo->capitan)
+                                                    <span class="text-xs">
+                                                        Sin nombre ({{ $equipo->capitan->rut }})
+                                                    </span>
                                                 @else
                                                     <span class="text-muted text-xs">Sin capitán</span>
                                                 @endif
@@ -54,7 +61,11 @@
                                                 @if($equipo->usuarios->isNotEmpty())
                                                     <ul class="mb-0 ps-3">
                                                         @foreach($equipo->usuarios as $usuario)
-                                                            <li class="text-xs">{{ $usuario->nombre }} ({{ $usuario->rut }})</li>
+                                                            <li class="text-xs">
+                                                                {{ ($usuario->alumno->nombre_alumno ?? 'Sin nombre') }}
+                                                                {{ $usuario->alumno->apellido_paterno ?? '' }}
+                                                                ({{ $usuario->rut }})
+                                                            </li>
                                                         @endforeach
                                                     </ul>
                                                 @else

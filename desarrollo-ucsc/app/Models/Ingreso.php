@@ -15,6 +15,7 @@ class Ingreso extends Model
         'fecha_ingreso',
         'hora_ingreso',
         'hora_salida',
+        'hora_salida_estimada',
         'tiempo_uso',
     ];
 

@@ -158,7 +158,9 @@ Route::middleware([
         Route::match(['get', 'post'], '/ingreso/actual', [ControlSalasController::class, 'mostrarIngreso'])->name('ingreso.mostrar');
 
         // Estado del usuario en la sala (para notificaciones)
-        Route::get('/estado-usuario', [ControlSalasController::class, 'estadoUsuario'])->middleware('auth');
+        Route::get('/estado-usuario', [ControlSalasController::class, 'estadoUsuario'])
+        ->middleware('auth')
+        ->name('estado-usuario');
 
         // Perfil usuario
         Route::get('/edit-perfil', [LoginController::class, 'editProfile'])->name('edit-perfil.edit');
