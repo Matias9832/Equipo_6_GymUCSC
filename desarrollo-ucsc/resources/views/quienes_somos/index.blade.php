@@ -65,4 +65,10 @@
         </div>
     </div>
 </div>
+
+<style>
+    #cerrar-perfil-docente{
+        display: none !important;
+    }
+</style>
 @endsection
