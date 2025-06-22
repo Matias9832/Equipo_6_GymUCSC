@@ -18,29 +18,6 @@
                             <label for="nombre_torneo" class="form-label">Nombre del Torneo</label>
                             <input type="text" name="nombre_torneo" id="nombre_torneo" class="form-control" placeholder="Ej: Liga de basketball interfacultades" value="{{ $torneo->nombre_torneo }}" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="id_deporte" class="form-label">Deporte</label>
-                            <select name="id_deporte" id="id_deporte" class="form-select" required>
-                                <option value="">Seleccione un deporte</option>
-                                @foreach($deportes as $deporte)
-                                    <option value="{{ $deporte->id_deporte }}" {{ $torneo->id_deporte == $deporte->id_deporte ? 'selected' : '' }}>
-                                        {{ $deporte->nombre_deporte }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="tipo_competencia" class="form-label">Tipo de Competencia</label>
-                            <select name="tipo_competencia" id="tipo_competencia" class="form-select" required>
-                                <option value="liga" {{ $torneo->tipo_competencia == 'liga' ? 'selected' : '' }}>Liga</option>
-                                <option value="copa" {{ $torneo->tipo_competencia == 'copa' ? 'selected' : '' }}>Copa</option>
-                                <option value="encuentro" {{ $torneo->tipo_competencia == 'encuentro' ? 'selected' : '' }}>Encuentro</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="max_equipos" class="form-label">Máximo de Equipos</label>
-                            <input type="number" name="max_equipos" id="max_equipos" class="form-control" value="{{ $torneo->max_equipos }}" required>
-                        </div>
                         <div class="d-flex justify-content-end gap-2 mt-4">
                             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                             <a href="{{ route('torneos.index') }}" class="btn btn-outline-secondary">Cancelar</a>
