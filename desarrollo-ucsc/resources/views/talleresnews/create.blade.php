@@ -29,29 +29,29 @@
 
                             <div id="imagePreviewContainer" class="row g-3 mt-3"></div>
                             <div class="form-group">
-                                <label>Nombre Noticia</label>
-                                <input type="text" name="nombre_noticia" class="form-control" required>
+                                <label>Título</label>
+                                <input type="text" name="nombre_noticia" class="form-control" placeholder="Título de la noticia" required>
                             </div>
                             <div class="form-group">
-                                <label>Contenido</label>
-                                <textarea name="descripcion_noticia" class="form-control" required></textarea>
+                                <label>Cuerpo</label>
+                                <textarea name="descripcion_noticia" class="form-control" placeholder="Cuerpo de la noticia" required></textarea>
                             </div>        
                             <div class="form-check mb-3">
                                 <input type="hidden" name="is_featured" value="0">
                                 <input type="checkbox" class="form-check-input" id="is_featured" name="is_featured" value="1"
-                                    {{ old('is_featured')=='1' ? 'checked' : '' }}>
+                                     {{ old('is_featured')=='1' ? 'checked' : '' }}>
                                 <label class="form-check-label" for="is_featured">
                                     <i class="fas fa-star text-warning me-1"></i> ¿Marcar como noticia destacada?
                                 </label>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3" id="featured_until_container" style="display: none;">
                                 <label for="featured_until" class="form-label">
                                     Tiempo hasta que sea destacada (opcional)
                                 </label>
-                                <input type="datetime-local" class="form-control" id="featured_until" name="featured_until"
-                                    value="{{ old('featured_until', isset($noticia) && $noticia->featured_until ? \Carbon\Carbon::parse($noticia->featured_until)->format('Y-m-d\TH:i') : '') }}">
+                                <input type="text" class="form-control" id="featured_until" name="featured_until" placeholder="Fecha lítmite para destacar"
+                                    autocomplete="off"
+                                  value="{{ old('featured_until', isset($noticia) && $noticia->featured_until ? \Carbon\Carbon::parse($noticia->featured_until)->format('Y-m-d H:i') : '') }}">
                             </div>
-
                         <div class="d-flex justify-content-end gap-2 mt-4">
                             <button class="btn btn-primary mt-2">Guardar</button>
                                 <a href="{{ route('talleresnews.index') }}" class="btn btn-outline-secondary mt-2">Cancelar</a>
@@ -65,9 +65,30 @@
     </div> 
 @endsection
 
-@section('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        // Mostrar/ocultar el campo de fecha según el checkbox
+        const isFeatured = document.getElementById('is_featured');
+        const featuredUntilContainer = document.getElementById('featured_until_container');
+
+        function toggleFeaturedUntil() {
+            featuredUntilContainer.style.display = isFeatured.checked ? 'block' : 'none';
+        }
+
+        // Inicializa el estado al cargar
+        toggleFeaturedUntil();
+
+        isFeatured.addEventListener('change', toggleFeaturedUntil);
+
+        // Flatpickr para el input de fecha
+       flatpickr("#featured_until", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            altInput: true,
+            altFormat: "d-m-Y H:i",
+            minDate: "today",
+            locale: "es"
+        });
         const input = document.getElementById('imageInput');
         const previewContainer = document.getElementById('imagePreviewContainer');
 
@@ -96,6 +117,6 @@
                 reader.readAsDataURL(file);
             });
         });
+
     });
 </script>
-@endsection

@@ -30,7 +30,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Se pretende cambiar la fuente a travez de una variable (Cambio por aplicar) -->
+
     @yield('custom-css')
     @php
         use App\Models\Tenants\TemaTenant;
