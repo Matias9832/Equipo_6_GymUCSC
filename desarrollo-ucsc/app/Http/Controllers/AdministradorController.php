@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Administrador;
 use App\Models\Usuario;
 use App\Models\Sucursal;
+use App\Models\Role;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
@@ -116,7 +117,8 @@ class AdministradorController extends Controller
     {
         // Obtener todas las sucursales
         $sucursales = Sucursal::all();
-        return view('admin.mantenedores.administradores.create', compact('sucursales'));
+        $roles = Role::where('name', '!=', 'Super Admin')->pluck('name', 'name');
+        return view('admin.mantenedores.administradores.create', compact('sucursales','roles'));
     }
 
     public function store(Request $request)
@@ -125,7 +127,7 @@ class AdministradorController extends Controller
             'rut_admin' => 'required|string|unique:administrador,rut_admin|unique:usuario,rut',
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario',
-            'rol' => 'required|in:Director,Docente,Coordinador,Visor QR',
+            'rol' => 'required|exists:roles,name',
             'descripcion_cargo' => 'nullable|string|max:255',
         ]);
 
@@ -205,7 +207,7 @@ class AdministradorController extends Controller
         $request->validate([
             'nombre_admin' => 'required|string|max:255',
             'correo_usuario' => 'required|email|unique:usuario,correo_usuario,' . $administrador->rut_admin . ',rut',
-            'rol' => 'required|in:Director,Docente,Coordinador,Visor QR',
+            'rol' => 'required|exists:roles,name',
             'descripcion_cargo' => 'nullable|string|max:255',
         ]);
 

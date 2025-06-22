@@ -36,7 +36,6 @@
                             <select name="rol" class="form-control" required>
                                 <option value="Docente" {{ $usuario->hasRole('Docente') ? 'selected' : '' }}>Docente</option>
                                 <option value="Coordinador" {{ $usuario->hasRole('Coordinador') ? 'selected' : '' }}>Coordinador</option>
-                                <option value="Visor QR" {{ $usuario->hasRole('Visor QR') ? 'selected' : '' }}>Visor QR</option>
                             </select>
                         </div>
 

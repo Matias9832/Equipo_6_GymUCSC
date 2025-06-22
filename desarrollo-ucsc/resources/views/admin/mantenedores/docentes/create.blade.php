@@ -37,7 +37,6 @@
                             <select name="rol" class="form-control" required>
                                 <option value="Docente">Docente</option>
                                 <option value="Coordinador">Coordinador</option>
-                                <option value="Visor QR">Visor QR</option>
                             </select>
                         </div>
 
