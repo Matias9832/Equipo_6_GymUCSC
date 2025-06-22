@@ -8,55 +8,53 @@
                 <div class="card-header pb-2">
                     <h5 class="mb-0">Datos de Ingresos a Salas</h5>
                 </div>
-                <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-end">
-                        <form method="GET" action="{{ route('datos-salas.index') }}" class="row g-3 align-items-end"
-                            style="flex: 1;">
-                            <div class="col-md-3">
+                <div class="card-body py-2">
+                     <form method="GET" action="{{ route('datos-salas.index') }}">
+                        <div class="row align-items-end gx-3 gy-3">
+                            <!-- Selector de Sala -->
+                            <div class="col-sm-12 col-md-4 col-lg-3 mb-lg-1">
                                 <label class="form-label text-uppercase font-weight-bold text-sm">Sala</label>
                                 <select class="form-control" name="sala_id" onchange="this.form.submit()">
                                     <option value="">Todas</option>
                                     @foreach($salas as $sala)
-                                        <option value="{{ $sala->id_sala }}" {{ request('sala_id') == $sala->id_sala ? 'selected' : '' }}>{{ $sala->nombre_sala }}
+                                        <option value="{{ $sala->id_sala }}" {{ request('sala_id') == $sala->id_sala ? 'selected' : '' }}>
+                                            {{ $sala->nombre_sala }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
-
-                            <div class="col-md-2">
+                            <!-- Desde -->
+                            <div class="col-sm-6 col-md-3 col-lg-2 mb-lg-1">
                                 <label class="form-label text-uppercase font-weight-bold text-sm">Desde</label>
                                 <input type="text" name="desde" class="form-control" id="desde"
                                     value="{{ request('desde', now()->startOfMonth()->format('Y-m-d')) }}"
                                     onchange="this.form.submit()">
                             </div>
-
-                            <div class="col-md-2">
+                            <!-- Hasta -->
+                            <div class="col-sm-6 col-md-3 col-lg-2 mb-lg-1">
                                 <label class="form-label text-uppercase font-weight-bold text-sm">Hasta</label>
                                 <input type="text" name="hasta" class="form-control" id="hasta"
                                     value="{{ request('hasta', now()->endOfMonth()->format('Y-m-d')) }}"
                                     onchange="this.form.submit()">
                             </div>
-                            <div class="col-md-2">
-                                <a href="{{ route('datos-salas.exportar', [
-                                    'sala_id' => request('sala_id'),
-                                    'desde' => request('desde'),
-                                    'hasta' => request('hasta')
-                                ]) }}" 
-                                class="btn custom-excel-btn custom-btn mb-1" title="Exportar" style="margin-bottom: 0px !important; height: 40px !important;">
-                                    <i class="fas fa-file-excel me-1"></i> Exportar a excel
-                                </a>
+                            <!-- Botones -->
+                            <div class="col-12 col-lg d-flex flex-wrap align-items-center gap-2 mt-3">
+                                <!-- Botón Exportar -->
+                                <div class="d-flex flex-wrap gap-2 me-auto">
+                                    <a href="{{ route('datos-salas.exportar', [
+                                        'sala_id' => request('sala_id'),
+                                        'desde' => request('desde'),
+                                        'hasta' => request('hasta')
+                                    ]) }}" 
+                                    class="btn custom-excel-btn custom-btn mb-1" title="Exportar">
+                                        <i class="fas fa-file-excel me-1"></i> Exportar a excel
+                                    </a>
+                                </div>
+                                <!-- Botón Ir a Salas -->
+                                <a href="{{ route('salas.index') }}" class="btn btn-primary mb-1">Ir a Salas</a>
                             </div>
-                            <div class="col-md-1">
-                            </div>
-                            <div class="col-md-2">
-                                <a href="{{ route('salas.index') }}"
-                                    class="btn btn-primary mb-1 d-flex align-items-center justify-content-center"
-                                    style="margin-bottom: 0px !important; height: 40px !important;">Ir a Salas
-                                </a>
-                            </div>
-                        </form>
-
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
