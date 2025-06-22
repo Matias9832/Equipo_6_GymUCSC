@@ -51,10 +51,13 @@ class Handler extends ExceptionHandler
     {
         // Error de conexión a la base de datos
         if ($exception instanceof PDOException || $exception instanceof QueryException) {
-            // Puedes mostrar una vista personalizada
             return response()->view('errors.db', [], 500);
         }
 
+        // Manejo personalizado para error 404
+        if ($this->isHttpException($exception) && $exception->getStatusCode() == 404) {
+            return response()->view('errors.404', [], 404);
+        }
         return parent::render($request, $exception);
     }
 }
