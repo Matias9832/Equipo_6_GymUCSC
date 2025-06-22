@@ -51,8 +51,8 @@
                             <!-- Botones izquierda -->
                             <div class="d-flex flex-wrap gap-2 me-auto">
                                 <a href="{{ route('datos-talleres.export', ['taller_id' => request('taller_id'), 'mes' => request('mes'), 'anio' => request('anio')]) }}" 
-                                   class="btn custom-excel-btn custom-btn mb-1">
-                                   Exportar a Excel
+                                   class="btn custom-excel-btn custom-btn mb-1" title="Exportar">
+                                   <i class="fas fa-file-excel me-1"></i> Exportar a excel
                                 </a>
                             </div>
 
@@ -196,6 +196,7 @@
                 </div>
             </div>
         </div>
+    </div>    
     @include('layouts.footers.auth.footer')
 </div>
 @endsection
@@ -326,6 +327,13 @@
         font-size: 0.85rem;
     }
     }
-
+    #chart-genero-bar {
+        height: 355px !important;
+        max-height: 380px !important;
+    }
+    #chart-curva {
+            height: 250px !important;
+            max-height: 300px !important;
+        }
 </style>
 @endpush
