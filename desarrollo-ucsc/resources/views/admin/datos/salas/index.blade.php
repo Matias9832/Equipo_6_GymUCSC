@@ -9,7 +9,7 @@
                     <h5 class="mb-0">Datos de Ingresos a Salas</h5>
                 </div>
                 <div class="card-body py-2">
-                     <form method="GET" action="{{ route('datos-salas.index') }}">
+                    <form method="GET" action="{{ route('datos-salas.index') }}">
                         <div class="row align-items-end gx-3 gy-3">
                             <!-- Selector de Sala -->
                             <div class="col-sm-12 col-md-4 col-lg-3 mb-lg-1">
@@ -58,11 +58,11 @@
                 </div>
             </div>
         </div>
-
+       <!-- Métricas y gráficos principales -->                                 
         <div class="row">
-            <!-- Información de Ingresos -->
+            <!-- Métrica: Información de Ingresos por mes -->
             <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-body p-3">
                         <div class="row">
                             <div class="col-8">
@@ -81,9 +81,59 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                <!-- Gráfico de curva: Ingresos por día del mes -->
+                <div class="card mb-4">
+                    <div class="card-header pb-0 pt-3 bg-transparent">
+                        <h6 class="text-capitalize">Ingresos por día del mes</h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="chart">
+                            <canvas id="chart-curva-salas" class="chart-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            
+                <!-- Informacion por carrera y porcentual -->
+                    <div class="card mb-4">
+                        <div class="card-header pb-0 p-3">
+                            <div class="d-flex justify-content-between">
+                                <h6 class="mb-2">Ingresos por Carrera</h6>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-items-center">
+                                <thead>
+                                    <tr>
+                                        <th>UA</th>
+                                        <th>Carrera</th>
+                                        <th class="text-center">Ingresos</th>
+                                        <th class="text-center">%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($rankingCarreras as $carrera)
+                                        <tr>
+                                            <td class="text-sm">{{ $carrera['ua'] }}</td>
+                                            <td class="text-sm text-truncate" style="max-width: 180px;"
+                                                title="{{ $carrera['carrera'] }}">
+                                                {{ $carrera['carrera'] }}
+                                            </td>
+                                            <td class="text-center text-sm"><strong>{{ $carrera['cantidad'] }}</strong></td>
+                                            <td class="text-center text-sm">{{ $carrera['porcentaje'] }}%</td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted">No hay datos disponibles.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            </div>    
+            <!-- Información de Ingresos Hoy -->
             <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
+                <div class="card mb-4">
                     <div class="card-body p-3">
                         <div class="row">
                             <div class="col-8">
@@ -102,67 +152,24 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Información Grafica -->
-        <div class="row mt-4">
-            <!-- Informacion por carrera y porcentual -->
-            <div class="col-lg-6 mb-lg-0 mb-4">
-                <div class="card">
-                    <div class="card-header pb-0 p-3">
-                        <div class="d-flex justify-content-between">
-                            <h6 class="mb-2">Ingresos por Carrera</h6>
+                <!-- Información por Genero -->
+                
+                    <div class="card z-index-2 mb-4">
+                        <div class="card-header pb-0 pt-3 bg-transparent">
+                            <h6 class="text-capitalize">Ingresos por género</h6>
+                            <p class="text-sm mb-0">
+                                Femenino: <span class="font-weight-bold text-pink">{{ $porcentajeF }}%</span> /
+                                Masculino: <span class="font-weight-bold text-primary">{{ $porcentajeM }}%</span>
+                            </p>
                         </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table align-items-center">
-                            <thead>
-                                <tr>
-                                    <th>UA</th>
-                                    <th>Carrera</th>
-                                    <th class="text-center">Ingresos</th>
-                                    <th class="text-center">%</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($rankingCarreras as $carrera)
-                                    <tr>
-                                        <td class="text-sm">{{ $carrera['ua'] }}</td>
-                                        <td class="text-sm text-truncate" style="max-width: 180px;"
-                                            title="{{ $carrera['carrera'] }}">
-                                            {{ $carrera['carrera'] }}
-                                        </td>
-                                        <td class="text-center text-sm"><strong>{{ $carrera['cantidad'] }}</strong></td>
-                                        <td class="text-center text-sm">{{ $carrera['porcentaje'] }}%</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4" class="text-center text-muted">No hay datos disponibles.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <!-- Información por Genero -->
-            <div class="col-lg-6 mb-lg-0 mb-4">
-                <div class="card z-index-2 h-100">
-                    <div class="card-header pb-0 pt-3 bg-transparent">
-                        <h6 class="text-capitalize">Ingresos por género</h6>
-                        <p class="text-sm mb-0">
-                            Femenino: <span class="font-weight-bold text-pink">{{ $porcentajeF }}%</span> /
-                            Masculino: <span class="font-weight-bold text-primary">{{ $porcentajeM }}%</span>
-                        </p>
-                    </div>
-                    <div class="card-body p-3">
-                        <div class="chart">
-                            <canvas id="chart-genero" class="chart-canvas" height="300"></canvas>
+                        <div class="card-body p-3">
+                            <div class="chart">
+                                <canvas id="chart-genero" class="chart-canvas" height="300"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>    
         </div>
         @include('layouts.footers.auth.footer')
     </div>
@@ -262,6 +269,41 @@
             }
         });
 
+        // Gráfico de curva: Ingresos por día del mes
+        const ctxCurvaSalas = document.getElementById("chart-curva-salas").getContext("2d");
+        new Chart(ctxCurvaSalas, {
+            type: "line",
+            data: {
+                labels: {!! json_encode(array_map(fn($d) => \Carbon\Carbon::parse($d['fecha'])->format('d M'), $curvaDatos)) !!},
+                datasets: [{
+                    label: "Ingresos por día",
+                    data: {!! json_encode(array_column($curvaDatos, 'cantidad')) !!},
+                    fill: false,
+                    borderColor: '#218838',
+                    tension: 0.3,
+                    pointBackgroundColor: '#D12421',
+                    pointRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#ccc' },
+                        grid: { display: true, drawBorder: false, borderDash: [5, 5] }
+                    },
+                    x: {
+                        ticks: { color: '#ccc' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
     </script>
     <style>
         .custom-excel-btn {
@@ -283,7 +325,11 @@
         }
         #chart-genero-bar {
         height: 355px !important;
-            max-height: 380px !important;
+        max-height: 380px !important;
+        }
+        #chart-curva-salas {
+            height: 250px !important;
+            max-height: 300px !important;
         }
     </style>
 @endpush

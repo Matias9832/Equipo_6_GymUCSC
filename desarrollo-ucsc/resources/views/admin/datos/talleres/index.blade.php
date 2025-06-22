@@ -196,6 +196,7 @@
                 </div>
             </div>
         </div>
+    </div>    
     @include('layouts.footers.auth.footer')
 </div>
 @endsection
@@ -330,5 +331,9 @@
         height: 355px !important;
         max-height: 380px !important;
     }
+    #chart-curva {
+            height: 250px !important;
+            max-height: 300px !important;
+        }
 </style>
 @endpush
