@@ -69,37 +69,3 @@
         </ul>
     </div>
 </aside>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const offcanvas = document.getElementById('sidenav-main');
-        const backdrop = document.querySelector('.btn-close[data-bs-dismiss="offcanvas"]');
-
-        // Mostrar fondo al abrir el panel
-        offcanvas.addEventListener('shown.bs.offcanvas', function () {
-            backdrop.classList.remove('hidden');
-        });
-
-        // Ocultar fondo al cerrar el panel
-        offcanvas.addEventListener('hidden.bs.offcanvas', function () {
-            backdrop.classList.add('hidden');
-        });
-    });
-</script>
-
-<style>
-    .invisible-overlay {
-    position: fixed;
-    top: 0;
-    left: 250px;
-    width: calc(100% - 250px);
-    height: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    z-index: 1050;
-    cursor: default;
-    pointer-events: auto;
-}
-</style>

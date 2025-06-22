@@ -66,14 +66,30 @@
             display: none;
         }
     </style>
+    <style>
+        .invisible-overlay {
+            position: fixed;
+            top: 0;
+            left: 250px;
+            width: calc(100% - 250px);
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            box-shadow: none;
+            z-index: 1050;
+            cursor: default;
+            pointer-events: auto;
+        }
+    </style>
 
     @if (!in_array(request()->route()->getName(), ['verificar.vista', 'reset-password', 'login']))
         @if(session('success') || session('update') || session('delete'))
             <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
                 <div id="toastSuccess" class="toast align-items-center text-white 
-                                                                                {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
-                                                                                border-0 show" role="alert"
-                    aria-live="assertive" aria-atomic="true">
+                                                                                                        {{ session('success') ? 'bg-success' : (session('update') ? 'bg-primary' : 'bg-danger') }} 
+                                                                                                        border-0 show"
+                    role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="d-flex">
                         <div class="toast-body text-center w-100">
                             {{ session('success') ?? session('update') ?? session('delete') }}
@@ -236,6 +252,22 @@
             closeIcon?.addEventListener('click', function () {
                 const bsCollapse = bootstrap.Collapse.getInstance(sidenav) || new bootstrap.Collapse(sidenav);
                 bsCollapse.hide();
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const offcanvas = document.getElementById('sidenav-main');
+            const backdrop = document.querySelector('.btn-close[data-bs-dismiss="offcanvas"]');
+
+            // Mostrar fondo al abrir el panel
+            offcanvas.addEventListener('shown.bs.offcanvas', function () {
+                backdrop.classList.remove('hidden');
+            });
+
+            // Ocultar fondo al cerrar el panel
+            offcanvas.addEventListener('hidden.bs.offcanvas', function () {
+                backdrop.classList.add('hidden');
             });
         });
     </script>
