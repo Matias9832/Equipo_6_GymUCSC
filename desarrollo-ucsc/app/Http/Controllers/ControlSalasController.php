@@ -359,7 +359,6 @@ class ControlSalasController extends Controller
         return back()->with('success', 'Usuario retirado correctamente.');
     }
 
-
     public function verUsuarios($id_sala)
     {
         $sala = Sala::where('activo', true)->where('id_sala', $id_sala)->firstOrFail();
@@ -367,9 +366,17 @@ class ControlSalasController extends Controller
         $sala->ingresos = Ingreso::where('id_sala', $sala->id_sala)
             ->whereNull('hora_salida')
             ->whereDate('fecha_ingreso', today())
-            ->with(['usuario.alumno', 'usuario.administrador'])
+            ->with(['usuario.alumno', 'usuario.administrador', 'usuario.salud'])
             ->get();
 
+        if (request()->ajax()) {
+            $tabla = view('admin.control-salas.partials.tabla_usuarios', ['ingresos' => $sala->ingresos])->render();
+            $modales = view('admin.control-salas.partials.modales_salud', ['ingresos' => $sala->ingresos])->render();
+            return response()->json([
+                'tabla' => $tabla,
+                'modales' => $modales,
+            ]);
+        }
 
         return view('admin.control-salas.ver_usuarios', compact('sala'));
     }
