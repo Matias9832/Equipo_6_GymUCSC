@@ -19,8 +19,8 @@ return [
     'central_domains' => [
         '127.0.0.1',
         'localhost',
-        'ugym.local',    // si es tu dominio real en producción
-        // 'ugym.local', // si trabajas local
+        'ugym.cl',    // si es tu dominio real en producción
+        // 'ugym.cl', // si trabajas local
     ],
 
     /**
