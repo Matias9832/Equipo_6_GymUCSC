@@ -86,17 +86,6 @@
                                     <i class="fas fa-edit"></i>
                                     Editar
                                 </a>
-                                <form
-                                    action="{{ route('talleres.destroy', ['taller' => $taller->id_taller, 'origen' => 'noticias']) }}"
-                                    method="POST"
-                                    onsubmit="event.stopPropagation(); return confirm('¿Estás seguro de eliminar este taller?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash-alt"></i>
-                                        Eliminar
-                                    </button>
-                                </form>
                             </div>
                             @endif
                         </div>
