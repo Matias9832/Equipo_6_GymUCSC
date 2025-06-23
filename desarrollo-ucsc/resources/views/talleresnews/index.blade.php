@@ -64,15 +64,15 @@
 
             <div class="accordion mt-2" id="accordionTalleres">
                 @foreach ($taller as $key => $taller)
-                <div class="accordion-item">
+                <div class="accordion-item mb-2">
                     <h2 class="accordion-header" id="heading{{ $key }}">
-                        <div class="d-flex justify-content-between align-items-center px-3 py-2 bg-white rounded-top"
+                        <div class="d-flex justify-content-between align-items-center px-3 py-1 bg-white rounded-top"
                             style="cursor: pointer;">
                             {{-- Botón que despliega el acordeón --}}
                             <div class="flex-grow-1 accordion-toggle collapsed d-flex align-items-center"
                                 data-bs-toggle="collapse" data-bs-target="#collapse{{ $key }}" aria-expanded="false"
                                 aria-controls="collapse{{ $key }}">
-                                <h5 class="ms-2 py-2">
+                                <h5 class="ms-2 mb-0 py-2">
                                     <strong>{{ $taller->nombre_taller }}</strong>
                                     <i class="fas fa-chevron-down ms-2 transition" id="arrow-{{ $key }}"></i>
                                 </h5>
@@ -284,7 +284,7 @@
 @section('custom-css')
 <style>
     .accordion .accordion-item {
-    border-radius: 1rem !important;
+    border-radius: 0.4rem !important;
     box-shadow: 0 1px 4px 0 rgba(44,62,80,0.04);
     border: 1px solid #dee2e6;
     margin-bottom: 1.2rem;

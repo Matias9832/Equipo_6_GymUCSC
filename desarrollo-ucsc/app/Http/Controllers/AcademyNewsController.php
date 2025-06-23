@@ -230,10 +230,8 @@ class AcademyNewsController extends Controller
         $this->eliminarImagenFisica($image->image_path);
         $image->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Imagen eliminada con éxito.'
-        ]);
+        // Redirige de vuelta a la página anterior con mensaje de éxito
+        return redirect()->back()->with('success', 'Imagen eliminada con éxito.');
     }
 }
 
