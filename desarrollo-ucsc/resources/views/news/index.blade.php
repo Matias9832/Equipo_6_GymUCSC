@@ -17,12 +17,14 @@
                 style="max-width: 650px;">
 
                 <!-- Botón en la esquina superior derecha del card -->
+                @can('Editar Banners')
                 @if(Auth::check() && Auth::user()->is_admin)
                 <a href="{{ route('newssettings.edit') }}" class="btn btn-sm text-white bg-secondary position-absolute"
                     style="top: 10px; right: 10px; z-index: 2;">
                     <i class="fas fa-pen-to-square"></i> Editar banner
                 </a>
                 @endif
+                @endcan
 
                 <small class="text-uppercase fw-semibold">
                     {{ $banner?->banner_subtitle ?? 'Direccion de Apoyo a los Estudiantes' }}
@@ -119,6 +121,7 @@
                                                     <i class="fas fa-star {{ $noticias->is_featured ? 'text-warning' : 'text-muted' }}"></i>
                                                 </button>
 
+                                                @can('Crear Noticias')
                                                 <a href="{{ route('news.edit', $noticias->id_noticia) }}" class="btn btn-sm btn-info px-2 py-1" title="Editar">
                                                     <i class="fas fa-pen-to-square"></i>
                                                 </a>
@@ -129,6 +132,7 @@
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </form>
+                                                @endcan
                                             </div>
                                         @endif
 
@@ -177,12 +181,14 @@
                 <div class="bg-white text-white rounded shadow p-4 p-md-5 mb-5 position-relative overflow-hidden">
 
                     <!-- Si deseas un botón de edición como en el banner -->
+                    @can('Acceso al Mantenedor de Salas')
                     @if(Auth::check() && Auth::user()->is_admin)
                         <a href="{{ route('salas.index') }}" class="btn btn-sm text-white bg-secondary position-absolute"
                             style="top: 10px; right: 10px; z-index: 2;">
                             <i class="fas fa-pen-to-square"></i> Editar Salas
                         </a>
                     @endif
+                    @endcan
 
                     <h4 class="mb-4 fw-bold text-uppercase text-black">Conoce Nuestras Salas</h4>
 

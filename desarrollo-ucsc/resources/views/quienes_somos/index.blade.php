@@ -15,12 +15,16 @@
         <div class="position-relative z-1 d-flex align-items-center h-100 ps-5 p-5">
             <div class="bg-primary bg-opacity-75 text-white p-md-5 rounded shadow position-relative"
                 style="max-width: 650px;">
+                @can('Editar Banners')
                 @if(Auth::check() && Auth::user()->is_admin)
-                <a href="{{ route('quienes-somos.banner.edit') }}" class="btn btn-sm text-white bg-info position-absolute"
+                <a href="{{ route('quienes-somos.banner.edit') }}"
+                    class="btn btn-sm text-white bg-secondary position-absolute"
                     style="top: 10px; right: 10px; z-index: 2;">
                     <i class="fas fa-pen-to-square"></i>
+                    Editar banner
                 </a>
                 @endif
+                @endcan
 
                 <small class="text-uppercase fw-semibold">
                     {{ $banner?->banner_subtitle ?? 'Unidad de Deportes y Recreación' }}
