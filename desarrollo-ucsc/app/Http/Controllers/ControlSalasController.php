@@ -363,21 +363,23 @@ class ControlSalasController extends Controller
     {
         $sala = Sala::where('activo', true)->where('id_sala', $id_sala)->firstOrFail();
 
-        $sala->ingresos = Ingreso::where('id_sala', $sala->id_sala)
+        $ingresos = Ingreso::where('id_sala', $sala->id_sala)
             ->whereNull('hora_salida')
             ->whereDate('fecha_ingreso', today())
             ->with(['usuario.alumno', 'usuario.administrador', 'usuario.salud'])
             ->get();
 
         if (request()->ajax()) {
-            $tabla = view('admin.control-salas.partials.tabla_usuarios', ['ingresos' => $sala->ingresos])->render();
-            $modales = view('admin.control-salas.partials.modales_salud', ['ingresos' => $sala->ingresos])->render();
+            $tabla = view('admin.control-salas.partials.tabla_usuarios', ['ingresos' => $ingresos])->render();
+            $modales = view('admin.control-salas.partials.modales_salud', ['ingresos' => $ingresos])->render();
             return response()->json([
                 'tabla' => $tabla,
                 'modales' => $modales,
             ]);
         }
 
+        // Solo para la carga inicial, así la vista principal también usa el mismo filtro
+        $sala->ingresos = $ingresos;
         return view('admin.control-salas.ver_usuarios', compact('sala'));
     }
 
