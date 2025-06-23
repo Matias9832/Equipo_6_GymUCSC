@@ -20,7 +20,7 @@ class TalleresNewsController extends Controller
 
     public function index()
     {
-         // Paso 1: Desmarcar noticias cuya fecha destacada ha expirado
+        // Paso 1: Desmarcar noticias cuya fecha destacada ha expirado
         TalleresNews::where('is_featured', true)
             ->whereNotNull('featured_until')
             ->where('featured_until', '<', now())
@@ -30,7 +30,7 @@ class TalleresNewsController extends Controller
             ]);
 
         // Paso 2: Obtener todas las noticias con paginación
-        $news = TalleresNews::with('administrador', 'images') // también cargamos imágenes si las usas en la vista
+        $news = TalleresNews::with('administrador', 'images')
             ->orderByDesc('fecha_noticia')
             ->paginate(4);
 
@@ -46,14 +46,31 @@ class TalleresNewsController extends Controller
             ->get();
 
         $banner = \App\Models\TalleresSetting::first();
+
+        // Ordenar los horarios por día de la semana
+        $diasOrden = [
+            'Lunes' => 1,
+            'Martes' => 2,
+            'Miércoles' => 3,
+            'Miercoles' => 3,
+            'Jueves' => 4,
+            'Viernes' => 5,
+            'Sábado' => 6,
+            'Sabado' => 6,
+            'Domingo' => 7,
+        ];
+
         $taller = Taller::with(['horarios', 'administrador'])
             ->where('activo_taller', true)
-            ->get();
+            ->get()
+            ->map(function($t) use ($diasOrden) {
+                $t->horarios = $t->horarios->sortBy(function($h) use ($diasOrden) {
+                    return $diasOrden[$h->dia_taller] ?? 99;
+                })->values();
+                return $t;
+            });
+
         return view('talleresnews.index', compact('news', 'featuredNews', 'banner', 'taller'));
-
-     
-
-        
     }
 
     /**

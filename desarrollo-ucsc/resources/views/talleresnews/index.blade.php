@@ -73,7 +73,7 @@
                                 data-bs-toggle="collapse" data-bs-target="#collapse{{ $key }}" aria-expanded="false"
                                 aria-controls="collapse{{ $key }}">
                                 <h5>
-                                    <strong class="">{{ $taller->nombre_taller }}</strong>
+                                    <strong>{{ $taller->nombre_taller }}</strong>
                                     <i class="fas fa-chevron-down ms-2 transition" id="arrow-{{ $key }}"></i>
                                 </h5>
                             </div>
@@ -82,7 +82,7 @@
                             @if(Auth::check() && Auth::user()->is_admin)
                             <div class="d-flex gap-2 ms-3 pt-2">
                                 <a href="{{ route('talleres.edit',['taller' => $taller->id_taller, 'origen' => 'noticias']) }}"
-                                    class="btn btn-sm btn-primary text-white" onclick="event.stopPropagation();">
+                                    class="btn btn-sm btn-outline-primary text-primary" onclick="event.stopPropagation();">
                                     <i class="fas fa-edit"></i>
                                     Editar
                                 </a>
@@ -106,15 +106,16 @@
                                 @endif
                             </p>
                             <p><strong>Lugar:</strong> {{ $taller->espacio->nombre_espacio }}</p>
-
+                            <!-- Horarios de talleres -->
                             @if($taller->horarios && $taller->horarios->count())
-                            <p><strong>Horarios:</strong></p>
-                            <ul>
-                                @foreach($taller->horarios as $horario)
-                                <li>{{ $horario->dia_semana }} de {{ $horario->hora_inicio }} a {{
-                                    $horario->hora_termino }}</li>
-                                @endforeach
-                            </ul>
+                                <p><strong>Horarios:</strong></p>
+                                <ul>
+                                    @foreach($taller->horarios as $horario)
+                                        <li>
+                                            {{ $horario->dia_taller }} de {{ $horario->hora_inicio }} a {{ $horario->hora_termino }}
+                                        </li>
+                                    @endforeach
+                                </ul>
                             @endif
                             @if($taller->administrador)
                                 <span> <strong>Profesor: </strong>{{ $taller->administrador->nombre_admin }}</span>
@@ -282,13 +283,17 @@
 
 @section('custom-css')
 <style>
-    .accordion .accordion-item .accordion-toggle.collapsed h5{
-        color: black;
-    }
-
-    .accordion .accordion-item .accordion-toggle h5{
-
-        color: var(--bs-primary);
-    }
+.accordion .accordion-collapse {
+    transition: height 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.accordion .accordion-body {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.2s, transform 0.1s;
+}
+.accordion .accordion-collapse.show .accordion-body {
+    opacity: 1;
+    transform: translateY(0);
+}
 </style>
 @endsection
