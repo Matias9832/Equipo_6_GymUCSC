@@ -120,7 +120,7 @@
                                                 <a href="{{ route('talleres.edit', [$taller->id_taller, 'origen' => 'panel']) }}"
                                                     class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip"
                                                     title="Editar">
-                                                    <i class="fas fa-pen-to-square text-info"></i>
+                                                    <i class="fas fa-pen-to-square text-primary"></i>
                                                 </a>
                                                 <form action="{{ route('talleres.destroy', $taller->id_taller) }}" method="POST"
                                                     class="d-inline">

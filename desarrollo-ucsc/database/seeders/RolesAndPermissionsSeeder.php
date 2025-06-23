@@ -57,6 +57,10 @@ class RolesAndPermissionsSeeder extends Seeder
 
             //Acceso a las noticias
             'Crear Noticias',
+            'Crear Noticias Academia',
+            'Crear Noticias Talleres',
+
+            'Editar Banners',
 
         ];
 
@@ -98,6 +102,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'Editar Usuarios',
             'Eliminar Usuarios',
             'Crear Noticias',
+            'Editar Banners',
             //Acceso al mantenedor de Docentes
             'Ver Docentes',
             'Crear Docentes',
@@ -144,6 +149,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'Ver Usuarios',
             'Ver Docentes',
             'Crear Noticias',
+            'Crear Noticias Academia',
+            'Crear Noticias Talleres',
+            'Editar Banners',
         ]);
         // Asignar permisos específicos al Visor QR
         $visor_qr->givePermissionTo([

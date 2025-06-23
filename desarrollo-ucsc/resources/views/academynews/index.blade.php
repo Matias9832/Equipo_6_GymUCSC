@@ -18,6 +18,7 @@
                 <div class="bg-primary bg-opacity-75 text-white p-md-5 rounded shadow position-relative" style="max-width: 650px;">
                     
                     <!-- Botón en la esquina superior derecha del card -->
+                    @can('Editar Banners')
                     @if(Auth::check() && Auth::user()->is_admin)
                         <a href="{{ route('academysettings.edit') }}" 
                         class="btn btn-sm text-white bg-secondary position-absolute"
@@ -26,6 +27,7 @@
                             Editar banner
                         </a>
                     @endif
+                    @endcan
 
                     <small class="text-uppercase fw-semibold">
                         {{ $banner?->banner_subtitle ?? 'UNIDAD DE DEPORTES Y RECREACIÓN' }}
@@ -184,7 +186,7 @@
                 @if($news->isEmpty())
                     <div class="card shadow-sm text-center p-5 position-relative mb-2">
                         @if(Auth::check() && Auth::user()->is_admin)
-                            @can('Crear Noticias')
+                            @can('Crear Noticias Academia')
                                 <div class="card-header pb-0 d-flex justify-content-between align-items-center w-100">
                                     <a href="{{ route('academynews.create') }}" class="btn btn-primary position-absolute"
                                         style="top: 15px; right: 15px; z-index: 1;">
@@ -221,6 +223,7 @@
                                                     data-id="{{ $noticias->id_noticia }}" title="Destacar" disabled>
                                                     <i class="fas fa-star {{ $noticias->is_featured ? 'text-warning' : 'text-muted' }}"></i>
                                                 </button>
+                                                @can('Crear Noticias Academia')
                                                 <a href="{{ route('academynews.edit', $noticias->id_noticia) }}"
                                                     class="btn btn-sm btn-info px-2 py-1" title="Editar">
                                                     <i class="fas fa-pen-to-square"></i>
@@ -238,6 +241,7 @@
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </form>
+                                                @endcan
                                             </div>
                                         @endif
 

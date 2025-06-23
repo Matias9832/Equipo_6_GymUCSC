@@ -162,6 +162,22 @@
                 </div>
             </div>
         </div>
+        <script>
+            function actualizarAforo(idSala) {
+                fetch(`/admin/control-salas/aforo/${idSala}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.querySelector('h2.text-primary').textContent = data.aforoPermitido;
+                        document.getElementById('aforo-actual').textContent = data.usuariosActivos;
+                        document.getElementById('aforo-estudiantes').textContent = data.estudiantes;
+                        document.getElementById('aforo-seleccionados').textContent = data.seleccionados;
+                    });
+            }
+
+            setInterval(function () {
+                actualizarAforo({{ $sala->id_sala }});
+            }, 2000);
+        </script>
     @endsection   
     @section('scripts')
     <script>

@@ -33,7 +33,7 @@
                                 <option value="">Seleccione un tipo de torneo</option>
                                 <option value="liga">Liga</option>
                                 <option value="copa">Copa</option>
-                                <option value="encuentro">Encuentro</option>
+                                <!-- <option value="encuentro">Encuentro</option> -->
                             </select>
                         </div>
 

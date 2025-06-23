@@ -32,7 +32,7 @@
                                         </td>
                                         <td class="align-middle text-center">
                                             <a href="{{ route('paises.edit', $pais->id_pais) }}" class="text-info font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">
-                                                <i class="fas fa-pen-to-square  text-info"></i>
+                                                <i class="fas fa-pen-to-square  text-primary"></i>
                                             </a>
                                             <form action="{{ route('paises.destroy', $pais->id_pais) }}" method="POST" class="d-inline">
                                                 @csrf

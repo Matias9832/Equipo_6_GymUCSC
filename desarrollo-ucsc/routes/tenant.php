@@ -98,7 +98,7 @@ Route::middleware([
     Route::get('/home', function () {
         return redirect()->route('news.index');
     })->name('welcome');
-    
+
     Route::get('/quienes-somos', [App\Http\Controllers\QuienesSomosController::class, 'index'])->name('quienes-somos.index');
 
     Route::fallback(function () {
@@ -159,8 +159,8 @@ Route::middleware([
 
         // Estado del usuario en la sala (para notificaciones)
         Route::get('/estado-usuario', [ControlSalasController::class, 'estadoUsuario'])
-        ->middleware('auth')
-        ->name('estado-usuario');
+            ->middleware('auth')
+            ->name('estado-usuario');
 
         // Perfil usuario
         Route::get('/edit-perfil', [LoginController::class, 'editProfile'])->name('edit-perfil.edit');
@@ -345,7 +345,8 @@ Route::middleware([
             Route::get('admin/news-settings/edit', [NewsSettingController::class, 'edit'])->name('newssettings.edit');
             Route::match(['put', 'post'], '/admin/news-settings/update', [NewsSettingController::class, 'update'])->name('newssettings.update');
             Route::delete('/admin/news-settings/image', [NewsSettingController::class, 'deleteImage'])->name('news.banner.image.delete');
-
+        });
+        Route::middleware(['permission:Crear Noticias Academia'])->group(function () {
             //Academias
             Route::resource('noticias-academia', AcademyNewsController::class)->except(['index', 'show'])->names('academynews');
             Route::post('/newsAcademy/{id}/toggle-featured', [AcademyNewsController::class, 'toggleFeatured'])->name('newsAcademy.toggleFeatured');
@@ -353,18 +354,22 @@ Route::middleware([
             Route::match(['put', 'post'], '/admin/academy-settings/update', [AcademySettingController::class, 'update'])->name('academysettings.update');
             Route::resource('academias', AcademiaController::class);
             Route::delete('/admin/academy-settings/image', [AcademySettingController::class, 'deleteImage'])->name('academy.banner.image.delete');
-
+        });
+        Route::middleware(['permission:Crear Noticias Talleres'])->group(function () {
             // Talleres
             Route::resource('noticias-talleres', TalleresNewsController::class)->except(['index', 'show'])->names('talleresnews');
             Route::post('/newsTalleres/{id}/toggle-featured', [TalleresNewsController::class, 'toggleFeatured'])->name('newsTalleres.toggleFeatured');
             Route::get('admin/talleres-settings/edit', [TalleresSettingController::class, 'edit'])->name('talleressettings.edit');
             Route::match(['put', 'post'], '/admin/talleres-settings/update', [TalleresSettingController::class, 'update'])->name('talleressettings.update');
             Route::delete('/admin/academy-settings/image', [TalleresSettingController::class, 'deleteImage'])->name('talleres.banner.image.delete');
+        });
 
+        Route::middleware(['permission:Editar Banners'])->group(function () {
             //Quienes somos
             Route::get('/quienes-somos/banner/edit', [App\Http\Controllers\QuienesSomosController::class, 'editBanner'])->name('quienes-somos.banner.edit');
             Route::put('/quienes-somos/banner/update', [App\Http\Controllers\QuienesSomosController::class, 'updateBanner'])->name('quienes-somos.banner.update');
         });
+
 
 
         // Importar alumnos

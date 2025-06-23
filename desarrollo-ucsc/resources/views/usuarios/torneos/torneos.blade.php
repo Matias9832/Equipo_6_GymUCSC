@@ -11,7 +11,7 @@
                 @else
                     @foreach($torneos as $torneo)
                         <div class="mb-4">
-                            <h5 style="color:#D12421;">
+                            <h5 class="text-primary">
                                 {{ $torneo->nombre_torneo }}
                                 <span class="text-muted" style="font-size:1rem;">
                                     &mdash; Deporte: {{ $torneo->deporte->nombre_deporte }}
@@ -46,7 +46,7 @@
                             </div>
                             {{-- Solo los usuarios que pertenecen a un equipo pueden ver miembros --}}
                             @if($equipo)
-                                <a href="{{ route('torneos.ver.miembros', $torneo->id) }}" class="btn btn-primary btn-sm" style="background:#D12421; border:none;">
+                                <a href="{{ route('torneos.ver.miembros', $torneo->id) }}" class="btn btn-primary btn-sm">
                                     Ver miembros
                                 </a>
                             @endif

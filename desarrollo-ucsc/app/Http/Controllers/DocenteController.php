@@ -90,7 +90,7 @@ class DocenteController extends Controller
                     return '
                         <td class="align-middle text-center">
                             <a href="' . $editUrl . '" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">
-                                <i class="fas fa-pen-to-square text-info"></i>
+                                <i class="fas fa-pen-to-square text-primary"></i>
                             </a>
                             <form action="' . $deleteUrl . '" method="POST" class="d-inline" onsubmit="return confirm(\'¿Estás seguro de que quieres eliminar este docente?\')">
                                 ' . csrf_field() . '

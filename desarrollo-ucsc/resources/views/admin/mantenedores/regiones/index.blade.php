@@ -30,13 +30,13 @@
                                         <td class="text-sm ps-4">{{ $region->pais->nombre_pais }}</td>
                                         <td class="align-middle text-center">
                                             <a href="{{ route('regiones.edit', $region->id_region) }}" class="text-secondary font-weight-bold text-xs me-2" title="Editar">
-                                                <i class="fas fa-pen-to-square text-info"></i>
+                                                <i class="fas fa-pen-to-square text-primary"></i>
                                             </a>
                                             <form action="{{ route('regiones.destroy', $region->id_region) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm('¿Estás seguro de que quieres eliminar esta región?')" title="Eliminar">
-                                                    <i class="fas fa-pen-to-square"></i>
+                                                    <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
                                         </td>

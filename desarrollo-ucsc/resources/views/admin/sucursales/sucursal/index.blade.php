@@ -52,7 +52,7 @@
                                                 <a href="{{ route('sucursales.edit', $sucursal->id_suc) }}"
                                                     class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip"
                                                     title="Editar">
-                                                    <i class="fas fa-pen-to-square text-info"></i>
+                                                    <i class="fas fa-pen-to-square text-primary"></i>
                                                 </a>
                                                 <form action="{{ route('sucursales.destroy', $sucursal->id_suc) }}"
                                                     method="POST" class="d-inline">

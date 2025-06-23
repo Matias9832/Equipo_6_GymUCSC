@@ -44,7 +44,7 @@
                                                 <a href="{{ route('ciudades.edit', $ciudad->id_ciudad) }}"
                                                     class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip"
                                                     title="Editar">
-                                                    <i class="fas fa-pen-to-square text-info"></i>
+                                                    <i class="fas fa-pen-to-square text-primary"></i>
                                                 </a>
                                                 <form action="{{ route('ciudades.destroy', $ciudad->id_ciudad) }}" method="POST"
                                                     class="d-inline">
