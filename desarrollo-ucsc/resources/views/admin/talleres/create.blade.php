@@ -117,9 +117,8 @@
                             <button type="button" class="btn btn-secondary btn-sm mt-2" id="agregar-horario">+ Añadir Horario</button>
 
                             <div class="d-flex justify-content-end gap-2 mt-4">
-                                <a href="{{ request()->query('origen') === 'noticias' ? route('talleresnews.index') : route('talleres.index') }}" class="btn btn-outline-secondary">Cancelar</a>
                                 <button type="submit" class="btn btn-primary ">Guardar</button>
-
+                                <a href="{{ request()->query('origen') === 'noticias' ? route('talleresnews.index') : route('talleres.index') }}" class="btn btn-outline-secondary">Cancelar</a>
                             </div>
                         </form>
                     </div>

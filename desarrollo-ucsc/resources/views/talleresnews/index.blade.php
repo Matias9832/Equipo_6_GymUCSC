@@ -19,9 +19,10 @@
 
                 <!-- Botón en la esquina superior derecha del card -->
                 @if(Auth::check() && Auth::user()->is_admin)
-                <a href="{{ route('talleressettings.edit') }}" class="btn btn-sm text-white bg-info position-absolute"
+                <a href="{{ route('talleressettings.edit') }}" title="Editar banner" class="btn btn-sm text-white bg-secondary position-absolute"
                     style="top: 10px; right: 10px; z-index: 2;">
                     <i class="fas fa-pen-to-square"></i>
+                    Editar Banner
                 </a>
                 @endif
 
@@ -42,7 +43,7 @@
         <div class="card shadow-sm text-center p-5 position-relative mb-2">
 
             @if(Auth::check() && Auth::user()->is_admin)
-            <div class="card-header pb-0 d-flex justify-content-between align-items-center mb-4">
+            <div class="card-header pb-0 d-flex justify-content-between align-items-center mb-2">
                 <a href="{{ route('talleres.create', ['origen' => 'noticias']) }}"
                     class="btn btn-primary position-absolute" style="top: 15px; right: 15px; z-index: 1;">
                     Crear nuevo taller
@@ -50,7 +51,7 @@
             </div>
             @endif
 
-            <h3 class="mb-4">Nuestros talleres extraprogramáticos</h3>
+            <h3 class="mb-4 pb-4">Nuestros talleres extraprogramáticos</h3>
 
 
             @if($taller->isEmpty())
@@ -61,7 +62,7 @@
             </div>
             @else
 
-            <div class="accordion" id="accordionTalleres">
+            <div class="accordion mt-2" id="accordionTalleres">
                 @foreach ($taller as $key => $taller)
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading{{ $key }}">
@@ -72,7 +73,7 @@
                                 data-bs-toggle="collapse" data-bs-target="#collapse{{ $key }}" aria-expanded="false"
                                 aria-controls="collapse{{ $key }}">
                                 <h5>
-                                    <strong class="">{{ $taller->nombre_taller }}</strong>
+                                    <strong>{{ $taller->nombre_taller }}</strong>
                                     <i class="fas fa-chevron-down ms-2 transition" id="arrow-{{ $key }}"></i>
                                 </h5>
                             </div>
@@ -81,19 +82,10 @@
                             @if(Auth::check() && Auth::user()->is_admin)
                             <div class="d-flex gap-2 ms-3 pt-2">
                                 <a href="{{ route('talleres.edit',['taller' => $taller->id_taller, 'origen' => 'noticias']) }}"
-                                    class="btn btn-sm btn-info text-white" onclick="event.stopPropagation();">
+                                    class="btn btn-sm btn-outline-primary text-primary" onclick="event.stopPropagation();">
                                     <i class="fas fa-edit"></i>
+                                    Editar
                                 </a>
-                                <form
-                                    action="{{ route('talleres.destroy', ['taller' => $taller->id_taller, 'origen' => 'noticias']) }}"
-                                    method="POST"
-                                    onsubmit="event.stopPropagation(); return confirm('¿Estás seguro de eliminar este taller?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
                             </div>
                             @endif
                         </div>
@@ -114,15 +106,19 @@
                                 @endif
                             </p>
                             <p><strong>Lugar:</strong> {{ $taller->espacio->nombre_espacio }}</p>
-
+                            <!-- Horarios de talleres -->
                             @if($taller->horarios && $taller->horarios->count())
-                            <p><strong>Horarios:</strong></p>
-                            <ul>
-                                @foreach($taller->horarios as $horario)
-                                <li>{{ $horario->dia_semana }} de {{ $horario->hora_inicio }} a {{
-                                    $horario->hora_termino }}</li>
-                                @endforeach
-                            </ul>
+                                <p><strong>Horarios:</strong></p>
+                                <ul>
+                                    @foreach($taller->horarios as $horario)
+                                        <li>
+                                            {{ $horario->dia_taller }} de {{ $horario->hora_inicio }} a {{ $horario->hora_termino }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                            @if($taller->administrador)
+                                <span> <strong>Profesor: </strong>{{ $taller->administrador->nombre_admin }}</span>
                             @endif
                         </div>
                     </div>
@@ -140,9 +136,11 @@
     {{-- Sección de noticias destacadas --}}
 
     @if ($featuredNews->isNotEmpty())
-    <div id="featuredNewsCarousel" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="5000">
-        <div class="carousel-inner">
-            <h4>Noticias Destacadas</h4>
+    <div id="featuredNewsCarousel" class="carousel slide mb-5 shadow-sm" data-bs-ride="carousel" data-bs-interval="5000" style="border-radius: 1rem; overflow: hidden;">
+        <div class="carousel-inner" style="border-radius: 1rem;">
+            <div class="w-100 py-3" style="background: #fff; border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
+                <h4 class="mb-0 text-center">Noticias Destacadas</h4>
+            </div>
             @foreach ($featuredNews as $index => $noticia)
             <div class="carousel-item @if($index == 0) active @endif"
                 style="background-color: white; border-radius: 1rem; padding: 1rem;">
@@ -153,7 +151,7 @@
                             class="d-block w-100 rounded" alt="Imagen de {{ $noticia->nombre_noticia }}"
                             style="height: 300px; object-fit: cover;">
                         @else
-                        <div class="bg-light d-flex justify-content-center align-items-center" style="height: 300px;">
+                        <div class="bg-light d-flex justify-content-center align-items-center rounded" style="height: 300px;">
                             <i class="ni ni-image text-muted" style="font-size: 3rem;"></i>
                         </div>
                         @endif
@@ -227,7 +225,7 @@
                                         class="fas fa-star {{ $noticias->is_featured ? 'text-warning' : 'text-muted' }}"></i>
                                 </button>
                                 <a href="{{ route('talleresnews.edit', $noticias->id_noticia) }}"
-                                    class="btn btn-sm btn-info px-2 py-1" title="Editar">
+                                    class="btn btn-sm btn-primary px-2 py-1" title="Editar">
                                     <i class="fas fa-pen-to-square"></i>
                                 </a>
                                 <form action="{{ route('talleresnews.destroy', $noticias->id_noticia) }}" method="POST"
@@ -285,13 +283,17 @@
 
 @section('custom-css')
 <style>
-    .accordion .accordion-item .accordion-toggle.collapsed h5{
-        color: black;
-    }
-
-    .accordion .accordion-item .accordion-toggle h5{
-
-        color: var(--bs-primary);
-    }
+.accordion .accordion-collapse {
+    transition: height 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.accordion .accordion-body {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.2s, transform 0.1s;
+}
+.accordion .accordion-collapse.show .accordion-body {
+    opacity: 1;
+    transform: translateY(0);
+}
 </style>
 @endsection

@@ -20,7 +20,7 @@ class TalleresNewsController extends Controller
 
     public function index()
     {
-         // Paso 1: Desmarcar noticias cuya fecha destacada ha expirado
+        // Paso 1: Desmarcar noticias cuya fecha destacada ha expirado
         TalleresNews::where('is_featured', true)
             ->whereNotNull('featured_until')
             ->where('featured_until', '<', now())
@@ -30,7 +30,7 @@ class TalleresNewsController extends Controller
             ]);
 
         // Paso 2: Obtener todas las noticias con paginación
-        $news = TalleresNews::with('administrador', 'images') // también cargamos imágenes si las usas en la vista
+        $news = TalleresNews::with('administrador', 'images')
             ->orderByDesc('fecha_noticia')
             ->paginate(4);
 
@@ -46,12 +46,31 @@ class TalleresNewsController extends Controller
             ->get();
 
         $banner = \App\Models\TalleresSetting::first();
-        $taller = Taller::with('horarios')->get();
+
+        // Ordenar los horarios por día de la semana
+        $diasOrden = [
+            'Lunes' => 1,
+            'Martes' => 2,
+            'Miércoles' => 3,
+            'Miercoles' => 3,
+            'Jueves' => 4,
+            'Viernes' => 5,
+            'Sábado' => 6,
+            'Sabado' => 6,
+            'Domingo' => 7,
+        ];
+
+        $taller = Taller::with(['horarios', 'administrador'])
+            ->where('activo_taller', true)
+            ->get()
+            ->map(function($t) use ($diasOrden) {
+                $t->horarios = $t->horarios->sortBy(function($h) use ($diasOrden) {
+                    return $diasOrden[$h->dia_taller] ?? 99;
+                })->values();
+                return $t;
+            });
+
         return view('talleresnews.index', compact('news', 'featuredNews', 'banner', 'taller'));
-
-     
-
-        
     }
 
     /**
@@ -231,9 +250,7 @@ class TalleresNewsController extends Controller
         $this->eliminarImagenFisica($image->image_path);
         $image->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Imagen eliminada con éxito.'
-        ]);
+        // Redirige de vuelta a la página anterior con mensaje de éxito
+        return redirect()->back()->with('success', 'Imagen eliminada con éxito.');
     }
 }
