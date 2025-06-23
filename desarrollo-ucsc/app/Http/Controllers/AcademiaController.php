@@ -42,16 +42,31 @@ class AcademiaController extends Controller
 
     public function store(Request $request)
     {
+        // Filtrar horarios vacíos antes de validar
+        $horariosValidos = collect($request->input('horarios'))
+            ->filter(function ($horario) {
+                return !empty(array_filter($horario, 'strlen'));
+            })->toArray();
+        $request->merge(['horarios' => $horariosValidos]);
+
         $request->validate([
             'nombre_academia' => 'required|string|max:255',
             'descripcion_academia' => 'required|string',
             'id_espacio' => 'required',
             'matricula'=> 'required|string',
             'mensualidad' => 'required|string',
-            'horarios' => 'required|array',
+            'horarios' => 'required|array|min:1',
             'horarios.*.dia' => 'required|string',
-            'horarios.*.hora_inicio' => 'required',
-            'horarios.*.hora_fin' => 'required',
+            'horarios.*.hora_inicio' => 'required|date_format:H:i',
+            'horarios.*.hora_fin' => 'required|date_format:H:i|after:horarios.*.hora_inicio',
+        ], [
+            'horarios.required' => 'Debes agregar al menos un horario.',
+            'horarios.*.dia.required' => 'El día es obligatorio.',
+            'horarios.*.hora_inicio.required' => 'La hora de inicio es obligatoria.',
+            'horarios.*.hora_inicio.date_format' => 'La hora de inicio debe tener el formato HH:MM.',
+            'horarios.*.hora_fin.required' => 'La hora de término es obligatoria.',
+            'horarios.*.hora_fin.date_format' => 'La hora de término debe tener el formato HH:MM.',
+            'horarios.*.hora_fin.after' => 'La hora de término debe ser posterior a la hora de inicio.',
         ]);
 
         $academia = Academia::create($request->only([
@@ -64,12 +79,15 @@ class AcademiaController extends Controller
         ]));
 
         foreach ($request->horarios as $horario) {
-            $academia->horarios()->create($horario);
+            $academia->horarios()->create([
+                'dia_semana' => $horario['dia'],
+                'hora_inicio' => $horario['hora_inicio'],
+                'hora_fin' => $horario['hora_fin'],
+            ]);
         }
 
         return redirect()->route('academias.index')->with('success', 'Academia creada correctamente.');
     }
-
     public function edit($id)
     {
         $academia = Academia::with('horarios')->findOrFail($id);
@@ -79,6 +97,13 @@ class AcademiaController extends Controller
 
     public function update(Request $request, $id)
     {
+        // Filtrar horarios vacíos antes de validar
+        $horariosValidos = collect($request->input('horarios'))
+            ->filter(function ($horario) {
+                return !empty(array_filter($horario, 'strlen'));
+            })->toArray();
+        $request->merge(['horarios' => $horariosValidos]);
+
         $request->validate([
             'nombre_academia' => 'required|string|max:255',
             'descripcion_academia' => 'required|string',
@@ -86,10 +111,18 @@ class AcademiaController extends Controller
             'mensualidad' => 'required|string',
             'implementos' => 'nullable|string',
             'matricula' => 'required|string',
-            'horarios' => 'required|array',
+            'horarios' => 'required|array|min:1',
             'horarios.*.dia' => 'required|string',
-            'horarios.*.hora_inicio' => 'required',
-            'horarios.*.hora_fin' => 'required',
+            'horarios.*.hora_inicio' => 'required|date_format:H:i',
+            'horarios.*.hora_fin' => 'required|date_format:H:i|after:horarios.*.hora_inicio',
+        ], [
+            'horarios.required' => 'Debes agregar al menos un horario.',
+            'horarios.*.dia.required' => 'El día es obligatorio.',
+            'horarios.*.hora_inicio.required' => 'La hora de inicio es obligatoria.',
+            'horarios.*.hora_inicio.date_format' => 'La hora de inicio debe tener el formato HH:MM.',
+            'horarios.*.hora_fin.required' => 'La hora de término es obligatoria.',
+            'horarios.*.hora_fin.date_format' => 'La hora de término debe tener el formato HH:MM.',
+            'horarios.*.hora_fin.after' => 'La hora de término debe ser posterior a la hora de inicio.',
         ]);
 
         $academia = Academia::findOrFail($id);
@@ -104,9 +137,12 @@ class AcademiaController extends Controller
 
         // Eliminar horarios existentes y volver a crear
         $academia->horarios()->delete();
-
         foreach ($request->horarios as $horario) {
-            $academia->horarios()->create($horario);
+            $academia->horarios()->create([
+                'dia_semana' => $horario['dia'],
+                'hora_inicio' => $horario['hora_inicio'],
+                'hora_fin' => $horario['hora_fin'],
+            ]);
         }
 
         return redirect()->route('academias.index')->with('success', 'Academia actualizada correctamente.');

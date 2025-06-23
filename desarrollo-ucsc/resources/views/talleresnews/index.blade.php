@@ -19,7 +19,7 @@
 
                 <!-- Botón en la esquina superior derecha del card -->
                 @if(Auth::check() && Auth::user()->is_admin)
-                <a href="{{ route('talleressettings.edit') }}" title="Editar banner" class="btn btn-sm text-white bg-secondary position-absolute"
+                <a href="{{ route('talleressettings.edit') }}" class="btn btn-sm text-white bg-secondary position-absolute"
                     style="top: 10px; right: 10px; z-index: 2;">
                     <i class="fas fa-pen-to-square"></i>
                     Editar Banner
@@ -46,7 +46,7 @@
             <div class="card-header pb-0 d-flex justify-content-between align-items-center mb-2">
                 <a href="{{ route('talleres.create', ['origen' => 'noticias']) }}"
                     class="btn btn-primary position-absolute" style="top: 15px; right: 15px; z-index: 1;">
-                    Crear nuevo taller
+                    <i class="ni ni-fat-add me-2"></i>Crear nuevo taller
                 </a>
             </div>
             @endif

@@ -1,146 +1,192 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
-@section('title', 'Editar Academia')
-
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Editar Academia'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Academias Deportivas'])
 
 <div class="container-fluid py-4">
-    <div class="card">
-        <div class="card-body">
-            <form action="{{ route('academias.update', $academia->id_academia) }}" method="POST">
-
-                @csrf
-                @method('PUT')
-
-                <div class="mb-3">
-                    <label class="form-label">Nombre de la academia</label>
-                    <input type="text" name="nombre_academia" class="form-control" value="{{ old('nombre_academia', $academia->nombre_academia) }}" required>
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <h5>Editar academia</h5>
                 </div>
+                <div class="card-body">
+                    <form action="{{ route('academias.update', $academia->id_academia) }}" method="POST">
+                        @csrf
+                        @method('PUT')
 
-                <div class="mb-3">
-                    <label class="form-label">Descripción</label>
-                    <textarea name="descripcion_academia" class="form-control" rows="3" required>{{ old('descripcion_academia', $academia->descripcion_academia) }}</textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Espacio</label>
-                    <select name="id_espacio" class="form-select" required>
-                        @foreach($espacios as $espacio)
-                            <option value="{{ $espacio->id_espacio }}" {{ $academia->id_espacio == $espacio->id_espacio ? 'selected' : '' }}>
-                                {{ $espacio->nombre_espacio }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Implementos</label>
-                    <input type="text" name="implementos" class="form-control" value="{{ old('implementos', $academia->implementos) }}">
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Matrícula</label>
-                    <input type="text" name="matricula" class="form-control" value="{{ old('matricula', $academia->matricula) }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Mensualidad</label>
-                    <input type="text" name="mensualidad" class="form-control" value="{{ old('mensualidad', $academia->mensualidad) }}" required>
-                </div>
-
-                <hr>
-                <h5>Horarios</h5>
-
-                @php
-                    $diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-                    $oldHorarios = old('horarios', $academia->horarios->toArray());
-                @endphp
-
-                <div id="horarios-container">
-                    @foreach ($oldHorarios as $index => $horario)
-                        <div class="row horario-item mb-3 align-items-center">
-                            <div class="col-md-3">
-                                <label>Día</label>
-                                <select name="horarios[{{ $index }}][dia]" class="form-control" required>
-                                    @foreach ($diasSemana as $dia)
-                                        <option value="{{ $dia }}" {{ ($horario['dia'] ?? '') == $dia ? 'selected' : '' }}>
-                                            {{ $dia }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label>Hora de inicio</label>
-                                <input type="time" name="horarios[{{ $index }}][hora_inicio]" class="form-control" value="{{ $horario['hora_inicio'] ?? '' }}" required>
-                            </div>
-                            <div class="col-md-3">
-                                <label>Hora de fin</label>
-                                <input type="time" name="horarios[{{ $index }}][hora_fin]" class="form-control" value="{{ $horario['hora_fin'] ?? '' }}" required>
-                            </div>
-                            <div class="col-md-3 mt-4">
-                                <button type="button" class="btn btn-danger remove-horario">Eliminar</button>
-                            </div>
+                        <div class="mb-3">
+                            <label for="nombre_academia" class="form-label">Nombre de la academia</label>
+                            <input type="text" name="nombre_academia" id="nombre_academia" class="form-control" placeholder="Ej: Academia de Fútbol" required maxlength="255" value="{{ old('nombre_academia', $academia->nombre_academia) }}">
                         </div>
-                    @endforeach
-                </div>
 
-                <button type="button" class="btn btn-secondary my-2" id="add-horario">+ Agregar otro horario</button>
+                        <div class="mb-3">
+                            <label for="descripcion_academia" class="form-label">Descripción</label>
+                            <textarea name="descripcion_academia" id="descripcion_academia" class="form-control" rows="3" placeholder="Puedes explicar en qué consiste esta academia o sus objetivos" required>{{ old('descripcion_academia', $academia->descripcion_academia) }}</textarea>
+                        </div>
 
-                <div class="mt-4">
-                    <button type="submit" class="btn btn-primary">Actualizar academia</button>
+                        <div class="mb-3">
+                            <label class="form-label">Espacio</label>
+                            <select name="id_espacio" class="form-select" required>
+                                <option value="">Seleccione un espacio</option>
+                                @foreach($espacios as $espacio)
+                                    <option value="{{ $espacio->id_espacio }}" {{ old('id_espacio', $academia->id_espacio) == $espacio->id_espacio ? 'selected' : '' }}>
+                                        {{ $espacio->nombre_espacio }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Implementos (opcional)</label>
+                            <input type="text" name="implementos" class="form-control" placeholder="Ej: Camiseta, buzo, zapatillas, etc." value="{{ old('implementos', $academia->implementos) }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Matrícula</label>
+                            <input type="text" name="matricula" class="form-control" placeholder="Precio de la matrícula" required value="{{ old('matricula', $academia->matricula) }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mensualidad</label>
+                            <input type="text" name="mensualidad" class="form-control" placeholder="Valor de la mensualidad" required value="{{ old('mensualidad', $academia->mensualidad) }}">
+                        </div>
+
+                        <hr>
+                        <h6>Horarios</h6>
+                        @php
+                            $diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+                            $horarios_old = old('horarios', $academia->horarios->map(function($h) {
+                                return [
+                                    'dia' => $h->dia_semana,
+                                    'hora_inicio' => $h->hora_inicio,
+                                    'hora_fin' => $h->hora_fin
+                                ];
+                            })->toArray());
+                        @endphp
+
+                        <div id="horarios-container" data-dias-semana="{{ json_encode($diasSemana) }}" data-index-inicial="{{ count($horarios_old) }}">
+                            @if (count($horarios_old) > 0)
+                                @foreach($horarios_old as $i => $horario)
+                                    <div class="row my-2 horario-item">
+                                        <div class="col-md-3">
+                                            <select name="horarios[{{ $i }}][dia]" class="form-select @error('horarios.'.$i.'.dia') is-invalid @enderror" required>
+                                                <option value="">-- Día --</option>
+                                                @foreach($diasSemana as $dia)
+                                                    <option value="{{ $dia }}" @selected(isset($horario['dia']) && $horario['dia'] === $dia)>{{ $dia }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('horarios.'.$i.'.dia')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="text" name="horarios[{{ $i }}][hora_inicio]" class="form-control time-picker @error('horarios.'.$i.'.hora_inicio') is-invalid @enderror" placeholder="Hora inicio" value="{{ $horario['hora_inicio'] ?? '' }}" required>
+                                            @error('horarios.'.$i.'.hora_inicio')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="text" name="horarios[{{ $i }}][hora_fin]" class="form-control time-picker @error('horarios.'.$i.'.hora_fin') is-invalid @enderror" placeholder="Hora término" value="{{ $horario['hora_fin'] ?? '' }}" required>
+                                            @error('horarios.'.$i.'.hora_fin')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-md-3 d-flex align-items-center">
+                                            <button type="button" class="btn btn-danger btn-sm remove-horario">Eliminar</button>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm mt-2" id="agregar-horario">+ Añadir Horario</button>
+
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">Actualizar academia</button>
+                            <a href="{{ route('academias.index') }}" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
     @include('layouts.footers.auth.footer')
 </div>
-
 @endsection
 
+@push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    let index = {{ count($oldHorarios) }};
-
-    document.getElementById('add-horario').addEventListener('click', function () {
+    document.addEventListener('DOMContentLoaded', function () {
         const container = document.getElementById('horarios-container');
-        const item = document.createElement('div');
-        item.classList.add('row', 'horario-item', 'mb-3', 'align-items-center');
-        item.innerHTML = `
-            <div class="col-md-3">
-                <label>Día</label>
-                <select name="horarios[${index}][dia]" class="form-control" required>
-                    <option value="">Seleccione día</option>
-                    <option value="Lunes">Lunes</option>
-                    <option value="Martes">Martes</option>
-                    <option value="Miércoles">Miércoles</option>
-                    <option value="Jueves">Jueves</option>
-                    <option value="Viernes">Viernes</option>
-                    <option value="Sábado">Sábado</option>
-                    <option value="Domingo">Domingo</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label>Hora de inicio</label>
-                <input type="time" name="horarios[${index}][hora_inicio]" class="form-control" required>
-            </div>
-            <div class="col-md-3">
-                <label>Hora de fin</label>
-                <input type="time" name="horarios[${index}][hora_fin]" class="form-control" required>
-            </div>
-            <div class="col-md-3 mt-4">
-                <button type="button" class="btn btn-danger remove-horario">Eliminar</button>
-            </div>
-        `;
-        container.appendChild(item);
-        index++;
-    });
+        const diasSemana = JSON.parse(container.dataset.diasSemana);
+        let index = parseInt(container.dataset.indexInicial, 10);
 
-    document.getElementById('horarios-container').addEventListener('click', function (e) {
-        if (e.target.classList.contains('remove-horario')) {
-            e.target.closest('.horario-item').remove();
+        function initTimePickers(element = document) {
+            flatpickr(element.querySelectorAll('.time-picker'), {
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true,
+                minuteIncrement: 5
+            });
         }
-    });
-});
-</script>
 
+        // Inicializa los time-pickers existentes (si hay errores y se recargó la página)
+        initTimePickers();
+
+        document.getElementById('agregar-horario').addEventListener('click', function () {
+            const newRow = document.createElement('div');
+            newRow.classList.add('row', 'my-2', 'horario-item');
+
+            let selectDiaOptions = `<option value="">-- Día --</option>`;
+            diasSemana.forEach(dia => {
+                selectDiaOptions += `<option value="${dia}">${dia}</option>`;
+            });
+
+            newRow.innerHTML = `
+                <div class="col-md-3">
+                    <select name="horarios[${index}][dia]" class="form-select" required>${selectDiaOptions}</select>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="horarios[${index}][hora_inicio]" class="form-control time-picker" placeholder="Hora inicio" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="horarios[${index}][hora_fin]" class="form-control time-picker" placeholder="Hora término" required>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <button type="button" class="btn btn-danger btn-sm remove-horario">Eliminar</button>
+                </div>
+            `;
+            container.appendChild(newRow);
+            initTimePickers(newRow);
+            index++;
+        });
+
+        container.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('remove-horario')) {
+                e.target.closest('.horario-item').remove();
+            }
+        });
+
+        // Validación en tiempo real (hora_fin > hora_inicio)
+        container.addEventListener('input', function (e) {
+            if (e.target && e.target.matches('input[name$="[hora_fin]"]')) {
+                const terminoInput = e.target;
+                const row = terminoInput.closest('.horario-item');
+                const inicioInput = row.querySelector('input[name$="[hora_inicio]"]');
+                
+                terminoInput.setCustomValidity('');
+                if (terminoInput.value && inicioInput.value) {
+                    const inicioTime = new Date(`2000/01/01 ${inicioInput.value}`);
+                    const terminoTime = new Date(`2000/01/01 ${terminoInput.value}`);
+
+                    if (terminoTime <= inicioTime) {
+                        terminoInput.setCustomValidity('La hora de término debe ser posterior a la hora de inicio.');
+                        terminoInput.reportValidity();
+                    }
+                }
+            }
+        });
+    });
+</script>
+@endpush
