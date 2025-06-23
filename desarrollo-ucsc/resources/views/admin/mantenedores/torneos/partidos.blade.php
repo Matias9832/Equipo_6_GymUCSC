@@ -57,11 +57,11 @@
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
-                                <th>Local</th>
-                                <th>Visitante</th>
-                                <th>Resultado Local</th>
-                                <th>Resultado Visitante</th>
-                                <th>Acción</th>
+                                <th class="ps-2">Local</th>
+                                <th class="ps-2">Visitante</th>
+                                <th class="ps-2">Resultado Local</th>
+                                <th class="ps-2">Resultado Visitante</th>
+                                <th class="ps-2">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,8 +82,8 @@
                                     </td>
                                     <td>
                                             @if(!$finalizada)
-                                                <button type="submit" class="btn btn-success btn-sm">Guardar</button>
-                                                <a href="{{ route('torneos.index') }}" class="btn btn-outline-secondary mt-3">Volver</a>
+                                                <button type="submit" class="btn btn-success btn-sm" style="margin-bottom: 0rem !important">Guardar</button>
+                                                <a href="{{ route('torneos.index') }}" class="btn btn-outline-secondary mt-3 btn-sm">Volver</a>
                                             @endif
                                         </form>
                                     </td>
