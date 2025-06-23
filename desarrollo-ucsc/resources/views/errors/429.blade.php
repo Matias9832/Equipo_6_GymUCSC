@@ -12,7 +12,7 @@
             <img src="{{ url($ultimaMarca->logo_marca) }}" alt="Logo Marca" style="height: 70px;" class="mb-4">
             <h2 class="mb-3 text-primary fw-bold">Error</h2>
             <p class="mb-4 text-secondary">
-                Ha ocurrido un error inesperado.<br>
+                Has enviado demasiadas solicitudes al servidor.<br>
                 Serás redirigido al inicio en unos segundos.
             </p>
             <a href="{{ url('/') }}" class="btn btn-primary">
