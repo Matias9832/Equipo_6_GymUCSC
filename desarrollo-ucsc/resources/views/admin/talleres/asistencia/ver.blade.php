@@ -1,7 +1,7 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-@include('layouts.navbars.auth.topnav', ['title' => 'Hoja de Asistencia'])
+@include('layouts.navbars.auth.topnav', ['title' => 'Talleres'])
 
 <div class="container-fluid py-4">
     <div class="row">
@@ -10,7 +10,7 @@
                 <div class="card-header pb-0">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h6 class="mb-0">Asistencia del taller: {{ $taller->nombre_taller }}</h6>
+                            <h4 class="mb-0">Hoja de asistencia: {{ $taller->nombre_taller }}</h4>
                         </div>
                         <div class="col-auto">
                             <a href="{{ route('asistencia.registrar', $taller->id_taller) }}" class="btn btn-sm btn-primary me-2">
