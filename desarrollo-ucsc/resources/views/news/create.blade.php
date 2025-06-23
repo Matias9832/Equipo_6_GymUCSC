@@ -98,30 +98,30 @@
 </style>
 @endsection
 
-@section('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Mostrar/ocultar el campo de fecha según el checkbox
         const isFeatured = document.getElementById('is_featured');
         const featuredUntilContainer = document.getElementById('featured_until_container');
 
         function toggleFeaturedUntil() {
-            featuredUntilContainer.style.display = isFeatured.checked ? 'block' : 'none';
+            if (isFeatured.checked) {
+                featuredUntilContainer.style.display = 'block';
+            } 
         }
 
-        // Inicializa el estado al cargar
+        // Ejecuta al cargar (asegura que el estado inicial sea correcto)
         toggleFeaturedUntil();
 
+        // Ejecuta al cambiar el checkbox
         isFeatured.addEventListener('change', toggleFeaturedUntil);
 
-        // Flatpickr para la fecha (solo días desde hoy)
+        // ... (el resto de tu código para flatpickr y preview de imágenes)
         flatpickr("#featured_date", {
             dateFormat: "Y-m-d",
             minDate: "today",
             locale: "es"
         });
 
-        // Flatpickr para la hora
         flatpickr("#featured_time", {
             enableTime: true,
             noCalendar: true,
@@ -130,7 +130,6 @@
             locale: "es"
         });
 
-        // Preview de imágenes
         const input = document.getElementById('imageInput');
         const previewContainer = document.getElementById('imagePreviewContainer');
         input.addEventListener('change', function () {
@@ -155,4 +154,3 @@
         });
     });
 </script>
-@endsection

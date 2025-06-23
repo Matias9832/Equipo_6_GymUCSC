@@ -129,7 +129,6 @@
 </style>
 @endsection
 
-@section('scripts')
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Mostrar/ocultar el campo de fecha según el checkbox
@@ -185,3 +184,4 @@
             });
         });
     });
+</script>    
