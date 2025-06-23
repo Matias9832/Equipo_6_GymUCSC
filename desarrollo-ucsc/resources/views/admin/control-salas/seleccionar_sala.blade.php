@@ -79,7 +79,7 @@
                                                                                 </a>
 
                                                                                 <!-- Botón Cambiar Aforo -->
-                                                                                <button class="btn btn-sm btn-warning ms-2" data-bs-toggle="modal"
+                                                                                <button class="btn btn-sm btn-success ms-2" data-bs-toggle="modal"
                                                                                     data-bs-target="#cambiarAforoModal{{ $sala->id_sala }}">
                                                                                     Cambiar Aforo
                                                                                 </button>
