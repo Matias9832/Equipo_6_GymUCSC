@@ -19,7 +19,7 @@
                     @foreach($fechas as $f)
                         <form method="GET" class="d-inline">
                             <input type="hidden" name="ronda" value="{{ $f }}">
-                            <button type="submit" class="btn btn-sm {{ $f == $rondaSeleccionada ? 'btn-primary' : 'btn-outline-primary' }} mx-1 mb-1">
+                            <button type="submit" class="btn btn-sm {{ $f == $rondaSeleccionada ? 'btn-primary' : 'btn-outline-primary' }} mx-1 mb-1" style="margin-bottom: 0px !important;">
                                 {{ $f }}
                             </button>
                         </form>
@@ -27,7 +27,7 @@
                 </div>
                 <form method="GET" class="ms-2">
                     <input type="hidden" name="ronda" value="{{ $rondaSiguiente }}">
-                    <button type="submit" class="btn btn-outline-secondary btn-sm" {{ $rondaSiguiente === null ? 'disabled' : '' }} style="margin-bottom: 0rem !important;">>
+                    <button type="submit" class="btn btn-outline-secondary btn-sm" {{ $rondaSiguiente === null ? 'disabled' : '' }} style="margin-bottom: 0rem !important;">
                         Siguiente &raquo;
                     </button>
                 </form>
