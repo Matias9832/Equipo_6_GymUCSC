@@ -16,9 +16,9 @@
             <div class="bg-primary bg-opacity-75 text-white p-md-5 rounded shadow position-relative"
                 style="max-width: 650px;">
                 @if(Auth::check() && Auth::user()->is_admin)
-                <a href="{{ route('quienes-somos.banner.edit') }}" class="btn btn-sm text-white bg-info position-absolute"
+                <a href="{{ route('quienes-somos.banner.edit') }}" class="btn btn-sm text-white bg-secondary position-absolute"
                     style="top: 10px; right: 10px; z-index: 2;">
-                    <i class="fas fa-pen-to-square"></i>
+                    <i class="fas fa-pen-to-square me-2"></i>Editar 
                 </a>
                 @endif
 

@@ -119,7 +119,7 @@
                                                     <i class="fas fa-star {{ $noticias->is_featured ? 'text-warning' : 'text-muted' }}"></i>
                                                 </button>
 
-                                                <a href="{{ route('news.edit', $noticias->id_noticia) }}" class="btn btn-sm btn-info px-2 py-1" title="Editar">
+                                                <a href="{{ route('news.edit', $noticias->id_noticia) }}" class="btn btn-sm btn-primary px-2 py-1" title="Editar">
                                                     <i class="fas fa-pen-to-square"></i>
                                                 </a>
                                                 <form action="{{ route('news.destroy', $noticias->id_noticia) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar esta noticia?');">
