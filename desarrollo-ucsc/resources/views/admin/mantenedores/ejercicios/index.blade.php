@@ -41,7 +41,7 @@
                                             <td class="align-middle text-center">
                                                 <a href="{{ route('ejercicios.edit', $ejercicio->id) }}" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip"
                                                     title="Editar">
-                                                    <i class="fas fa-pen-to-square text-info"></i></a>
+                                                    <i class="fas fa-pen-to-square text-primary"></i></a>
                                                 <form action="{{ route('ejercicios.destroy', $ejercicio->id) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')

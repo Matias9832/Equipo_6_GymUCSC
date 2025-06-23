@@ -14,27 +14,27 @@
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
-                                <th>Equipo</th>
-                                <th>PJ</th>
-                                <th>PG</th>
-                                <th>PE</th>
-                                <th>PP</th>
-                                <th>GF</th>
-                                <th>GC</th>
-                                <th>PTS</th>
+                                <th class="ps-3">Equipo</th>
+                                <th class="ps-3">PJ</th>
+                                <th class="ps-3">PG</th>
+                                <th class="ps-3">PE</th>
+                                <th class="ps-3">PP</th>
+                                <th class="ps-3">GF</th>
+                                <th class="ps-3">GC</th>
+                                <th class="ps-3">PTS</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($tabla as $fila)
                                 <tr>
-                                    <td>{{ $fila['equipo']->nombre_equipo }}</td>
-                                    <td>{{ $fila['pj'] }}</td>
-                                    <td>{{ $fila['pg'] }}</td>
-                                    <td>{{ $fila['pe'] }}</td>
-                                    <td>{{ $fila['pp'] }}</td>
-                                    <td>{{ $fila['gf'] }}</td>
-                                    <td>{{ $fila['gc'] }}</td>
-                                    <td>{{ $fila['pts'] }}</td>
+                                    <td class="ps-3">{{ $fila['equipo']->nombre_equipo }}</td>
+                                    <td class="ps-3">{{ $fila['pj'] }}</td>
+                                    <td class="ps-3">{{ $fila['pg'] }}</td>
+                                    <td class="ps-3">{{ $fila['pe'] }}</td>
+                                    <td class="ps-3">{{ $fila['pp'] }}</td>
+                                    <td class="ps-3">{{ $fila['gf'] }}</td>
+                                    <td class="ps-3">{{ $fila['gc'] }}</td>
+                                    <td class="ps-3">{{ $fila['pts'] }}</td>
                                 </tr>
                             @empty
                                 <tr>

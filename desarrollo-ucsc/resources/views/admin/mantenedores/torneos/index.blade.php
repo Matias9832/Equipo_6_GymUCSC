@@ -15,13 +15,13 @@
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center">Nombre</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center">Sucursal</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center">Deporte</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center">Tipo</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center">Máx. Equipos</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center">Gestión</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center">Acciones</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center ps-0">Nombre</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center ps-2">Sucursal</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center ps-2">Deporte</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center ps-2">Tipo</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center ps-2">Máx. Equipos</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center ps-2">Gestión</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder text-center ps-2">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -29,10 +29,10 @@
                                         <tr>
                                             <td>{{ $torneo->nombre_torneo }}</td>
                                             <td>{{ $torneo->sucursal->nombre_suc }}</td>
-                                            <td class="align-middle text-center">{{ $torneo->deporte->nombre_deporte }}</td>
-                                            <td class="align-middle text-center">{{ $torneo->tipo_competencia }}</td>
-                                            <td class="align-middle text-center">{{ $torneo->max_equipos }}</td>
-                                            <td class="align-middle text-center">
+                                            <td class="align-middle text-center ps-3">{{ $torneo->deporte->nombre_deporte }}</td>
+                                            <td class="align-middle text-center ps-2 text-capitalize">{{ $torneo->tipo_competencia }}</td>
+                                            <td class="align-middle text-center ps-2">{{ $torneo->max_equipos }}</td>
+                                            <td class="align-middle text-center ps-2">
                                                 @if(!\App\Models\Partido::where('torneo_id', $torneo->id)->exists())
                                                     <a href="{{ route('torneos.iniciar', $torneo->id) }}" class="btn btn-sm btn-outline-primary ms-1 my-2">
                                                         <i class="fas fa-play"></i> Iniciar Torneo
@@ -63,11 +63,15 @@
                                                 @endif
                                             </td>
                                             <td class="align-middle text-center">
-                                                <a href="{{ route('torneos.edit', $torneo->id) }}" class="btn btn-sm btn-primary me-1 my-2">Editar</a>
+                                                <a href="{{ route('torneos.edit', $torneo->id) }}" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">
+                                                    <i class="fas fa-pen-to-square text-primary"></i>
+                                                </a>
                                                 <form action="{{ route('torneos.destroy', $torneo->id) }}" method="POST" style="display: inline;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger my-2">Eliminar</button>
+                                                    <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline" onclick="return confirm('¿Estás seguro de que quieres eliminar este deporte?')" title="Eliminar">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -84,5 +88,6 @@
                 </div>
             </div>
         </div>
+        @include('layouts.footers.auth.footer')
     </div>
 @endsection

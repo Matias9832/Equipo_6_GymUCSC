@@ -30,7 +30,7 @@
         }
 
         .code-box {
-            background: #D12421;
+            background: #2d3e50;
             color: #fff;
             padding: 14px 0;
             border-radius: 6px;

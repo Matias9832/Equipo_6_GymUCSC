@@ -11,7 +11,7 @@
                 @else
                     @foreach($rutinas as $rutina)
                         <div class="mb-4">
-                            <h5 style="color:#D12421;">
+                            <h5 class="text-primary">
                                 {{ $rutina->nombre }}
                                 <span class="text-muted" style="font-size:1rem;">
                                     &mdash; 
@@ -31,8 +31,7 @@
                                     </li>
                                 @endforeach
                             </ul>
-                            <button class="btn btn-primary btn-sm mt-2 iniciar-rutina"
-                                style="background:#D12421; border:none;"
+                            <button class="btn btn-primary btn-sm mt-2 iniciar-rutina bg-primary"
                                 data-rutina="{{ $rutina->id }}">
                                 <i class="fa fa-play"></i> Realizar rutina
                             </button>
@@ -48,8 +47,8 @@
     <div class="modal fade" id="visorRutinaModal" tabindex="-1" aria-labelledby="visorRutinaLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content" style="background:#fff;">
-                <div class="modal-header" style="border-bottom:2px solid #D12421;">
-                    <h5 class="modal-title" id="visorRutinaLabel" style="color:#D12421;">Rutina</h5>
+                <div class="modal-header border-primary">
+                    <h5 class="modal-title text-primary" id="visorRutinaLabel" >Rutina</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
@@ -63,8 +62,8 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background:#646567; border:none;">Salir</button>
-                    <button type="button" class="btn btn-warning" id="btn-saltar-descanso" style="display:none; background:#ffc107; color:#646567; border:none;">Saltar descanso</button>
-                    <button type="button" class="btn btn-primary" id="btn-continuar-ejercicio" style="background:#D12421; border:none;">Continuar</button>
+                    <button type="button" class="btn btn-warning text-white" id="btn-saltar-descanso" style="display:none; background:#ffc107; color:#646567; border:none;">Saltar descanso</button>
+                    <button type="button" class="btn btn-primary bg-primary" id="btn-continuar-ejercicio">Continuar</button>
                 </div>
             </div>
         </div>
@@ -90,13 +89,13 @@
         // Imagen/gif si existe
         let imgHtml = '';
         if (ejercicio.imagen) {
-            imgHtml = `<img src="/img/${ejercicio.imagen}" alt="Ejercicio" class="img-fluid mb-3" style="max-height:220px; border-radius:10px; border:2px solid #D12421;">`;
+            imgHtml = `<img src="/img/${ejercicio.imagen}" alt="Ejercicio" class="img-fluid mb-3 border-primary" style="max-height:220px;">`;
         } else {
             imgHtml = `<div class="mb-3 text-muted" style="font-size:1.2rem;">Sin imagen</div>`;
         }
 
         document.getElementById('visor-ejercicio').innerHTML = `
-            <h4 style="color:#D12421;">${ejercicio.nombre}</h4>
+            <h4 class="text-primary">${ejercicio.nombre}</h4>
             ${imgHtml}
             <div class="mb-2" style="color:#646567;">
                 <span><b>Serie:</b> ${serie} de ${ejercicio.pivot.series}</span> &nbsp; 

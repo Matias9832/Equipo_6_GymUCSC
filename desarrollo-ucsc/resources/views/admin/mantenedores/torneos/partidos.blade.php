@@ -10,7 +10,7 @@
             <div class="mb-3 d-flex align-items-center flex-wrap">
                 <form method="GET" class="me-2">
                     <input type="hidden" name="ronda" value="{{ $rondaAnterior }}">
-                    <button type="submit" class="btn btn-outline-secondary btn-sm" {{ $rondaAnterior === null ? 'disabled' : '' }}>
+                    <button type="submit" class="btn btn-outline-secondary btn-sm" {{ $rondaAnterior === null ? 'disabled' : '' }} style="margin-bottom: 0rem !important;">
                         &laquo; Anterior
                     </button>
                 </form>
@@ -19,7 +19,7 @@
                     @foreach($fechas as $f)
                         <form method="GET" class="d-inline">
                             <input type="hidden" name="ronda" value="{{ $f }}">
-                            <button type="submit" class="btn btn-sm {{ $f == $rondaSeleccionada ? 'btn-primary' : 'btn-outline-primary' }} mx-1 mb-1">
+                            <button type="submit" class="btn btn-sm {{ $f == $rondaSeleccionada ? 'btn-primary' : 'btn-outline-primary' }} mx-1 mb-1" style="margin-bottom: 0px !important;">
                                 {{ $f }}
                             </button>
                         </form>
@@ -27,7 +27,7 @@
                 </div>
                 <form method="GET" class="ms-2">
                     <input type="hidden" name="ronda" value="{{ $rondaSiguiente }}">
-                    <button type="submit" class="btn btn-outline-secondary btn-sm" {{ $rondaSiguiente === null ? 'disabled' : '' }}>
+                    <button type="submit" class="btn btn-outline-secondary btn-sm" {{ $rondaSiguiente === null ? 'disabled' : '' }} style="margin-bottom: 0rem !important;">
                         Siguiente &raquo;
                     </button>
                 </form>
@@ -57,11 +57,11 @@
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
-                                <th>Local</th>
-                                <th>Visitante</th>
-                                <th>Resultado Local</th>
-                                <th>Resultado Visitante</th>
-                                <th>Acción</th>
+                                <th class="ps-2">Local</th>
+                                <th class="ps-2">Visitante</th>
+                                <th class="ps-2">Resultado Local</th>
+                                <th class="ps-2">Resultado Visitante</th>
+                                <th class="ps-2">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,8 +82,8 @@
                                     </td>
                                     <td>
                                             @if(!$finalizada)
-                                                <button type="submit" class="btn btn-success btn-sm">Guardar</button>
-                                                <a href="{{ route('torneos.index') }}" class="btn btn-outline-secondary mt-3">Volver</a>
+                                                <button type="submit" class="btn btn-success btn-sm" style="margin-bottom: 0rem !important">Guardar</button>
+                                                <a href="{{ route('torneos.index') }}" class="btn btn-outline-secondary mt-3 btn-sm">Volver</a>
                                             @endif
                                         </form>
                                     </td>

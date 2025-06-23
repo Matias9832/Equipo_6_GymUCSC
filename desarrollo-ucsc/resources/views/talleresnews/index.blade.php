@@ -18,6 +18,7 @@
                 style="max-width: 650px;">
 
                 <!-- Botón en la esquina superior derecha del card -->
+                @can('Editar Banners')
                 @if(Auth::check() && Auth::user()->is_admin)
                 <a href="{{ route('talleressettings.edit') }}" class="btn btn-sm text-white bg-secondary position-absolute"
                     style="top: 10px; right: 10px; z-index: 2;">
@@ -25,6 +26,7 @@
                     Editar Banner
                 </a>
                 @endif
+                @endcan
 
                 <small class="text-uppercase fw-semibold">
                     {{ $banner?->banner_subtitle ?? 'Unidad de Deportes y Recreación' }}
@@ -186,7 +188,7 @@
             @if($news->isEmpty())
             <div class="card shadow-sm text-center p-5 position-relative mb-2">
                 @if(Auth::check() && Auth::user()->is_admin)
-                @can('Crear Noticias')
+                @can('Crear Noticias Talleres')
                 <div class="card-header pb-0 d-flex justify-content-between align-items-center w-100">
                     <a href="{{ route('talleresnews.create') }}" class="btn btn-primary position-absolute"
                         style="top: 15px; right: 15px; z-index: 1;">
@@ -224,6 +226,7 @@
                                     <i
                                         class="fas fa-star {{ $noticias->is_featured ? 'text-warning' : 'text-muted' }}"></i>
                                 </button>
+                                @can('Crear Noticias Talleres')
                                 <a href="{{ route('talleresnews.edit', $noticias->id_noticia) }}"
                                     class="btn btn-sm btn-primary px-2 py-1" title="Editar">
                                     <i class="fas fa-pen-to-square"></i>
@@ -236,7 +239,7 @@
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
-
+                                @endcan
                             </div>
                             @endif
 
