@@ -34,7 +34,7 @@
 </div>
 @endsection
 
-@section('scripts')
+<!-- AGREGAR ESTE SCRIPT FUERA DE LA SECCIÓN -->
 <script>
 function actualizarTablaUsuarios() {
     $.ajax({
@@ -48,8 +48,5 @@ function actualizarTablaUsuarios() {
         }
     });
 }
-
-// Actualiza cada 5 segundos
 setInterval(actualizarTablaUsuarios, 5000);
 </script>
-@endsection
