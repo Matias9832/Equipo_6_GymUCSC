@@ -13,7 +13,7 @@ class PreventAccessFromTenants
         $host = $request->getHost();
 
         // Si el host NO es el central (ej: ugym.cl) => asumimos que es un tenant
-        if ($host !== 'ugym.local' && Str::contains($host, 'ugym.local')) {
+        if ($host !== 'ugym.cl' && Str::contains($host, 'ugym.cl')) {
             // \Log::info('🌐 Redirigiendo porque es tenant: ' . $host);
             return redirect()->route('news.index');
         }
