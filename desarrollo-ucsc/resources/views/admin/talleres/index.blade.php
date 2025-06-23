@@ -159,7 +159,7 @@
         </div>
         @include('layouts.footers.auth.footer')
     </div>
-@endsection
+    
 <style>
     .custom-excel-btn {
         background-color: rgb(33, 115, 70) !important;
@@ -167,3 +167,4 @@
         border: none;
     }
 </style>
+@endsection
