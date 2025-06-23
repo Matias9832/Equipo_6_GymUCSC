@@ -64,7 +64,7 @@
                                             </td>
                                             <td class="align-middle text-center">
                                                 <a href="{{ route('torneos.edit', $torneo->id) }}" class="text-secondary font-weight-bold text-xs me-2" data-toggle="tooltip" title="Editar">
-                                                    <i class="fas fa-pen-to-square text-info"></i>
+                                                    <i class="fas fa-pen-to-square text-primary"></i>
                                                 </a>
                                                 <form action="{{ route('torneos.destroy', $torneo->id) }}" method="POST" style="display: inline;">
                                                     @csrf

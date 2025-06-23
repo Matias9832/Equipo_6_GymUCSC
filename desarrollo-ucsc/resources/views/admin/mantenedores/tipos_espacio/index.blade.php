@@ -28,7 +28,7 @@
                                         <td class="text-sm ps-4">{{ $tipo->nombre_tipo }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('tipos_espacio.edit', $tipo->id) }}" class="text-secondary font-weight-bold text-xs me-2" title="Editar">
-                                                <i class="fas fa-pen-to-square text-info"></i>
+                                                <i class="fas fa-pen-to-square text-primary"></i>
                                             </a>
                                             <form action="{{ route('tipos_espacio.destroy', $tipo->id) }}" method="POST" class="d-inline">
                                                 @csrf
