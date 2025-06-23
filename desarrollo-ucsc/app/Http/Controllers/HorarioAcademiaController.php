@@ -24,12 +24,16 @@ class HorarioAcademiaController extends Controller
     {
         $request->validate([
             'id_academia' => 'required|exists:academias,id_academia',
-            'dia' => 'required|string',
-            'hora_inicio' => 'required',
-            'hora_fin' => 'required',
+            'dia_semana' => 'required|string',
+            'hora_inicio' => 'required|date_format:H:i',
+            'hora_fin' => 'required|date_format:H:i|after:hora_inicio',
+        ], [
+            'hora_fin.after' => 'La hora de término debe ser posterior a la hora de inicio.',
+            'hora_inicio.date_format' => 'La hora de inicio debe tener el formato HH:MM.',
+            'hora_fin.date_format' => 'La hora de término debe tener el formato HH:MM.',
         ]);
 
-        HorarioAcademia::create($request->all());
+        HorarioAcademia::create($request->only(['id_academia', 'dia_semana', 'hora_inicio', 'hora_fin']));
 
         return redirect()->route('horarios.index')->with('success', 'Horario creado exitosamente.');
     }
@@ -45,13 +49,17 @@ class HorarioAcademiaController extends Controller
     {
         $request->validate([
             'id_academia' => 'required|exists:academias,id_academia',
-            'dia' => 'required|string',
-            'hora_inicio' => 'required',
-            'hora_fin' => 'required',
+            'dia_semana' => 'required|string',
+            'hora_inicio' => 'required|date_format:H:i',
+            'hora_fin' => 'required|date_format:H:i|after:hora_inicio',
+        ], [
+            'hora_fin.after' => 'La hora de término debe ser posterior a la hora de inicio.',
+            'hora_inicio.date_format' => 'La hora de inicio debe tener el formato HH:MM.',
+            'hora_fin.date_format' => 'La hora de término debe tener el formato HH:MM.',
         ]);
 
         $horario = HorarioAcademia::findOrFail($id);
-        $horario->update($request->all());
+        $horario->update($request->only(['id_academia', 'dia_semana', 'hora_inicio', 'hora_fin']));
 
         return redirect()->route('horarios.index')->with('success', 'Horario actualizado correctamente.');
     }

@@ -55,16 +55,12 @@ class AcademiaController extends Controller
             'id_espacio' => 'required',
             'matricula'=> 'required|string',
             'mensualidad' => 'required|string',
-            'horarios' => 'required|array|min:1',
-            'horarios.*.dia' => 'required|string',
-            'horarios.*.hora_inicio' => 'required|date_format:H:i',
-            'horarios.*.hora_fin' => 'required|date_format:H:i|after:horarios.*.hora_inicio',
+            'horarios' => 'nullable|array',
+            'horarios.*.dia' => 'nullable|string',
+            'horarios.*.hora_inicio' => 'nullable|date_format:H:i',
+            'horarios.*.hora_fin' => 'nullable|date_format:H:i|after:horarios.*.hora_inicio',
         ], [
-            'horarios.required' => 'Debes agregar al menos un horario.',
-            'horarios.*.dia.required' => 'El día es obligatorio.',
-            'horarios.*.hora_inicio.required' => 'La hora de inicio es obligatoria.',
             'horarios.*.hora_inicio.date_format' => 'La hora de inicio debe tener el formato HH:MM.',
-            'horarios.*.hora_fin.required' => 'La hora de término es obligatoria.',
             'horarios.*.hora_fin.date_format' => 'La hora de término debe tener el formato HH:MM.',
             'horarios.*.hora_fin.after' => 'La hora de término debe ser posterior a la hora de inicio.',
         ]);
@@ -78,12 +74,20 @@ class AcademiaController extends Controller
             'mensualidad'
         ]));
 
-        foreach ($request->horarios as $horario) {
-            $academia->horarios()->create([
-                'dia_semana' => $horario['dia'],
-                'hora_inicio' => $horario['hora_inicio'],
-                'hora_fin' => $horario['hora_fin'],
-            ]);
+        if (!empty($request->horarios)) {
+            foreach ($request->horarios as $horario) {
+                if (
+                    !empty($horario['dia']) &&
+                    !empty($horario['hora_inicio']) &&
+                    !empty($horario['hora_fin'])
+                ) {
+                    $academia->horarios()->create([
+                        'dia_semana' => $horario['dia'],
+                        'hora_inicio' => $horario['hora_inicio'],
+                        'hora_fin' => $horario['hora_fin'],
+                    ]);
+                }
+            }
         }
 
         return redirect()->route('academias.index')->with('success', 'Academia creada correctamente.');
@@ -108,19 +112,14 @@ class AcademiaController extends Controller
             'nombre_academia' => 'required|string|max:255',
             'descripcion_academia' => 'required|string',
             'id_espacio' => 'required',
+            'matricula'=> 'required|string',
             'mensualidad' => 'required|string',
-            'implementos' => 'nullable|string',
-            'matricula' => 'required|string',
-            'horarios' => 'required|array|min:1',
-            'horarios.*.dia' => 'required|string',
-            'horarios.*.hora_inicio' => 'required|date_format:H:i',
-            'horarios.*.hora_fin' => 'required|date_format:H:i|after:horarios.*.hora_inicio',
+            'horarios' => 'nullable|array',
+            'horarios.*.dia' => 'nullable|string',
+            'horarios.*.hora_inicio' => 'nullable|date_format:H:i',
+            'horarios.*.hora_fin' => 'nullable|date_format:H:i|after:horarios.*.hora_inicio',
         ], [
-            'horarios.required' => 'Debes agregar al menos un horario.',
-            'horarios.*.dia.required' => 'El día es obligatorio.',
-            'horarios.*.hora_inicio.required' => 'La hora de inicio es obligatoria.',
             'horarios.*.hora_inicio.date_format' => 'La hora de inicio debe tener el formato HH:MM.',
-            'horarios.*.hora_fin.required' => 'La hora de término es obligatoria.',
             'horarios.*.hora_fin.date_format' => 'La hora de término debe tener el formato HH:MM.',
             'horarios.*.hora_fin.after' => 'La hora de término debe ser posterior a la hora de inicio.',
         ]);
@@ -135,14 +134,24 @@ class AcademiaController extends Controller
             'mensualidad'
         ]));
 
-        // Eliminar horarios existentes y volver a crear
+        // Elimina los horarios antiguos
         $academia->horarios()->delete();
-        foreach ($request->horarios as $horario) {
-            $academia->horarios()->create([
-                'dia_semana' => $horario['dia'],
-                'hora_inicio' => $horario['hora_inicio'],
-                'hora_fin' => $horario['hora_fin'],
-            ]);
+
+        // Agrega los nuevos horarios si existen
+        if (!empty($request->horarios)) {
+            foreach ($request->horarios as $horario) {
+                if (
+                    !empty($horario['dia']) &&
+                    !empty($horario['hora_inicio']) &&
+                    !empty($horario['hora_fin'])
+                ) {
+                    $academia->horarios()->create([
+                        'dia_semana' => $horario['dia'],
+                        'hora_inicio' => $horario['hora_inicio'],
+                        'hora_fin' => $horario['hora_fin'],
+                    ]);
+                }
+            }
         }
 
         return redirect()->route('academias.index')->with('success', 'Academia actualizada correctamente.');

@@ -15,7 +15,7 @@ class HorarioAcademia extends Model
 
     protected $fillable = [
         'id_academia',
-        'dia',
+        'dia_semana',
         'hora_inicio',
         'hora_fin',
     ];
