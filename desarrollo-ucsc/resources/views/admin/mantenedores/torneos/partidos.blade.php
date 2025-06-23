@@ -10,7 +10,7 @@
             <div class="mb-3 d-flex align-items-center flex-wrap">
                 <form method="GET" class="me-2">
                     <input type="hidden" name="ronda" value="{{ $rondaAnterior }}">
-                    <button type="submit" class="btn btn-outline-secondary btn-sm" {{ $rondaAnterior === null ? 'disabled' : '' }}>
+                    <button type="submit" class="btn btn-outline-secondary btn-sm" {{ $rondaAnterior === null ? 'disabled' : '' }} style="margin-bottom: 0rem !important;">
                         &laquo; Anterior
                     </button>
                 </form>
@@ -27,7 +27,7 @@
                 </div>
                 <form method="GET" class="ms-2">
                     <input type="hidden" name="ronda" value="{{ $rondaSiguiente }}">
-                    <button type="submit" class="btn btn-outline-secondary btn-sm" {{ $rondaSiguiente === null ? 'disabled' : '' }}>
+                    <button type="submit" class="btn btn-outline-secondary btn-sm" {{ $rondaSiguiente === null ? 'disabled' : '' }} style="margin-bottom: 0rem !important;">>
                         Siguiente &raquo;
                     </button>
                 </form>
