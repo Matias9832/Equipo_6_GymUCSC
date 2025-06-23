@@ -363,7 +363,7 @@ Route::middleware([
             Route::get('admin/talleres-settings/edit', [TalleresSettingController::class, 'edit'])->name('talleressettings.edit');
             Route::match(['put', 'post'], '/admin/talleres-settings/update', [TalleresSettingController::class, 'update'])->name('talleressettings.update');
             Route::delete('/admin/talleres-settings/image', [TalleresSettingController::class, 'deleteImage'])->name('talleres.banner.image.delete');
-
+        });
         Route::middleware(['permission:Editar Banners'])->group(function () {
             //Quienes somos
             Route::get('/quienes-somos/banner/edit', [App\Http\Controllers\QuienesSomosController::class, 'editBanner'])->name('quienes-somos.banner.edit');
@@ -410,6 +410,5 @@ Route::middleware([
             Route::get('/datos-talleres', [App\Http\Controllers\DatosTallerController::class, 'index'])->name('datos-talleres.index');
             Route::get('/datos-talleres/exportar', [App\Http\Controllers\DatosTallerController::class, 'exportarExcel'])->name('datos-talleres.export');
         });
-
     });
 });
