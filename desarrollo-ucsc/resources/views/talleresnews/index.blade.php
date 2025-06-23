@@ -135,9 +135,11 @@
     {{-- Sección de noticias destacadas --}}
 
     @if ($featuredNews->isNotEmpty())
-    <div id="featuredNewsCarousel" class="carousel slide mb-5" data-bs-ride="carousel" data-bs-interval="5000">
-        <div class="carousel-inner">
-            <h4>Noticias Destacadas</h4>
+    <div id="featuredNewsCarousel" class="carousel slide mb-5 shadow-sm" data-bs-ride="carousel" data-bs-interval="5000" style="border-radius: 1rem; overflow: hidden;">
+        <div class="carousel-inner" style="border-radius: 1rem;">
+            <div class="w-100 py-3" style="background: #fff; border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
+                <h4 class="mb-0 text-center">Noticias Destacadas</h4>
+            </div>
             @foreach ($featuredNews as $index => $noticia)
             <div class="carousel-item @if($index == 0) active @endif"
                 style="background-color: white; border-radius: 1rem; padding: 1rem;">
@@ -148,7 +150,7 @@
                             class="d-block w-100 rounded" alt="Imagen de {{ $noticia->nombre_noticia }}"
                             style="height: 300px; object-fit: cover;">
                         @else
-                        <div class="bg-light d-flex justify-content-center align-items-center" style="height: 300px;">
+                        <div class="bg-light d-flex justify-content-center align-items-center rounded" style="height: 300px;">
                             <i class="ni ni-image text-muted" style="font-size: 3rem;"></i>
                         </div>
                         @endif

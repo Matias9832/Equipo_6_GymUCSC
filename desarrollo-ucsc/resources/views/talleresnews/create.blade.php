@@ -44,14 +44,23 @@
                                     <i class="fas fa-star text-warning me-1"></i> ¿Marcar como noticia destacada?
                                 </label>
                             </div>
+                            <!-- Fecha y hora de tiempo máximo de noticia destacada -->
                             <div class="mb-3" id="featured_until_container" style="display: none;">
-                                <label for="featured_until" class="form-label">
-                                    Tiempo hasta que sea destacada (opcional)
-                                </label>
-                                <input type="text" class="form-control" id="featured_until" name="featured_until" placeholder="Fecha lítmite para destacar"
-                                    autocomplete="off"
-                                  value="{{ old('featured_until', isset($noticia) && $noticia->featured_until ? \Carbon\Carbon::parse($noticia->featured_until)->format('Y-m-d H:i') : '') }}">
+                                <label class="form-label">Tiempo hasta que sea destacada (opcional)</label>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" id="featured_date" name="featured_date" placeholder="Fecha"
+                                            autocomplete="off"
+                                            value="{{ old('featured_date', isset($noticia) && $noticia->featured_until ? \Carbon\Carbon::parse($noticia->featured_until)->format('Y-m-d') : '') }}">
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" id="featured_time" name="featured_time" placeholder="Hora"
+                                            autocomplete="off"
+                                            value="{{ old('featured_time', isset($noticia) && $noticia->featured_until ? \Carbon\Carbon::parse($noticia->featured_until)->format('H:i') : '') }}">
+                                    </div>
+                                </div>
                             </div>
+                        <!--Botones de guardar y cancelar  -->
                         <div class="d-flex justify-content-end gap-2 mt-4">
                             <button class="btn btn-primary mt-2">Guardar</button>
                                 <a href="{{ route('talleresnews.index') }}" class="btn btn-outline-secondary mt-2">Cancelar</a>
@@ -80,15 +89,23 @@
 
         isFeatured.addEventListener('change', toggleFeaturedUntil);
 
-        // Flatpickr para el input de fecha
-       flatpickr("#featured_until", {
-            enableTime: true,
-            dateFormat: "Y-m-d H:i",
-            altInput: true,
-            altFormat: "d-m-Y H:i",
+       // Flatpickr para la fecha (solo días desde hoy)
+        flatpickr("#featured_date", {
+            dateFormat: "Y-m-d",
             minDate: "today",
             locale: "es"
         });
+
+        // Flatpickr para la hora
+        flatpickr("#featured_time", {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            locale: "es"
+        });
+
+        
         const input = document.getElementById('imageInput');
         const previewContainer = document.getElementById('imagePreviewContainer');
 
