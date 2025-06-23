@@ -57,7 +57,9 @@
                             </div>
 
                             <!-- Botón derecha -->
+                            @can('Acceso al Mantenedor de Talleres')
                             <a href="{{ route('talleres.index') }}" class="btn btn-primary mb-1">Ir a talleres</a>
+                            @endcan
                         </div>
                     </div>
                 </form>

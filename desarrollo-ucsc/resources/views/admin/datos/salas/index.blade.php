@@ -51,7 +51,9 @@
                                     </a>
                                 </div>
                                 <!-- Botón Ir a Salas -->
+                                @can('Acceso al Mantenedor de Salas')
                                 <a href="{{ route('salas.index') }}" class="btn btn-primary mb-1">Ir a Salas</a>
+                                @endcan
                             </div>
                         </div>
                     </form>
