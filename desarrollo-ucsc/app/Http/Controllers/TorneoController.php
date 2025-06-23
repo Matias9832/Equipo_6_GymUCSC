@@ -131,17 +131,13 @@ class TorneoController extends Controller
     {
         $request->validate([
             'nombre_torneo' => 'required|string|max:255',
-            'id_deporte' => 'required|exists:deportes,id_deporte',
-            'tipo_competencia' => 'required|in:liga,copa,encuentro',
-            'max_equipos' => 'required|integer|min:1',
+            
         ]);
 
         try {
             $torneo->update([
                 'nombre_torneo' => $request->nombre_torneo,
-                'id_deporte' => $request->id_deporte,
-                'tipo_competencia' => $request->tipo_competencia,
-                'max_equipos' => $request->max_equipos,
+                
             ]);
 
             $equipos = $request->input('equipos', []);
