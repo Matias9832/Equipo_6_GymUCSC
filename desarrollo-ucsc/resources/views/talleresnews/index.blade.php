@@ -66,13 +66,13 @@
                 @foreach ($taller as $key => $taller)
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="heading{{ $key }}">
-                        <div class="d-flex justify-content-between align-items-center px-3 py-2 bg-white border rounded-top"
+                        <div class="d-flex justify-content-between align-items-center px-3 py-2 bg-white rounded-top"
                             style="cursor: pointer;">
                             {{-- Botón que despliega el acordeón --}}
                             <div class="flex-grow-1 accordion-toggle collapsed d-flex align-items-center"
                                 data-bs-toggle="collapse" data-bs-target="#collapse{{ $key }}" aria-expanded="false"
                                 aria-controls="collapse{{ $key }}">
-                                <h5>
+                                <h5 class="ms-2 py-2">
                                     <strong>{{ $taller->nombre_taller }}</strong>
                                     <i class="fas fa-chevron-down ms-2 transition" id="arrow-{{ $key }}"></i>
                                 </h5>
@@ -139,7 +139,7 @@
     <div id="featuredNewsCarousel" class="carousel slide mb-5 shadow-sm" data-bs-ride="carousel" data-bs-interval="5000" style="border-radius: 1rem; overflow: hidden;">
         <div class="carousel-inner" style="border-radius: 1rem;">
             <div class="w-100 py-3" style="background: #fff; border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
-                <h4 class="mb-0 text-center">Noticias Destacadas</h4>
+                <h3 class="mb-0 mt-2 text-center">Noticias Destacadas</h3>
             </div>
             @foreach ($featuredNews as $index => $noticia)
             <div class="carousel-item @if($index == 0) active @endif"
@@ -202,7 +202,7 @@
                 </div>
             </div>
             @else
-            <div class="card shadow-sm text-center p-5 position-relative mb-2">
+            <div class="card shadow-sm text-center p-4 position-relative mb-2">
                 @if(Auth::check() && Auth::user()->is_admin)
                 <div class="card-header pb-0 d-flex justify-content-between align-items-center mb-4">
                     <a href="{{ route('talleresnews.create') }}" class="btn btn-primary position-absolute"
@@ -211,7 +211,7 @@
                     </a>
                 </div>
                 @endif
-                <h3>Todas nuestras noticias</h3>
+                <h3 class="mb-4">Todas nuestras noticias</h3>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
                     @foreach ($news as $noticias)
                     <div class="col">
@@ -283,10 +283,22 @@
 
 @section('custom-css')
 <style>
+    .accordion .accordion-item {
+    border-radius: 1rem !important;
+    box-shadow: 0 1px 4px 0 rgba(44,62,80,0.04);
+    border: 1px solid #dee2e6;
+    margin-bottom: 1.2rem;
+    background: #fff;
+    overflow: hidden; 
+}
+.accordion .accordion-header {
+    border-radius: 1rem 1rem 0 0 !important;
+}
 .accordion .accordion-collapse {
     transition: height 0.5s cubic-bezier(0.4,0,0.2,1);
 }
 .accordion .accordion-body {
+    border-radius: 0 0 1rem 1rem !important;
     opacity: 0;
     transform: translateY(-10px);
     transition: opacity 0.2s, transform 0.1s;
