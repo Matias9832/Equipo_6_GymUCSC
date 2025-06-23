@@ -18,9 +18,9 @@
 
                 <!-- Botón en la esquina superior derecha del card -->
                 @if(Auth::check() && Auth::user()->is_admin)
-                <a href="{{ route('newssettings.edit') }}" class="btn btn-sm text-white bg-info position-absolute"
+                <a href="{{ route('newssettings.edit') }}" class="btn btn-sm text-white bg-secondary position-absolute"
                     style="top: 10px; right: 10px; z-index: 2;">
-                    <i class="fas fa-pen-to-square"></i>
+                    <i class="fas fa-pen-to-square"></i> Editar banner
                 </a>
                 @endif
 
@@ -173,43 +173,43 @@
             </div>
 
             <!-- Salas por Sucursal -->
-<div class="col-lg-4">
-    <div class="bg-opacity-75 text-white rounded shadow p-4 p-md-5 mb-5 position-relative overflow-hidden">
+            <div class="col-lg-4">
+                <div class="bg-white text-white rounded shadow p-4 p-md-5 mb-5 position-relative overflow-hidden">
 
-        <!-- Si deseas un botón de edición como en el banner -->
-        @if(Auth::check() && Auth::user()->is_admin)
-            <a href="{{ route('salas.index') }}" class="btn btn-sm text-white bg-info position-absolute"
-                style="top: 10px; right: 10px; z-index: 2;">
-                <i class="fas fa-pen-to-square"></i>
-            </a>
-        @endif
+                    <!-- Si deseas un botón de edición como en el banner -->
+                    @if(Auth::check() && Auth::user()->is_admin)
+                        <a href="{{ route('salas.index') }}" class="btn btn-sm text-white bg-secondary position-absolute"
+                            style="top: 10px; right: 10px; z-index: 2;">
+                            <i class="fas fa-pen-to-square"></i> Editar Salas
+                        </a>
+                    @endif
 
-        <h4 class="mb-4 fw-bold text-uppercase text-black">Conoce Nuestras Salas</h4>
+                    <h4 class="mb-4 fw-bold text-uppercase text-black">Conoce Nuestras Salas</h4>
 
-        @foreach($sucursalesConSalas as $sucursal)
-            <div class="mb-3">
-                <h5 class="fw-bold">{{ $sucursal->nombre_suc }}</h5>
+                    @foreach($sucursalesConSalas as $sucursal)
+                        <div class="mb-3">
+                            <h5 class="fw-bold">{{ $sucursal->nombre_suc }}</h5>
 
-                @if($sucursal->salas->isNotEmpty())
-                    <ul class="list-unstyled">
-                        @foreach($sucursal->salas as $sala)
-                            <li class="d-flex justify-content-between align-items-center mb-2 border-bottom border-primary pb-2 text-primary">
-                                <span class="fw-semibold">{{ $sala->nombre_sala }}</span>
-                                <span class="text-primary-50 small">
-                                    {{ \Carbon\Carbon::parse($sala->horario_apertura)->format('H:i') }} a 
-                                    {{ \Carbon\Carbon::parse($sala->horario_cierre)->format('H:i') }}
-                                </span>
-                            </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <p class="mb-4 text-primary">No hay salas disponibles en esta sucursal.</p>
-                @endif
+                            @if($sucursal->salas->isNotEmpty())
+                                <ul class="list-unstyled">
+                                    @foreach($sucursal->salas as $sala)
+                                        <li class="d-flex justify-content-between align-items-center mb-2 border-bottom border-primary pb-2 text-primary">
+                                            <span class="fw-semibold">{{ $sala->nombre_sala }}</span>
+                                            <span class="text-primary-50 small">
+                                                {{ \Carbon\Carbon::parse($sala->horario_apertura)->format('H:i') }} a 
+                                                {{ \Carbon\Carbon::parse($sala->horario_cierre)->format('H:i') }}
+                                            </span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <p class="mb-4 text-primary">No hay salas disponibles en esta sucursal.</p>
+                            @endif
+                        </div>
+                    @endforeach
+
+                </div>
             </div>
-        @endforeach
-
-    </div>
-</div>
 
         </div>
     </div>
