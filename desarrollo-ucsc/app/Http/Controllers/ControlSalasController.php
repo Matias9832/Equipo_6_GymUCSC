@@ -166,7 +166,7 @@ class ControlSalasController extends Controller
         }
 
         // Calcular hora de salida estimada (90 minutos o cierre de sala)
-        $minutosUso = 6; // Cambia a lo que necesites
+        $minutosUso = 90; // Cambia a lo que necesites
         $horaIngreso = now();
         $horaSalidaEstimada = $horaIngreso->copy()->addMinutes($minutosUso);
         if ($horaSalidaEstimada->gt($horaCierre)) {
@@ -422,7 +422,7 @@ class ControlSalasController extends Controller
         }
 
         // Calcular hora de salida estimada (90 minutos o cierre de sala)
-        $minutosUso = 6; // Cambia a lo que necesites
+        $minutosUso = 90; // Cambia a lo que necesites
         $horaIngreso = now();
         $horaSalidaEstimada = $horaIngreso->copy()->addMinutes($minutosUso);
         if ($horaSalidaEstimada->gt($horaCierre)) {
