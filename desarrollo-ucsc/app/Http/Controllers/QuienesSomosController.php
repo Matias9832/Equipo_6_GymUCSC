@@ -60,4 +60,20 @@ class QuienesSomosController extends Controller
 
         return redirect()->route('quienes-somos.index')->with('success', 'Banner actualizado correctamente.');
     }
+
+    public function deleteImage()
+    {
+        $banner = QuienesSomosSetting::first();
+
+        // Elimina el archivo del servidor si existe
+        if ($banner && $banner->banner_image_path && file_exists(public_path($banner->banner_image_path))) {
+            unlink(public_path($banner->banner_image_path));
+        }
+
+        // Limpia el campo en la base de datos
+        $banner->banner_image_path = null;
+        $banner->save();
+
+        return redirect()->back()->with('success', 'Imagen del banner eliminada correctamente.');
+    }
 }

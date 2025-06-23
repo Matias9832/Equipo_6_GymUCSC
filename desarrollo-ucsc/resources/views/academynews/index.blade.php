@@ -225,11 +225,6 @@
                                                     class="btn btn-sm btn-info px-2 py-1" title="Editar">
                                                     <i class="fas fa-pen-to-square"></i>
                                                 </a>
-                                                @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </button>
                                                 <form action="{{ route('academynews.destroy', $noticias->id_noticia) }}" method="POST"
                                                     onsubmit="return confirm('¿Estás seguro de eliminar esta noticia?');">
                                                     @csrf

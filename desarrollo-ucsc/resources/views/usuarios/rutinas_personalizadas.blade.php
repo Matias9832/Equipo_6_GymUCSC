@@ -5,7 +5,7 @@
     <main class="main-content mt-0">
         <div class="container py-4">
             <h2 class="mb-4">Mis Rutinas Personalizadas</h2>
-            <div class="card shadow rounded-4 p-4" style="background: #fff;">
+            <div class="card shadow rounded-4 p-2" style="background: #fff;">
                 @if($rutinas->isEmpty())
                     <div class="alert alert-info">No tienes rutinas asignadas.</div>
                 @else

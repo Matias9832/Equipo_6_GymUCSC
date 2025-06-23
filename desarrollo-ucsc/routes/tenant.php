@@ -50,6 +50,7 @@ use App\Http\Controllers\TalleresNewsController;
 use App\Http\Controllers\TalleresSettingController;
 use App\Http\Controllers\NewsSettingController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\QuienesSomosController;
 
 use App\Http\Controllers\TalleresController;
 
@@ -359,11 +360,12 @@ Route::middleware([
             Route::post('/newsTalleres/{id}/toggle-featured', [TalleresNewsController::class, 'toggleFeatured'])->name('newsTalleres.toggleFeatured');
             Route::get('admin/talleres-settings/edit', [TalleresSettingController::class, 'edit'])->name('talleressettings.edit');
             Route::match(['put', 'post'], '/admin/talleres-settings/update', [TalleresSettingController::class, 'update'])->name('talleressettings.update');
-            Route::delete('/admin/academy-settings/image', [TalleresSettingController::class, 'deleteImage'])->name('talleres.banner.image.delete');
+            Route::delete('/admin/talleres-settings/image', [TalleresSettingController::class, 'deleteImage'])->name('talleres.banner.image.delete');
 
             //Quienes somos
             Route::get('/quienes-somos/banner/edit', [App\Http\Controllers\QuienesSomosController::class, 'editBanner'])->name('quienes-somos.banner.edit');
             Route::put('/quienes-somos/banner/update', [App\Http\Controllers\QuienesSomosController::class, 'updateBanner'])->name('quienes-somos.banner.update');
+            Route::delete('/quienes-somos/banner/image', [QuienesSomosController::class, 'deleteImage'])->name('quienes-somos.banner.image.delete');
         });
 
 

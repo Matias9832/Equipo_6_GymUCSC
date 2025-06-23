@@ -13,9 +13,9 @@
 
 <div class="container mt-4">
     <h2 class="mb-4">Mis Talleres</h2>
-
+    <div class="card shadow rounded-4 p-2" style="background: #fff;">
     @if($talleres->isEmpty())
-        <div class="alert alert-secondary">No tienes talleres registrados con asistencia.</div>
+        <div class="alert alert-info">No tienes talleres registrados con asistencia.</div>
     @else
         <div class="row">
             @foreach($talleres as $taller)
