@@ -84,17 +84,17 @@
                                         @else
                                             <li><a class="dropdown-item" href="{{ route('edit-perfil.edit') }}"><i
                                                         class="fas fa-user-edit me-1"></i> Editar Perfil</a></li>
-                                        @endif
-                                        <li><a class="dropdown-item" href="{{ route('ingreso.mostrar') }}"><i
+                                            <li><a class="dropdown-item" href="{{ route('ingreso.mostrar') }}"><i
                                                     class="fas fa-door-open me-1"></i> Salas</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('usuario.talleres') }}"><i
-                                                    class="fas fa-chalkboard-teacher me-2"></i> Mis Talleres</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('rutinas.personalizadas.index') }}"><i
-                                                    class="fa fa-dumbbell me-2"></i> Rutinas</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('actividad.usuario') }}"><i
-                                                    class="fas fa-calendar me-1"></i> Mi Actividad</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('torneos.usuario.index') }}"><i
-                                                    class="fas fa-trophy me-1"></i> Torneos</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('usuario.talleres') }}"><i
+                                                        class="fas fa-chalkboard-teacher me-2"></i> Mis Talleres</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('rutinas.personalizadas.index') }}"><i
+                                                        class="fa fa-dumbbell me-2"></i> Rutinas</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('actividad.usuario') }}"><i
+                                                        class="fas fa-calendar me-1"></i> Mi Actividad</a></li>
+                                            <li><a class="dropdown-item" href="{{ route('torneos.usuario.index') }}"><i
+                                                        class="fas fa-trophy me-1"></i> Torneos</a></li>            
+                                        @endif
                                         <li>
                                             <form method="POST" action="{{ route('logout') }}">
                                                 @csrf

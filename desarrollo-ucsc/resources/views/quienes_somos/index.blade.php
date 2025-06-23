@@ -20,7 +20,7 @@
                 <a href="{{ route('quienes-somos.banner.edit') }}"
                     class="btn btn-sm text-white bg-secondary position-absolute"
                     style="top: 10px; right: 10px; z-index: 2;">
-                    <i class="fas fa-pen-to-square"></i>
+                    <i class="fas fa-pen-to-square me-2"></i>
                     Editar banner
                 </a>
                 @endif
