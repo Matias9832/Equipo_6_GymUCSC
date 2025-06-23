@@ -53,8 +53,8 @@
                     </div>
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{{ route('quienes-somos.index') }}" class="btn btn-outline-secondary mt-2">Cancelar</a>
                         <button class="btn btn-primary mt-2">Actualizar</button>
+                        <a href="{{ route('quienes-somos.index') }}" class="btn btn-outline-secondary mt-2">Cancelar</a>
                     </div>
                 </form>
             </div>
