@@ -7,7 +7,7 @@
     <div class="container my-5">
         <div class="position-relative mb-5 overflow-hidden rounded" style="max-height: 600px; max-width: 100%;">
             <!-- Imagen de fondo -->
-            <img src="{{ global_asset($banner?->banner_image_path ?? url('https://direcciones.ucsc.cl/content/uploads/sites/17/2023/08/stock-deportes-y-recreacion.jpg')) }}"
+            <img src="{{ asset($banner?->banner_image_path ?? url('https://direcciones.ucsc.cl/content/uploads/sites/17/2023/08/stock-deportes-y-recreacion.jpg')) }}"
                 class="w-100 h-100 position-absolute top-0 start-0"
                 style="object-fit: cover; z-index: 0;"
                 alt="Banner academias deportivas">
@@ -148,7 +148,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             @if ($noticia->images->count())
-                            <img src="{{ global_asset($noticia->images->first()->image_path) }}"
+                            <img src="{{ asset($noticia->images->first()->image_path) }}"
                                 class="d-block w-100 rounded" alt="Imagen de {{ $noticia->nombre_noticia }}"
                                 style="height: 300px; object-fit: cover;">
                             @else
@@ -243,7 +243,7 @@
                                         <a href="{{ route('academynews.show', $noticias->id_noticia) }}" class="text-decoration-none text-dark d-block w-100">
                                             <div style="height: 200px; overflow: hidden; background-color: #f9f9f9;">
                                                 @if ($noticias->images->count())
-                                                    <img src="{{ global_asset($noticias->images->first()->image_path) }}"
+                                                    <img src="{{ asset($noticias->images->first()->image_path) }}"
                                                         alt="Imagen noticia" class="w-100 h-100" style="object-fit: cover;">
                                                 @else
                                                     <div class="bg-light d-flex justify-content-center align-items-center h-100 text-muted">

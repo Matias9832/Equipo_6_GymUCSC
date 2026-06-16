@@ -6,7 +6,7 @@
 
         <div class="position-relative mb-5 overflow-hidden rounded" style="max-height: 600px; max-width: 100%;">
         <!-- Imagen de fondo -->
-        <img src="{{ global_asset($banner?->banner_image_path ?? url('https://direcciones.ucsc.cl/content/uploads/sites/17/2024/10/extra-desk.png')) }}"
+        <img src="{{ asset($banner?->banner_image_path ?? url('https://direcciones.ucsc.cl/content/uploads/sites/17/2024/10/extra-desk.png')) }}"
             class="w-100 h-100 position-absolute top-0 start-0" style="object-fit: cover; z-index: 0;"
             alt="Banner Noticias">
 
@@ -45,7 +45,7 @@
                         <div class="row align-items-center">
                             <div class="col-md-6">
                                 @if ($noticia->images->count())
-                                    <img src="{{ global_asset($noticia->images->first()->image_path) }}"
+                                    <img src="{{ asset($noticia->images->first()->image_path) }}"
                                         class="d-block w-100 rounded"
                                         alt="Imagen de {{ $noticia->nombre_noticia }}"
                                         style="height: 300px; object-fit: cover;">
@@ -140,7 +140,7 @@
                                         {{-- Imagen --}}
                                             <div style="height: 200px; overflow: hidden; background-color: #f9f9f9;">
                                                 @if ($noticias->images->count())
-                                                    <img src="{{ global_asset($noticias->images->first()->image_path) }}"
+                                                    <img src="{{ asset($noticias->images->first()->image_path) }}"
                                                         alt="Imagen noticia"
                                                         class="w-100 h-100"
                                                         style="object-fit: cover;">

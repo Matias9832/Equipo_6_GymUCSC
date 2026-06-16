@@ -13,7 +13,7 @@
 
                 @if($banner?->banner_image_path)
                     <div class="mb-3" style="position: relative; display: inline-block; max-width: 100%;">
-                        <img src="{{ global_asset($banner->banner_image_path) }}" class="img-fluid" style="max-height: 200px; border-radius: 6px;">
+                        <img src="{{ asset($banner->banner_image_path) }}" class="img-fluid" style="max-height: 200px; border-radius: 6px;">
                         
                         <form action="{{ route('quienes-somos.banner.image.delete') }}" method="POST"
                             onsubmit="return confirm('¿Estás seguro de eliminar esta imagen?');"

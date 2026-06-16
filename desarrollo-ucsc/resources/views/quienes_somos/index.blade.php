@@ -7,7 +7,7 @@
     <!-- Banner superior -->
     <div class="position-relative mb-5 overflow-hidden rounded" style="max-height: 600px; max-width: 100%;">
         <!-- Imagen de fondo -->
-        <img src="{{ global_asset($banner?->banner_image_path ?? url('https://direcciones.ucsc.cl/content/uploads/sites/17/2024/10/extra-desk.png')) }}"
+        <img src="{{ asset($banner?->banner_image_path ?? url('https://direcciones.ucsc.cl/content/uploads/sites/17/2024/10/extra-desk.png')) }}"
             class="w-100 h-100 position-absolute top-0 start-0" style="object-fit: cover; z-index: 0;"
             alt="Banner Quiénes Somos">
 

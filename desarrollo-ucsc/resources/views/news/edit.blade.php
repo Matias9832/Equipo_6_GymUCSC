@@ -30,7 +30,7 @@
                                     @foreach($news->images as $image)
                                         <div class="col-md-3 position-relative">
                                             <div style="width: 100%; height: 200px; overflow: hidden; border-radius: 0.5rem; position: relative;">
-                                                <img src="{{ global_asset($image->image_path) }}"
+                                                <img src="{{ asset($image->image_path) }}"
                                                     style="width: 100%; height: 100%; object-fit: cover;">
                                                 <form action="{{ route('news.image.destroy', $image->id_imagen) }}" method="POST"
                                                     onsubmit="return confirm('¿Estás seguro de eliminar esta imagen?');"

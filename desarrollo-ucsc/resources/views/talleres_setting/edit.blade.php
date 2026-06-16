@@ -14,7 +14,7 @@
                 @if($setting->banner_image_path)
                     <div class="mb-3" style="position: relative; display: inline-block; max-width: 100%;">
                         {{-- Imagen de fondo --}}
-                        <img src="{{ global_asset($setting->banner_image_path) }}" class="img-fluid" style="max-height: 200px; border-radius: 6px;">
+                        <img src="{{ asset($setting->banner_image_path) }}" class="img-fluid" style="max-height: 200px; border-radius: 6px;">
 
                         {{-- Botón eliminar imagen --}}
                         <form action="{{ route('talleres.banner.image.delete') }}" method="POST"
