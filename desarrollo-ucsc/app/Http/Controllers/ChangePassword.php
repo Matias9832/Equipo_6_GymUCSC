@@ -16,10 +16,8 @@ class ChangePassword extends Controller
     {
         Auth::logout();
 
-        if (tenancy()->tenant) {
-            $id = intval(request()->id);
-            $this->user = Usuario::find($id);
-        }
+        $id = intval(request()->id);
+        $this->user = Usuario::find($id);
     }
     public function show(Request $request)
     {

@@ -12,7 +12,6 @@
                     <script>
                         document.write(new Date().getFullYear())
                     </script>,
-                    Hecho por U gym.
                 </div>
             </div>
             <div class="col-lg-6">

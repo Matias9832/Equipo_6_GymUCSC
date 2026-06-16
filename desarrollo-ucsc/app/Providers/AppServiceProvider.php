@@ -4,8 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
-use Stancl\Tenancy\Resolvers\DomainTenantResolver;
-use Stancl\Tenancy\Events\TenancyInitialized;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Pagination\Paginator;
 
@@ -26,9 +24,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        if (tenancy()->initialized) {
-            URL::forceRootUrl(request()->getSchemeAndHttpHost());
-        }
+        URL::forceRootUrl(request()->getSchemeAndHttpHost());
         Paginator::useBootstrapFive();
     }
 }
