@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Tenants\Fuente;
+use App\Models\Fuente;
 
 class FuentesSeeder extends Seeder
 {

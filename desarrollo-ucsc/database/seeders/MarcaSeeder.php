@@ -15,10 +15,10 @@ class MarcaSeeder extends Seeder
     public function run()
     {
         Marca::create([
-            'nombre_marca' => 'GymUCSC',
-            'logo_marca' => 'logos/marcas/JjQcWP1RjTaVsszTgsAPRV9TYtGQbpLy4sMyxo9Z.png',
-            'mision_marca' => 'Nuestra misión es promover el bienestar físico y mental de los estudiantes a través del ejercicio.',
-            'vision_marca' => 'Ser el gimnasio universitario más reconocido por su calidad, innovación y servicios en la UCSC.',
+            'nombre_marca' => 'UCSC',
+            'logo_marca' => 'img/empresas/684a46da3a1e3.png',
+            'mision_marca' => 'Entregar formación académica de calidad, inspirada en valores cristianos y orientada al bien común.',
+            'vision_marca' => 'Ser una comunidad universitaria reconocida por su compromiso social y excelencia educativa.',
         ]);
     }
 }

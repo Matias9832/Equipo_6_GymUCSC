@@ -1,23 +1,19 @@
 <style>
 :root {
-    --bs-primary: {{ $tema->bs_primary ?? '#101820' }};
-    --bs-success: {{ $tema->bs_success ?? '#198754' }};
-    --bs-danger: {{ $tema->bs_danger ?? '#d30d0d' }};
+    --bs-primary: #D12421;
+    --bs-success: #2dce89;
+    --bs-danger: #646567;
 
-    --primary-focus: {{ $tema->primary_focus ?? '#2d3e50' }};
-    --border-primary-focus: {{ $tema->border_primary_focus ?? '#1f2a35' }};
-    --primary-gradient: {{ $tema->primary_gradient ?? '#1c5d9e' }};
+    --primary-focus: #bc201e;
+    --border-primary-focus: #a71d1a;
+    --primary-gradient: #fb2b28;
 
-    --success-focus: {{ $tema->success_focus ?? '#4b7148' }};
-    --border-success-focus: {{ $tema->border_success_focus ?? '#2b4c28' }};
-    --success-gradient: {{ $tema->success_gradient ?? '#5f8a5b' }};
+    --success-focus: #29b97b;
+    --border-success-focus: #24a56e;
+    --success-gradient: #36f7a4;
 
-    --danger-focus: {{ $tema->danger_focus ?? '#e63333' }};
-    --border-danger-focus: {{ $tema->border_danger_focus ?? '#a50a0a' }};
-    --danger-gradient: {{ $tema->danger_gradient ?? '#f55f5f' }};
-}
-
-body {
-    font-family: {{ $tema->familia_css ?? '' }};
+    --danger-focus: #5a5b5d;
+    --border-danger-focus: #505152;
+    --danger-gradient: #78797c;
 }
 </style>

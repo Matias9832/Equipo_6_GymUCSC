@@ -32,22 +32,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     @yield('custom-css')
-    @php
-        use App\Models\Tenants\TemaTenant;
-
-        // Se obtiene el tenant actual usando Tenancy
-        $tenant = tenancy()->tenant ?? null;
-
-        $tema = $tenant
-            ? TemaTenant::where('tenant_id', $tenant->id)->first()
-            : null;
-    @endphp
-
-    @if($tema && $tema->url_fuente)
-        <link href="{{ $tema->url_fuente }}" rel="stylesheet">
-    @endif
-
-    @include('layouts.colors.tema-css', ['tema' => $tema])
+    @include('layouts.colors.tema-css')
 </head>
 
 <body class="{{ $class ?? '' }}">

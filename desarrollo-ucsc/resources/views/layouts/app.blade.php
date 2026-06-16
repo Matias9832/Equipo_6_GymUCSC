@@ -40,22 +40,7 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 
-    @php
-        use App\Models\Tenants\TemaTenant;
-
-        $tenant = tenancy()->tenant ?? null;
-
-        $tema = $tenant
-            ? TemaTenant::where('tenant_id', $tenant->id)->first()
-            : null;
-    @endphp
-
-    @if($tema && $tema->url_fuente && $tema->url_fuente != NULL)
-        <link href="{{ $tema->url_fuente }}" rel="stylesheet">
-    @endif
-
-    @include('layouts.colors.tema-css', ['tema' => $tema])
-
+    @include('layouts.colors.tema-css')
 </head>
 
 <body class="{{ $class ?? '' }}">
