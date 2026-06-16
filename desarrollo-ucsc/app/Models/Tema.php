@@ -1,42 +1,39 @@
 <?php
 
-namespace App\Models\Tenants;
+namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Stancl\Tenancy\Database\Concerns\CentralConnection;
 
-class TemaTenant extends Model
+class Tema extends Model
 {
-    use HasFactory, CentralConnection;
-
-    protected $table = 'tema_tenant';
-    protected $primaryKey = 'id_tema_tenant';
+    protected $table = 'temas';
+    protected $primaryKey = 'id_tema';
     public $timestamps = true;
 
-    protected $guarded = [];
     protected $fillable = [
-        'tenant_id',
         'nombre_tema',
         'nombre_fuente',
         'familia_css',
         'url_fuente',
+
+        // Colores principales
         'bs_primary',
         'bs_success',
         'bs_danger',
+
+        // Variantes PRIMARY
         'primary_focus',
         'border_primary_focus',
         'primary_gradient',
+
+        // Variantes SUCCESS
         'success_focus',
         'border_success_focus',
         'success_gradient',
+
+        // Variantes DANGER
         'danger_focus',
         'border_danger_focus',
         'danger_gradient',
     ];
-
-    public function tenant()
-    {
-        return $this->belongsTo(\App\Models\Tenant::class, 'tenant_id', 'id');
-    }
 }

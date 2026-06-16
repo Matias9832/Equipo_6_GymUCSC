@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Models\Tenants;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Fuente extends Model
+class Color extends Model
 {
     use HasFactory;
 
-    protected $table = 'fuentes';
+    protected $table = 'colores';
 
     protected $fillable = [
-        'nombre_fuente',
-        'familia_css',
-        'url_fuente',
+        'nombre_color',
+        'codigo_hex',
     ];
 }
