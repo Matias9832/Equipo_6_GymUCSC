@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders\Tenants;
+namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Tenants\Fuente;

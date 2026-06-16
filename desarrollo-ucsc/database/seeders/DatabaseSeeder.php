@@ -47,5 +47,10 @@ class DatabaseSeeder extends Seeder
 
         //Seeder de los Ejercicios
         $this->call(EjercicioSeeder::class);
+
+        //Seeder de Personalizaciones
+        $this->call(ColoresSeeder::class);
+        $this->call(FuentesSeeder::class);
+        $this->call(TemasSeeder::class);
     }
 }
